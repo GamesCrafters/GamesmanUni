@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" />
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>GamesmanUni</title>
+
+    <link rel="icon" href="favicon.ico" />
+
+    <script>
+      // Check that service workers are supported
+      if ("serviceWorker" in navigator) {
+        // Use the window load event to keep the page load performant
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js");
+        });
+      }
+    </script>
+
+    <!-- jquery js min -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- custom js -->
+    <script src="./sw.js"></script>
+    <script src="./scripts/main.js"></script>
+    <script src="./scripts/style.js"></script>
+    <script id="themeScript"></script>
+    <script src="./scripts/games.js"></script>
+    <script src="./scripts/game.js"></script>
+    <script id="gameScript"></script>
+    <script id="gameGuiScript"></script>
+    <script src="./scripts/game/setting.js"></script>
+    <script src="./scripts/game/history.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="appHeaderContainer" class="container">
+        <img
+          id="appLogo"
+          src="./images/app-logo.png"
+          alt="App Logo"
+          width="100"
+          height="100"
+        />
+        <h1 id="appTitle" class="title">GamesmanUni</h1>
+      </div>
+      <div id="bodyContainer" class="container">
+        <div id="gamesContainer" class="container">
+          <h2 id="gamesTitle" class="title">Games</h2>
+          <button class="game">ftz</button>
+          <button class="game">ttt</button>
+        </div>
+        <div id="gameContainer" class="container">
+          <div id="settingContainer" class="container">
+            <h3 id="settingTitle" class="title">Setting</h3>
+            <button id="backToGamesSetting">back</button>
+          </div>
+          <div id="guiContainer" class="container">
+            <h2><span id="gameTitle" class="title"></span></h2>
+            <div>Round <span id="round"></span></div>
+            <div>Player <span id="turn"></span> Turn</div>
+            <div id="boardContainer" class="container">
+              <div>Board = <span id="board"></span></div>
+              <button id="nextMove1">take one</button>
+              <button id="nextMove2">take two</button>
+              <button id="restart">restart</button>
+            </div>
+            <div>Value = <span id="value"></span></div>
+            <div>Remoteness = <span id="remoteness"></span></div>
+            <div id="message">Welcome!</div>
+          </div>
+          <div id="historyContainer" class="container">
+            <h3 id="historyTitle" class="title">History</h3>
+            <canvas id="history" width="250" height="40"></canvas>
+          </div>
+        </div>
+      </div>
+      <div id="footerContainer" class="container">
+        ©
+        <a href="http://gamescrafters.berkeley.edu/" target="_blank"
+          >GamesCrafters</a
+        >
+        and UC Regents
+      </div>
+    </div>
+  </body>
+</html>
