@@ -1,6 +1,6 @@
 {
-  "name": "uni-vue-pgl-main",
-  "short_name": "uni-vue-pgl-main",
+  "name": "GamesmanUni",
+  "short_name": "GamesmanUni",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

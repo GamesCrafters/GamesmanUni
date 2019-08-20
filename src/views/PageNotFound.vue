@@ -1,6 +1,6 @@
 <template>
-  <div id="home">
-    <h2 id="homeTitle">Welcome!</h2>
+  <div id="pageNotFound">
+    <h2 id="pageNotFoundTitle">Page Not Found... 😔</h2>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({})
-export default class Home extends Vue {}
+export default class PageNotFound extends Vue {}
 </script>
 
 <style scoped lang="scss"></style>
