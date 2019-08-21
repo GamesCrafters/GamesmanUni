@@ -39,7 +39,7 @@ export default class Home extends Vue {}
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: rgb(41, 44, 51);
   padding: 0 10% 0 10%;
   p {
     padding: 0 20% 0 20%;
@@ -50,7 +50,7 @@ export default class Home extends Vue {}
   padding: 0 0 10px 0;
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: rgb(41, 44, 51);
     &.router-link-exact-active {
       color: #42b983;
     }
