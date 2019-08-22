@@ -1,0 +1,20 @@
+{
+  "games": [
+    {
+      "code": "cnf",
+      "name": "Connect Four"
+    },
+
+    {
+      "code": "ftz",
+      "name": "Four to Zero",
+      "solver": "c"
+    },
+
+    {
+      "code": "ttt",
+      "name": "Tic-Tac-Toe",
+      "solver": "c"
+    }
+  ]
+}
