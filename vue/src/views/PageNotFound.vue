@@ -1,13 +1,16 @@
 <template>
-  <div id="pageNotFound">
-    <h2 id="pageNotFoundTitle">Page Not Found... 😔</h2>
-  </div>
+  <AppPageNotFound></AppPageNotFound>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import AppPageNotFound from "./../components/AppPageNotFound.vue";
 
-@Component({})
+@Component({
+  components: {
+    AppPageNotFound
+  }
+})
 export default class PageNotFound extends Vue {}
 </script>
 
