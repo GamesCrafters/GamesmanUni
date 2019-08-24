@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import AppHome from "./../components/AppHome.vue";
+import AppHome from "@/components/AppHome.vue";
 
 @Component({
   components: {
