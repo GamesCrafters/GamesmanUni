@@ -19,7 +19,7 @@ import AppFooter from "./components/AppFooter.vue";
     AppFooter
   }
 })
-export default class Home extends Vue {}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
