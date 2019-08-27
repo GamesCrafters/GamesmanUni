@@ -1,22 +1,22 @@
 <template>
   <div id="app">
-    <AppHeader></AppHeader>
+    <Header></Header>
     <hr class="c-divider" />
     <router-view />
     <hr class="c-divider" />
-    <AppFooter></AppFooter>
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import AppHeader from "./components/AppHeader.vue";
-import AppFooter from "./components/AppFooter.vue";
+import Header from "@/components/app/Header.vue";
+import Footer from "@/components/app/Footer.vue";
 
 @Component({
   components: {
-    AppHeader,
-    AppFooter
+    Header,
+    Footer
   }
 })
 export default class App extends Vue {}
@@ -24,6 +24,8 @@ export default class App extends Vue {}
 
 <style lang="scss">
 // @import "styles";
+// add global style for buttons
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -47,6 +49,15 @@ export default class App extends Vue {}
 
 .c-text {
   padding: 0 20% 0 20%;
+}
+
+.c-inline-code {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #bcbec0;
+  padding: 2px;
+  font: 12px Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace;
 }
 </style>
 

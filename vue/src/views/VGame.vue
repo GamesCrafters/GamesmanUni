@@ -1,17 +1,17 @@
 <template>
-  <AppAbout></AppAbout>
+  <Game></Game>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import AppAbout from "@/components/AppAbout.vue";
+import Game from "@/components/app/Game.vue";
 
 @Component({
   components: {
-    AppAbout
+    Game
   }
 })
-export default class About extends Vue {}
+export default class VGame extends Vue {}
 </script>
 
 <style scoped lang="scss"></style>

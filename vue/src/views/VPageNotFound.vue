@@ -1,17 +1,17 @@
 <template>
-  <AppGames></AppGames>
+  <PageNotFound></PageNotFound>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import AppGames from "@/components/AppGames.vue";
+import PageNotFound from "@/components/app/PageNotFound.vue";
 
 @Component({
   components: {
-    AppGames
+    PageNotFound
   }
 })
-export default class Games extends Vue {}
+export default class VPageNotFound extends Vue {}
 </script>
 
 <style scoped lang="scss"></style>
