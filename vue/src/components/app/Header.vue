@@ -1,13 +1,15 @@
 <template>
   <div id="app-header">
     <router-link id="app-header-logo" class="c-router-link" to="/">
-      <img alt="Gamesman Logo" src="./../assets/app-logo.png" />
+      <img alt="Gamesman Logo" src="@/assets/app-logo.png" />
     </router-link>
     <h1 id="app-header-title">GamesmanUni</h1>
     <div id="app-header-nav">
+      <button>⚙</button> |
       <router-link class="c-router-link" to="/">Home</router-link> |
       <router-link class="c-router-link" to="/games">Games</router-link> |
-      <router-link class="c-router-link" to="/about">About</router-link>
+      <router-link class="c-router-link" to="/about">About</router-link> |
+      <button>☽</button>
     </div>
   </div>
 </template>
@@ -16,7 +18,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class AppHeader extends Vue {}
+export default class Header extends Vue {}
 </script>
 
 <style scoped lang="scss">

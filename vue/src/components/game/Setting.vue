@@ -1,6 +1,6 @@
 <template>
-  <div id="app-games">
-    <h2 id="app-games-title">Games</h2>
+  <div id="game-setting">
+    <h3 id="game-setting-title">Game Setting</h3>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class AppGames extends Vue {}
+export default class Setting extends Vue {}
 </script>
 
 <style scoped lang="scss"></style>
