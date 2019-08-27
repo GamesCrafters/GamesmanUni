@@ -1,0 +1,15 @@
+{
+  "status": "ok",
+  "response": [
+    {
+      "id": "ftz",
+      "name": "Four to Zero",
+      "dataBaseUrl": "https://nyc.cs.berkeley.edu/classic/service/gamesman/puzzles/4to0/"
+    },
+    {
+      "id": "ttt",
+      "name": "Tic-Tac-Toe",
+      "dataBaseUrl": "https://nyc.cs.berkeley.edu/classic/service/gamesman/puzzles/ttt/"
+    }
+  ]
+}
