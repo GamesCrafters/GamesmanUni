@@ -1,14 +1,16 @@
 <template>
   <div id="app-game">
-    <h2 id="game-title">{{ game.name }}</h2>
-    <p id="game-round">Round: {{ game.round.round }}</p>
-    <p id="game-player">Player: {{ game.round.turnName }}</p>
+    <h2 id="game-title">{{ $store.state.currentGame.name }}</h2>
+    <p id="game-round">Round: {{ $store.state.currentGame.round.round }}</p>
+    <p id="game-player">{{ $store.state.currentGame.round.turnName }} Turn</p>
     <button @click="restart">Restart</button>
-    <component :is="game.id"></component>
-    <p id="game-value">Value:</p>
-    <p id="game-remoteness">Remoteness:</p>
-    <p id="game-message">Message:</p>
-    <!-- <History></History> -->
+    <component :is="$store.state.currentGame.id"></component>
+    <p id="game-value">Value: {{ $store.state.currentGame.round.value }}</p>
+    <p id="game-remoteness">
+      Remoteness: {{ $store.state.currentGame.round.remoteness }}
+    </p>
+    <p id="game-message"></p>
+    <!-- <History v-if="!game.start"></History> -->
     <Setting></Setting>
   </div>
 </template>
@@ -31,25 +33,19 @@ import Setting from "@/components/game/Setting.vue";
   }
 })
 export default class Game extends Vue {
-  game: CGame = new CGame();
-
-  created() {
-    this.game = new CGame(
-      this.$store.state.games[
-        this.$store.state.gameIds.indexOf(this.$route.params.gameId)
-      ]
-    );
-    this.$store.commit("currentGame", this.game);
-    this.game = this.$store.state.currentGame;
-  }
-
-  beforeRouteLeave(to: Object, from: Object, next: Function) {
-    this.$store.commit("updatePlayedGames", this.game);
+  mounted() {
+    this.$store.commit("loadCurrentGame", this.$route.params.gameId);
   }
 
   restart() {
-    this.game.name = "boooo";
-    return;
+    this.$store.commit(
+      "currentGame",
+      new CGame(this.$store.getters("game", this.$route.params.gameId))
+    );
+  }
+
+  beforeRouteLeave(to: Object, from: Object, next: Function) {
+    this.$store.commit("updatePlayedGames");
   }
 }
 </script>

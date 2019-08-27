@@ -27,31 +27,37 @@ export default new Vuex.Store({
     },
     games(state, games: Array<CGame>) {
       state.games = games;
+      state.gameIds = state.games.map((game: CGameData): string => {
+        return game.id;
+      });
     },
-    gameIds(state, gameIds: Array<string>) {
-      state.gameIds = gameIds;
-    },
-    updatePlayedGames(state, lastGame: CGame) {
-      let i = state.playedGameIds.indexOf(lastGame.id);
-      if (i != -1) {
-        state.playedGames[i] = lastGame;
-      } else {
-        state.playedGameIds.push(lastGame.id);
-        state.playedGames.push(lastGame);
-      }
-    },
-    currentGame(state, currentGame: CGame) {
-      let i = state.playedGameIds.indexOf(currentGame.id);
+    loadCurrentGame(state, currentGameId: string) {
+      let i = state.playedGameIds.indexOf(currentGameId);
+      // if an already started game exists...
       if (i != -1) {
         state.currentGame = state.playedGames[i];
       } else {
-        state.currentGame = currentGame;
+        let j = state.gameIds.indexOf(currentGameId);
+        state.currentGame = new CGame(state.games[j]);
+      }
+    },
+    currentGame(state, currentGame: CGame) {
+      state.currentGame = currentGame;
+    },
+    updatePlayedGames(state) {
+      let i = state.playedGameIds.indexOf(state.currentGame.id);
+      if (i != -1) {
+        state.playedGames[i] = state.currentGame;
+      } else {
+        state.playedGames.push(state.currentGame);
+        state.playedGameIds.push(state.currentGame.id);
       }
     }
   },
-  actions: {
-    async newCurrentGame({ commit }) {
-      commit("currentgame");
+  getters: {
+    game(state, gameId: string) {
+      let i = state.gameIds.indexOf(gameId);
+      return state.games[i];
     }
   }
 });

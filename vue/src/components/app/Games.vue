@@ -20,7 +20,9 @@ import * as gamesData from "@/datas/temps/GAMES.json";
 @Component
 export default class Games extends Vue {
   games: Array<CGameData> = [];
-  mounted() {
+
+  created() {
+    // load games...
     for (let gameData of gamesData.response) {
       let game = new CGameData({
         id: gameData.id,
@@ -29,11 +31,8 @@ export default class Games extends Vue {
       });
       this.games.push(game);
     }
+    // save games...
     this.$store.commit("games", this.games);
-    let appGameIds = this.$store.state.games.map((game: CGameData): string => {
-      return game.id;
-    });
-    this.$store.commit("gameIds", appGameIds);
   }
 }
 </script>
