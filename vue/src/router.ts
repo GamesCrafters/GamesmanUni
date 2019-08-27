@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import VHome from "@/views/VHome.vue";
 
 Vue.use(Router);
 
@@ -10,27 +10,32 @@ export default new Router({
   routes: [
     {
       path: "/",
-      component: Home
+      name: "vHome",
+      component: VHome
     },
     {
       path: "/games",
+      name: "vGames",
       component: () =>
-        import(/* webpackChunkName: "games" */ "./views/Games.vue")
+        import(/* webpackChunkName: "vGames" */ "./views/VGames.vue")
     },
     {
       path: "/game/:solverId/:gameId",
-      component: () => import(/* webpackChunkName: "game" */ "./views/Game.vue")
+      name: "vGame",
+      component: () => import(/* webpackChunkName: "vGame" */ "./views/VGame.vue")
     },
     {
       path: "/about",
+      name: "vAbout",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import(/* webpackChunkName: "vAbout" */ "./views/VAbout.vue")
     },
     {
       path: "*",
+      name: "vPageNotFound",
       component: () =>
         import(
-          /* webpackChunkName: "pageNotFound" */ "./views/PageNotFound.vue"
+          /* webpackChunkName: "vPageNotFound" */ "./views/VPageNotFound.vue"
         )
     }
   ]
