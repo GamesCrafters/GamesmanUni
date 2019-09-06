@@ -1,14 +1,14 @@
-import { IGameData } from "@/interfaces/IGameData";
-import { CRound } from "@/classes/CRound";
-import { CHistory } from "@/classes/CHistory";
+import { Round } from "@/classes/Round";
+import { History } from "@/classes/History";
 
-export interface IGame extends IGameData {
+export interface IGame {
+  statuses: { [status: number]: string };
+  status: number;
   id: string;
   name: string;
   dataBaseUrl: string;
-  valueCodes: { [value: string]: number };
-  turnNames: { [value: number]: string };
-  maxRemoteness: number;
-  round: CRound;
-  history: CHistory;
+  starterTurn: number;
+  maximumRemoteness: number;
+  round: Round;
+  history: History;
 }

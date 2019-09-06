@@ -1,14 +1,14 @@
 <template>
-  <PageNotFound></PageNotFound>
+  <CPageNotFound></CPageNotFound>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import PageNotFound from "@/components/app/PageNotFound.vue";
+import CPageNotFound from "@/components/CPageNotFound.vue";
 
 @Component({
   components: {
-    PageNotFound
+    CPageNotFound
   }
 })
 export default class VPageNotFound extends Vue {}

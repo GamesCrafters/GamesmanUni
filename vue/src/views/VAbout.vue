@@ -1,14 +1,14 @@
 <template>
-  <About></About>
+  <CAbout></CAbout>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import About from "@/components/app/About.vue";
+import CAbout from "@/components/CAbout.vue";
 
 @Component({
   components: {
-    About
+    CAbout
   }
 })
 export default class VAbout extends Vue {}

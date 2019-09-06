@@ -1,63 +1,61 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { CAppSetting } from "@/classes/CAppSetting";
-import { CGameData } from "@/classes/CGameData";
-import { CGame } from "@/classes/CGame";
+import { GamesData } from "@/classes/external/GamesData";
+import { Game } from "@/classes/Game";
+import { App } from "@/classes/App";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    appSetting: new CAppSetting(),
-    games: <CGameData[]>[],
-    gameIds: <string[]>[],
-    playedGames: <CGame[]>[],
-    playedGameIds: <string[]>[],
-    currentGame: new CGame()
+    app: new App(),
+    currentMoveTracker: { round: 0, move: "none" }
   },
   mutations: {
-    appSetting(state, appSetting: CAppSetting) {
-      state.appSetting = appSetting;
+    app(state, app: App) {
+      state.app = app;
     },
-    theme(state, theme: string) {
-      state.appSetting.theme = theme;
+    gamesData(state, gamesData: GamesData) {
+      state.app.gamesData = gamesData;
     },
-    layout(state, layout: string) {
-      state.appSetting.layout = layout;
+    status(state, status: number) {
+      state.app.currentGame.setStatus(status);
     },
-    games(state, games: Array<CGame>) {
-      state.games = games;
-      state.gameIds = state.games.map((game: CGameData): string => {
-        return game.id;
-      });
+    currentGame(state, currentGame: Game) {
+      state.app.currentGame = currentGame;
     },
-    loadCurrentGame(state, currentGameId: string) {
-      let i = state.playedGameIds.indexOf(currentGameId);
-      // if an already started game exists...
-      if (i != -1) {
-        state.currentGame = state.playedGames[i];
-      } else {
-        let j = state.gameIds.indexOf(currentGameId);
-        state.currentGame = new CGame(state.games[j]);
-      }
+    currentMoveTracker(state, currentMove: string) {
+      state.currentMoveTracker = {
+        round: state.app.currentGame.round.getRoundNumber(),
+        move: currentMove
+      };
+    }
+  },
+  actions: {
+    initApp({ commit }) {
+      commit("app", new App());
     },
-    currentGame(state, currentGame: CGame) {
-      state.currentGame = currentGame;
+    saveGamesData({ commit }, gamesData: GamesData) {
+      commit("gamesData", gamesData);
     },
-    updatePlayedGames(state) {
-      let i = state.playedGameIds.indexOf(state.currentGame.id);
-      if (i != -1) {
-        state.playedGames[i] = state.currentGame;
-      } else {
-        state.playedGames.push(state.currentGame);
-        state.playedGameIds.push(state.currentGame.id);
-      }
+    saveCurrentGame({ commit }, currentGame: Game) {
+      commit("currentGame", currentGame);
+    },
+    makeMove({ commit }, move: string) {
+      commit("currentMoveTracker", move);
+    },
+    setStatus({ commit }, status: number) {
+      commit("status", status);
     }
   },
   getters: {
-    game(state, gameId: string) {
-      let i = state.gameIds.indexOf(gameId);
-      return state.games[i];
-    }
+    gameData: state => (gameId: string) =>
+      state.app.gamesData.getGameData(gameId),
+    currentGame: state => state.app.currentGame,
+    currentMoveTracker: state => state.currentMoveTracker,
+    round: state => state.app.currentGame.round,
+    history: state => state.app.currentGame.history,
+    nextMoveValuesData: state => state.app.currentGame.round.nextMoveValuesData,
+    status: state => state.app.currentGame.status
   }
 });

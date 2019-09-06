@@ -1,14 +1,14 @@
 <template>
-  <Home></Home>
+  <CHome></CHome>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Home from "@/components/app/Home.vue";
+import CHome from "@/components/CHome.vue";
 
 @Component({
   components: {
-    Home
+    CHome
   }
 })
 export default class VHome extends Vue {}

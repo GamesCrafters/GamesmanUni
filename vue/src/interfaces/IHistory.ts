@@ -1,10 +1,14 @@
+import { NextMoveValuesData } from "@/classes/external/NextMoveValuesData";
+
 export interface IHistory {
-  moves: Array<number>;
+  moves: Array<string>;
+  moveValues: Array<string>;
   boards: Array<string>;
   values: Array<string>;
   valueCodes: Array<number>;
   remotenesses: Array<number>;
   turns: Array<number>;
   turnNames: Array<string>;
-  rounds: Array<number>;
+  roundNumbers: Array<number>;
+  nextMoveValuesDatas: Array<NextMoveValuesData>;
 }

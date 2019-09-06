@@ -1,14 +1,14 @@
 <template>
-  <Games></Games>
+  <CGames></CGames>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Games from "@/components/app/Games.vue";
+import CGames from "@/components/CGames.vue";
 
 @Component({
   components: {
-    Games
+    CGames
   }
 })
 export default class VGames extends Vue {}

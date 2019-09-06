@@ -10,32 +10,29 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "vHome",
       component: VHome
     },
     {
       path: "/games",
-      name: "vGames",
       component: () =>
-        import(/* webpackChunkName: "vGames" */ "./views/VGames.vue")
+        import(/* webpackChunkName: "games" */ "./views/VGames.vue")
     },
     {
-      path: "/game/:solverId/:gameId",
-      name: "vGame",
-      component: () => import(/* webpackChunkName: "vGame" */ "./views/VGame.vue")
+      path: "/game/:gameId",
+      name: "game",
+      component: () =>
+        import(/* webpackChunkName: "game" */ "./views/VGame.vue")
     },
     {
       path: "/about",
-      name: "vAbout",
       component: () =>
-        import(/* webpackChunkName: "vAbout" */ "./views/VAbout.vue")
+        import(/* webpackChunkName: "about" */ "./views/VAbout.vue")
     },
     {
       path: "*",
-      name: "vPageNotFound",
       component: () =>
         import(
-          /* webpackChunkName: "vPageNotFound" */ "./views/VPageNotFound.vue"
+          /* webpackChunkName: "pageNotFound" */ "./views/VPageNotFound.vue"
         )
     }
   ]
