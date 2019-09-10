@@ -1,29 +1,23 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <AppHeader></AppHeader>
+    <hr class="c-divider" />
     <router-view />
+    <hr class="c-divider" />
+    <AppFooter></AppFooter>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import AppHeader from "@/components/AppHeader.vue";
+import AppFooter from "@/components/AppFooter.vue";
+
+@Component({
+  components: {
+    AppHeader,
+    AppFooter
   }
-}
-</style>
+})
+export default class App extends Vue {}
+</script>
