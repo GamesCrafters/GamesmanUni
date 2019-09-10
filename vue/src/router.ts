@@ -15,24 +15,23 @@ export default new Router({
     {
       path: "/games",
       component: () =>
-        import(/* webpackChunkName: "games" */ "./views/AppGames.vue")
+        import(/* webpackChunkName: "games" */ "./views/Games.vue")
     },
     {
       path: "/game/:gameId/:gameVariation",
       name: "game",
-      component: () =>
-        import(/* webpackChunkName: "game" */ "./views/AppGame.vue")
+      component: () => import(/* webpackChunkName: "game" */ "./views/Game.vue")
     },
     {
       path: "/about",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/AppAbout.vue")
+        import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
       path: "*",
       component: () =>
         import(
-          /* webpackChunkName: "pageNotFound" */ "./views/AppPageNotFound.vue"
+          /* webpackChunkName: "pageNotFound" */ "./views/PageNotFound.vue"
         )
     }
   ]
