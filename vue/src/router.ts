@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import VHome from "@/views/VHome.vue";
+import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
@@ -10,30 +10,17 @@ export default new Router({
   routes: [
     {
       path: "/",
-      component: VHome
-    },
-    {
-      path: "/games",
-      component: () =>
-        import(/* webpackChunkName: "games" */ "./views/VGames.vue")
-    },
-    {
-      path: "/game/:gameId",
-      name: "game",
-      component: () =>
-        import(/* webpackChunkName: "game" */ "./views/VGame.vue")
+      name: "home",
+      component: Home
     },
     {
       path: "/about",
+      name: "about",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/VAbout.vue")
-    },
-    {
-      path: "*",
-      component: () =>
-        import(
-          /* webpackChunkName: "pageNotFound" */ "./views/VPageNotFound.vue"
-        )
+        import(/* webpackChunkName: "about" */ "./views/About.vue")
     }
   ]
 });
