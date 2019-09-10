@@ -3,5 +3,6 @@ export interface TDataGames {
   response: Array<{
     id: string;
     name: string;
+    dataBaseUrl: string;
   }>;
 }
