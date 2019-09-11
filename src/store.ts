@@ -16,7 +16,8 @@ export default new Vuex.Store({
     roundNumber: state => state.app.game.round.roundNumber,
     visualizerSelectorId: state => state.app.game.visualizerSelectorId,
     loadingStatus: state => state.app.game.loadingStatus,
-    moveValue: state => (move: string) => state.app.game.round.getMoveValue(move)
+    moveValue: state => (move: string) =>
+      state.app.game.round.getMoveValue(move)
   },
   mutations: {
     game(state, game: CGame) {
