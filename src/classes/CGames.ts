@@ -27,7 +27,7 @@ export class CGames implements IGames {
     return this.gameIds.indexOf(gameId);
   }
 
-  getGameData(gameId: string) {
+  getGameData(gameId: string): TGameData {
     return this.gameDatas[this.indexOfGameData(gameId)];
   }
 }

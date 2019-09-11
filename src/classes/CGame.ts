@@ -75,7 +75,7 @@ export class CGame implements IGame {
     return nextMoveDatas;
   }
 
-  async initGame(gameData: TGameData) {
+  async initGame(gameData: TGameData): Promise<void> {
     this.id = gameData.id;
     this.name = gameData.name;
     this.dataBaseUrl = gameData.dataBaseUrl;
@@ -86,7 +86,7 @@ export class CGame implements IGame {
     this.history.push(this.round);
   }
 
-  async runRound(move: string) {
+  async runRound(move: string): Promise<void> {
     this.round.setMove(move);
     this.history.updateLastRound(this.round);
     let newRound = new CRound();

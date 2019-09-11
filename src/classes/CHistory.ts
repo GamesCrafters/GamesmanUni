@@ -10,14 +10,14 @@ export class CHistory implements IHistory {
     this.maximumRemoteness = 6;
   }
 
-  push(round: CRound) {
+  push(round: CRound): void {
     this.rounds.push(round);
     this.maximumRemoteness = Math.max(
       ...this.rounds.map(round => round.remoteness)
     );
   }
 
-  updateLastRound(round: CRound) {
+  updateLastRound(round: CRound): void {
     this.rounds[this.rounds.length - 1] = round;
   }
 }

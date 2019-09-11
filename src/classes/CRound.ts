@@ -24,7 +24,7 @@ export class CRound implements IRound {
     this.nextMoveDatas = new Array<TMoveData>();
   }
 
-  setFirstRound(moveData: TMoveData, nextMoveDatas: Array<TMoveData>) {
+  setFirstRound(moveData: TMoveData, nextMoveDatas: Array<TMoveData>): void {
     this.gameVariation = 0;
     this.turnNumber = 0;
     this.roundNumber = 1;
@@ -36,7 +36,7 @@ export class CRound implements IRound {
     this.nextMoveDatas = nextMoveDatas;
   }
 
-  setNextRound(currentRound: CRound) {
+  setNextRound(currentRound: CRound): void {
     this.gameVariation = 0;
     this.turnNumber = (currentRound.turnNumber + 1) % 2;
     this.roundNumber = currentRound.roundNumber + 1;
@@ -52,7 +52,7 @@ export class CRound implements IRound {
     this.nextMoveDatas = new Array<TMoveData>();
   }
 
-  setNextMoveDatas(nextMoveDatas: Array<TMoveData>) {
+  setNextMoveDatas(nextMoveDatas: Array<TMoveData>): void {
     this.nextMoveDatas = nextMoveDatas;
   }
 
@@ -91,7 +91,7 @@ export class CRound implements IRound {
     }
   }
 
-  setMove(move: string) {
+  setMove(move: string): void {
     this.move = move;
     this.moveValue = this.getMoveValue(move);
   }
