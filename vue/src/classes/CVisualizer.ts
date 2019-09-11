@@ -1,3 +1,4 @@
+import * as style from "@/datas/styles/SLight";
 import { IVisualizer } from "@/interfaces/IVisualizer";
 import { CGame } from "@/classes/CGame";
 import { CHistory } from "./CHistory";
@@ -63,15 +64,16 @@ export class CVisualizer implements IVisualizer {
   constructor(game: CGame, currentRoundNumber?: number) {
     this.history = game.history;
     this.maximumRemoteness = this.history.maximumRemoteness;
-    this.currentRoundNumber = currentRoundNumber || this.history.rounds.length;
+    this.currentRoundNumber =
+      currentRoundNumber ||
+      (this.history.rounds.length != 0 && this.history.rounds.length) ||
+      1;
 
     this.canvas = document.getElementById(
       game.visualizerSelectorId
     ) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    let style: any;
-    import("@/datas/styles/SLight.ts").then(style => style);
     this.font = style.font;
     this.mainColor = style.mainColor;
     this.winColor = style.winColor;
@@ -96,7 +98,7 @@ export class CVisualizer implements IVisualizer {
     this.gridHeight = this.rowHeight * this.rowCount;
     this.canvasHeight =
       this.turnNameHeight +
-      2 * (this.xCoordinateHeight + this.xLabelHeight) +
+      2 * (this.padding + this.xCoordinateHeight + this.xLabelHeight) +
       this.gridHeight;
 
     this.yCoordinateWidth = 10;
@@ -106,7 +108,8 @@ export class CVisualizer implements IVisualizer {
     this.columnCount = 2 * this.maximumRemoteness + 3;
     this.gridWidth = this.columnWidth * this.columnCount;
     this.canvasWidth =
-      2 * (this.yCoordinateWidth + this.yLabelWidth) + this.gridWidth;
+      2 * (this.padding + this.yCoordinateWidth + this.yLabelWidth) +
+      this.gridWidth;
 
     this.gridTop =
       this.padding +
@@ -252,7 +255,7 @@ export class CVisualizer implements IVisualizer {
         this.mainColor
       );
       this.setText(
-        this.history.rounds[round].turnNumber.toString(),
+        this.history.rounds[round - 1].turnNumber.toString(),
         this.gridRight + this.yLabelWidth / 2,
         this.roundToY(round),
         this.mainColor
@@ -293,7 +296,7 @@ export class CVisualizer implements IVisualizer {
     let x: number | [number, number];
     let y: number;
     for (let round = 1; round <= this.currentRoundNumber; round++) {
-      roundData = this.history.rounds[round];
+      roundData = this.history.rounds[round - 1];
       if (roundData.positionValue === "draw") {
         x = this.gridMiddleX;
       } else if (roundData.positionValue === "tie") {
@@ -301,7 +304,7 @@ export class CVisualizer implements IVisualizer {
           this.remotenessToX(roundData.remoteness, 0),
           this.remotenessToX(roundData.remoteness, 1)
         ];
-      } else if (roundData.positionValue === "win") {
+      } else if (roundData.positionValue === "lose") {
         x = this.remotenessToX(
           roundData.remoteness,
           (roundData.turnNumber + 1) % 2
@@ -356,7 +359,7 @@ export class CVisualizer implements IVisualizer {
       y1 = this.pointCoordinates[round].y;
       x2 = this.pointCoordinates[round + 1].x;
       y2 = this.pointCoordinates[round + 1].y;
-      color = this.valueToColor(this.history.rounds[round].moveValue);
+      color = this.valueToColor(this.history.rounds[round - 1].moveValue);
       if (typeof x1 === "number" && typeof x2 === "number") {
         this.setLink(x1, y1, x2, y2, color);
       } else if (typeof x1 === "number" && typeof x2 != "number") {
@@ -377,7 +380,7 @@ export class CVisualizer implements IVisualizer {
     for (let round = 1; round <= this.currentRoundNumber; round++) {
       x = this.pointCoordinates[round].x;
       y = this.pointCoordinates[round].y;
-      color = this.valueToColor(this.history.rounds[round].moveValue);
+      color = this.valueToColor(this.history.rounds[round - 1].positionValue);
       if (typeof x === "number") {
         this.setPoint(x, y, color);
       } else {

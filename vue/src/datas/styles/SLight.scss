@@ -1,0 +1,63 @@
+.c-divider {
+  border: 0.5px dotted;
+}
+
+.c-link-router {
+  font-weight: bold;
+  color: black;
+  &.router-link-exact-active {
+    color: #42b983;
+  }
+}
+
+.c-text {
+  padding: 0 20% 0 20%;
+}
+
+.c-code-inline {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #bcbec0;
+  padding: 2px;
+  font: 12px Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace;
+}
+
+.c-win {
+  color: black;
+  background-color: #42b983;
+}
+
+.c-draw {
+  color: black;
+  background-color: orange;
+}
+
+.c-tie {
+  color: black;
+  background-color: orange;
+}
+
+.c-lose {
+  color: white;
+  background-color: red;
+}
+
+.c-none {
+  color: black;
+  background-color: white;
+}
+
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: black;
+  padding: 0 10% 0 10%;
+}
+
+#app-header-nav {
+  padding: 0 0 10px 0;
+  .c-link-router {
+    font-size: 18px;
+  }
+}

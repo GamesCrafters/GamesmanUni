@@ -1,5 +1,5 @@
 import { IHistory } from "@/interfaces/IHistory";
-import { CRound } from "./CRound";
+import { CRound } from "@/classes/CRound";
 
 export class CHistory implements IHistory {
   rounds: Array<CRound>;

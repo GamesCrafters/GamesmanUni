@@ -29,7 +29,7 @@ export default class CGame extends Vue {
     return this.$store.getters.game;
   }
 
-  mounted() {
+  created() {
     this.$store.dispatch("startNewGame", this.$route.params.gameId);
   }
 

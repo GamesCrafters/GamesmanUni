@@ -11,8 +11,6 @@ export class CRound implements IRound {
   positionValue: string;
   remoteness: number;
   nextMoveDatas: Array<TMoveData>;
-  nextMoves: Array<string>;
-  nextMovePositionValues: Array<string>;
 
   constructor() {
     this.gameVariation = 0;
@@ -24,11 +22,10 @@ export class CRound implements IRound {
     this.positionValue = "";
     this.remoteness = 6;
     this.nextMoveDatas = new Array<TMoveData>();
-    this.nextMoves = new Array<string>();
-    this.nextMovePositionValues = new Array<string>();
   }
 
   setFirstRound(moveData: TMoveData, nextMoveDatas: Array<TMoveData>) {
+    this.gameVariation = 0;
     this.turnNumber = 0;
     this.roundNumber = 1;
     this.move = "";
@@ -36,60 +33,66 @@ export class CRound implements IRound {
     this.board = moveData.board;
     this.positionValue = moveData.positionValue;
     this.remoteness = moveData.remoteness;
-    this.setNextMoveDatas(nextMoveDatas);
+    this.nextMoveDatas = nextMoveDatas;
   }
 
-  getNextRound(nextMoveDatas: Array<TMoveData>) {
-    const moveData = this.getNextMoveData(this.move);
-    let nextRound: CRound = new CRound();
-    nextRound.gameVariation = this.gameVariation;
-    nextRound.turnNumber = (this.turnNumber + 1) % 2;
-    nextRound.roundNumber = this.roundNumber + 1;
-    nextRound.move = "";
-    nextRound.moveValue = "";
-    nextRound.board = moveData.board;
-    nextRound.positionValue = moveData.positionValue;
-    nextRound.remoteness = moveData.remoteness;
-    nextRound.setNextMoveDatas(nextMoveDatas);
-    return nextRound;
+  setNextRound(currentRound: CRound) {
+    this.gameVariation = 0;
+    this.turnNumber = (currentRound.turnNumber + 1) % 2;
+    this.roundNumber = currentRound.roundNumber + 1;
+    this.move = "";
+    this.moveValue = "";
+    this.board = currentRound.getNextMoveData(currentRound.move).board;
+    this.positionValue = currentRound.getNextMoveData(
+      currentRound.move
+    ).positionValue;
+    this.remoteness = currentRound.getNextMoveData(
+      currentRound.move
+    ).remoteness;
+    this.nextMoveDatas = new Array<TMoveData>();
   }
 
   setNextMoveDatas(nextMoveDatas: Array<TMoveData>) {
     this.nextMoveDatas = nextMoveDatas;
-    this.nextMoves = this.nextMoveDatas.map(nextMoveData => nextMoveData.move);
-    this.nextMovePositionValues = this.nextMoveDatas.map(
-      nextMoveData => nextMoveData.positionValue
-    );
+  }
+
+  private getNextMoves(): Array<string> {
+    return this.nextMoveDatas.map(nextMoveData => nextMoveData.move);
+  }
+
+  private indexOfNextMoveData(nextMove: string): number {
+    return this.getNextMoves().indexOf(nextMove);
+  }
+
+  getNextMoveData(nextMove: string): TMoveData {
+    let i = this.indexOfNextMoveData(nextMove);
+    if (i != -1) {
+      return this.nextMoveDatas[i];
+    }
+    return { move: "", board: "", positionValue: "", remoteness: 6 };
+  }
+
+  getNextMovePositionValue(nextMove: string): string {
+    let i = this.indexOfNextMoveData(nextMove);
+    if (i != -1) {
+      return this.nextMoveDatas[i].positionValue;
+    }
+    return "";
   }
 
   getMoveValue(move: string): string {
-    const i = this.nextMoves.indexOf(move);
-    const nextMovePositionValue = this.nextMovePositionValues[i];
+    const nextMovePositionValue = this.getNextMovePositionValue(move);
     if (nextMovePositionValue === "win") {
       return "lose";
     } else if (nextMovePositionValue === "lose") {
       return "win";
     } else {
-      return move;
+      return nextMovePositionValue;
     }
   }
 
   setMove(move: string) {
     this.move = move;
     this.moveValue = this.getMoveValue(move);
-  }
-
-  private indexOfNextMove(nextMove: string): number {
-    return this.nextMoves.indexOf(nextMove);
-  }
-
-  getNextMoveData(nextMove: string): TMoveData {
-    const i = this.indexOfNextMove(nextMove);
-    return this.nextMoveDatas[i];
-  }
-
-  getNextMovePositionValue(nextMove: string): string {
-    const i = this.indexOfNextMove(nextMove);
-    return this.nextMovePositionValues[i];
   }
 }

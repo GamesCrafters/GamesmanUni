@@ -1,6 +1,6 @@
-import { IGames } from "@/interfaces/IGames";
-import { TGameData } from "@/types/TGameData";
 import { TDataGames } from "@/types/TDataGames";
+import { TGameData } from "@/types/TGameData";
+import { IGames } from "@/interfaces/IGames";
 
 export class CGames implements IGames {
   gameDatas: Array<TGameData>;
@@ -8,10 +8,10 @@ export class CGames implements IGames {
 
   constructor() {
     this.gameDatas = this.loadGames();
-    this.gameIds = this.gameDatas.map(gameData => gameData.id);
+    this.gameIds = this.getGameIds();
   }
 
-  loadGames(): Array<TGameData> {
+  private loadGames(): Array<TGameData> {
     const DATAGAMES: TDataGames = require("@/datas/temps/DATAGAMES.json");
     if (DATAGAMES.status === "ok") {
       return DATAGAMES.response;
@@ -19,12 +19,12 @@ export class CGames implements IGames {
     return Array<TGameData>();
   }
 
-  getGameIds(): Array<string> {
+  private getGameIds(): Array<string> {
     return this.gameDatas.map(gameData => gameData.id);
   }
 
   private indexOfGameData(gameId: string): number {
-    return this.getGameIds().indexOf(gameId);
+    return this.gameIds.indexOf(gameId);
   }
 
   getGameData(gameId: string) {

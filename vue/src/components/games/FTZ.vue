@@ -5,16 +5,18 @@
       <button
         id="ftz-move-1"
         class="ftz app-game-move"
-        @click="runMove1"
-        :class="[move1PositionValue]"
+        @click="runMove('1')"
+        :class="moveValue('1')"
+        :disabled="isInvalidMove('1')"
       >
         take one
       </button>
       <button
         id="ftz-move-2"
         class="ftz app-game-move"
-        @click="runMove2"
-        :class="[move2PositionValue]"
+        @click="runMove('2')"
+        :class="moveValue('2')"
+        :disabled="isInvalidMove('2')"
       >
         take two
       </button>
@@ -23,28 +25,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
 export default class FTZ extends Vue {
+  get loadingStatus() {
+    return this.$store.getters.loadingStatus;
+  }
+
   get game() {
     return this.$store.getters.game;
   }
 
-  get move1PositionValue() {
-    return this.$store.getters.nextMovePositionValue("1");
+  runMove(move: string) {
+    this.$store.dispatch("runRound", move);
   }
 
-  get move2PositionValue() {
-    return this.$store.getters.nextMovePositionValue("2");
+  moveValue(move: string): string {
+    if (!this.loadingStatus) {
+      return "c-" + this.$store.getters.moveValue(move);
+    }
+    return "c-";
   }
 
-  runMove1() {
-    this.$store.dispatch("runRound", "1");
-  }
-
-  runMove2() {
-    this.$store.dispatch("runRound", "2");
+  isInvalidMove(move: string) {
+    const loadingStatus = this.loadingStatus;
+    const moveValue = this.moveValue(move);
+    if (this.loadingStatus || this.moveValue(move) === "c-") {
+      return true;
+    }
   }
 }
 </script>

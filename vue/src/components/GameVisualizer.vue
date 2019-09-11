@@ -11,22 +11,16 @@ import { CVisualizer } from "@/classes/CVisualizer";
 
 @Component
 export default class GameVisualizer extends Vue {
-  get visualizerSelectorId() {
-    return this.$store.getters.visualizerSelectorId;
-  }
+  visualizerSelectorId = this.$store.getters.visualizerSelectorId;
 
   drawVisualizer() {
     const visualizer = new CVisualizer(this.$store.getters.game);
     visualizer.drawVisualizer();
   }
 
-  mounted() {
-    this.drawVisualizer();
-  }
-
-  @Watch("$store.getters.round")
+  @Watch("$store.getters.loadingStatus")
   onRoundChange() {
-    this.drawVisualizer();
+    !this.$store.getters.loadingStatus && this.drawVisualizer();
   }
 }
 </script>

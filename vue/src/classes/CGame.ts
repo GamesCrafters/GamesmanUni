@@ -89,8 +89,11 @@ export class CGame implements IGame {
   async runRound(move: string) {
     this.round.setMove(move);
     this.history.updateLastRound(this.round);
-    const nextMoveDatas = await this.getNextMoveDatas(this.round.board);
-    this.round = this.round.getNextRound(nextMoveDatas);
+    let newRound = new CRound();
+    newRound.setNextRound(this.round);
+    let nextMoveDatas = await this.getNextMoveDatas(newRound.board);
+    newRound.setNextMoveDatas(nextMoveDatas);
+    this.round = newRound;
     this.history.push(this.round);
   }
 }
