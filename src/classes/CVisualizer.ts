@@ -130,7 +130,7 @@ export class CVisualizer implements IVisualizer {
     this.pointCoordinates = {};
   }
 
-  drawVisualizer() {
+  drawVisualizer(): void {
     this.setCanvasShape();
     this.setVisualizerFrame();
     this.setTurnNames();
@@ -154,12 +154,25 @@ export class CVisualizer implements IVisualizer {
     this.ctx.stroke();
   }
 
-  private setText(text: string, x: number, y: number, color: string): void {
+  private setText(
+    text: string,
+    x: number,
+    y: number,
+    color: string,
+    rotationRadian?: number
+  ): void {
+    this.ctx.save();
     this.ctx.textBaseline = "middle";
     this.ctx.textAlign = "center";
     this.ctx.fillStyle = color;
     this.ctx.font = this.font;
+    if (rotationRadian) {
+      this.ctx.translate(x, y);
+      this.ctx.rotate(rotationRadian);
+      this.ctx.translate(-x, -y);
+    }
     this.ctx.fillText(text, x, y);
+    this.ctx.restore();
   }
 
   private setTurnNames(): void {
@@ -193,6 +206,13 @@ export class CVisualizer implements IVisualizer {
       this.xLabel,
       this.canvasWidth / 2,
       this.padding + this.turnNameHeight + this.xLabelHeight / 2,
+      this.mainColor
+    );
+
+    this.setText(
+      this.xLabel,
+      this.canvasWidth / 2,
+      this.canvasHeight - (this.padding + this.xLabelHeight / 2),
       this.mainColor
     );
   }
@@ -243,7 +263,21 @@ export class CVisualizer implements IVisualizer {
   }
 
   private setYLabel(): void {
-    // TBS
+    this.setText(
+      "round",
+      this.padding + this.yLabelWidth / 2,
+      this.gridTop + this.gridHeight / 2,
+      this.mainColor,
+      -(Math.PI / 2)
+    );
+
+    this.setText(
+      "turn",
+      this.canvasWidth - (this.padding + this.yLabelWidth / 2),
+      this.gridTop + this.gridHeight / 2,
+      this.mainColor,
+      Math.PI / 2
+    );
   }
 
   private setYCoordinates(): void {
