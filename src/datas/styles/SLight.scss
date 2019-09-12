@@ -1,63 +1,129 @@
+$font: 1em "Avenir", Helvetica, Arial, sans-serif;
+$monoFont: 0.9em Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace;
+$backgroundColor: white;
+$mainColor: black;
+$themeColor: #42b983;
+$neutralColor: skyblue;
+$winColor: #42b983;
+$drawColor: orange;
+$tieColor: orange;
+$loseColor: #ff4f4f;
+
+@mixin roundBorder {
+  padding: 1.5em;
+  margin: 0.5em;
+  border-radius: 100%;
+  height: 7em;
+}
+
 .c-divider {
-  border: 0.5px dotted;
+  border: 0.03em dotted;
 }
 
 .c-link-router {
   font-weight: bold;
-  color: black;
+  color: $mainColor;
   &.router-link-exact-active {
-    color: #42b983;
+    color: $themeColor;
   }
 }
 
 .c-text {
   padding: 0 20% 0 20%;
+  line-height: 2em;
 }
 
 .c-code-inline {
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border: 1px solid #bcbec0;
-  padding: 2px;
-  font: 12px Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace;
+  border-radius: 0.25em;
+  border: 0.04em solid #bcbec0;
+  padding: 0.125em 0.25em 0.125em 0.25em;
+  font: $monoFont;
 }
 
 .c-win {
-  color: black;
-  background-color: #42b983;
+  color: $mainColor;
+  background-color: $winColor;
 }
 
 .c-draw {
-  color: black;
-  background-color: orange;
+  color: $mainColor;
+  background-color: $drawColor;
 }
 
 .c-tie {
-  color: black;
-  background-color: orange;
+  color: $mainColor;
+  background-color: $tieColor;
 }
 
 .c-lose {
-  color: white;
-  background-color: red;
+  color: $backgroundColor;
+  background-color: $loseColor;
 }
 
 .c-none {
-  color: black;
-  background-color: white;
+  color: $mainColor;
+  background-color: $backgroundColor;
 }
 
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   text-align: center;
-  color: black;
+  color: $mainColor;
   padding: 0 10% 0 10%;
 }
 
 #app-header-nav {
-  padding: 0 0 10px 0;
+  padding: 0 0 0.5em 0;
   .c-link-router {
-    font-size: 18px;
+    font-size: 1.2em;
+  }
+}
+
+#app-game-main {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: baseline;
+
+  > * {
+    flex: 1 1 auto;
+  }
+}
+
+#app-game-main-left {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#app-game-main-left-row1 {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+
+  > * {
+    flex: 1 1 0;
+  }
+}
+
+#app-game-roundNumber,
+#app-game-turnName {
+  font-weight: bold;
+}
+
+#app-game-restart {
+  @include roundBorder();
+  background-color: $neutralColor;
+}
+
+#ftz {
+  .app-game-board {
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 5%;
+  }
+
+  .app-game-move {
+    @include roundBorder();
   }
 }

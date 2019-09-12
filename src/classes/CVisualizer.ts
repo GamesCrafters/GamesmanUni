@@ -29,16 +29,16 @@ export class CVisualizer implements IVisualizer {
   padding: number;
 
   turnNameHeight: number;
-  xCoordinateHeight: number;
   xLabelHeight: number;
+  xCoordinateHeight: number;
   rowHeight: number;
 
   private rowCount: number;
   private gridHeight: number;
   private canvasHeight: number;
 
-  yCoordinateWidth: number;
   yLabelWidth: number;
+  yCoordinateWidth: number;
   columnWidth: number;
 
   private columnCount: number;
@@ -84,15 +84,15 @@ export class CVisualizer implements IVisualizer {
     this.turnName0 = game.turnNames[0];
     this.turnName1 = game.turnNames[1];
 
-    this.xLabel = "Remoteness";
+    this.xLabel = "remoteness";
     this.yLeftLabel = "round";
     this.yRightLabel = "turn";
 
     this.padding = 10;
-    this.turnNameHeight = 10;
-    this.xCoordinateHeight = 10;
-    this.xLabelHeight = 10;
-    this.rowHeight = 10;
+    this.turnNameHeight = 20;
+    this.xLabelHeight = 20;
+    this.xCoordinateHeight = 20;
+    this.rowHeight = 20;
 
     this.rowCount = this.currentRoundNumber;
     this.gridHeight = this.rowHeight * this.rowCount;
@@ -101,9 +101,9 @@ export class CVisualizer implements IVisualizer {
       2 * (this.padding + this.xCoordinateHeight + this.xLabelHeight) +
       this.gridHeight;
 
-    this.yCoordinateWidth = 10;
-    this.yLabelWidth = 10;
-    this.columnWidth = 10;
+    this.yLabelWidth = 20;
+    this.yCoordinateWidth = 20;
+    this.columnWidth = 20;
 
     this.columnCount = 2 * this.maximumRemoteness + 3;
     this.gridWidth = this.columnWidth * this.columnCount;
@@ -132,6 +132,7 @@ export class CVisualizer implements IVisualizer {
 
   drawVisualizer(): void {
     this.setCanvasShape();
+    this.setCanvasResolution();
     this.setVisualizerFrame();
     this.setTurnNames();
     this.setXLabel();
@@ -146,6 +147,15 @@ export class CVisualizer implements IVisualizer {
   private setCanvasShape(): void {
     this.canvas.height = this.canvasHeight;
     this.canvas.width = this.canvasWidth;
+  }
+
+  private setCanvasResolution(): void {
+    this.canvas.style.width = this.canvas.width + "px";
+    this.canvas.style.height = this.canvas.height + "px";
+    let devicePixelRatio = window.devicePixelRatio || 1;
+    this.canvas.width *= devicePixelRatio;
+    this.canvas.height *= devicePixelRatio;
+    this.ctx.scale(devicePixelRatio, devicePixelRatio);
   }
 
   private setVisualizerFrame(): void {
@@ -178,13 +188,13 @@ export class CVisualizer implements IVisualizer {
   private setTurnNames(): void {
     this.setText(
       this.turnName0,
-      this.gridMiddleX - this.gridWidth / 4,
+      this.gridMiddleX - this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
       this.mainColor
     );
     this.setText(
       this.turnName1,
-      this.gridMiddleX + this.gridWidth / 4,
+      this.gridMiddleX + this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
       this.mainColor
     );
@@ -205,14 +215,14 @@ export class CVisualizer implements IVisualizer {
     this.setText(
       this.xLabel,
       this.canvasWidth / 2,
-      this.padding + this.turnNameHeight + this.xLabelHeight / 2,
+      this.gridTop - this.xCoordinateHeight - this.xLabelHeight / 2,
       this.mainColor
     );
 
     this.setText(
       this.xLabel,
       this.canvasWidth / 2,
-      this.canvasHeight - (this.padding + this.xLabelHeight / 2),
+      this.gridBottom + this.xCoordinateHeight + this.xLabelHeight / 2,
       this.mainColor
     );
   }
@@ -238,25 +248,25 @@ export class CVisualizer implements IVisualizer {
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 0),
-        this.gridTop - this.xLabelHeight / 2,
+        this.gridTop - this.xCoordinateHeight / 2,
         this.mainColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 1),
-        this.gridTop - this.xLabelHeight / 2,
+        this.gridTop - this.xCoordinateHeight / 2,
         this.mainColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 0),
-        this.gridBottom + this.xLabelHeight / 2,
+        this.gridBottom + this.xCoordinateHeight / 2,
         this.mainColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 1),
-        this.gridBottom + this.xLabelHeight / 2,
+        this.gridBottom + this.xCoordinateHeight / 2,
         this.mainColor
       );
     }
@@ -265,7 +275,7 @@ export class CVisualizer implements IVisualizer {
   private setYLabel(): void {
     this.setText(
       "round",
-      this.padding + this.yLabelWidth / 2,
+      this.gridLeft - this.yCoordinateWidth - this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
       this.mainColor,
       -(Math.PI / 2)
@@ -273,7 +283,7 @@ export class CVisualizer implements IVisualizer {
 
     this.setText(
       "turn",
-      this.canvasWidth - (this.padding + this.yLabelWidth / 2),
+      this.gridRight + this.yCoordinateWidth + this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
       this.mainColor,
       Math.PI / 2
@@ -284,13 +294,13 @@ export class CVisualizer implements IVisualizer {
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
       this.setText(
         round.toString(),
-        this.gridLeft - this.yLabelWidth / 2,
+        this.gridLeft - this.yCoordinateWidth / 2,
         this.roundToY(round),
         this.mainColor
       );
       this.setText(
         this.history.rounds[round - 1].turnNumber.toString(),
-        this.gridRight + this.yLabelWidth / 2,
+        this.gridRight + this.yCoordinateWidth / 2,
         this.roundToY(round),
         this.mainColor
       );

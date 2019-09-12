@@ -1,21 +1,21 @@
 <template>
-  <div class="ftz app-game">
-    <p class="ftz app-game-board">Board: {{ game.round.board }}</p>
-    <div class="ftz app-game-moves">
+  <div id="ftz" class="app-game">
+    <p class="app-game-board" :class="`c-${game.round.positionValue}`">
+      {{ game.round.board }}
+    </p>
+    <div class="app-game-moves">
       <button
-        id="ftz-move-1"
-        class="ftz app-game-move"
-        @click="runMove('1')"
+        class="app-game-move"
         :class="moveValue('1')"
+        @click="runMove('1')"
         :disabled="isInvalidMove('1')"
       >
         take one
       </button>
       <button
-        id="ftz-move-2"
-        class="ftz app-game-move"
-        @click="runMove('2')"
+        class="app-game-move"
         :class="moveValue('2')"
+        @click="runMove('2')"
         :disabled="isInvalidMove('2')"
       >
         take two

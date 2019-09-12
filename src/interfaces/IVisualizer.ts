@@ -18,12 +18,12 @@ export interface IVisualizer {
   padding: number;
 
   turnNameHeight: number;
-  xCoordinateHeight: number;
   xLabelHeight: number;
+  xCoordinateHeight: number;
   rowHeight: number;
 
-  yCoordinateWidth: number;
   yLabelWidth: number;
+  yCoordinateWidth: number;
   columnWidth: number;
 
   pointRadius: number;

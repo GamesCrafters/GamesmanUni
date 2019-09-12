@@ -1,15 +1,35 @@
 <template>
   <div id="app-game">
     <h2 id="app-game-title">{{ game.name }}</h2>
-    <p id="app-game-round">Round {{ game.round.roundNumber }}</p>
-    <p id="app-game-player">{{ game.turnNames[game.round.turnNumber] }} Turn</p>
-    <button id="app-game-restart" @click="restarted">Restart</button>
-    <component :is="game.id.toUpperCase()"></component>
-    <p id="app-game-positionValue">
-      Position Value: {{ game.round.positionValue }}
-    </p>
-    <p id="app-game-remoteness">Remoteness: {{ game.round.remoteness }}</p>
-    <GameVisualizer></GameVisualizer>
+    <div id="app-game-main">
+      <div id="app-game-main-left">
+        <div id="app-game-main-left-row1">
+          <div id="app-game-main-left-row1-col1">
+            <p id="app-game-roundNumber">Round {{ game.round.roundNumber }}</p>
+            <p id="app-game-positionValue">
+              Position Value: {{ game.round.positionValue }}
+            </p>
+          </div>
+          <div id="app-game-main-left-row1-col2">
+            <button id="app-game-restart" @click="restarted">Restart</button>
+          </div>
+          <div id="app-game-main-left-row1-col3">
+            <p id="app-game-turnName">
+              {{ game.turnNames[game.round.turnNumber] }}
+            </p>
+            <p id="app-game-remoteness">
+              Remoteness: {{ game.round.remoteness }}
+            </p>
+          </div>
+        </div>
+        <div id="app-game-main-left-row2">
+          <component :is="game.id.toUpperCase()"></component>
+        </div>
+      </div>
+      <div id="app-game-main-right">
+        <GameVisualizer></GameVisualizer>
+      </div>
+    </div>
   </div>
 </template>
 
