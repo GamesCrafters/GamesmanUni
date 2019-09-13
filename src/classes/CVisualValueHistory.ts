@@ -305,6 +305,14 @@ export class CVisualValueHistory implements IVisualValueHistory {
         this.mainColor
       );
     }
+    if (this.history.rounds[this.currentRoundNumber - 1].remoteness === 0) {
+      this.setText(
+        "😢",
+        this.gridRight + this.yCoordinateWidth / 2,
+        this.roundToY(this.currentRoundNumber),
+        this.mainColor
+      );
+    }
   }
 
   private setGrid(): void {
