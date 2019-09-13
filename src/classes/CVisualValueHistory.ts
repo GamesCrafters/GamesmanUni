@@ -12,15 +12,17 @@ export class CVisualValueHistory implements IVisualValueHistory {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
-  font: any;
-  mainColor: any;
-  winColor: any;
-  drawColor: any;
-  tieColor: any;
-  loseColor: any;
+  private font: any;
+  private mainColor: any;
+  private winColor: any;
+  private drawColor: any;
+  private tieColor: any;
+  private loseColor: any;
+  private turnColor0: any;
+  private turnColor1: any;
 
-  turnName0: string;
-  turnName1: string;
+  private turnName0: string;
+  private turnName1: string;
 
   xLabel: string;
   yLeftLabel: string;
@@ -80,6 +82,8 @@ export class CVisualValueHistory implements IVisualValueHistory {
     this.drawColor = style.drawColor;
     this.tieColor = style.tieColor;
     this.loseColor = style.loseColor;
+    this.turnColor0 = style.turnColor0;
+    this.turnColor1 = style.turnColor1;
 
     this.turnName0 = game.turnNames[0];
     this.turnName1 = game.turnNames[1];
@@ -190,13 +194,13 @@ export class CVisualValueHistory implements IVisualValueHistory {
       this.turnName0,
       this.gridMiddleX - this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
-      this.mainColor
+      this.turnColor0
     );
     this.setText(
       this.turnName1,
       this.gridMiddleX + this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
-      this.mainColor
+      this.turnColor1
     );
   }
 

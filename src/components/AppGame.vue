@@ -7,15 +7,25 @@
           <div id="app-game-main-left-row1-col1">
             <p id="app-game-roundNumber">Move #{{ game.round.roundNumber }}</p>
             <p id="app-game-positionValue">
-              Prediction: {{ game.turnNames[game.round.turnNumber] }} should
-              {{ game.round.positionValue }}.
+              Prediction:
+              <span :class="'c-turn-' + game.round.turnNumber">{{
+                game.turnNames[game.round.turnNumber]
+              }}</span>
+              should
+              <span :class="'c-' + game.round.positionValue">{{
+                game.round.positionValue
+              }}</span
+              >.
             </p>
           </div>
           <div id="app-game-main-left-row1-col2">
             <button id="app-game-restart" @click="restarted">Restart</button>
           </div>
           <div id="app-game-main-left-row1-col3">
-            <p id="app-game-turnName">
+            <p
+              id="app-game-turnName"
+              :class="'c-turn-' + game.round.turnNumber"
+            >
               {{ game.turnNames[game.round.turnNumber] }}
             </p>
             <p id="app-game-remoteness">

@@ -4,6 +4,8 @@ $backgroundColor: white;
 $mainColor: black;
 $themeColor: #42b983;
 $neutralColor: skyblue;
+$turnColor0: darkblue;
+$turnColor1: darkred;
 $winColor: #42b983;
 $drawColor: orange;
 $tieColor: orange;
@@ -40,29 +42,32 @@ $loseColor: #ff4f4f;
   font: $monoFont;
 }
 
+.c-turn-0 {
+  color: $turnColor0;
+}
+
+.c-turn-1 {
+  color: $turnColor1;
+}
+
 .c-win {
-  color: $mainColor;
-  background-color: $winColor;
+  color: $winColor;
 }
 
 .c-draw {
-  color: $mainColor;
-  background-color: $drawColor;
+  color: $drawColor;
 }
 
 .c-tie {
-  color: $mainColor;
-  background-color: $tieColor;
+  color: $tieColor;
 }
 
 .c-lose {
-  color: $backgroundColor;
-  background-color: $loseColor;
+  color: $loseColor;
 }
 
 .c-none {
   color: $mainColor;
-  background-color: $backgroundColor;
 }
 
 #app {
