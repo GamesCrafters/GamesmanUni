@@ -14,7 +14,8 @@ export default new Vuex.Store({
     gameData: state => (gameId: string) => state.app.games.getGameData(gameId),
     game: state => state.app.game,
     roundNumber: state => state.app.game.round.roundNumber,
-    visualizerSelectorId: state => state.app.game.visualizerSelectorId,
+    visualValueHistorySelectorId: state =>
+      state.app.game.visualValueHistorySelectorId,
     loadingStatus: state => state.app.game.loadingStatus,
     moveValue: state => (move: string) =>
       state.app.game.round.getMoveValue(move)

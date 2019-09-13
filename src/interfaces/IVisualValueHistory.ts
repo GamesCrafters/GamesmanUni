@@ -1,6 +1,6 @@
 import { CGame } from "@/classes/CGame";
 
-export interface IVisualizer {
+export interface IVisualValueHistory {
   font: any;
   mainColor: any;
   winColor: any;
@@ -32,5 +32,5 @@ export interface IVisualizer {
   xIntervalBarWidth: number;
   xInterval: number;
 
-  drawVisualizer(): void;
+  drawVisualValueHistory(): void;
 }

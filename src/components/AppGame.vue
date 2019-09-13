@@ -5,7 +5,7 @@
       <div id="app-game-main-left">
         <div id="app-game-main-left-row1">
           <div id="app-game-main-left-row1-col1">
-            <p id="app-game-roundNumber">Round {{ game.round.roundNumber }}</p>
+            <p id="app-game-roundNumber">Move #{{ game.round.roundNumber }}</p>
             <p id="app-game-positionValue">
               Position Value: {{ game.round.positionValue }}
             </p>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div id="app-game-main-right">
-        <GameVisualizer></GameVisualizer>
+        <GameVisualValueHistory></GameVisualValueHistory>
       </div>
     </div>
   </div>
@@ -36,12 +36,12 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import FTZ from "@/components/games/FTZ.vue";
-import GameVisualizer from "@/components/GameVisualizer.vue";
+import GameVisualValueHistory from "@/components/GameVisualValueHistory.vue";
 
 @Component({
   components: {
     FTZ,
-    GameVisualizer
+    GameVisualValueHistory
   }
 })
 export default class CGame extends Vue {

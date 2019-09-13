@@ -15,17 +15,17 @@ export class CGame implements IGame {
   turnNames: { [turn: number]: string };
   round: CRound;
   history: CHistory;
-  visualizerSelectorId: string;
+  visualValueHistorySelectorId: string;
   loadingStatus: boolean;
 
   constructor() {
     this.id = "";
     this.name = "";
     this.dataBaseUrl = "";
-    this.turnNames = { 0: "Player 0", 1: "Player 1" };
+    this.turnNames = { 0: "Left Player", 1: "Right Player" };
     this.round = new CRound();
     this.history = new CHistory();
-    this.visualizerSelectorId = "app-game-visualizer-canvas";
+    this.visualValueHistorySelectorId = "app-game-visual-value-history-canvas";
     this.loadingStatus = true;
   }
 

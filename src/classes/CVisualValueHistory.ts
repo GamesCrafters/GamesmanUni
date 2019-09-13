@@ -1,10 +1,10 @@
 import * as style from "@/datas/styles/SLight";
-import { IVisualizer } from "@/interfaces/IVisualizer";
+import { IVisualValueHistory } from "@/interfaces/IVisualValueHistory";
 import { CGame } from "@/classes/CGame";
 import { CHistory } from "./CHistory";
 import { CRound } from "./CRound";
 
-export class CVisualizer implements IVisualizer {
+export class CVisualValueHistory implements IVisualValueHistory {
   private history: CHistory;
   private maximumRemoteness: number;
   private currentRoundNumber: number;
@@ -70,7 +70,7 @@ export class CVisualizer implements IVisualizer {
       1;
 
     this.canvas = document.getElementById(
-      game.visualizerSelectorId
+      game.visualValueHistorySelectorId
     ) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -85,7 +85,7 @@ export class CVisualizer implements IVisualizer {
     this.turnName1 = game.turnNames[1];
 
     this.xLabel = "remoteness";
-    this.yLeftLabel = "round";
+    this.yLeftLabel = "move";
     this.yRightLabel = "turn";
 
     this.padding = 10;
@@ -130,10 +130,10 @@ export class CVisualizer implements IVisualizer {
     this.pointCoordinates = {};
   }
 
-  drawVisualizer(): void {
+  drawVisualValueHistory(): void {
     this.setCanvasShape();
     this.setCanvasResolution();
-    this.setVisualizerFrame();
+    this.setVisualValueHistoryFrame();
     this.setTurnNames();
     this.setXLabel();
     this.setXCoordinates();
@@ -158,7 +158,7 @@ export class CVisualizer implements IVisualizer {
     this.ctx.scale(devicePixelRatio, devicePixelRatio);
   }
 
-  private setVisualizerFrame(): void {
+  private setVisualValueHistoryFrame(): void {
     this.ctx.strokeStyle = this.mainColor;
     this.ctx.rect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx.stroke();

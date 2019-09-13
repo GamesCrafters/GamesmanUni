@@ -9,7 +9,7 @@ export interface IGame {
   turnNames: { [turn: number]: string };
   round: CRound;
   history: CHistory;
-  visualizerSelectorId: string;
+  visualValueHistorySelectorId: string;
   loadingStatus: boolean;
 
   initGame(gameData: TGameData): Promise<void>;
