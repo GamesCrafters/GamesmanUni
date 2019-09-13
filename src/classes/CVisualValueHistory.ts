@@ -274,7 +274,7 @@ export class CVisualValueHistory implements IVisualValueHistory {
 
   private setYLabel(): void {
     this.setText(
-      "round",
+      this.yLeftLabel,
       this.gridLeft - this.yCoordinateWidth - this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
       this.mainColor,
@@ -282,7 +282,7 @@ export class CVisualValueHistory implements IVisualValueHistory {
     );
 
     this.setText(
-      "turn",
+      this.yRightLabel,
       this.gridRight + this.yCoordinateWidth + this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
       this.mainColor,
