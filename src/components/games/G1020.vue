@@ -1,5 +1,5 @@
 <template>
-  <div id="ftz" class="app-game">
+  <div id="g1020" class="app-game">
     <p class="app-game-board" :class="`c-${game.round.positionValue}`">
       {{ game.round.board }}
     </p>
@@ -28,7 +28,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
-export default class FTZ extends Vue {
+export default class G1020 extends Vue {
   get loadingStatus() {
     return this.$store.getters.loadingStatus;
   }

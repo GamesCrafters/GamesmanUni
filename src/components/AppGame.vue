@@ -23,7 +23,7 @@
           </div>
         </div>
         <div id="app-game-main-left-row2">
-          <component :is="game.id.toUpperCase()"></component>
+          <component :is="'G' + game.id"></component>
         </div>
       </div>
       <div id="app-game-main-right">
@@ -35,12 +35,12 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import FTZ from "@/components/games/FTZ.vue";
+import G1020 from "@/components/games/G1020.vue";
 import GameVisualValueHistory from "@/components/GameVisualValueHistory.vue";
 
 @Component({
   components: {
-    FTZ,
+    G1020,
     GameVisualValueHistory
   }
 })
