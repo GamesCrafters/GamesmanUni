@@ -84,9 +84,9 @@ export class CVisualValueHistory implements IVisualValueHistory {
     this.turnName0 = game.turnNames[0];
     this.turnName1 = game.turnNames[1];
 
-    this.xLabel = "remoteness";
-    this.yLeftLabel = "move";
-    this.yRightLabel = "turn";
+    this.xLabel = "Remoteness";
+    this.yLeftLabel = "Move #";
+    this.yRightLabel = "Moves";
 
     this.padding = 10;
     this.turnNameHeight = 20;
@@ -299,7 +299,7 @@ export class CVisualValueHistory implements IVisualValueHistory {
         this.mainColor
       );
       this.setText(
-        this.history.rounds[round - 1].turnNumber.toString(),
+        this.history.rounds[round - 1].move,
         this.gridRight + this.yCoordinateWidth / 2,
         this.roundToY(round),
         this.mainColor

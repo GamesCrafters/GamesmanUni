@@ -7,7 +7,8 @@
           <div id="app-game-main-left-row1-col1">
             <p id="app-game-roundNumber">Move #{{ game.round.roundNumber }}</p>
             <p id="app-game-positionValue">
-              Position Value: {{ game.round.positionValue }}
+              Prediction: {{ game.turnNames[game.round.turnNumber] }} should
+              {{ game.round.positionValue }}.
             </p>
           </div>
           <div id="app-game-main-left-row1-col2">
