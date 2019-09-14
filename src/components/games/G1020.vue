@@ -3,12 +3,14 @@
     <tr v-for="i in cellCount" :key="i">
       <td
         @click="
-          boardData[i - 1].clickable ? runMove(boardData[i - 1].move) : null
+          boardData[cellCount - i].clickable
+            ? runMove(boardData[cellCount - i].move)
+            : null
         "
       >
-        <span :class="boardData[i - 1].piece">
-          <span :class="boardData[i - 1].hint">
-            {{ boardData[i - 1].board }}
+        <span :class="boardData[cellCount - i].piece">
+          <span :class="boardData[cellCount - i].hint">
+            {{ boardData[cellCount - i].board }}
           </span>
         </span>
       </td>
