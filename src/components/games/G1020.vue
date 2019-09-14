@@ -26,6 +26,15 @@ import { TMoveData } from "@/types/TMoveData";
 @Component
 export default class G1020 extends Vue {
   cellCount = 11;
+  boardData: {
+    [cell: string]: {
+      piece: string;
+      hint: string;
+      clickable: boolean;
+      move: string;
+      board: string;
+    };
+  } = this.initBoardData();
 
   get loadingStatus() {
     return this.$store.getters.loadingStatus;
@@ -35,7 +44,7 @@ export default class G1020 extends Vue {
     return this.$store.getters.game;
   }
 
-  get boardData() {
+  initBoardData() {
     let boardData: {
       [cell: string]: {
         piece: string;
@@ -55,8 +64,21 @@ export default class G1020 extends Vue {
         board: cell.toString()
       };
     }
+    return boardData;
+  }
 
+  created() {
+    this.boardData = this.initBoardData();
+  }
+
+  mounted() {
+    this.updateBoardData();
+  }
+
+  @Watch("$store.getters.loadingStatus")
+  updateBoardData() {
     if (!this.loadingStatus) {
+      this.boardData = this.initBoardData();
       let rounds: Array<CRound> = this.$store.getters.rounds;
       let round: CRound = this.$store.getters.round;
       for (
@@ -68,7 +90,7 @@ export default class G1020 extends Vue {
           rounds[roundNumber].move != "" &&
           roundNumber != round.roundNumber - 1
         ) {
-          boardData[
+          this.boardData[
             rounds[roundNumber + 1].board
           ].piece = `c-turn-piece-${rounds[roundNumber].turnNumber}`;
         }
@@ -77,12 +99,11 @@ export default class G1020 extends Vue {
       for (let nextMoveData of round.nextMoveDatas) {
         let move = nextMoveData.move;
         let moveValue = this.$store.getters.moveValue(move);
-        boardData[nextMoveData.board].move = move;
-        boardData[nextMoveData.board].hint = `c-hint-${moveValue}`;
-        boardData[nextMoveData.board].clickable = true;
+        this.boardData[nextMoveData.board].move = move;
+        this.boardData[nextMoveData.board].hint = `c-hint-${moveValue}`;
+        this.boardData[nextMoveData.board].clickable = true;
       }
     }
-    return boardData;
   }
 
   runMove(move: string): void {
