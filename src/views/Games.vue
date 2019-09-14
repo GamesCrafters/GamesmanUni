@@ -9,6 +9,9 @@ import AppGames from "@/components/AppGames.vue";
 @Component({
   components: {
     AppGames
+  },
+  metaInfo: {
+    title: "Games"
   }
 })
 export default class Games extends Vue {}

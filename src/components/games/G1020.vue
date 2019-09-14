@@ -1,34 +1,30 @@
 <template>
-  <div id="g1020" class="app-game">
-    <p class="app-game-board" :class="`c-${game.round.positionValue}`">
-      {{ game.round.board }}
-    </p>
-    <div class="app-game-moves">
-      <button
-        class="app-game-move"
-        :class="moveValue('1')"
-        @click="runMove('1')"
-        :disabled="isInvalidMove('1')"
+  <table id="app-game-board">
+    <tr v-for="i in cellCount" :key="i">
+      <td
+        @click="
+          boardData[i - 1].clickable ? runMove(boardData[i - 1].move) : null
+        "
       >
-        take one
-      </button>
-      <button
-        class="app-game-move"
-        :class="moveValue('2')"
-        @click="runMove('2')"
-        :disabled="isInvalidMove('2')"
-      >
-        take two
-      </button>
-    </div>
-  </div>
+        <span :class="boardData[i - 1].piece">
+          <span :class="boardData[i - 1].hint">
+            {{ boardData[i - 1].board }}
+          </span>
+        </span>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
+import { CRound } from "@/classes/CRound";
+import { TMoveData } from "@/types/TMoveData";
 
 @Component
 export default class G1020 extends Vue {
+  cellCount = 11;
+
   get loadingStatus() {
     return this.$store.getters.loadingStatus;
   }
@@ -37,23 +33,55 @@ export default class G1020 extends Vue {
     return this.$store.getters.game;
   }
 
-  runMove(move: string) {
-    this.$store.dispatch("runRound", move);
-  }
+  get boardData() {
+    let boardData: {
+      [cell: string]: {
+        piece: string;
+        hint: string;
+        clickable: boolean;
+        move: string;
+        board: string;
+      };
+    } = {};
 
-  moveValue(move: string): string {
+    for (let cell: number = 0; cell < this.cellCount; cell++) {
+      boardData[cell.toString()] = {
+        piece: "",
+        hint: "",
+        clickable: false,
+        move: "",
+        board: cell.toString()
+      };
+    }
+
     if (!this.loadingStatus) {
-      return "c-" + this.$store.getters.moveValue(move);
+      let rounds: Array<CRound> = this.$store.getters.rounds;
+      let round: CRound = this.$store.getters.round;
+      for (
+        let roundNumber: number = 0;
+        roundNumber < round.roundNumber;
+        roundNumber++
+      ) {
+        if (rounds[roundNumber].move != "") {
+          boardData[
+            rounds[roundNumber + 1].board
+          ].piece = `c-turn-piece-${rounds[roundNumber].turnNumber}`;
+        }
+      }
+
+      for (let nextMoveData of round.nextMoveDatas) {
+        let move = nextMoveData.move;
+        let moveValue = this.$store.getters.moveValue(move);
+        boardData[nextMoveData.board].move = move;
+        boardData[nextMoveData.board].hint = `c-hint-${moveValue}`;
+        boardData[nextMoveData.board].clickable = true;
+      }
     }
-    return "c-";
+    return boardData;
   }
 
-  isInvalidMove(move: string) {
-    const loadingStatus = this.loadingStatus;
-    const moveValue = this.moveValue(move);
-    if (this.loadingStatus || this.moveValue(move) === "c-") {
-      return true;
-    }
+  runMove(move: string): void {
+    this.$store.dispatch("runRound", move);
   }
 }
 </script>

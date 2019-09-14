@@ -11,7 +11,15 @@ export class CHistory implements IHistory {
   }
 
   push(round: CRound): void {
-    this.rounds.push(round);
+    if (round.roundNumber > this.rounds.length) {
+      this.rounds.push(round);
+    } else {
+      this.rounds.splice(
+        round.roundNumber - 1,
+        this.rounds.length - round.roundNumber,
+        round
+      );
+    }
     this.maximumRemoteness = Math.max(
       ...this.rounds.map(round => round.remoteness)
     );

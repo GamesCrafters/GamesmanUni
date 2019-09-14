@@ -37,7 +37,7 @@ export class CRound implements IRound {
   }
 
   setNextRound(currentRound: CRound): void {
-    this.gameVariation = 0;
+    this.gameVariation = currentRound.gameVariation;
     this.turnNumber = (currentRound.turnNumber + 1) % 2;
     this.roundNumber = currentRound.roundNumber + 1;
     this.move = "";

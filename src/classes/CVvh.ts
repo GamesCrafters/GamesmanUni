@@ -1,10 +1,10 @@
 import * as style from "@/datas/styles/SLight";
-import { IVisualValueHistory } from "@/interfaces/IVisualValueHistory";
+import { IVvh } from "@/interfaces/IVvh";
 import { CGame } from "@/classes/CGame";
 import { CHistory } from "./CHistory";
 import { CRound } from "./CRound";
 
-export class CVisualValueHistory implements IVisualValueHistory {
+export class CVvh implements IVvh {
   private history: CHistory;
   private maximumRemoteness: number;
   private currentRoundNumber: number;
@@ -63,16 +63,13 @@ export class CVisualValueHistory implements IVisualValueHistory {
     [round: number]: { x: number | [number, number]; y: number };
   };
 
-  constructor(game: CGame, currentRoundNumber?: number) {
+  constructor(game: CGame) {
     this.history = game.history;
     this.maximumRemoteness = this.history.maximumRemoteness;
-    this.currentRoundNumber =
-      currentRoundNumber ||
-      (this.history.rounds.length != 0 && this.history.rounds.length) ||
-      1;
+    this.currentRoundNumber = game.round.roundNumber;
 
     this.canvas = document.getElementById(
-      game.visualValueHistorySelectorId
+      game.vvhSelectorId
     ) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
@@ -134,10 +131,10 @@ export class CVisualValueHistory implements IVisualValueHistory {
     this.pointCoordinates = {};
   }
 
-  drawVisualValueHistory(): void {
+  drawVvh(): void {
     this.setCanvasShape();
     this.setCanvasResolution();
-    this.setVisualValueHistoryFrame();
+    this.setVvhFrame();
     this.setTurnNames();
     this.setXLabel();
     this.setXCoordinates();
@@ -162,7 +159,7 @@ export class CVisualValueHistory implements IVisualValueHistory {
     this.ctx.scale(devicePixelRatio, devicePixelRatio);
   }
 
-  private setVisualValueHistoryFrame(): void {
+  private setVvhFrame(): void {
     this.ctx.strokeStyle = this.mainColor;
     this.ctx.rect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx.stroke();

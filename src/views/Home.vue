@@ -9,6 +9,9 @@ import AppWelcome from "@/components/AppWelcome.vue";
 @Component({
   components: {
     AppWelcome
+  },
+  metaInfo: {
+    title: "Home"
   }
 })
 export default class Home extends Vue {}

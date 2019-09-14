@@ -17,11 +17,19 @@ import AppFooter from "@/components/AppFooter.vue";
   components: {
     AppHeader,
     AppFooter
+  },
+  metaInfo: {
+    title: "GamesmanUni",
+    titleTemplate: "%s | GamesmanUni"
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  created() {
+    document.body.className = this.$store.getters.style;
+  }
+}
 </script>
 
 <style lang="scss">
-@import "@/datas/styles/SLight.scss";
+@import "@/datas/styles/style.scss";
 </style>

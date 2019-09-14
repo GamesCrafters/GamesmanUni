@@ -15,7 +15,7 @@ export class CGame implements IGame {
   turnNames: { [turn: number]: string };
   round: CRound;
   history: CHistory;
-  visualValueHistorySelectorId: string;
+  vvhSelectorId: string;
   loadingStatus: boolean;
 
   constructor() {
@@ -25,7 +25,7 @@ export class CGame implements IGame {
     this.turnNames = { 0: "Left Player", 1: "Right Player" };
     this.round = new CRound();
     this.history = new CHistory();
-    this.visualValueHistorySelectorId = "app-game-visual-value-history-canvas";
+    this.vvhSelectorId = "app-game-vvh-canvas";
     this.loadingStatus = true;
   }
 
@@ -95,5 +95,14 @@ export class CGame implements IGame {
     newRound.setNextMoveDatas(nextMoveDatas);
     this.round = newRound;
     this.history.push(this.round);
+  }
+
+  runUndo(): void {
+    let currentRound = this.history.rounds[this.round.roundNumber - 2];
+    this.round = currentRound;
+  }
+
+  runRedo(): void {
+    this.round = this.history.rounds[this.round.roundNumber];
   }
 }

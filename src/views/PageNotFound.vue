@@ -9,6 +9,9 @@ import AppPageNotFound from "@/components/AppPageNotFound.vue";
 @Component({
   components: {
     AppPageNotFound
+  },
+  metaInfo: {
+    title: "Page Not Found"
   }
 })
 export default class PageNotFound extends Vue {}

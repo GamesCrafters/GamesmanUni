@@ -1,6 +1,6 @@
 import { CGame } from "@/classes/CGame";
 
-export interface IVisualValueHistory {
+export interface IVvh {
   xLabel: string;
   yLeftLabel: string;
   yRightLabel: string;
@@ -22,5 +22,5 @@ export interface IVisualValueHistory {
   xIntervalBarWidth: number;
   xInterval: number;
 
-  drawVisualValueHistory(): void;
+  drawVvh(): void;
 }

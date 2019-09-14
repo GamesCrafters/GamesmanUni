@@ -21,7 +21,7 @@ import { CGames } from "@/classes/CGames";
 
 @Component
 export default class AppGames extends Vue {
-  get gameDatas(): CGames {
+  get gameDatas() {
     return this.$store.getters.gameDatas;
   }
 }

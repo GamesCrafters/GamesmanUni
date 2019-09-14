@@ -10,15 +10,17 @@ export default new Vuex.Store({
     app: new CApp()
   },
   getters: {
+    style: state => state.app.style,
     gameDatas: state => state.app.games.gameDatas,
     gameData: state => (gameId: string) => state.app.games.getGameData(gameId),
     game: state => state.app.game,
-    roundNumber: state => state.app.game.round.roundNumber,
-    visualValueHistorySelectorId: state =>
-      state.app.game.visualValueHistorySelectorId,
+    vvhSelectorId: state => state.app.game.vvhSelectorId,
     loadingStatus: state => state.app.game.loadingStatus,
+    round: state => state.app.game.round,
+    roundNumber: state => state.app.game.round.roundNumber,
     moveValue: state => (move: string) =>
-      state.app.game.round.getMoveValue(move)
+      state.app.game.round.getMoveValue(move),
+    rounds: state => state.app.game.history.rounds
   },
   mutations: {
     game(state, game: CGame) {
@@ -41,6 +43,22 @@ export default new Vuex.Store({
       commit("loadingStatus", true);
       let game = getters.game;
       await game.runRound(move);
+      commit("game", game);
+      commit("loadingStatus", false);
+    },
+
+    async runUndo({ getters, commit }) {
+      commit("loadingStatus", true);
+      let game = getters.game;
+      await game.runUndo();
+      commit("game", game);
+      commit("loadingStatus", false);
+    },
+
+    async runRedo({ getters, commit }) {
+      commit("loadingStatus", true);
+      let game = getters.game;
+      await game.runRedo();
       commit("game", game);
       commit("loadingStatus", false);
     }

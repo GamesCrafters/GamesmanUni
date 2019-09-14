@@ -9,6 +9,9 @@ import AppAbout from "@/components/AppAbout.vue";
 @Component({
   components: {
     AppAbout
+  },
+  metaInfo: {
+    title: "About"
   }
 })
 export default class About extends Vue {}
