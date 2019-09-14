@@ -172,54 +172,60 @@ $loseColor: #ff4f4f;
   width: 5em;
   table-layout: fixed;
   td {
-    height: 2em;
-    vertical-align: middle;
-
     .c-turn-piece-0 {
       display: inline-block;
-      background: $turnColor0;
+      color: $backgroundColor;
+      background-color: $turnColor0;
       height: 1.5em;
       width: 1.5em;
     }
 
     .c-turn-piece-1 {
       display: inline-block;
-      background: $turnColor1;
+      color: $backgroundColor;
+      background-color: $turnColor1;
       height: 1.5em;
       width: 1.5em;
     }
 
     .c-hint-win {
+      cursor: pointer;
       display: inline-block;
-      background: $winColor;
+      background-color: $winColor;
       border-radius: 100%;
       height: 1.5em;
       width: 1.5em;
     }
 
     .c-hint-draw {
+      cursor: pointer;
       display: inline-block;
-      background: $drawColor;
+      background-color: $drawColor;
       border-radius: 100%;
       height: 1.5em;
       width: 1.5em;
     }
 
     .c-hint-tie {
+      cursor: pointer;
       display: inline-block;
-      background: $tieColor;
+      background-color: $tieColor;
       border-radius: 100%;
       height: 1.5em;
       width: 1.5em;
     }
 
     .c-hint-lose {
+      cursor: pointer;
       display: inline-block;
-      background: $loseColor;
+      background-color: $loseColor;
       border-radius: 100%;
       height: 1.5em;
       width: 1.5em;
     }
+
+    height: 2em;
+    vertical-align: middle;
     border: 1px solid black;
   }
   border-collapse: collapse;
