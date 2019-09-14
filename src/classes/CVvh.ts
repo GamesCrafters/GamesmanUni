@@ -19,7 +19,9 @@ export class CVvh implements IVvh {
   private tieColor: any;
   private loseColor: any;
   private turnColor0: any;
+  private turnColor0Transparent: any;
   private turnColor1: any;
+  private turnColor1Transparent: any;
 
   private turnName0: string;
   private turnName1: string;
@@ -80,6 +82,8 @@ export class CVvh implements IVvh {
     this.tieColor = style.tieColor;
     this.loseColor = style.loseColor;
     this.turnColor0 = style.turnColor0;
+    this.turnColor0Transparent = style.turnColor0Transparent;
+    this.turnColor1Transparent = style.turnColor1Transparent;
     this.turnColor1 = style.turnColor1;
 
     this.turnName0 = game.turnNames[0];
@@ -140,6 +144,7 @@ export class CVvh implements IVvh {
     this.setXCoordinates();
     this.setYLabel();
     this.setYCoordinates();
+    this.setRoundTurnColorGuide();
     this.setGrid();
     this.getPointCoordinates();
     this.setGraph();
@@ -312,6 +317,23 @@ export class CVvh implements IVvh {
         this.gridRight + this.yCoordinateWidth / 2,
         this.roundToY(this.currentRoundNumber),
         this.mainColor
+      );
+    }
+  }
+
+  private setRoundTurnColorGuide() {
+    this.ctx.lineWidth = 0;
+    for (let round: number = 1; round <= this.currentRoundNumber; round++) {
+      if (this.history.rounds[round - 1].turnNumber === 0) {
+        this.ctx.fillStyle = this.turnColor0Transparent;
+      } else {
+        this.ctx.fillStyle = this.turnColor1Transparent;
+      }
+      this.ctx.fillRect(
+        this.gridLeft + this.columnWidth / 2,
+        this.gridTop + (round - 1) * this.rowHeight,
+        this.gridWidth - this.columnWidth,
+        this.rowHeight
       );
     }
   }

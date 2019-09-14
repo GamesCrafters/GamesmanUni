@@ -1,14 +1,16 @@
 $font: 1em "Avenir", Helvetica, Arial, sans-serif;
 $monoFont: 0.9em Monaco, Consolas, "Andale  Mono", "DejaVu Sans Mono", monospace;
-$backgroundColor: white;
-$mainColor: black;
+$backgroundColor: #ffffff;
+$mainColor: #000000;
 $themeColor: #42b983;
-$neutralColor: skyblue;
-$turnColor0: darkblue;
-$turnColor1: darkred;
+$neutralColor: #87cfeb;
+$turnColor0: #00008b;
+$turnColor0Transparent: rgba($turnColor0, 0.2);
+$turnColor1: #8b0000;
+$turnColor1Transparent: rgba($turnColor1, 0.2);
 $winColor: #42b983;
-$drawColor: orange;
-$tieColor: orange;
+$drawColor: #ffa500;
+$tieColor: #ffa500;
 $loseColor: #ff4f4f;
 
 .c-divider {
