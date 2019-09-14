@@ -62,7 +62,10 @@ export default class G1020 extends Vue {
         roundNumber < round.roundNumber;
         roundNumber++
       ) {
-        if (rounds[roundNumber].move != "") {
+        if (
+          rounds[roundNumber].move != "" &&
+          roundNumber != round.roundNumber - 1
+        ) {
           boardData[
             rounds[roundNumber + 1].board
           ].piece = `c-turn-piece-${rounds[roundNumber].turnNumber}`;
