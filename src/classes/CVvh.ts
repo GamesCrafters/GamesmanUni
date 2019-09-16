@@ -90,7 +90,7 @@ export class CVvh implements IVvh {
     this.turnName1 = game.turnNames[1];
 
     this.xLabel = "Remoteness";
-    this.yLeftLabel = "Move #";
+    this.yLeftLabel = "Moves";
     this.yRightLabel = "Moves";
 
     this.padding = 10;
@@ -298,26 +298,50 @@ export class CVvh implements IVvh {
 
   private setYCoordinates(): void {
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
-      this.setText(
-        round.toString(),
-        this.gridLeft - this.yCoordinateWidth / 2,
-        this.roundToY(round),
-        this.mainColor
-      );
-      this.setText(
-        this.history.rounds[round - 1].move,
-        this.gridRight + this.yCoordinateWidth / 2,
-        this.roundToY(round),
-        this.mainColor
-      );
+      if (this.history.rounds[round - 1].turnNumber === 0) {
+        this.setText(
+          this.history.rounds[round - 1].move,
+          this.gridLeft - this.yCoordinateWidth / 2,
+          this.roundToY(round),
+          this.mainColor
+        );
+      } else {
+        this.setText(
+          this.history.rounds[round - 1].move,
+          this.gridRight + this.yCoordinateWidth / 2,
+          this.roundToY(round),
+          this.mainColor
+        );
+      }
     }
     if (this.history.rounds[this.currentRoundNumber - 1].remoteness === 0) {
-      this.setText(
-        "😢",
-        this.gridRight + this.yCoordinateWidth / 2,
-        this.roundToY(this.currentRoundNumber),
-        this.mainColor
-      );
+      if (this.history.rounds[this.currentRoundNumber - 1].turnNumber === 0) {
+        this.setText(
+          "😢",
+          this.gridLeft - this.yCoordinateWidth / 2,
+          this.roundToY(this.currentRoundNumber),
+          this.mainColor
+        );
+        this.setText(
+          "🥳",
+          this.gridRight + this.yCoordinateWidth / 2,
+          this.roundToY(this.currentRoundNumber),
+          this.mainColor
+        );
+      } else {
+        this.setText(
+          "🥳",
+          this.gridLeft - this.yCoordinateWidth / 2,
+          this.roundToY(this.currentRoundNumber),
+          this.mainColor
+        );
+        this.setText(
+          "😢",
+          this.gridRight + this.yCoordinateWidth / 2,
+          this.roundToY(this.currentRoundNumber),
+          this.mainColor
+        );
+      }
     }
   }
 
