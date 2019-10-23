@@ -2,30 +2,44 @@ import { IHistory } from "@/interfaces/IHistory";
 import { CRound } from "@/classes/CRound";
 
 export class CHistory implements IHistory {
-  rounds: Array<CRound>;
-  maximumRemoteness: number;
+  private roundArray: Array<CRound>;
+  private roundDictionary: Map<number, CRound>;
+  private maximumRemoteness: number;
 
   constructor() {
-    this.rounds = new Array<CRound>();
-    this.maximumRemoteness = 6;
+    this.roundArray = new Array<CRound>();
+    this.roundDictionary = new Map<number, CRound>();
+    this.maximumRemoteness = require("@/datas/defaults.json").maximumRemoteness;
   }
 
-  push(round: CRound): void {
-    if (round.roundNumber > this.rounds.length) {
-      this.rounds.push(round);
-    } else {
-      this.rounds.splice(
-        round.roundNumber - 1,
-        this.rounds.length - round.roundNumber,
-        round
-      );
+  getRoundArray(): Array<CRound> {
+    return this.roundArray;
+  }
+
+  getRoundDictionary(): Map<number, CRound> {
+    return this.roundDictionary;
+  }
+
+  getMaximumRemoteness(): number {
+    return this.maximumRemoteness;
+  }
+
+  updateHistory(round: CRound): void {
+    const lastRoundNumber = this.roundArray.length;
+    if (round.getRoundNumber() <= lastRoundNumber) {
+      const startIndex = round.getRoundNumber() - 1;
+      const lastIndex = this.roundArray.length - 1;
+      const deleteCount = lastIndex - startIndex + 1;
+      this.roundArray.splice(startIndex, deleteCount);
+      for (
+        let roundNumber: number = startIndex + 1;
+        roundNumber <= lastIndex + 1;
+        roundNumber++
+      ) {
+        this.roundDictionary.delete(roundNumber);
+      }
     }
-    this.maximumRemoteness = Math.max(
-      ...this.rounds.map(round => round.remoteness)
-    );
-  }
-
-  updateLastRound(round: CRound): void {
-    this.rounds[this.rounds.length - 1] = round;
+    this.roundArray.push(round);
+    this.roundDictionary.set(round.getRoundNumber(), round);
   }
 }

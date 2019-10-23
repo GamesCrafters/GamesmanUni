@@ -1,8 +1,7 @@
-import { TGameData } from "@/types/TGameData";
+import { TGameData } from "@/types/internal/TGameData";
 
 export interface IGames {
-  gameDatas: Array<TGameData>;
-  gameIds: Array<string>;
+  getGameDataArray(): Array<TGameData>;
 
-  getGameData(gameId: string): TGameData;
+  initGames(): Promise<void>;
 }

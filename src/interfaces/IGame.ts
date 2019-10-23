@@ -1,17 +1,27 @@
-import { TGameData } from "@/types/TGameData";
+import { TVariantData } from "@/types/internal/TVariantData";
 import { CRound } from "@/classes/CRound";
 import { CHistory } from "@/classes/CHistory";
 
 export interface IGame {
-  id: string;
-  name: string;
-  dataBaseUrl: string;
-  turnNames: { [turn: number]: string };
-  round: CRound;
-  history: CHistory;
-  vvhSelectorId: string;
-  loadingStatus: boolean;
+  getId(): string;
+  getName(): string;
+  getVariantDataArray(): Array<TVariantData>;
+  getVariantDataDictionary(): Map<string, TVariantData>;
+  getVariantData(): TVariantData;
+  getTurnNameDictionary(): Map<number, string>;
+  getVvhSelectorId(): string;
+  getRound(): CRound;
+  getHistory(): CHistory;
 
-  initGame(gameData: TGameData): Promise<void>;
-  runRound(move: string): Promise<void>;
+  setId(id: string): void;
+  setName(name: string): void;
+  setVariantData(variantId: string): void;
+  setTurn0Name(turn0Name: string): void;
+  setTurn1Name(turn1Name: string): void;
+
+  initGame(id: string): Promise<void>;
+  startNewGame(): Promise<void>;
+  runMove(): Promise<void>;
+  undoMove(): void;
+  redoMove(): void;
 }

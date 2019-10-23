@@ -21,7 +21,6 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { CRound } from "@/classes/CRound";
-import { TMoveData } from "@/types/TMoveData";
 
 @Component
 export default class G1020 extends Vue {
@@ -79,35 +78,36 @@ export default class G1020 extends Vue {
   updateBoardData() {
     if (!this.loadingStatus) {
       this.boardData = this.initBoardData();
-      let rounds: Array<CRound> = this.$store.getters.rounds;
-      let round: CRound = this.$store.getters.round;
+      let rounds: Array<CRound> = this.$store.getters.historyRounds;
+      let round: CRound = this.$store.getters.gameRound;
       for (
         let roundNumber: number = 0;
-        roundNumber < round.roundNumber;
+        roundNumber < round.getRoundNumber();
         roundNumber++
       ) {
         if (
-          rounds[roundNumber].move != "" &&
-          roundNumber != round.roundNumber - 1
+          rounds[roundNumber].getMove() != "" &&
+          roundNumber != round.getRoundNumber() - 1
         ) {
           this.boardData[
-            rounds[roundNumber + 1].board
-          ].piece = `c-turn-piece-${rounds[roundNumber].turnNumber}`;
+            rounds[roundNumber + 1].getPosition()
+          ].piece = `c-turn-piece-${rounds[roundNumber].getTurnName()}`;
         }
       }
 
-      for (let nextMoveData of round.nextMoveDatas) {
+      for (let nextMoveData of round.getNextMoveDataArray()) {
         let move = nextMoveData.move;
         let moveValue = this.$store.getters.moveValue(move);
-        this.boardData[nextMoveData.board].move = move;
-        this.boardData[nextMoveData.board].hint = `c-hint-${moveValue}`;
-        this.boardData[nextMoveData.board].clickable = true;
+        this.boardData[nextMoveData.position].move = move;
+        this.boardData[nextMoveData.position].hint = `c-hint-${moveValue}`;
+        this.boardData[nextMoveData.position].clickable = true;
       }
     }
   }
 
   runMove(move: string): void {
-    this.$store.dispatch("runRound", move);
+    this.$store.commit("roundMove", move);
+    this.$store.dispatch("runMove");
   }
 }
 </script>

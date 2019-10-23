@@ -10,13 +10,12 @@
             <p id="app-game-roundNumber">Move #{{ game.round.roundNumber }}</p>
             <p id="app-game-positionValue">
               Prediction:
-              <span :class="'c-turn-' + game.round.turnNumber">{{
-                game.turnNames[game.round.turnNumber]
-              }}</span>
+              <span :class="'c-turn-' + game.round.turnNumber">
+                {{ game.turnNames[game.round.turnNumber] }}
+              </span>
               should
-              <span :class="'c-' + game.round.positionValue">{{
-                game.round.positionValue
-              }}</span
+              <span :class="'c-' + game.round.positionValue">
+                {{ game.round.positionValue }} </span
               >.
             </p>
           </div>
@@ -51,7 +50,7 @@
         </div>
       </div>
       <div id="app-game-r2-c2">
-        <GameVvh></GameVvh>
+        <!-- <GameVvh></GameVvh> -->
       </div>
     </div>
   </div>
@@ -59,9 +58,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import moment from "moment";
+import { CGame } from "@/classes/CGame";
 import G1020 from "@/components/games/G1020.vue";
 import GameVvh from "@/components/GameVvh.vue";
-import moment from "moment";
 
 @Component({
   components: {
@@ -69,10 +69,11 @@ import moment from "moment";
     GameVvh
   }
 })
-export default class CGame extends Vue {
+export default class AppGame extends Vue {
   interval = setInterval(() => this.updateInterval(), 1000);
   dateTime = moment();
   timer = moment().startOf("day");
+  showOption = true;
 
   get date() {
     return this.dateTime.format("LL");
@@ -82,12 +83,12 @@ export default class CGame extends Vue {
     return this.dateTime.format("LTS");
   }
 
-  get game() {
+  get game(): CGame {
     return this.$store.getters.game;
   }
 
   metaInfo() {
-    return { title: this.game.name };
+    return { title: this.game.getName() };
   }
 
   initInterval(): void {
@@ -103,28 +104,32 @@ export default class CGame extends Vue {
 
   created() {
     this.initInterval();
-    this.$store.dispatch("startNewGame", this.$route.params.gameId);
+    this.$store.dispatch("initGame");
+    this.$store.dispatch("startNewGame");
   }
 
   get isInvalidUndo(): boolean {
-    return this.game.round.roundNumber === 1;
+    return this.game.getRound().getRoundNumber() === 1;
   }
 
   undid(): void {
-    this.$store.dispatch("runUndo", this.$route.params.gameId);
+    this.$store.dispatch("undoMove");
   }
 
   restarted(): void {
     this.initInterval();
-    this.$store.dispatch("startNewGame", this.$route.params.gameId);
+    this.$store.dispatch("startNewGame");
   }
 
   get isInvalidRedo(): boolean {
-    return this.game.round.roundNumber === this.game.history.rounds.length;
+    return (
+      this.game.getRound().getRoundNumber() ===
+      this.game.getHistory().getRoundArray().length
+    );
   }
 
   redid(): void {
-    this.$store.dispatch("runRedo", this.$route.params.gameId);
+    this.$store.dispatch("redoMove");
   }
 }
 </script>

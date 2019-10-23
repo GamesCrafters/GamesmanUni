@@ -1,6 +1,7 @@
 export interface TMoveData {
   move: string;
-  board: string;
+  moveValue: string;
+  position: string;
   positionValue: string;
   remoteness: number;
 }

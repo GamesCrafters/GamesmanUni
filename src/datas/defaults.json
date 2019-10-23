@@ -1,0 +1,18 @@
+{
+  "themeDictionary": { "dark": "Dark Theme", "light": "Light Theme" },
+  "theme": "light",
+
+  "layoutDictionary": { "default": "Default Layout" },
+  "layout": "default",
+
+  "languageDictionary": { "cn": "🇨🇳 简体中文", "en": "🇺🇸 English" },
+  "language": "en",
+
+  "serverDataSource": "https://nyc.cs.berkeley.edu/glue/v0/",
+
+  "turn0Name": "Left Player",
+  "turn1Name": "Right Player",
+  "vvhSelectorId": "app-game-vvh-canvas",
+
+  "maximumRemoteness": 6
+}

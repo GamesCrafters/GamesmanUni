@@ -3,7 +3,8 @@
     <h2 id="app-about-title">About</h2>
 
     <p class="c-text">
-      <span class="c-code-inline">GamesmanUni</span> is a web implementation of
+      <span class="c-code-inline">GamesmanUni</span>
+      is a web implementation of
       <a
         class="c-link-external"
         href="https://github.com/GamesCrafters/GamesmanClassic"
@@ -12,34 +13,33 @@
       >
         <span class="c-code-inline">GamesmanClassic</span>
       </a>
-      in <span class="c-code-inline">C</span>, developed as part of
+      in
+      <span class="c-code-inline">C</span>, developed as part of
       <a
         class="c-link-external"
         href="http://gamescrafters.berkeley.edu/"
         target="_blank"
         rel="noreferrer"
+        >GamesCrafters</a
       >
-        GamesCrafters
-      </a>
       research and development group at
       <a
         class="c-link-external"
         href="https://www.berkeley.edu"
         target="_blank"
         rel="noreferrer"
+        >UC Berkeley</a
       >
-        UC Berkeley
-      </a>
-      . <span class="c-code-inline">Gamesman</span> is a finite, two-person,
+      .
+      <span class="c-code-inline">Gamesman</span> is a finite, two-person,
       perfect-information game generator based on Master thesis by
       <a
         class="c-link-external"
         href="http://gamescrafters.berkeley.edu/"
         target="_blank"
         rel="noreferrer"
+        >Professor Dan Garcia</a
       >
-        Professor Dan Garcia
-      </a>
       .
     </p>
 
@@ -50,18 +50,16 @@
         href="https://developers.google.com/web/progressive-web-apps/"
         target="_blank"
         rel="noreferrer"
+        >Progressive Web Application (PWA)</a
       >
-        Progressive Web Application (PWA)
-      </a>
       as well as
       <a
         class="c-link-external"
         href="https://en.wikipedia.org/wiki/Single-page_application"
         target="_blank"
         rel="noreferrer"
+        >Single Page Application (SPA)</a
       >
-        Single Page Application (SPA)
-      </a>
       . It is backwards compatible with older browser environments. It is
       designed to run on any platforms as long as there is an internet access
       and a browser with javascript enable. In devices with modern browsers, it
@@ -70,11 +68,8 @@
     </p>
 
     <p class="c-text">
-      The application is designed to work for everyone. Players can play the
-      games just by going through UI navigations while researchers can use URL
-      to load a specific game state from server. If you are a developer, make
-      use of javascript console in the browser and consult the developer
-      documentation for more detailed information.
+      If you are a developer, consult the developer documentation for more
+      detailed information and make use of javascript console in the browser.
     </p>
   </div>
 </template>

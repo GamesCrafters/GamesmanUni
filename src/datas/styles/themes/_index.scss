@@ -1,0 +1,34 @@
+@use "dark";
+@use "light";
+
+body.c-theme-dark {
+  --font: #{dark.$font};
+  --monofont: #{dark.$monoFont};
+  --backgroundColor: #{dark.$backgroundColor};
+  --primaryColor: #{dark.$primaryColor};
+  --secondaryColor: #{dark.$secondaryColor};
+  --themeColor: #{dark.$themeColor};
+  --neutralColor: #{dark.$neutralColor};
+  --turn0Color: #{dark.$turn0Color};
+  --turn1Color: #{dark.$turn1Color};
+  --winColor: #{dark.$winColor};
+  --drawColor: #{dark.$drawColor};
+  --tieColor: #{dark.$tieColor};
+  --loseColor: #{dark.$loseColor};
+}
+
+body.c-theme-light {
+  --font: #{light.$font};
+  --monofont: #{light.$monoFont};
+  --backgroundColor: #{light.$backgroundColor};
+  --primaryColor: #{light.$primaryColor};
+  --secondaryColor: #{light.$secondaryColor};
+  --themeColor: #{light.$themeColor};
+  --neutralColor: #{light.$neutralColor};
+  --turn0Color: #{light.$turn0Color};
+  --turn1Color: #{light.$turn1Color};
+  --winColor: #{light.$winColor};
+  --drawColor: #{light.$drawColor};
+  --tieColor: #{light.$tieColor};
+  --loseColor: #{light.$loseColor};
+}

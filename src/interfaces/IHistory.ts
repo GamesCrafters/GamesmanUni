@@ -1,9 +1,9 @@
 import { CRound } from "@/classes/CRound";
 
 export interface IHistory {
-  rounds: Array<CRound>;
-  maximumRemoteness: number;
+  getRoundArray(): Array<CRound>;
+  getRoundDictionary(): Map<number, CRound>;
+  getMaximumRemoteness(): number;
 
-  push(round: CRound): void;
-  updateLastRound(round: CRound): void;
+  updateHistory(round: CRound): void;
 }

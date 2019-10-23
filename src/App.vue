@@ -23,13 +23,9 @@ import AppFooter from "@/components/AppFooter.vue";
     titleTemplate: "%s | GamesmanUni"
   }
 })
-export default class App extends Vue {
-  created() {
-    document.body.className = this.$store.getters.style;
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
-@import "@/datas/styles/style.scss";
+@use "@/datas/styles/style";
 </style>

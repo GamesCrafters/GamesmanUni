@@ -13,20 +13,15 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import { CVvh } from "@/classes/CVvh";
+// import { CVvh } from "@/classes/CVvh";
 
 @Component
 export default class GameVvh extends Vue {
-  vvhSelectorId = this.$store.getters.vvhSelectorId;
-
-  drawVvh(): void {
-    const vvh = new CVvh(this.$store.getters.game);
-    vvh.drawVvh();
-  }
+  vvhSelectorId: string = this.$store.getters.vvhSelectorId;
 
   @Watch("$store.getters.loadingStatus")
   onRoundChange(): void {
-    !this.$store.getters.loadingStatus && this.drawVvh();
+    // !this.$store.getters.loadingStatus && this.$store.dispatch("drawVvh");
   }
 }
 </script>
