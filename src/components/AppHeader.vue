@@ -16,50 +16,52 @@
       <router-link class="c-link-router" to="/about">About</router-link>
     </nav>
 
-    <div id="app-header-setting-theme" class="c-dropdown">
-      <span class="c-dropdown-selection"
-        >{{ themeDictionary.get(theme) }} ▼</span
-      >
-      <div class="c-dropdown-menu">
-        <div
-          class="c-dropdown-menu-choice"
-          v-for="key in Array.from(themeDictionary.keys())"
-          :key="key"
-          @click="changeTheme(key)"
-        >
-          {{ themeDictionary.get(key) }}
+    <div id="app-header-setting">
+      <div id="app-header-setting-theme" class="c-dropdown">
+        <div class="c-dropdown-selection">
+          {{ themeDictionary.get(theme) }} ▼
+        </div>
+        <div class="c-dropdown-menu">
+          <div
+            class="c-dropdown-menu-choice"
+            v-for="key in Array.from(themeDictionary.keys())"
+            :key="key"
+            @click="changeTheme(key)"
+          >
+            {{ themeDictionary.get(key) }}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="app-header-setting-layout" class="c-dropdown">
-      <span class="c-dropdown-selection"
-        >{{ layoutDictionary.get(layout) }} ▼</span
-      >
-      <div class="c-dropdown-menu">
-        <div
-          class="c-dropdown-menu-choice"
-          v-for="key in Array.from(layoutDictionary.keys())"
-          :key="key"
-          @click="changeLayout(key)"
-        >
-          {{ layoutDictionary.get(key) }}
+      <div id="app-header-setting-layout" class="c-dropdown">
+        <div class="c-dropdown-selection">
+          {{ layoutDictionary.get(layout) }} ▼
+        </div>
+        <div class="c-dropdown-menu">
+          <div
+            class="c-dropdown-menu-choice"
+            v-for="key in Array.from(layoutDictionary.keys())"
+            :key="key"
+            @click="changeLayout(key)"
+          >
+            {{ layoutDictionary.get(key) }}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="app-header-setting-language" class="c-dropdown">
-      <span class="c-dropdown-selection"
-        >{{ languageDictionary.get(language) }} ▼</span
-      >
-      <div class="c-dropdown-menu">
-        <div
-          class="c-dropdown-menu-choice"
-          v-for="key in Array.from(languageDictionary.keys())"
-          :key="key"
-          @click="changeLanguage(key)"
-        >
-          {{ languageDictionary.get(key) }}
+      <div id="app-header-setting-language" class="c-dropdown">
+        <div class="c-dropdown-selection">
+          {{ languageDictionary.get(language) }} ▼
+        </div>
+        <div class="c-dropdown-menu">
+          <div
+            class="c-dropdown-menu-choice"
+            v-for="key in Array.from(languageDictionary.keys())"
+            :key="key"
+            @click="changeLanguage(key)"
+          >
+            {{ languageDictionary.get(key) }}
+          </div>
         </div>
       </div>
     </div>
@@ -115,6 +117,7 @@ export default class AppHeader extends Vue {
   changeLanguage(language: string): void {
     this.$root.$i18n.locale = language;
     this.$store.commit("language", language);
+    console.log(this.$root.$i18n.locale);
   }
 }
 </script>

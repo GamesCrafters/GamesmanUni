@@ -1,9 +1,64 @@
-body {
+* {
+  color: var(--primaryColor);
   font: var(--font);
   text-align: center;
+}
+
+body {
   background-color: var(--backgroundColor);
-  color: var(--primaryColor);
   padding: 0 10% 0 10%;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+p {
+  padding: 0 20% 0 20%;
+  line-height: 2em;
+}
+
+a {
+  &:link {
+    font-weight: bold;
+    color: #5f5ca0;
+  }
+  &:visited {
+    color: #8d3f9b;
+  }
+}
+
+code {
+  font: var(--monoFont);
+  border: 0.04em solid #bcbec0;
+  border-radius: 0.25em;
+  padding: 0.125em 0.25em 0.125em 0.25em;
 }
 
 .c-divider {
@@ -11,72 +66,50 @@ body {
 }
 
 .c-link-router {
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 0 0.3em 0 0;
   color: var(--primaryColor);
+  font-weight: bold;
+  padding-right: 0.3em;
+
   &.router-link-exact-active {
     color: var(--themeColor);
   }
 }
 
-.c-link-external {
-  &:link {
-    font-weight: bold;
-    color: #3730ff;
-  }
-  &:visited {
-    color: #df29ff;
-  }
-}
-
-.c-text {
-  padding: 0 20% 0 20%;
-  line-height: 2em;
-}
-
-.c-code-inline {
-  font: var(--monoFont);
-  border: 0.04em solid #bcbec0;
-  border-radius: 0.25em;
-  padding: 0.125em 0.25em 0.125em 0.25em;
-}
-
 .c-dropdown {
-  position: relative;
   display: inline-block;
-  min-width: 7em;
 
-  &:hover {
-    background-color: var(--themeColor);
-    .c-dropdown-menu {
-      display: block;
-    }
+  * {
+    text-align: left;
   }
 
   .c-dropdown-selection {
     font-weight: bold;
-  }
-
-  .c-dropdown-selection,
-  .c-dropdown-menu-choice {
-    text-align: left;
-    padding: 0.25em 1em 0.25em 1em;
+    padding: 0.25em 0.5em 0.25em 0.5em;
   }
 
   .c-dropdown-menu {
+    border: 0em;
+    background-color: lightslategray;
+    box-shadow: 0 8em 16em 0 rgba(0, 0, 0, 0.2);
     display: none;
+    padding: 0em;
     position: absolute;
-    background-color: var(--backgroundColor);
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
   }
 
   .c-dropdown-menu-choice {
-    padding: 0.25em 0.28em 0.25em 1em;
-    min-width: 7em;
+    padding: 0.25em 0.5em 0.25em 0.5em;
     &:hover {
       background-color: var(--themeColor);
+    }
+  }
+
+  &:hover {
+    .c-dropdown-selection {
+      background-color: var(--themeColor);
+    }
+    .c-dropdown-menu {
+      display: block;
     }
   }
 }

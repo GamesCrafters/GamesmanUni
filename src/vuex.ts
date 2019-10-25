@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import { TMoveData } from "@/types/internal/TMoveData";
 import { CApp } from "@/classes/CApp";
 import { CRound } from "@/classes/CRound";
-// import { CVvh } from "@/classes/CVvh";
 
 Vue.use(Vuex);
 

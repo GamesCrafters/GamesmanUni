@@ -1,4 +1,5 @@
 module.exports = {
+  configureWebpack: {},
   pluginOptions: {
     i18n: {
       locale: "en",
