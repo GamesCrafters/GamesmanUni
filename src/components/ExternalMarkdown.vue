@@ -6,6 +6,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import VueMarkdown from "vue-markdown";
+import { existsSync } from "fs";
 
 @Component({
   components: {
@@ -16,7 +17,27 @@ export default class ExternalMarkdown extends Vue {
   @Prop({ default: "error.md" }) relativePath!: string;
 
   get markdownText() {
-    return require("raw-loader!@/datas/markdowns/" + this.relativePath).default;
+    const fs = require("fs");
+    try {
+      if (
+        require("raw-loader!@/datas/markdowns/" +
+          this.$i18n.locale +
+          "/" +
+          this.relativePath)
+      ) {
+        return require("raw-loader!@/datas/markdowns/" +
+          this.$i18n.locale +
+          "/" +
+          this.relativePath).default;
+      }
+    } catch (errorMessage) {
+      console.error(errorMessage);
+      console.log(`"${this.relativePath}" is loaded in fallback language.`);
+    }
+    return require("raw-loader!@/datas/markdowns/" +
+      this.$i18n.fallbackLocale +
+      "/" +
+      this.relativePath).default;
   }
 }
 </script>

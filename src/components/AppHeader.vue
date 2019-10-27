@@ -117,7 +117,6 @@ export default class AppHeader extends Vue {
   changeLanguage(language: string): void {
     this.$root.$i18n.locale = language;
     this.$store.commit("language", language);
-    console.log(this.$root.$i18n.locale);
   }
 }
 </script>
