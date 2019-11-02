@@ -1,6 +1,6 @@
 <template>
   <div id="app-home">
-    <vue-markdown id="app-home-title">## {{ $t("title") }}</vue-markdown>
+    <h2 id="app-home-title">{{ $t("title") }}</h2>
   </div>
 </template>
 

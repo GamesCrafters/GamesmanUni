@@ -1,5 +1,7 @@
 <template>
-  <vue-markdown class="c-markdown" :source="markdownText"></vue-markdown>
+  <div id="app-external-markdown">
+    <vue-markdown class="c-markdown" :source="markdownText"></vue-markdown>
+  </div>
 </template>
 
 <script lang="ts">
