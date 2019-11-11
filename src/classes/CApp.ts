@@ -10,6 +10,7 @@ export class CApp implements IApp {
   private layout: string;
   private readonly languageDictionary: Map<string, string>;
   private language: string;
+  private readonly serverDataVersion: string;
   private readonly serverDataSource: string;
   private readonly games: CGames;
   private readonly game: CGame;
@@ -28,6 +29,7 @@ export class CApp implements IApp {
       Object.entries(require("@/datas/defaults.json").languageDictionary)
     );
     this.language = require("@/datas/defaults.json").language;
+    this.serverDataVersion = require("@/datas/defaults.json").serverDataVersion;
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
     this.games = new CGames();
     this.game = new CGame();
@@ -59,6 +61,10 @@ export class CApp implements IApp {
 
   getLanguage(): string {
     return this.language;
+  }
+
+  getServerDataVersion(): string {
+    return this.serverDataVersion;
   }
 
   getServerDataSource(): string {

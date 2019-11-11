@@ -20,7 +20,7 @@ export interface IRound {
   setTurnId(turnId: number): void;
   setTurnName(turnName: string): void;
   setMove(move: string): void;
-  setMoveValue(moveValue: string): void;
+  setMoveValue(move: string): void;
   setPosition(position: string): void;
   setPositionValue(positionValue: string): void;
   setRemoteness(remoteness: number): void;

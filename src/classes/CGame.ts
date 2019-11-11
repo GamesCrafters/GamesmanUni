@@ -2,11 +2,11 @@ import axios, { AxiosResponse } from "axios";
 import { TRawErrorData } from "@/types/external/TRawErrorData";
 import { TRawGameData } from "@/types/external/TRawGameData";
 import { TRawPositionData } from "@/types/external/TRawPositionData";
+import { TMoveData } from "@/types/internal/TMoveData";
 import { TVariantData } from "@/types/internal/TVariantData";
 import { IGame } from "@/interfaces/IGame";
 import { CRound } from "@/classes/CRound";
 import { CHistory } from "@/classes/CHistory";
-import { TMoveData } from "@/types/internal/TMoveData";
 
 export class CGame implements IGame {
   private readonly serverDataSource: string;
@@ -19,6 +19,7 @@ export class CGame implements IGame {
   private readonly vvhSelectorId: string;
   private round: CRound;
   private history: CHistory;
+  private showHint: boolean;
 
   constructor() {
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
@@ -39,6 +40,7 @@ export class CGame implements IGame {
     this.vvhSelectorId = require("@/datas/defaults.json").vvhSelectorId;
     this.round = new CRound();
     this.history = new CHistory();
+    this.showHint = require("@/datas/defaults.json").showHint;
   }
 
   getId(): string {
@@ -77,6 +79,10 @@ export class CGame implements IGame {
     return this.history;
   }
 
+  getShowHint(): boolean {
+    return this.showHint;
+  }
+
   setId(id: string): void {
     this.id = id;
   }
@@ -100,6 +106,10 @@ export class CGame implements IGame {
 
   setTurn1Name(turn1Name: string): void {
     this.turnNameDictionary.set(1, turn1Name);
+  }
+
+  setShowHint(showHint: boolean): void {
+    this.showHint = showHint;
   }
 
   private async loadDetailedGameData(): Promise<void> {
@@ -135,7 +145,25 @@ export class CGame implements IGame {
       this.round.setPositionValue(rawData.response.positionValue);
       this.round.setRemoteness(rawData.response.remoteness);
       this.round.setNextMoveDataArray(rawData.response.moves);
+      this.round.setNextMoveDataDictionary(rawData.response.moves);
     }
+  }
+
+  async startNewGame(): Promise<void> {
+    this.currentVariantData = this.variantDataDictionary.get(
+      this.round.getVariantId()
+    ) as TVariantData;
+    this.round = new CRound();
+    this.round.setVariantId(this.currentVariantData.id);
+    this.round.setVariantDescription(this.currentVariantData.description);
+    this.round.setTurnId(0);
+    this.round.setTurnName(this.turnNameDictionary.get(
+      this.round.getTurnId()
+    ) as string);
+    this.round.setPosition(this.currentVariantData.startingPosition);
+    await this.loadPositionData();
+    this.history = new CHistory();
+    this.history.updateHistory(this.round);
   }
 
   async initGame(): Promise<void> {
@@ -143,38 +171,24 @@ export class CGame implements IGame {
     this.startNewGame();
   }
 
-  async startNewGame(): Promise<void> {
-    this.currentVariantData = this.variantDataArray[0];
-    this.round = new CRound();
-    this.round.setVariantId(this.currentVariantData.id);
-    this.round.setVariantDescription(this.currentVariantData.description);
-    this.round.setTurnName(<string>this.turnNameDictionary.get(0));
-    this.round.setPosition(this.currentVariantData.startingPosition);
-    await this.loadPositionData();
-    this.history = new CHistory();
-    this.history.updateHistory(this.round);
-  }
-
   async runMove(): Promise<void> {
+    this.round.setMoveValue(this.round.getMove());
     this.history.updateHistory(this.round);
     let oldRound = this.round;
     this.round = new CRound();
     this.round.setRoundNumber(oldRound.getRoundNumber() + 1);
-    this.round.setVariantId(this.currentVariantData.id);
-    this.round.setVariantDescription(this.currentVariantData.description);
+    this.round.setVariantId(oldRound.getVariantId());
+    this.round.setVariantDescription(oldRound.getVariantDescription());
     this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
-    this.round.setTurnName(<string>(
-      this.turnNameDictionary.get(this.round.getTurnId())
-    ));
-    this.round.setPosition(this.currentVariantData.startingPosition);
-    this.round.setMove("");
+    this.round.setTurnName(this.turnNameDictionary.get(
+      this.round.getTurnId()
+    ) as string);
     this.round.setPosition(
       (oldRound
         .getNextMoveDataDictionary()
         .get(oldRound.getMove()) as TMoveData).position
     );
     await this.loadPositionData();
-    this.history.updateHistory(oldRound);
     this.history.updateHistory(this.round);
   }
 

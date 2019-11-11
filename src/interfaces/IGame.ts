@@ -12,15 +12,17 @@ export interface IGame {
   getVvhSelectorId(): string;
   getRound(): CRound;
   getHistory(): CHistory;
+  getShowHint(): boolean;
 
   setId(id: string): void;
   setName(name: string): void;
   setVariantData(variantId: string): void;
   setTurn0Name(turn0Name: string): void;
   setTurn1Name(turn1Name: string): void;
+  setShowHint(showHint: boolean): void;
 
-  initGame(id: string): Promise<void>;
   startNewGame(): Promise<void>;
+  initGame(id: string): Promise<void>;
   runMove(): Promise<void>;
   undoMove(): void;
   redoMove(): void;

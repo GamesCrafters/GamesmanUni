@@ -9,6 +9,7 @@ export interface IApp {
   getLayout(): string;
   getLanguageDictionary(): Map<string, string>;
   getLanguage(): string;
+  getServerDataVersion(): string;
   getServerDataSource(): string;
   getGames(): CGames;
   getGame(): CGame;

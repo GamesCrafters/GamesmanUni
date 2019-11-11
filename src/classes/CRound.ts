@@ -25,7 +25,7 @@ export class CRound implements IRound {
     this.moveValue = "";
     this.position = "";
     this.positionValue = "";
-    this.remoteness = require("@/datas/defaults.json");
+    this.remoteness = require("@/datas/defaults.json").maximumRemoteness;
     this.nextMoveDataArray = new Array<TMoveData>();
     this.nextMoveDataDictionary = new Map<string, TMoveData>();
   }
@@ -104,9 +104,9 @@ export class CRound implements IRound {
 
   setMoveValue(move: string): void {
     if (this.nextMoveDataDictionary.has(move)) {
-      this.moveValue = (<TMoveData>(
-        this.nextMoveDataDictionary.get(move)
-      )).moveValue;
+      this.moveValue = (this.nextMoveDataDictionary.get(
+        move
+      ) as TMoveData).moveValue;
     } else {
       this.moveValue = "";
     }

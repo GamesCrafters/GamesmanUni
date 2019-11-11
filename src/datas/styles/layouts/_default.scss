@@ -15,27 +15,27 @@ h1 {
 }
 
 h2 {
-  font-size: 1.8em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
 h3 {
-  font-size: 1.6em;
+  font-size: 1.17em;
   font-weight: bold;
 }
 
 h4 {
-  font-size: 1.4em;
+  font-size: 1em;
   font-weight: bold;
 }
 
 h5 {
-  font-size: 1.2em;
+  font-size: 0.83em;
   font-weight: bold;
 }
 
 h6 {
-  font-size: 1em;
+  font-size: 0.75em;
   font-weight: bold;
 }
 
@@ -44,10 +44,14 @@ p {
   line-height: 2em;
 }
 
+b {
+  font-weight: bold;
+}
+
 a {
   &:link {
-    font-weight: bold;
     color: #5f5ca0;
+    font-weight: bold;
   }
   &:visited {
     color: #8d3f9b;
@@ -55,10 +59,27 @@ a {
 }
 
 code {
-  font: var(--monoFont);
   border: 0.04em solid #bcbec0;
   border-radius: 0.25em;
+  font: var(--monoFont);
   padding: 0.125em 0.25em 0.125em 0.25em;
+}
+
+button {
+  background-color: var(--backgroundColor);
+  border: 0.1em solid var(--themeColor);
+  border-radius: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease-out;
+  &:hover {
+    background-color: var(--themeColor);
+  }
+  &:disabled {
+    background-color: var(--backgroundColor);
+    cursor: auto;
+    opacity: 0.5;
+  }
 }
 
 .c-divider {
@@ -69,7 +90,6 @@ code {
   color: var(--primaryColor);
   font-weight: bold;
   padding-right: 0.3em;
-
   &.router-link-exact-active {
     color: var(--themeColor);
   }
@@ -77,33 +97,27 @@ code {
 
 .c-dropdown {
   display: inline-block;
-
   * {
     text-align: left;
   }
-
   .c-dropdown-selection {
     font-weight: bold;
     padding: 0.25em 0.5em 0.25em 0.5em;
   }
-
   .c-dropdown-menu {
     border: 0em;
     background-color: lightslategray;
-    box-shadow: 0 8em 16em 0 rgba(0, 0, 0, 0.2);
     display: none;
     padding: 0em;
     position: absolute;
     z-index: 1;
   }
-
   .c-dropdown-menu-choice {
-    padding: 0.25em 0.5em 0.25em 0.5em;
+    padding: 0.25em 0.5em;
     &:hover {
       background-color: var(--themeColor);
     }
   }
-
   &:hover {
     .c-dropdown-selection {
       background-color: var(--themeColor);
@@ -114,193 +128,72 @@ code {
   }
 }
 
-//   .c-turn-0 {
-//     color: $turnColor0;
-//     background-color: $backgroundColor;
-//   }
+.c-turn-0 {
+  background-color: var(--backgroundColor);
+  color: var(--turn0Color);
+}
 
-//   .c-turn-0-rev {
-//     color: $backgroundColor;
-//     background-color: $turnColor0;
-//   }
+.c-turn-0-rev {
+  background-color: var(--turn0Color);
+  color: var(--backgroundColor);
+}
 
-//   .c-turn-1 {
-//     color: $turnColor1;
-//     background-color: $backgroundColor;
-//   }
+.c-turn-1 {
+  background-color: var(--backgroundColor);
+  color: var(--turn1Color);
+}
 
-//   .c-turn-1-rev {
-//     color: $backgroundColor;
-//     background-color: $turnColor1;
-//   }
+.c-turn-1-rev {
+  background-color: var(--turn1Color);
+  color: var(--backgroundColor);
+}
 
-//   .c-win {
-//     color: $winColor;
-//     background-color: $backgroundColor;
-//   }
+.c-win {
+  background-color: var(--backgroundColor);
+  color: var(--winColor);
+}
 
-//   .c-win-rev {
-//     color: $mainColor;
-//     background-color: $winColor;
-//   }
+.c-win-rev {
+  background-color: var(--winColor);
+  color: var(--primaryColor);
+}
 
-//   .c-draw {
-//     color: $drawColor;
-//     background-color: $backgroundColor;
-//   }
+.c-draw {
+  background-color: var(--backgroundColor);
+  color: var(--drawColor);
+}
 
-//   .c-draw-rev {
-//     color: $mainColor;
-//     background-color: $drawColor;
-//   }
+.c-draw-rev {
+  background-color: var(--drawColor);
+  color: var(--primaryColor);
+}
 
-//   .c-tie {
-//     color: $tieColor;
-//     background-color: $backgroundColor;
-//   }
+.c-tie {
+  background-color: var(--backgroundColor);
+  color: var(--tieColor);
+}
 
-//   .c-tie-rev {
-//     color: $mainColor;
-//     background-color: $tieColor;
-//   }
+.c-tie-rev {
+  background-color: var(--tieColor);
+  color: var(--primaryColor);
+}
 
-//   .c-lose {
-//     color: $loseColor;
-//     background-color: $backgroundColor;
-//   }
+.c-lose {
+  background-color: var(--backgroundColor);
+  color: var(--loseColor);
+}
 
-//   .c-lose-rev {
-//     color: $backgroundColor;
-//     background-color: $loseColor;
-//   }
+.c-lose-rev {
+  background-color: var(--loseColor);
+  color: var(--backgroundColor);
+}
 
-//   .c-none {
-//     color: $mainColor;
-//     background-color: $backgroundColor;
-//   }
+.c-none {
+  background-color: var(--backgroundColor);
+  color: var(--primaryColor);
+}
 
-//   .c-none-rev {
-//     color: $backgroundColor;
-//     background-color: $mainColor;
-//   }
-
-//   #app-game,
-//   #app-game-r2-c1,
-//   #app-game-r2-c1-r1-c1,
-//   #app-game-r2-c1-r1-c2,
-//   #app-game-r2-c1-r1-c3 {
-//     display: flex;
-//     flex-flow: column nowrap;
-//   }
-
-//   #app-game-r2,
-//   #app-game-r2-c1-r1 {
-//     display: flex;
-//     flex-flow: row wrap;
-//     justify-content: space-around;
-//     align-items: flex-start;
-
-//     > * {
-//       flex: 1 1 0;
-//     }
-//   }
-
-//   #app-game-r2-c1-r2 {
-//     display: flex;
-//     flex-flow: row nowrap;
-//     justify-content: space-around;
-//     align-items: center;
-//   }
-
-//   #app-game-r2-c1-r3 {
-//     display: flex;
-//     flex-flow: column nowrap;
-//     justify-content: center;
-//     align-items: center;
-//   }
-
-//   #app-game-roundNumber,
-//   #app-game-turnName {
-//     font-weight: bold;
-//   }
-
-//   #app-game-undo,
-//   #app-game-restart,
-//   #app-game-redo {
-//     background-color: $neutralColor;
-//     padding: 2em;
-//     margin: 2em;
-//     border-radius: 100%;
-//   }
-
-//   #app-game-board {
-//     width: 5em;
-//     table-layout: fixed;
-//     td {
-//       .c-turn-piece-0 {
-//         display: inline-block;
-//         color: $backgroundColor;
-//         background-color: $turnColor0;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       .c-turn-piece-1 {
-//         display: inline-block;
-//         color: $backgroundColor;
-//         background-color: $turnColor1;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       .c-hint-win {
-//         cursor: pointer;
-//         display: inline-block;
-//         background-color: $winColor;
-//         border-radius: 100%;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       .c-hint-draw {
-//         cursor: pointer;
-//         display: inline-block;
-//         background-color: $drawColor;
-//         border-radius: 100%;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       .c-hint-tie {
-//         cursor: pointer;
-//         display: inline-block;
-//         background-color: $tieColor;
-//         border-radius: 100%;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       .c-hint-lose {
-//         cursor: pointer;
-//         display: inline-block;
-//         background-color: $loseColor;
-//         border-radius: 100%;
-//         height: 1.5em;
-//         width: 1.5em;
-//       }
-
-//       height: 2em;
-//       vertical-align: middle;
-//       border: 1px solid black;
-//     }
-//     border-collapse: collapse;
-//   }
-
-//   #app-game-vvh-colorGuide {
-//     > * {
-//       padding: 0 1.5em 0 1.5em;
-//       margin: 0 0.5em 0 0.5em;
-//       border-radius: 100%;
-//     }
-//   }
-// }
+.c-none-rev {
+  background-color: var(--primaryColor);
+  color: var(--backgroundColor);
+}

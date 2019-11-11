@@ -3,12 +3,11 @@
     <h2 id="app-games-title">Games</h2>
     <p v-for="gameData in gameDataArray" :key="gameData.id">
       <router-link
-        :click="clicked(gameData.id)"
         :to="{
           name: 'game',
           params: { gameId: gameData.id, gameVariation: 0 }
         }"
-        >{{ gameData.name }} ({{ gameData.status }})</router-link
+        >{{ gameData.name }} (Server Data: {{ gameData.status }})</router-link
       >
     </p>
   </div>
@@ -27,10 +26,6 @@ export default class AppGames extends Vue {
 
   created(): void {
     this.$store.dispatch("initGames");
-  }
-
-  clicked(gameId: string): void {
-    this.$store.commit("gameId", gameId);
   }
 }
 </script>

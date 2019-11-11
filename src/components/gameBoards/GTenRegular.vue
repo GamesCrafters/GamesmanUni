@@ -1,21 +1,8 @@
 <template>
-  <table id="app-game-board">
-    <tr v-for="i in cellCount" :key="i">
-      <td
-        @click="
-          boardData[cellCount - i].clickable
-            ? runMove(boardData[cellCount - i].move)
-            : null
-        "
-      >
-        <span :class="boardData[cellCount - i].piece">
-          <span :class="boardData[cellCount - i].hint">
-            {{ boardData[cellCount - i].board }}
-          </span>
-        </span>
-      </td>
-    </tr>
-  </table>
+  <div>
+    <button @click="runMove('1')">Remove 1</button>
+    <button @click="runMove('2')">Remove 2</button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -23,8 +10,8 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { CRound } from "@/classes/CRound";
 
 @Component
-export default class G1020 extends Vue {
-  cellCount = 11;
+export default class GTenRegular extends Vue {
+  cellCount: number = 11;
   boardData: {
     [cell: string]: {
       piece: string;
@@ -53,7 +40,6 @@ export default class G1020 extends Vue {
         board: string;
       };
     } = {};
-
     for (let cell: number = 0; cell < this.cellCount; cell++) {
       boardData[cell.toString()] = {
         piece: "",
@@ -78,8 +64,8 @@ export default class G1020 extends Vue {
   updateBoardData() {
     if (!this.loadingStatus) {
       this.boardData = this.initBoardData();
-      let rounds: Array<CRound> = this.$store.getters.historyRounds;
-      let round: CRound = this.$store.getters.gameRound;
+      let rounds: Array<CRound> = this.$store.getters.roundArray;
+      let round: CRound = this.$store.getters.round;
       for (
         let roundNumber: number = 0;
         roundNumber < round.getRoundNumber();
@@ -91,13 +77,14 @@ export default class G1020 extends Vue {
         ) {
           this.boardData[
             rounds[roundNumber + 1].getPosition()
-          ].piece = `c-turn-piece-${rounds[roundNumber].getTurnName()}`;
+          ].piece = `c-turn-piece-${rounds[roundNumber].getTurnId()}`;
         }
       }
-
       for (let nextMoveData of round.getNextMoveDataArray()) {
-        let move = nextMoveData.move;
-        let moveValue = this.$store.getters.moveValue(move);
+        const move = nextMoveData.move;
+        const moveValue =
+          this.$store.getters.nextMoveDataDictionary.get(move).moveValue ||
+          "none";
         this.boardData[nextMoveData.position].move = move;
         this.boardData[nextMoveData.position].hint = `c-hint-${moveValue}`;
         this.boardData[nextMoveData.position].clickable = true;
@@ -106,8 +93,7 @@ export default class G1020 extends Vue {
   }
 
   runMove(move: string): void {
-    this.$store.commit("roundMove", move);
-    this.$store.dispatch("runMove");
+    this.$store.dispatch("runMove", move);
   }
 }
 </script>

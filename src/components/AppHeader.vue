@@ -19,7 +19,7 @@
     <div id="app-header-setting">
       <div id="app-header-setting-theme" class="c-dropdown">
         <div class="c-dropdown-selection">
-          {{ themeDictionary.get(theme) }} ▼
+          {{ themeDictionary.get(theme) }} Theme ▼
         </div>
         <div class="c-dropdown-menu">
           <div
@@ -35,7 +35,7 @@
 
       <div id="app-header-setting-layout" class="c-dropdown">
         <div class="c-dropdown-selection">
-          {{ layoutDictionary.get(layout) }} ▼
+          {{ layoutDictionary.get(layout) }} Layout ▼
         </div>
         <div class="c-dropdown-menu">
           <div

@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-// import { CVvh } from "@/classes/CVvh";
+import { CVvh } from "@/classes/CVvh";
 
 @Component
 export default class GameVvh extends Vue {
@@ -21,7 +21,29 @@ export default class GameVvh extends Vue {
 
   @Watch("$store.getters.loadingStatus")
   onRoundChange(): void {
-    // !this.$store.getters.loadingStatus && this.$store.dispatch("drawVvh");
+    !this.$store.getters.loadingStatus && this.$store.dispatch("drawVvh");
   }
 }
 </script>
+
+<style scoped lang="scss">
+#app-game-vvh {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: stretch;
+}
+
+#app-game-vvh-title {
+  margin: 0;
+}
+
+#app-game-vvh-colorGuide {
+  > * {
+    border-radius: 100%;
+    margin: 0 0.5em;
+    padding: 0 1.5em;
+  }
+}
+</style>
