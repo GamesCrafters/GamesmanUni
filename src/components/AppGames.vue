@@ -5,7 +5,7 @@
       <router-link
         :to="{
           name: 'game',
-          params: { gameId: gameData.id, gameVariation: 0 }
+          params: { gameId: gameData.id, variantId: 'regular' }
         }"
         >{{ gameData.name }} (Server Data: {{ gameData.status }})</router-link
       >

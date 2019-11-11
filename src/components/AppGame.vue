@@ -90,11 +90,11 @@
           </button>
         </div>
         <div id="app-game-body-main-board">
-          <!-- <GameBoard></GameBoard> -->
+          <GameBoard></GameBoard>
         </div>
       </div>
       <div id="app-game-body-vvh">
-        <!-- <GameVvh></GameVvh> -->
+        <GameVvh></GameVvh>
       </div>
     </div>
   </div>
