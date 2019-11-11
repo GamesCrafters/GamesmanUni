@@ -8,7 +8,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import VueMarkdown from "vue-markdown";
-import { existsSync } from "fs";
 
 @Component({
   components: {
@@ -19,7 +18,6 @@ export default class ExternalMarkdown extends Vue {
   @Prop({ default: "error.md" }) relativePath!: string;
 
   get markdownText() {
-    const fs = require("fs");
     try {
       if (
         require("raw-loader!@/datas/markdowns/" +
