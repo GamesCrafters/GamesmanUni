@@ -17,20 +17,30 @@ export class CGames implements IGames {
     return this.gameDataArray;
   }
 
-  private async loadGameDataArray(): Promise<void> {
+  private async loadGameDataArray(): Promise<boolean> {
+    let success: boolean = true;
     const gamesDataSource: string = `${this.serverDataSource}/games`;
-    const httpResponse: AxiosResponse = await axios.get(gamesDataSource);
-    const rawData: TRawGamesData | TRawErrorData = httpResponse.data;
-    if (rawData.status === "ok") {
-      this.gameDataArray = rawData.response.map(rawGameData => ({
-        id: rawGameData.gameId,
-        name: rawGameData.name,
-        status: rawGameData.status
-      }));
+    try {
+      const httpResponse: AxiosResponse = await axios.get(gamesDataSource);
+      const rawData: TRawGamesData | TRawErrorData = httpResponse.data;
+      if (rawData.status === "ok") {
+        this.gameDataArray = rawData.response.map(rawGameData => ({
+          id: rawGameData.gameId,
+          name: rawGameData.name,
+          status: rawGameData.status
+        }));
+      }
+    } catch (errorMessage) {
+      console.error(errorMessage);
+      console.error("Error: Failed to load games from server.");
+      success = false;
     }
+    return success;
   }
 
-  async initGames(): Promise<void> {
-    await this.loadGameDataArray();
+  async initGames(): Promise<boolean> {
+    let success: boolean = true;
+    success = await this.loadGameDataArray();
+    return success;
   }
 }

@@ -21,7 +21,7 @@ export default class GameVvh extends Vue {
 
   @Watch("$store.getters.loadingStatus")
   onRoundChange(): void {
-    !this.$store.getters.loadingStatus && this.$store.dispatch("drawVvh");
+    !this.$store.getters.loadingStatus && this.$store.commit("drawVvh");
   }
 }
 </script>

@@ -6,5 +6,6 @@ export interface IHistory {
   getRoundDictionary(): Map<number, CRound>;
   getMaximumRemoteness(): number;
 
-  updateHistory(round: CRound): void;
+  // type === ("last" || "curr" || "undo" || "redo")
+  updateHistory(round: CRound, type: string): void;
 }

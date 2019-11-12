@@ -112,44 +112,65 @@ export class CGame implements IGame {
     this.showHint = showHint;
   }
 
-  private async loadDetailedGameData(): Promise<void> {
+  private async loadDetailedGameData(): Promise<boolean> {
+    let success: boolean = true;
     const detailedGameDataSource: string = `${this.serverDataSource}/games/${this.id}`;
-    const httpResponse: AxiosResponse = await axios.get(detailedGameDataSource);
-    const rawData: TRawGameData | TRawErrorData = httpResponse.data;
-    if (rawData.status === "ok") {
-      this.name = rawData.response.name;
-      this.variantDataArray = rawData.response.variants.map(rawVariantData => ({
-        id: rawVariantData.variantId,
-        description: rawVariantData.description,
-        status: rawVariantData.status,
-        startingPosition: rawVariantData.startingPosition
-      }));
-      this.variantDataDictionary = new Map<string, TVariantData>();
-      for (let i: number = 0; i < this.variantDataArray.length; i++) {
-        this.variantDataDictionary.set(
-          this.variantDataArray[i].id,
-          this.variantDataArray[i]
+    try {
+      const httpResponse: AxiosResponse = await axios.get(
+        detailedGameDataSource
+      );
+      const rawData: TRawGameData | TRawErrorData = httpResponse.data;
+      if (rawData.status === "ok") {
+        this.name = rawData.response.name;
+        this.variantDataArray = rawData.response.variants.map(
+          rawVariantData => ({
+            id: rawVariantData.variantId,
+            description: rawVariantData.description,
+            status: rawVariantData.status,
+            startingPosition: rawVariantData.startingPosition
+          })
         );
+        this.variantDataDictionary = new Map<string, TVariantData>();
+        for (let i: number = 0; i < this.variantDataArray.length; i++) {
+          this.variantDataDictionary.set(
+            this.variantDataArray[i].id,
+            this.variantDataArray[i]
+          );
+        }
       }
+    } catch (errorMessage) {
+      console.error(errorMessage);
+      console.error("Error: Failed to load detailed game data from server.");
+      success = false;
     }
+    return success;
   }
 
-  private async loadPositionData(): Promise<void> {
+  private async loadPositionData(): Promise<boolean> {
+    let success: boolean = true;
     let positionDataSource: string = this.serverDataSource;
     positionDataSource += `/games/${this.id}`;
     positionDataSource += `/variants/${this.currentVariantData.id}`;
     positionDataSource += `/positions/${this.round.getPosition()}`;
-    const httpResponse: AxiosResponse = await axios.get(positionDataSource);
-    const rawData: TRawPositionData | TRawErrorData = httpResponse.data;
-    if (rawData.status === "ok") {
-      this.round.setPositionValue(rawData.response.positionValue);
-      this.round.setRemoteness(rawData.response.remoteness);
-      this.round.setNextMoveDataArray(rawData.response.moves);
-      this.round.setNextMoveDataDictionary(rawData.response.moves);
+    try {
+      const httpResponse: AxiosResponse = await axios.get(positionDataSource);
+      const rawData: TRawPositionData | TRawErrorData = httpResponse.data;
+      if (rawData.status === "ok") {
+        this.round.setPositionValue(rawData.response.positionValue);
+        this.round.setRemoteness(rawData.response.remoteness);
+        this.round.setNextMoveDataArray(rawData.response.moves);
+        this.round.setNextMoveDataDictionary(rawData.response.moves);
+      }
+    } catch (errorMessage) {
+      console.error(errorMessage);
+      console.error("Error: Failed to load position data from server.");
+      success = false;
     }
+    return success;
   }
 
-  async startNewGame(): Promise<void> {
+  async startNewGame(): Promise<boolean> {
+    let success: boolean = true;
     this.currentVariantData = this.variantDataDictionary.get(
       this.round.getVariantId()
     ) as TVariantData;
@@ -157,24 +178,26 @@ export class CGame implements IGame {
     this.round.setVariantId(this.currentVariantData.id);
     this.round.setVariantDescription(this.currentVariantData.description);
     this.round.setTurnId(0);
-    this.round.setTurnName(this.turnNameDictionary.get(
-      this.round.getTurnId()
-    ) as string);
+    this.round.setTurnName(this.turnNameDictionary.get(0) as string);
     this.round.setPosition(this.currentVariantData.startingPosition);
-    await this.loadPositionData();
+    success = await this.loadPositionData();
     this.history = new CHistory();
-    this.history.updateHistory(this.round);
+    this.history.updateHistory(this.round, "curr");
+    return success;
   }
 
-  async initGame(): Promise<void> {
-    await this.loadDetailedGameData();
-    this.startNewGame();
+  async initGame(): Promise<boolean> {
+    let success: boolean = true;
+    success = await this.loadDetailedGameData();
+    success = await this.startNewGame();
+    return success;
   }
 
-  async runMove(): Promise<void> {
+  async runMove(): Promise<boolean> {
+    let success = true;
     this.round.setMoveValue(this.round.getMove());
-    this.history.updateHistory(this.round);
-    let oldRound = this.round;
+    this.history.updateHistory(this.round, "last");
+    const oldRound = this.round;
     this.round = new CRound();
     this.round.setRoundNumber(oldRound.getRoundNumber() + 1);
     this.round.setVariantId(oldRound.getVariantId());
@@ -188,19 +211,22 @@ export class CGame implements IGame {
         .getNextMoveDataDictionary()
         .get(oldRound.getMove()) as TMoveData).position
     );
-    await this.loadPositionData();
-    this.history.updateHistory(this.round);
+    success = await this.loadPositionData();
+    this.history.updateHistory(this.round, "curr");
+    return success;
   }
 
   undoMove(): void {
     this.round = this.history
       .getRoundDictionary()
       .get(this.round.getRoundNumber() - 1) as CRound;
+    this.history.updateHistory(this.round, "undo");
   }
 
   redoMove(): void {
     this.round = this.history
       .getRoundDictionary()
       .get(this.round.getRoundNumber() + 1) as CRound;
+    this.history.updateHistory(this.round, "redo");
   }
 }

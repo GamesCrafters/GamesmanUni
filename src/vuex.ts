@@ -156,6 +156,12 @@ export default new Vuex.Store({
     showHint(state, showHint: boolean): void {
       state.app.getGame().setShowHint(showHint);
     },
+    undoMove(state): void {
+      state.app.getGame().undoMove();
+    },
+    redoMove(state): void {
+      state.app.getGame().redoMove();
+    },
 
     roundNumber(state, roundNumber: number): void {
       state.app
@@ -228,56 +234,53 @@ export default new Vuex.Store({
         .getGame()
         .getRound()
         .setNextMoveDataDictionary(nextMoveDataArray);
-    }
-  },
-  actions: {
-    async initGames({ state, commit }): Promise<void> {
-      commit("loadingStatus", true);
-      await state.app.getGames().initGames();
-      commit("loadingStatus", false);
     },
 
-    async startNewGame({ state, commit }): Promise<void> {
-      commit("loadingStatus", true);
-      await state.app.getGame().startNewGame();
-      commit("loadingStatus", false);
-    },
-    async initGame({ state, commit }): Promise<void> {
-      commit("loadingStatus", true);
-      await state.app.getGame().initGame();
-      commit("loadingStatus", false);
-    },
-    async runMove({ state, commit }, move: string): Promise<void> {
-      commit("loadingStatus", true);
-      commit("move", move);
-      await state.app.getGame().runMove();
-      commit("loadingStatus", false);
-    },
-    undoMove({ state, commit }): void {
-      commit("loadingStatus", true);
-      state.app.getGame().undoMove();
-      commit("loadingStatus", false);
-    },
-    redoMove({ state, commit }): void {
-      commit("loadingStatus", true);
-      state.app.getGame().redoMove();
-      commit("loadingStatus", false);
-    },
-
-    updateHistory({ state, commit }, round: CRound): void {
-      commit("loadingStatus", true);
+    updateHistory(state, { round, type }): void {
       state.app
         .getGame()
         .getHistory()
-        .updateHistory(round);
-      commit("loadingStatus", false);
+        .updateHistory(round, type);
     },
 
-    drawVvh({ getters, commit }): void {
-      commit("loadingStatus", true);
-      const vvh: CVvh = new CVvh(getters.game, getters.showHint);
+    drawVvh(state): void {
+      const vvh: CVvh = new CVvh(
+        state.app.getGame(),
+        state.app.getGame().getShowHint()
+      );
       vvh.drawVvh();
+    }
+  },
+  actions: {
+    async initGames({ state, commit }): Promise<boolean> {
+      let success: boolean = true;
+      commit("loadingStatus", true);
+      success = await state.app.getGames().initGames();
       commit("loadingStatus", false);
+      return success;
+    },
+
+    async startNewGame({ state, commit }): Promise<boolean> {
+      let success: boolean = true;
+      commit("loadingStatus", true);
+      success = await state.app.getGame().startNewGame();
+      commit("loadingStatus", false);
+      return success;
+    },
+    async initGame({ state, commit }): Promise<boolean> {
+      let success: boolean = true;
+      commit("loadingStatus", true);
+      success = await state.app.getGame().initGame();
+      commit("loadingStatus", false);
+      return success;
+    },
+    async runMove({ state, commit }, move: string): Promise<boolean> {
+      let success: boolean = true;
+      commit("loadingStatus", true);
+      commit("move", move);
+      success = await state.app.getGame().runMove();
+      commit("loadingStatus", false);
+      return success;
     }
   }
 });

@@ -21,9 +21,9 @@ export interface IGame {
   setTurn1Name(turn1Name: string): void;
   setShowHint(showHint: boolean): void;
 
-  startNewGame(): Promise<void>;
-  initGame(id: string): Promise<void>;
-  runMove(): Promise<void>;
+  startNewGame(): Promise<boolean>;
+  initGame(id: string): Promise<boolean>;
+  runMove(): Promise<boolean>;
   undoMove(): void;
   redoMove(): void;
 }
