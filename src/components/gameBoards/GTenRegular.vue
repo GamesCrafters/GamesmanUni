@@ -1,5 +1,5 @@
 <template>
-  <div #app-game-board-ten-regular></div>
+  <div id="app-game-board-ten-regular"></div>
 </template>
 
 <script lang="ts">
