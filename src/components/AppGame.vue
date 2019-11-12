@@ -12,15 +12,19 @@
         >
           <div slot="content">
             <h2>
-              {{ game.getName() }} ({{
-                game.getRound().getVariantDescription()
-              }})
+              {{ game.getName() }}
+              <br />
+              ({{ game.getRound().getVariantDescription() }})
             </h2>
             <h3>Game Options</h3>
           </div>
         </PopupWindow>
       </div>
-      <h2>{{ game.getName() }}</h2>
+      <h2>
+        {{ game.getName() }}
+        <br />
+        ({{ game.getRound().getVariantDescription() }})
+      </h2>
       <div id="app-game-instruction">
         <button
           id="app-game-instruction-button"
@@ -52,13 +56,12 @@
               >
             </code>
             <code id="app-game-positionValue">
-              <span :class="'c-turn-' + game.getRound().getTurnId()">{{
-                game.getRound().getTurnName()
-              }}</span>
+              <span :class="'c-turn-' + game.getRound().getTurnId()">
+                {{ game.getRound().getTurnName() }}
+              </span>
               <br />should
-              <span :class="'c-' + game.getRound().getPositionValue()">{{
-                game.getRound().getPositionValue()
-              }}</span
+              <span :class="'c-' + game.getRound().getPositionValue()">
+                {{ game.getRound().getPositionValue() }} </span
               >.
             </code>
           </div>
@@ -163,7 +166,8 @@ export default class AppGame extends Vue {
   }
 
   undid(): void {
-    this.$store.dispatch("undoMove");
+    this.$store.commit("undoMove");
+    this.$store.commit("drawVvh");
   }
 
   restarted(): void {
@@ -173,13 +177,14 @@ export default class AppGame extends Vue {
 
   get isInvalidRedo(): boolean {
     return (
-      this.game.getHistory().getCurrentRoundNumber() ===
-      this.game.getHistory().getRoundArray().length - 1
+      this.game.getHistory().getCurrentRoundNumber() >=
+      this.game.getHistory().getRoundArray().length
     );
   }
 
   redid(): void {
-    this.$store.dispatch("redoMove");
+    this.$store.commit("redoMove");
+    this.$store.commit("drawVvh");
   }
 }
 </script>
@@ -255,8 +260,4 @@ export default class AppGame extends Vue {
     padding: 1.5em 1em;
   }
 }
-
-// #app-game-body-main-board {
-//   @include flexItem(column, nowrap, flex-start, center, stretch);
-// }
 </style>

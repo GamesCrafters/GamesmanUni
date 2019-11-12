@@ -31,13 +31,14 @@ export default class ExternalMarkdown extends Vue {
           this.relativePath).default;
       }
     } catch (errorMessage) {
-      console.error(errorMessage);
-      console.log(
+      console.warn(
         `"${
           this.relativePath
-        }" is loaded in fallback language, ${this.$store.getters.languageDictionary.get(
+        }" does not exist in "${this.$store.getters.languageDictionary.get(
+          this.$i18n.locale
+        )}" language yet. It is loaded in fallback language, ${this.$store.getters.languageDictionary.get(
           this.$i18n.fallbackLocale
-        )}.`
+        )} instead.`
       );
     }
     return require("raw-loader!@/datas/markdowns/" +

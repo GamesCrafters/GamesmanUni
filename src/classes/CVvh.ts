@@ -331,6 +331,7 @@ export class CVvh implements IVvh {
       }
     }
     if (
+      this.history.getRoundDictionary().get(this.currentRoundNumber) &&
       (this.history
         .getRoundDictionary()
         .get(this.currentRoundNumber) as CRound).getRemoteness() === 0

@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <button @click="runMove('1')">Remove 1</button>
-    <button @click="runMove('2')">Remove 2</button>
-  </div>
+  <div #app-game-board-ten-regular></div>
 </template>
 
 <script lang="ts">
