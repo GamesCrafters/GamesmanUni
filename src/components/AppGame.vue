@@ -56,12 +56,13 @@
               >
             </code>
             <code id="app-game-positionValue">
-              <span :class="'c-turn-' + game.getRound().getTurnId()">
-                {{ game.getRound().getTurnName() }}
-              </span>
+              <span :class="'c-turn-' + game.getRound().getTurnId()">{{
+                game.getRound().getTurnName()
+              }}</span>
               <br />should
-              <span :class="'c-' + game.getRound().getPositionValue()">
-                {{ game.getRound().getPositionValue() }} </span
+              <span :class="'c-' + game.getRound().getPositionValue()">{{
+                game.getRound().getPositionValue()
+              }}</span
               >.
             </code>
           </div>

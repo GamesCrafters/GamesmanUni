@@ -504,7 +504,7 @@ export class CVvh implements IVvh {
         this.setLink(x1[1], y1, x2, y2, color);
       } else if (typeof x1 != "number" && typeof x2 != "number") {
         this.setLink(x1[0], y1, x2[0], y2, color);
-        this.setLink(x1[0], y1, x2[1], y2, color);
+        this.setLink(x1[1], y1, x2[1], y2, color);
       }
     }
   }

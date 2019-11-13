@@ -35,11 +35,9 @@ export default class GameVvh extends Vue {
   align-content: stretch;
 }
 
-#app-game-vvh-title {
-  margin: 0;
-}
-
 #app-game-vvh-colorGuide {
+  margin: 0.5em;
+  padding: 0.5em;
   > * {
     border-radius: 100%;
     margin: 0 0.5em;
