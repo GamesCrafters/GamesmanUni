@@ -17,16 +17,31 @@ import { CVvh } from "@/classes/CVvh";
 
 @Component
 export default class GameVvh extends Vue {
-  vvhSelectorId = this.$store.getters.vvhSelectorId;
-
-  drawVvh(): void {
-    const vvh = new CVvh(this.$store.getters.game);
-    vvh.drawVvh();
-  }
+  vvhSelectorId: string = this.$store.getters.vvhSelectorId;
 
   @Watch("$store.getters.loadingStatus")
   onRoundChange(): void {
-    !this.$store.getters.loadingStatus && this.drawVvh();
+    !this.$store.getters.loadingStatus && this.$store.commit("drawVvh");
   }
 }
 </script>
+
+<style scoped lang="scss">
+#app-game-vvh {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: stretch;
+}
+
+#app-game-vvh-colorGuide {
+  margin: 0.5em;
+  padding: 0.5em;
+  > * {
+    border-radius: 100%;
+    margin: 0 0.5em;
+    padding: 0 1.5em;
+  }
+}
+</style>

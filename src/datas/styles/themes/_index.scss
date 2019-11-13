@@ -1,0 +1,80 @@
+@use "cal";
+@use "classic";
+@use "dark";
+@use "light";
+@use "oski";
+
+body.c-theme-cal {
+  --font: #{cal.$font};
+  --monofont: #{cal.$monoFont};
+  --backgroundColor: #{cal.$backgroundColor};
+  --primaryColor: #{cal.$primaryColor};
+  --secondaryColor: #{cal.$secondaryColor};
+  --themeColor: #{cal.$themeColor};
+  --turn0Color: #{cal.$turn0Color};
+  --turn1Color: #{cal.$turn1Color};
+  --winColor: #{cal.$winColor};
+  --drawColor: #{cal.$drawColor};
+  --tieColor: #{cal.$tieColor};
+  --loseColor: #{cal.$loseColor};
+}
+
+body.c-theme-classic {
+  --font: #{classic.$font};
+  --monofont: #{classic.$monoFont};
+  --backgroundColor: #{classic.$backgroundColor};
+  --primaryColor: #{classic.$primaryColor};
+  --secondaryColor: #{classic.$secondaryColor};
+  --themeColor: #{classic.$themeColor};
+  --turn0Color: #{classic.$turn0Color};
+  --turn1Color: #{classic.$turn1Color};
+  --winColor: #{classic.$winColor};
+  --drawColor: #{classic.$drawColor};
+  --tieColor: #{classic.$tieColor};
+  --loseColor: #{classic.$loseColor};
+}
+
+body.c-theme-dark {
+  --font: #{dark.$font};
+  --monofont: #{dark.$monoFont};
+  --backgroundColor: #{dark.$backgroundColor};
+  --primaryColor: #{dark.$primaryColor};
+  --secondaryColor: #{dark.$secondaryColor};
+  --themeColor: #{dark.$themeColor};
+  --turn0Color: #{dark.$turn0Color};
+  --turn1Color: #{dark.$turn1Color};
+  --winColor: #{dark.$winColor};
+  --drawColor: #{dark.$drawColor};
+  --tieColor: #{dark.$tieColor};
+  --loseColor: #{dark.$loseColor};
+}
+
+body.c-theme-light {
+  --font: #{light.$font};
+  --monofont: #{light.$monoFont};
+  --backgroundColor: #{light.$backgroundColor};
+  --primaryColor: #{light.$primaryColor};
+  --secondaryColor: #{light.$secondaryColor};
+  --themeColor: #{light.$themeColor};
+  --turn0Color: #{light.$turn0Color};
+  --turn1Color: #{light.$turn1Color};
+  --winColor: #{light.$winColor};
+  --drawColor: #{light.$drawColor};
+  --tieColor: #{light.$tieColor};
+  --loseColor: #{light.$loseColor};
+}
+
+body.c-theme-oski {
+  --font: #{oski.$font};
+  --monofont: #{oski.$monoFont};
+  --backgroundColor: #{oski.$backgroundColor};
+  --primaryColor: #{oski.$primaryColor};
+  --secondaryColor: #{oski.$secondaryColor};
+  --themeColor: #{oski.$themeColor};
+  --turn0Color: #{oski.$turn0Color};
+  --turn1Color: #{oski.$turn1Color};
+  --winColor: #{oski.$winColor};
+  --drawColor: #{oski.$drawColor};
+  --tieColor: #{oski.$tieColor};
+  --loseColor: #{oski.$loseColor};
+}

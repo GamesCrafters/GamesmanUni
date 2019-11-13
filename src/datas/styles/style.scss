@@ -1,7 +1,2 @@
-body.light {
-  @import "light";
-}
-
-body.dark {
-  @import "dark";
-}
+@forward "themes";
+@forward "layouts";

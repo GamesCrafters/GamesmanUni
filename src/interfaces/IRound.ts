@@ -1,22 +1,29 @@
-import { TMoveData } from "@/types/TMoveData";
-import { CRound } from "@/classes/CRound";
+import { TMoveData } from "@/types/internal/TMoveData";
 
 export interface IRound {
-  gameVariation: number;
-  turnNumber: number;
-  roundNumber: number;
-  move: string;
-  moveValue: string;
-  board: string;
-  positionValue: string;
-  remoteness: number;
-  nextMoveDatas: Array<TMoveData>;
+  getRoundNumber(): number;
+  getVariantId(): string;
+  getVariantDescription(): string;
+  getTurnId(): number;
+  getTurnName(): string;
+  getMove(): string;
+  getMoveValue(): string;
+  getPosition(): string;
+  getPositionValue(): string;
+  getRemoteness(): number;
+  getNextMoveDataArray(): Array<TMoveData>;
+  getNextMoveDataDictionary(): Map<string, TMoveData>;
 
-  setFirstRound(moveData: TMoveData, nextMoveDatas: Array<TMoveData>): void;
-  setNextRound(currentRound: CRound): void;
-  setNextMoveDatas(nextMoveDatas: Array<TMoveData>): void;
-  getNextMoveData(nextMove: string): TMoveData;
-  getNextMovePositionValue(nextMove: string): string;
-  getMoveValue(move: string): string;
+  setRoundNumber(roundNumber: number): void;
+  setVariantId(variantId: string): void;
+  setVariantDescription(variantDescription: string): void;
+  setTurnId(turnId: number): void;
+  setTurnName(turnName: string): void;
   setMove(move: string): void;
+  setMoveValue(move: string): void;
+  setPosition(position: string): void;
+  setPositionValue(positionValue: string): void;
+  setRemoteness(remoteness: number): void;
+  setNextMoveDataArray(nextMoveDataArray: Array<TMoveData>): void;
+  setNextMoveDataDictionary(nextMoveDataDictionary: Array<TMoveData>): void;
 }

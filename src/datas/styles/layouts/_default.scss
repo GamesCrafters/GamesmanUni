@@ -1,0 +1,212 @@
+* {
+  color: var(--primaryColor);
+  font: var(--font);
+  text-align: center;
+}
+
+body {
+  background-color: var(--backgroundColor);
+  padding: 0 10% 0 10%;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+h6 {
+  font-size: 0.75em;
+  font-weight: bold;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+p {
+  padding: 0 20% 0 20%;
+  line-height: 2em;
+}
+
+b {
+  font-weight: bold;
+}
+
+a {
+  &:link {
+    color: #5f5ca0;
+    font-weight: bold;
+  }
+  &:visited {
+    color: #8d3f9b;
+  }
+}
+
+code {
+  border: 0.04em solid #bcbec0;
+  border-radius: 0.25em;
+  font: var(--monoFont);
+  padding: 0.125em 0.25em 0.125em 0.25em;
+}
+
+button {
+  background-color: var(--backgroundColor);
+  border: 0.1em solid var(--themeColor);
+  border-radius: 1em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease-out;
+  &:hover {
+    background-color: var(--themeColor);
+  }
+  &:disabled {
+    background-color: var(--backgroundColor);
+    cursor: auto;
+    opacity: 0.5;
+  }
+}
+
+.c-divider {
+  border: 0.03em dotted;
+  margin: 1em;
+}
+
+.c-link-router {
+  color: var(--primaryColor);
+  font-weight: bold;
+  padding-right: 0.3em;
+  &.router-link-exact-active {
+    color: var(--themeColor);
+  }
+}
+
+.c-dropdown {
+  display: inline-block;
+  * {
+    text-align: left;
+  }
+  .c-dropdown-selection {
+    font-weight: bold;
+    padding: 0.25em 0.5em 0.25em 0.5em;
+  }
+  .c-dropdown-menu {
+    border: 0em;
+    background-color: lightslategray;
+    display: none;
+    padding: 0em;
+    position: absolute;
+    z-index: 1;
+  }
+  .c-dropdown-menu-choice {
+    padding: 0.25em 0.5em;
+    &:hover {
+      background-color: var(--themeColor);
+    }
+  }
+  &:hover {
+    .c-dropdown-selection {
+      background-color: var(--themeColor);
+    }
+    .c-dropdown-menu {
+      display: block;
+    }
+  }
+}
+
+.c-turn-0 {
+  background-color: var(--backgroundColor);
+  color: var(--turn0Color);
+}
+
+.c-turn-0-rev {
+  background-color: var(--turn0Color);
+  color: var(--backgroundColor);
+}
+
+.c-turn-1 {
+  background-color: var(--backgroundColor);
+  color: var(--turn1Color);
+}
+
+.c-turn-1-rev {
+  background-color: var(--turn1Color);
+  color: var(--backgroundColor);
+}
+
+.c-win {
+  background-color: var(--backgroundColor);
+  color: var(--winColor);
+}
+
+.c-win-rev {
+  background-color: var(--winColor);
+  color: var(--primaryColor);
+}
+
+.c-draw {
+  background-color: var(--backgroundColor);
+  color: var(--drawColor);
+}
+
+.c-draw-rev {
+  background-color: var(--drawColor);
+  color: var(--primaryColor);
+}
+
+.c-tie {
+  background-color: var(--backgroundColor);
+  color: var(--tieColor);
+}
+
+.c-tie-rev {
+  background-color: var(--tieColor);
+  color: var(--primaryColor);
+}
+
+.c-lose {
+  background-color: var(--backgroundColor);
+  color: var(--loseColor);
+}
+
+.c-lose-rev {
+  background-color: var(--loseColor);
+  color: var(--primaryColor);
+}
+
+.c-none {
+  background-color: var(--backgroundColor);
+  color: var(--primaryColor);
+}
+
+.c-none-rev {
+  background-color: var(--primaryColor);
+  color: var(--backgroundColor);
+}

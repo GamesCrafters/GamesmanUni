@@ -1,49 +1,48 @@
-import * as style from "@/datas/styles/SLight";
 import { IVvh } from "@/interfaces/IVvh";
 import { CGame } from "@/classes/CGame";
-import { CHistory } from "./CHistory";
-import { CRound } from "./CRound";
+import { CHistory } from "@/classes/CHistory";
+import { CRound } from "@/classes/CRound";
 
 export class CVvh implements IVvh {
   private history: CHistory;
   private maximumRemoteness: number;
   private currentRoundNumber: number;
 
+  private showHint: boolean;
+
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
 
   private font: any;
-  private mainColor: any;
+  private primaryColor: any;
   private winColor: any;
   private drawColor: any;
   private tieColor: any;
   private loseColor: any;
-  private turnColor0: any;
-  private turnColor0Transparent: any;
-  private turnColor1: any;
-  private turnColor1Transparent: any;
+  private turn0Color: any;
+  private turn1Color: any;
 
-  private turnName0: string;
-  private turnName1: string;
+  private turn0Name: string;
+  private turn1Name: string;
 
-  xLabel: string;
-  yLeftLabel: string;
-  yRightLabel: string;
+  private xLabel: string;
+  private yLeftLabel: string;
+  private yRightLabel: string;
 
-  padding: number;
+  private padding: number;
 
-  turnNameHeight: number;
-  xLabelHeight: number;
-  xCoordinateHeight: number;
-  rowHeight: number;
+  private turnNameHeight: number;
+  private xLabelHeight: number;
+  private xCoordinateHeight: number;
+  private rowHeight: number;
 
   private rowCount: number;
   private gridHeight: number;
   private canvasHeight: number;
 
-  yLabelWidth: number;
-  yCoordinateWidth: number;
-  columnWidth: number;
+  private yLabelWidth: number;
+  private yCoordinateWidth: number;
+  private columnWidth: number;
 
   private columnCount: number;
   private gridWidth: number;
@@ -55,49 +54,63 @@ export class CVvh implements IVvh {
   private gridMiddleX: number;
   private gridRight: number;
 
-  pointRadius: number;
-  linkWidth: number;
-  xBarWidth: number;
-  xIntervalBarWidth: number;
-  xInterval: number;
+  private pointRadius: number;
+  private linkWidth: number;
+  private xBarWidth: number;
+  private xIntervalBarWidth: number;
+  private xInterval: number;
 
   private pointCoordinates: {
     [round: number]: { x: number | [number, number]; y: number };
   };
 
-  constructor(game: CGame) {
-    this.history = game.history;
-    this.maximumRemoteness = this.history.maximumRemoteness;
-    this.currentRoundNumber = game.round.roundNumber;
+  constructor(game: CGame, showHint: boolean) {
+    this.history = game.getHistory();
+    this.maximumRemoteness = this.history.getMaximumRemoteness();
+    this.currentRoundNumber = this.history.getCurrentRoundNumber();
+
+    this.showHint = showHint;
 
     this.canvas = document.getElementById(
-      game.vvhSelectorId
+      game.getVvhSelectorId()
     ) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    this.font = style.font;
-    this.mainColor = style.mainColor;
-    this.winColor = style.winColor;
-    this.drawColor = style.drawColor;
-    this.tieColor = style.tieColor;
-    this.loseColor = style.loseColor;
-    this.turnColor0 = style.turnColor0;
-    this.turnColor0Transparent = style.turnColor0Transparent;
-    this.turnColor1Transparent = style.turnColor1Transparent;
-    this.turnColor1 = style.turnColor1;
+    this.font = getComputedStyle(document.body).getPropertyValue("--font");
+    this.primaryColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--primaryColor");
+    this.winColor = getComputedStyle(document.body).getPropertyValue(
+      "--winColor"
+    );
+    this.drawColor = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--drawColor");
+    this.tieColor = getComputedStyle(document.body).getPropertyValue(
+      "--tieColor"
+    );
+    this.loseColor = getComputedStyle(document.body).getPropertyValue(
+      "--loseColor"
+    );
+    this.turn0Color = getComputedStyle(document.body).getPropertyValue(
+      "--turn0Color"
+    );
+    this.turn1Color = getComputedStyle(document.body).getPropertyValue(
+      "--turn1Color"
+    );
 
-    this.turnName0 = game.turnNames[0];
-    this.turnName1 = game.turnNames[1];
+    this.turn0Name = game.getTurnNameDictionary().get(0) as string;
+    this.turn1Name = game.getTurnNameDictionary().get(1) as string;
 
-    this.xLabel = "Remoteness";
-    this.yLeftLabel = "Moves";
-    this.yRightLabel = "Moves";
+    this.xLabel = require("@/datas/defaults.json").vvhXLabel;
+    this.yLeftLabel = require("@/datas/defaults.json").vvhYLeftLabel;
+    this.yRightLabel = require("@/datas/defaults.json").vvhYRightLabel;
 
-    this.padding = 10;
-    this.turnNameHeight = 20;
-    this.xLabelHeight = 20;
-    this.xCoordinateHeight = 20;
-    this.rowHeight = 20;
+    this.padding = require("@/datas/defaults.json").vvhPadding;
+    this.turnNameHeight = require("@/datas/defaults.json").vvhTurnNameHeight;
+    this.xLabelHeight = require("@/datas/defaults.json").vvhXLabelHeight;
+    this.xCoordinateHeight = require("@/datas/defaults.json").vvhXCoordinateHeight;
+    this.rowHeight = require("@/datas/defaults.json").vvhRowHeight;
 
     this.rowCount = this.currentRoundNumber;
     this.gridHeight = this.rowHeight * this.rowCount;
@@ -106,9 +119,9 @@ export class CVvh implements IVvh {
       2 * (this.padding + this.xCoordinateHeight + this.xLabelHeight) +
       this.gridHeight;
 
-    this.yLabelWidth = 20;
-    this.yCoordinateWidth = 20;
-    this.columnWidth = 20;
+    this.yLabelWidth = require("@/datas/defaults.json").vvhYLabelWidth;
+    this.yCoordinateWidth = require("@/datas/defaults.json").vvhYCoordinateWidth;
+    this.columnWidth = require("@/datas/defaults.json").vvhColumnWidth;
 
     this.columnCount = 2 * this.maximumRemoteness + 3;
     this.gridWidth = this.columnWidth * this.columnCount;
@@ -126,11 +139,11 @@ export class CVvh implements IVvh {
     this.gridMiddleX = this.gridLeft + this.gridWidth / 2;
     this.gridRight = this.gridLeft + this.gridWidth;
 
-    this.pointRadius = 5;
-    this.linkWidth = 1;
-    this.xBarWidth = 1;
-    this.xIntervalBarWidth = 2;
-    this.xInterval = 5;
+    this.pointRadius = require("@/datas/defaults.json").vvhPointRadius;
+    this.linkWidth = require("@/datas/defaults.json").vvhLinkWidth;
+    this.xBarWidth = require("@/datas/defaults.json").vvhXBarWidth;
+    this.xIntervalBarWidth = require("@/datas/defaults.json").vvhXIntervalBarWidth;
+    this.xInterval = require("@/datas/defaults.json").vvhXInterval;
 
     this.pointCoordinates = {};
   }
@@ -165,7 +178,7 @@ export class CVvh implements IVvh {
   }
 
   private setVvhFrame(): void {
-    this.ctx.strokeStyle = this.mainColor;
+    this.ctx.strokeStyle = this.primaryColor;
     this.ctx.rect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx.stroke();
   }
@@ -193,16 +206,16 @@ export class CVvh implements IVvh {
 
   private setTurnNames(): void {
     this.setText(
-      this.turnName0,
+      this.turn0Name,
       this.gridMiddleX - this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
-      this.turnColor0
+      this.turn0Color
     );
     this.setText(
-      this.turnName1,
+      this.turn1Name,
       this.gridMiddleX + this.gridWidth / 3,
       this.padding + this.turnNameHeight / 2,
-      this.turnColor1
+      this.turn1Color
     );
   }
 
@@ -222,14 +235,14 @@ export class CVvh implements IVvh {
       this.xLabel,
       this.canvasWidth / 2,
       this.gridTop - this.xCoordinateHeight - this.xLabelHeight / 2,
-      this.mainColor
+      this.primaryColor
     );
 
     this.setText(
       this.xLabel,
       this.canvasWidth / 2,
       this.gridBottom + this.xCoordinateHeight + this.xLabelHeight / 2,
-      this.mainColor
+      this.primaryColor
     );
   }
 
@@ -238,13 +251,13 @@ export class CVvh implements IVvh {
       "D",
       this.gridMiddleX,
       this.gridTop - this.xCoordinateHeight / 2,
-      this.mainColor
+      this.primaryColor
     );
     this.setText(
       "D",
       this.gridMiddleX,
       this.gridBottom + this.xCoordinateHeight / 2,
-      this.mainColor
+      this.primaryColor
     );
     for (
       let remoteness: number = 0;
@@ -255,25 +268,25 @@ export class CVvh implements IVvh {
         remoteness.toString(),
         this.remotenessToX(remoteness, 0),
         this.gridTop - this.xCoordinateHeight / 2,
-        this.mainColor
+        this.primaryColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 1),
         this.gridTop - this.xCoordinateHeight / 2,
-        this.mainColor
+        this.primaryColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 0),
         this.gridBottom + this.xCoordinateHeight / 2,
-        this.mainColor
+        this.primaryColor
       );
       this.setText(
         remoteness.toString(),
         this.remotenessToX(remoteness, 1),
         this.gridBottom + this.xCoordinateHeight / 2,
-        this.mainColor
+        this.primaryColor
       );
     }
   }
@@ -283,7 +296,7 @@ export class CVvh implements IVvh {
       this.yLeftLabel,
       this.gridLeft - this.yCoordinateWidth - this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
-      this.mainColor,
+      this.primaryColor,
       -(Math.PI / 2)
     );
 
@@ -291,55 +304,67 @@ export class CVvh implements IVvh {
       this.yRightLabel,
       this.gridRight + this.yCoordinateWidth + this.yLabelWidth / 2,
       this.gridTop + this.gridHeight / 2,
-      this.mainColor,
+      this.primaryColor,
       Math.PI / 2
     );
   }
 
   private setYCoordinates(): void {
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
-      if (this.history.rounds[round - 1].turnNumber === 0) {
+      if (
+        (this.history.getRoundDictionary().get(round) as CRound).getTurnId() ===
+        0
+      ) {
         this.setText(
-          this.history.rounds[round - 1].move,
+          (this.history.getRoundDictionary().get(round) as CRound).getMove(),
           this.gridLeft - this.yCoordinateWidth / 2,
           this.roundToY(round),
-          this.mainColor
+          this.primaryColor
         );
       } else {
         this.setText(
-          this.history.rounds[round - 1].move,
+          (this.history.getRoundDictionary().get(round) as CRound).getMove(),
           this.gridRight + this.yCoordinateWidth / 2,
           this.roundToY(round),
-          this.mainColor
+          this.primaryColor
         );
       }
     }
-    if (this.history.rounds[this.currentRoundNumber - 1].remoteness === 0) {
-      if (this.history.rounds[this.currentRoundNumber - 1].turnNumber === 0) {
+    if (
+      this.history.getRoundDictionary().get(this.currentRoundNumber) &&
+      (this.history
+        .getRoundDictionary()
+        .get(this.currentRoundNumber) as CRound).getRemoteness() === 0
+    ) {
+      if (
+        (this.history
+          .getRoundDictionary()
+          .get(this.currentRoundNumber) as CRound).getTurnId() === 0
+      ) {
         this.setText(
           "😢",
           this.gridLeft - this.yCoordinateWidth / 2,
           this.roundToY(this.currentRoundNumber),
-          this.mainColor
+          this.primaryColor
         );
         this.setText(
           "🥳",
           this.gridRight + this.yCoordinateWidth / 2,
           this.roundToY(this.currentRoundNumber),
-          this.mainColor
+          this.primaryColor
         );
       } else {
         this.setText(
           "🥳",
           this.gridLeft - this.yCoordinateWidth / 2,
           this.roundToY(this.currentRoundNumber),
-          this.mainColor
+          this.primaryColor
         );
         this.setText(
           "😢",
           this.gridRight + this.yCoordinateWidth / 2,
           this.roundToY(this.currentRoundNumber),
-          this.mainColor
+          this.primaryColor
         );
       }
     }
@@ -347,11 +372,15 @@ export class CVvh implements IVvh {
 
   private setRoundTurnColorGuide() {
     this.ctx.lineWidth = 0;
+    this.ctx.globalAlpha = 0.2;
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
-      if (this.history.rounds[round - 1].turnNumber === 0) {
-        this.ctx.fillStyle = this.turnColor0Transparent;
+      if (
+        (this.history.getRoundDictionary().get(round) as CRound).getTurnId() ===
+        0
+      ) {
+        this.ctx.fillStyle = this.turn0Color;
       } else {
-        this.ctx.fillStyle = this.turnColor1Transparent;
+        this.ctx.fillStyle = this.turn1Color;
       }
       this.ctx.fillRect(
         this.gridLeft + this.columnWidth / 2,
@@ -360,10 +389,11 @@ export class CVvh implements IVvh {
         this.rowHeight
       );
     }
+    this.ctx.globalAlpha = 1;
   }
 
   private setGrid(): void {
-    this.ctx.strokeStyle = this.mainColor;
+    this.ctx.strokeStyle = this.primaryColor;
     for (
       let remoteness: number = 0;
       remoteness <= this.maximumRemoteness + 1;
@@ -395,21 +425,24 @@ export class CVvh implements IVvh {
     let x: number | [number, number];
     let y: number;
     for (let round = 1; round <= this.currentRoundNumber; round++) {
-      roundData = this.history.rounds[round - 1];
-      if (roundData.positionValue === "draw") {
+      roundData = this.history.getRoundDictionary().get(round) as CRound;
+      if (roundData.getPositionValue() === "draw") {
         x = this.gridMiddleX;
-      } else if (roundData.positionValue === "tie") {
+      } else if (roundData.getPositionValue() === "tie") {
         x = [
-          this.remotenessToX(roundData.remoteness, 0),
-          this.remotenessToX(roundData.remoteness, 1)
+          this.remotenessToX(roundData.getRemoteness(), 0),
+          this.remotenessToX(roundData.getRemoteness(), 1)
         ];
-      } else if (roundData.positionValue === "lose") {
+      } else if (roundData.getPositionValue() === "lose") {
         x = this.remotenessToX(
-          roundData.remoteness,
-          (roundData.turnNumber + 1) % 2
+          roundData.getRemoteness(),
+          (roundData.getTurnId() + 1) % 2
         );
       } else {
-        x = this.remotenessToX(roundData.remoteness, roundData.turnNumber);
+        x = this.remotenessToX(
+          roundData.getRemoteness(),
+          roundData.getTurnId()
+        );
       }
       y = this.roundToY(round);
       this.pointCoordinates[round] = { x: x, y: y };
@@ -458,7 +491,9 @@ export class CVvh implements IVvh {
       y1 = this.pointCoordinates[round].y;
       x2 = this.pointCoordinates[round + 1].x;
       y2 = this.pointCoordinates[round + 1].y;
-      color = this.valueToColor(this.history.rounds[round - 1].moveValue);
+      color = this.valueToColor(
+        (this.history.getRoundDictionary().get(round) as CRound).getMoveValue()
+      );
       if (typeof x1 === "number" && typeof x2 === "number") {
         this.setLink(x1, y1, x2, y2, color);
       } else if (typeof x1 === "number" && typeof x2 != "number") {
@@ -469,7 +504,7 @@ export class CVvh implements IVvh {
         this.setLink(x1[1], y1, x2, y2, color);
       } else if (typeof x1 != "number" && typeof x2 != "number") {
         this.setLink(x1[0], y1, x2[0], y2, color);
-        this.setLink(x1[0], y1, x2[1], y2, color);
+        this.setLink(x1[1], y1, x2[1], y2, color);
       }
     }
   }
@@ -479,7 +514,11 @@ export class CVvh implements IVvh {
     for (let round = 1; round <= this.currentRoundNumber; round++) {
       x = this.pointCoordinates[round].x;
       y = this.pointCoordinates[round].y;
-      color = this.valueToColor(this.history.rounds[round - 1].positionValue);
+      color = this.valueToColor(
+        (this.history
+          .getRoundDictionary()
+          .get(round) as CRound).getPositionValue()
+      );
       if (typeof x === "number") {
         this.setPoint(x, y, color);
       } else {

@@ -1,33 +1,46 @@
-import { TDataGames } from "@/types/TDataGames";
-import { TGameData } from "@/types/TGameData";
+import axios, { AxiosResponse } from "axios";
+import { TRawErrorData } from "@/types/external/TRawErrorData";
+import { TRawGamesData } from "@/types/external/TRawGamesData";
+import { TGameData } from "@/types/internal/TGameData";
 import { IGames } from "@/interfaces/IGames";
 
 export class CGames implements IGames {
-  gameDatas: Array<TGameData>;
-  gameIds: Array<string>;
+  private readonly serverDataSource: string;
+  private gameDataArray: Array<TGameData>;
 
   constructor() {
-    this.gameDatas = this.loadGames();
-    this.gameIds = this.getGameIds();
+    this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
+    this.gameDataArray = new Array<TGameData>();
   }
 
-  private loadGames(): Array<TGameData> {
-    const DATAGAMES: TDataGames = require("@/datas/temps/DATAGAMES.json");
-    if (DATAGAMES.status === "ok") {
-      return DATAGAMES.response;
+  getGameDataArray(): Array<TGameData> {
+    return this.gameDataArray;
+  }
+
+  private async loadGameDataArray(): Promise<boolean> {
+    let success: boolean = true;
+    const gamesDataSource: string = `${this.serverDataSource}/games`;
+    try {
+      const httpResponse: AxiosResponse = await axios.get(gamesDataSource);
+      const rawData: TRawGamesData | TRawErrorData = httpResponse.data;
+      if (rawData.status === "ok") {
+        this.gameDataArray = rawData.response.map(rawGameData => ({
+          id: rawGameData.gameId,
+          name: rawGameData.name,
+          status: rawGameData.status
+        }));
+      }
+    } catch (errorMessage) {
+      console.error(errorMessage);
+      console.error("Error: Failed to load games from server.");
+      success = false;
     }
-    return Array<TGameData>();
+    return success;
   }
 
-  private getGameIds(): Array<string> {
-    return this.gameDatas.map(gameData => gameData.id);
-  }
-
-  private indexOfGameData(gameId: string): number {
-    return this.gameIds.indexOf(gameId);
-  }
-
-  getGameData(gameId: string): TGameData {
-    return this.gameDatas[this.indexOfGameData(gameId)];
+  async initGames(): Promise<boolean> {
+    let success: boolean = true;
+    success = await this.loadGameDataArray();
+    return success;
   }
 }

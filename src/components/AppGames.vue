@@ -1,28 +1,31 @@
 <template>
   <div id="app-games">
     <h2 id="app-games-title">Games</h2>
-    <p class="c-text" v-for="gameData in gameDatas" :key="gameData.id">
+    <p v-for="gameData in gameDataArray" :key="gameData.id">
       <router-link
-        class="c-link-router"
         :to="{
           name: 'game',
-          params: { gameId: gameData.id, gameVariation: 0 }
+          params: { gameId: gameData.id, variantId: 'regular' }
         }"
+        >{{ gameData.name }} (Server Data: {{ gameData.status }})</router-link
       >
-        {{ gameData.name }}
-      </router-link>
     </p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { TGameData } from "@/types/internal/TGameData";
 import { CGames } from "@/classes/CGames";
 
 @Component
 export default class AppGames extends Vue {
-  get gameDatas() {
-    return this.$store.getters.gameDatas;
+  get gameDataArray(): Array<TGameData> {
+    return this.$store.getters.gameDataArray;
+  }
+
+  created(): void {
+    this.$store.dispatch("initGames");
   }
 }
 </script>

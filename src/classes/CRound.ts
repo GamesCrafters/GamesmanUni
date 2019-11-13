@@ -1,98 +1,140 @@
-import { TMoveData } from "@/types/TMoveData";
+import { TMoveData } from "@/types/internal/TMoveData";
 import { IRound } from "@/interfaces/IRound";
 
 export class CRound implements IRound {
-  gameVariation: number;
-  turnNumber: number;
-  roundNumber: number;
-  move: string;
-  moveValue: string;
-  board: string;
-  positionValue: string;
-  remoteness: number;
-  nextMoveDatas: Array<TMoveData>;
+  private roundNumber: number;
+  private variantId: string;
+  private variantDescription: string;
+  private turnId: number;
+  private turnName: string;
+  private move: string;
+  private moveValue: string;
+  private position: string;
+  private positionValue: string;
+  private remoteness: number;
+  private nextMoveDataArray: Array<TMoveData>;
+  private nextMoveDataDictionary: Map<string, TMoveData>;
 
   constructor() {
-    this.gameVariation = 0;
-    this.turnNumber = 0;
     this.roundNumber = 1;
+    this.variantId = "";
+    this.variantDescription = "";
+    this.turnId = 0;
+    this.turnName = "";
     this.move = "";
     this.moveValue = "";
-    this.board = "";
+    this.position = "";
     this.positionValue = "";
-    this.remoteness = 6;
-    this.nextMoveDatas = new Array<TMoveData>();
+    this.remoteness = require("@/datas/defaults.json").maximumRemoteness;
+    this.nextMoveDataArray = new Array<TMoveData>();
+    this.nextMoveDataDictionary = new Map<string, TMoveData>();
   }
 
-  setFirstRound(moveData: TMoveData, nextMoveDatas: Array<TMoveData>): void {
-    this.gameVariation = 0;
-    this.turnNumber = 0;
-    this.roundNumber = 1;
-    this.move = "";
-    this.moveValue = "";
-    this.board = moveData.board;
-    this.positionValue = moveData.positionValue;
-    this.remoteness = moveData.remoteness;
-    this.nextMoveDatas = nextMoveDatas;
+  getRoundNumber(): number {
+    return this.roundNumber;
   }
 
-  setNextRound(currentRound: CRound): void {
-    this.gameVariation = currentRound.gameVariation;
-    this.turnNumber = (currentRound.turnNumber + 1) % 2;
-    this.roundNumber = currentRound.roundNumber + 1;
-    this.move = "";
-    this.moveValue = "";
-    this.board = currentRound.getNextMoveData(currentRound.move).board;
-    this.positionValue = currentRound.getNextMoveData(
-      currentRound.move
-    ).positionValue;
-    this.remoteness = currentRound.getNextMoveData(
-      currentRound.move
-    ).remoteness;
-    this.nextMoveDatas = new Array<TMoveData>();
+  getVariantId(): string {
+    return this.variantId;
   }
 
-  setNextMoveDatas(nextMoveDatas: Array<TMoveData>): void {
-    this.nextMoveDatas = nextMoveDatas;
+  getVariantDescription(): string {
+    return this.variantDescription;
   }
 
-  private getNextMoves(): Array<string> {
-    return this.nextMoveDatas.map(nextMoveData => nextMoveData.move);
+  getTurnId(): number {
+    return this.turnId;
   }
 
-  private indexOfNextMoveData(nextMove: string): number {
-    return this.getNextMoves().indexOf(nextMove);
+  getTurnName(): string {
+    return this.turnName;
   }
 
-  getNextMoveData(nextMove: string): TMoveData {
-    let i = this.indexOfNextMoveData(nextMove);
-    if (i != -1) {
-      return this.nextMoveDatas[i];
-    }
-    return { move: "", board: "", positionValue: "", remoteness: 6 };
+  getMove(): string {
+    return this.move;
   }
 
-  getNextMovePositionValue(nextMove: string): string {
-    let i = this.indexOfNextMoveData(nextMove);
-    if (i != -1) {
-      return this.nextMoveDatas[i].positionValue;
-    }
-    return "";
+  getMoveValue(): string {
+    return this.moveValue;
   }
 
-  getMoveValue(move: string): string {
-    const nextMovePositionValue = this.getNextMovePositionValue(move);
-    if (nextMovePositionValue === "win") {
-      return "lose";
-    } else if (nextMovePositionValue === "lose") {
-      return "win";
-    } else {
-      return nextMovePositionValue;
-    }
+  getPosition(): string {
+    return this.position;
+  }
+
+  getPositionValue(): string {
+    return this.positionValue;
+  }
+
+  getRemoteness(): number {
+    return this.remoteness;
+  }
+
+  getNextMoveDataArray(): Array<TMoveData> {
+    return this.nextMoveDataArray;
+  }
+
+  getNextMoveDataDictionary(): Map<string, TMoveData> {
+    return this.nextMoveDataDictionary;
+  }
+
+  setRoundNumber(roundNumber: number): void {
+    this.roundNumber = roundNumber;
+  }
+
+  setVariantId(variantId: string): void {
+    this.variantId = variantId;
+  }
+
+  setVariantDescription(variantDescription: string): void {
+    this.variantDescription = variantDescription;
+  }
+
+  setTurnId(turnId: number): void {
+    this.turnId = turnId;
+  }
+
+  setTurnName(turnName: string): void {
+    this.turnName = turnName;
   }
 
   setMove(move: string): void {
     this.move = move;
-    this.moveValue = this.getMoveValue(move);
+  }
+
+  setMoveValue(move: string): void {
+    if (this.nextMoveDataDictionary.has(move)) {
+      this.moveValue = (this.nextMoveDataDictionary.get(
+        move
+      ) as TMoveData).moveValue;
+    } else {
+      this.moveValue = "";
+    }
+  }
+
+  setPosition(position: string): void {
+    this.position = position;
+  }
+
+  setPositionValue(positionValue: string): void {
+    this.positionValue = positionValue;
+  }
+
+  setRemoteness(remoteness: number): void {
+    this.remoteness = remoteness;
+  }
+
+  setNextMoveDataArray(nextMoveDataArray: Array<TMoveData>): void {
+    this.nextMoveDataArray = nextMoveDataArray;
+  }
+
+  setNextMoveDataDictionary(nextMoveDataArray: Array<TMoveData>): void {
+    this.nextMoveDataDictionary = new Map<string, TMoveData>();
+    for (let i: number = 0; i < nextMoveDataArray.length; i++) {
+      this.nextMoveDataDictionary.set(
+        nextMoveDataArray[i].move,
+        nextMoveDataArray[i]
+      );
+    }
   }
 }
