@@ -9,11 +9,13 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { CGame } from "@/classes/CGame";
 import GDefault from "@/components/gameBoards/GDefault.vue";
 import GTenRegular from "@/components/gameBoards/GTenRegular.vue";
+import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
 
 @Component({
   components: {
     GDefault,
-    GTenRegular
+    GTenRegular,
+    GTttRegular
   }
 })
 export default class GameBoard extends Vue {
