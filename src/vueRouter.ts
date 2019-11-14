@@ -18,7 +18,7 @@ export default new Router({
         import(/* webpackChunkName: "games" */ "./views/Games.vue")
     },
     {
-      path: "/game/:gameId/:variantId",
+      path: "/games/:gameId/variants/:variantId",
       name: "game",
       component: () => import(/* webpackChunkName: "game" */ "./views/Game.vue")
     },
