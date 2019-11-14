@@ -135,7 +135,6 @@ svg {
   > * {
     fill: none;
     stroke: var(--primaryColor);
-    stroke-opacity: 0.5;
     stroke-width: 2;
   }
 }

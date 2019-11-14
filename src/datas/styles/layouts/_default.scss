@@ -164,6 +164,7 @@ button {
 .c-win {
   background-color: var(--backgroundColor);
   color: var(--winColor);
+  text-shadow: 1px 1px 0.3em var(--primaryColor);
 }
 
 .c-win-rev {

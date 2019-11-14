@@ -17,10 +17,12 @@
               ({{ game.getRound().getVariantDescription() }})
             </h2>
             <h3>Game Options</h3>
+            <input type="checkbox" v-model="showClock" />
+            <label for="checkbox">Show Clock</label>
           </div>
         </PopupWindow>
       </div>
-      <h2>
+      <h2 id="app-game-title">
         {{ game.getName() }}
         <br />
         ({{ game.getRound().getVariantDescription() }})
@@ -50,33 +52,28 @@
       <div id="app-game-body-main">
         <div id="app-game-body-main-stats">
           <div id="app-game-body-main-stats-column1">
-            <div id="app-game-roundNumber">
-              <b>Move #{{ game.getRound().getRoundNumber() }}</b>
-            </div>
-            <div id="app-game-positionValue">
-              <span :class="'c-turn-' + game.getRound().getTurnId()">{{
-                game.getRound().getTurnName()
-              }}</span>
-              <br />should
-              <span :class="'c-' + game.getRound().getPositionValue()">{{
-                game.getRound().getPositionValue()
-              }}</span
-              >.
-            </div>
+            <b id="app-game-data">
+              Move #{{ game.getRound().getRoundNumber() }}
+              <br />
+              Remoteness {{ game.getRound().getRemoteness() }}
+            </b>
           </div>
-          <div id="app-game-body-main-stats-column2">
+          <div v-if="showClock" id="app-game-body-main-stats-column2">
             <div id="app-game-date">{{ date }}</div>
             <div id="app-game-time">{{ time }}</div>
             <div id="app-game-timer">{{ timer.format("HH:mm:ss") }}</div>
           </div>
           <div id="app-game-body-main-stats-column3">
-            <div id="app-game-turnName">
-              <b :class="'c-turn-' + game.getRound().getTurnId()"
-                >{{ game.getRound().getTurnName() }} Turn</b
-              >
-            </div>
-            <div id="app-game-remoteness">
-              Remoteness: {{ game.getRound().getRemoteness() }}
+            <div id="app-game-prediction">
+              <b :class="'c-turn-' + game.getRound().getTurnId()">
+                {{ game.getRound().getTurnName() }}
+              </b>
+              <br />should
+              <b
+                :class="'c-' + game.getRound().getPositionValue() + '-rev'"
+                style="border-radius: 100%"
+                >{{ game.getRound().getPositionValue() }}</b
+              >.
             </div>
           </div>
         </div>
@@ -120,6 +117,7 @@ import PopupWindow from "@/components/PopupWindow.vue";
 export default class AppGame extends Vue {
   showGameOptions = false;
   showGameInstruction = false;
+  showClock = false;
   interval = setInterval(() => this.updateInterval(), 1000);
   dateTime = moment();
   timer = moment().startOf("day");
@@ -229,7 +227,7 @@ export default class AppGame extends Vue {
 }
 
 #app-game-body-main-stats {
-  @include flexItem(row, wrap, space-around, flex-start);
+  @include flexItem(row, wrap, space-between, stretch, stretch);
   > * {
     @include flexContent(1, 1, 0);
   }
@@ -239,7 +237,7 @@ export default class AppGame extends Vue {
 }
 
 #app-game-body-main-stats-column1 {
-  @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
     border: 0.04em solid #bcbec0;
     border-radius: 0.25em;
@@ -248,7 +246,7 @@ export default class AppGame extends Vue {
 }
 
 #app-game-body-main-stats-column2 {
-  @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
     border: 0.04em solid #bcbec0;
     border-radius: 0.25em;
@@ -257,7 +255,7 @@ export default class AppGame extends Vue {
 }
 
 #app-game-body-main-stats-column3 {
-  @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
     border: 0.04em solid #bcbec0;
     border-radius: 0.25em;
