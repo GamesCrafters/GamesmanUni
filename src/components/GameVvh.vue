@@ -50,6 +50,7 @@ export default class GameVvh extends Vue {
   padding: 0.5em;
   > * {
     border-radius: 100%;
+    color: black;
     margin: 0 0.5em;
     padding: 0 1.5em;
   }
