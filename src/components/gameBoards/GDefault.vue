@@ -2,16 +2,16 @@
   <div id="app-game-board-default">
     <p id="app-game-board-default-position">
       <b>Position</b>
-      <br />
-      <pre><code>{{ game.getRound().getPosition() }}</code></pre>
     </p>
+    <pre><code>{{ game.getRound().getPosition() }}</code></pre>
     <p id="app-game-board-default-moves">
       <b>Move(s)</b>
       <br />
       <button
         v-for="nextMoveData in game.getRound().getNextMoveDataArray()"
         :key="nextMoveData.move"
-        :class="`c-${nextMoveData.moveValue}`"
+        :class="`c-${nextMoveData.moveValue}-rev`"
+        class="app-game-board-default-move"
         @click="runMove(nextMoveData.move)"
       >
         {{ nextMoveData.move }}
@@ -35,3 +35,9 @@ export default class GDefault extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.app-game-board-default-move {
+  color: black;
+}
+</style>
