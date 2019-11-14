@@ -20,8 +20,13 @@ export default class GameVvh extends Vue {
   vvhSelectorId: string = this.$store.getters.vvhSelectorId;
 
   @Watch("$store.getters.loadingStatus")
-  onRoundChange(): void {
+  onAsyncRoundChange(): void {
     !this.$store.getters.loadingStatus && this.$store.commit("drawVvh");
+  }
+
+  @Watch("$store.getters.roundNumber")
+  onSyncRoundChange(): void {
+    this.$store.commit("drawVvh");
   }
 
   @Watch("$store.getters.theme")

@@ -164,7 +164,6 @@ export default class AppGame extends Vue {
 
   undid(): void {
     this.$store.commit("undoMove");
-    this.$store.commit("drawVvh");
   }
 
   restarted(): void {
@@ -181,7 +180,6 @@ export default class AppGame extends Vue {
 
   redid(): void {
     this.$store.commit("redoMove");
-    this.$store.commit("drawVvh");
   }
 }
 </script>
