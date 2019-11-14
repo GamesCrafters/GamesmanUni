@@ -65,9 +65,9 @@
           </div>
           <div id="app-game-body-main-stats-column3">
             <div id="app-game-prediction">
-              <b :class="'c-turn-' + game.getRound().getTurnId()">{{
-                game.getRound().getTurnName()
-              }}</b>
+              <b :class="'c-turn-' + game.getRound().getTurnId()">
+                {{ game.getRound().getTurnName() }}
+              </b>
               <br />should
               <span
                 :class="'c-' + game.getRound().getPositionValue() + '-rev'"
@@ -239,7 +239,7 @@ export default class AppGame extends Vue {
 #app-game-body-main-stats-column1 {
   @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
-    border: 0.04em solid #bcbec0;
+    border: 0.04em solid var(--themeColor);
     border-radius: 0.25em;
     padding: 0.125em 0.25em 0.125em 0.25em;
   }
@@ -248,7 +248,7 @@ export default class AppGame extends Vue {
 #app-game-body-main-stats-column2 {
   @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
-    border: 0.04em solid #bcbec0;
+    border: 0.04em solid var(--themeColor);
     border-radius: 0.25em;
     padding: 0.125em 0.25em 0.125em 0.25em;
   }
@@ -257,7 +257,7 @@ export default class AppGame extends Vue {
 #app-game-body-main-stats-column3 {
   @include flexItem(column, nowrap, flex-end, stretch, stretch);
   > * {
-    border: 0.04em solid #bcbec0;
+    border: 0.04em solid var(--themeColor);
     border-radius: 0.25em;
     padding: 0.125em 0.25em 0.125em 0.25em;
   }

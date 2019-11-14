@@ -12,43 +12,43 @@ body {
 h1 {
   font-size: 2em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 h2 {
   font-size: 1.5em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 h3 {
   font-size: 1.17em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 h4 {
   font-size: 1em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 h5 {
   font-size: 0.83em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 h6 {
   font-size: 0.75em;
   font-weight: bold;
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 p {
@@ -62,16 +62,12 @@ b {
 
 a {
   &:link {
-    color: #5f5ca0;
     font-weight: bold;
-  }
-  &:visited {
-    color: #8d3f9b;
   }
 }
 
 code {
-  border: 0.04em solid #bcbec0;
+  border: 0.04em solid var(--themeColor);
   border-radius: 0.25em;
   font: var(--monoFont);
   padding: 0.125em 0.25em 0.125em 0.25em;
@@ -127,11 +123,13 @@ button {
   }
   .c-dropdown-menu-choice {
     padding: 0.25em 0.5em;
-    &:hover {
+    &:hover,
+    &:active {
       background-color: var(--themeColor);
     }
   }
-  &:hover {
+  &:hover,
+  &:active {
     .c-dropdown-selection {
       background-color: var(--themeColor);
     }
