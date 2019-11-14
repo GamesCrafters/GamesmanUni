@@ -6,7 +6,7 @@
 
 body.c-theme-cal {
   --font: #{cal.$font};
-  --monofont: #{cal.$monoFont};
+  --monoFont: #{cal.$monoFont};
   --backgroundColor: #{cal.$backgroundColor};
   --primaryColor: #{cal.$primaryColor};
   --secondaryColor: #{cal.$secondaryColor};
@@ -21,7 +21,7 @@ body.c-theme-cal {
 
 body.c-theme-classic {
   --font: #{classic.$font};
-  --monofont: #{classic.$monoFont};
+  --monoFont: #{classic.$monoFont};
   --backgroundColor: #{classic.$backgroundColor};
   --primaryColor: #{classic.$primaryColor};
   --secondaryColor: #{classic.$secondaryColor};
@@ -36,7 +36,7 @@ body.c-theme-classic {
 
 body.c-theme-dark {
   --font: #{dark.$font};
-  --monofont: #{dark.$monoFont};
+  --monoFont: #{dark.$monoFont};
   --backgroundColor: #{dark.$backgroundColor};
   --primaryColor: #{dark.$primaryColor};
   --secondaryColor: #{dark.$secondaryColor};
@@ -51,7 +51,7 @@ body.c-theme-dark {
 
 body.c-theme-light {
   --font: #{light.$font};
-  --monofont: #{light.$monoFont};
+  --monoFont: #{light.$monoFont};
   --backgroundColor: #{light.$backgroundColor};
   --primaryColor: #{light.$primaryColor};
   --secondaryColor: #{light.$secondaryColor};
@@ -66,7 +66,7 @@ body.c-theme-light {
 
 body.c-theme-oski {
   --font: #{oski.$font};
-  --monofont: #{oski.$monoFont};
+  --monoFont: #{oski.$monoFont};
   --backgroundColor: #{oski.$backgroundColor};
   --primaryColor: #{oski.$primaryColor};
   --secondaryColor: #{oski.$secondaryColor};

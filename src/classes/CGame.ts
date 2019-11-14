@@ -31,7 +31,7 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startingPosition: ""
+      startPosition: ""
     };
     this.turnNameDictionary = new Map([
       [0, require("@/datas/defaults.json").turn0Name],
@@ -96,7 +96,7 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startingPosition: ""
+      startPosition: ""
     };
   }
 
@@ -127,7 +127,7 @@ export class CGame implements IGame {
             id: rawVariantData.variantId,
             description: rawVariantData.description,
             status: rawVariantData.status,
-            startingPosition: rawVariantData.startingPosition
+            startPosition: rawVariantData.startPosition
           })
         );
         this.variantDataDictionary = new Map<string, TVariantData>();
@@ -137,6 +137,7 @@ export class CGame implements IGame {
             this.variantDataArray[i]
           );
         }
+        this.round.setVariantId(this.variantDataArray[0].id);
       }
     } catch (errorMessage) {
       console.error(errorMessage);
@@ -151,7 +152,9 @@ export class CGame implements IGame {
     let positionDataSource: string = this.serverDataSource;
     positionDataSource += `/games/${this.id}`;
     positionDataSource += `/variants/${this.currentVariantData.id}`;
-    positionDataSource += `/positions/${this.round.getPosition()}`;
+    positionDataSource += `/positions/${encodeURIComponent(
+      this.round.getPosition()
+    )}`;
     try {
       const httpResponse: AxiosResponse = await axios.get(positionDataSource);
       const rawData: TRawPositionData | TRawErrorData = httpResponse.data;
@@ -177,9 +180,8 @@ export class CGame implements IGame {
     this.round = new CRound();
     this.round.setVariantId(this.currentVariantData.id);
     this.round.setVariantDescription(this.currentVariantData.description);
-    this.round.setTurnId(0);
     this.round.setTurnName(this.turnNameDictionary.get(0) as string);
-    this.round.setPosition(this.currentVariantData.startingPosition);
+    this.round.setPosition(this.currentVariantData.startPosition);
     success = await this.loadPositionData();
     this.history = new CHistory();
     this.history.updateHistory(this.round, "curr");

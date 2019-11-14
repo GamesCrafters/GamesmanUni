@@ -7,7 +7,7 @@ export interface TRawGameData {
       variantId: string;
       description: string;
       status: string;
-      startingPosition: string;
+      startPosition: string;
     }>;
   };
 }

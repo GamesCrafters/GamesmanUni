@@ -3,7 +3,7 @@
     <p id="app-game-board-default-position">
       <b>Position</b>
       <br />
-      <code>{{ game.getRound().getPosition() }}</code>
+      <pre><code>{{ game.getRound().getPosition() }}</code></pre>
     </p>
     <p id="app-game-board-default-moves">
       <b>Move(s)</b>

@@ -14,8 +14,8 @@
   "languageDictionary": { "cn": "🇨🇳 简体中文", "en": "🇺🇸 English" },
   "language": "en",
 
-  "serverDataVersion": "0",
-  "serverDataSource": "https://nyc.cs.berkeley.edu/glue/v0/",
+  "serverDataVersion": "1",
+  "serverDataSource": "https://nyc.cs.berkeley.edu/universal/v1",
   "turn0Name": "Left Player",
   "turn1Name": "Right Player",
   "vvhSelectorId": "app-game-vvh-canvas",
@@ -34,8 +34,8 @@
   "vvhRowHeight": 20,
 
   "vvhYLabelWidth": 20,
-  "vvhYCoordinateWidth": 20,
-  "vvhColumnWidth": 20,
+  "vvhYCoordinateWidth": 40,
+  "vvhColumnWidth": 10,
 
   "vvhPointRadius": 5,
   "vvhLinkWidth": 1,

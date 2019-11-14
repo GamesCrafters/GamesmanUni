@@ -23,6 +23,11 @@ export default class GameVvh extends Vue {
   onRoundChange(): void {
     !this.$store.getters.loadingStatus && this.$store.commit("drawVvh");
   }
+
+  @Watch("$store.getters.theme")
+  onThemeChange(): void {
+    this.$store.commit("drawVvh");
+  }
 }
 </script>
 

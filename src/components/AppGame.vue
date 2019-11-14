@@ -50,12 +50,10 @@
       <div id="app-game-body-main">
         <div id="app-game-body-main-stats">
           <div id="app-game-body-main-stats-column1">
-            <code>
-              <b id="app-game-roundNumber"
-                >Move #{{ game.getRound().getRoundNumber() }}</b
-              >
-            </code>
-            <code id="app-game-positionValue">
+            <div id="app-game-roundNumber">
+              <b>Move #{{ game.getRound().getRoundNumber() }}</b>
+            </div>
+            <div id="app-game-positionValue">
               <span :class="'c-turn-' + game.getRound().getTurnId()">{{
                 game.getRound().getTurnName()
               }}</span>
@@ -64,24 +62,22 @@
                 game.getRound().getPositionValue()
               }}</span
               >.
-            </code>
+            </div>
           </div>
           <div id="app-game-body-main-stats-column2">
-            <code id="app-game-date">{{ date }}</code>
-            <code id="app-game-time">{{ time }}</code>
-            <code id="app-game-timer">{{ timer.format("HH:mm:ss") }}</code>
+            <div id="app-game-date">{{ date }}</div>
+            <div id="app-game-time">{{ time }}</div>
+            <div id="app-game-timer">{{ timer.format("HH:mm:ss") }}</div>
           </div>
           <div id="app-game-body-main-stats-column3">
-            <code>
-              <b
-                id="app-game-turnName"
-                :class="'c-turn-' + game.getRound().getTurnId()"
+            <div id="app-game-turnName">
+              <b :class="'c-turn-' + game.getRound().getTurnId()"
                 >{{ game.getRound().getTurnName() }} Turn</b
               >
-            </code>
-            <code id="app-game-remoteness"
-              >Remoteness: {{ game.getRound().getRemoteness() }}</code
-            >
+            </div>
+            <div id="app-game-remoteness">
+              Remoteness: {{ game.getRound().getRemoteness() }}
+            </div>
           </div>
         </div>
         <div id="app-game-body-main-function">
@@ -239,18 +235,36 @@ export default class AppGame extends Vue {
   > * {
     @include flexContent(1, 1, 0);
   }
+  > * {
+    font: var(--monoFont);
+  }
 }
 
 #app-game-body-main-stats-column1 {
   @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  > * {
+    border: 0.04em solid #bcbec0;
+    border-radius: 0.25em;
+    padding: 0.125em 0.25em 0.125em 0.25em;
+  }
 }
 
 #app-game-body-main-stats-column2 {
   @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  > * {
+    border: 0.04em solid #bcbec0;
+    border-radius: 0.25em;
+    padding: 0.125em 0.25em 0.125em 0.25em;
+  }
 }
 
 #app-game-body-main-stats-column3 {
   @include flexItem(column, nowrap, flex-start, stretch, stretch);
+  > * {
+    border: 0.04em solid #bcbec0;
+    border-radius: 0.25em;
+    padding: 0.125em 0.25em 0.125em 0.25em;
+  }
 }
 
 #app-game-body-main-function {

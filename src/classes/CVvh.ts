@@ -77,15 +77,15 @@ export class CVvh implements IVvh {
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
     this.font = getComputedStyle(document.body).getPropertyValue("--font");
-    this.primaryColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--primaryColor");
+    this.primaryColor = getComputedStyle(document.body).getPropertyValue(
+      "--primaryColor"
+    );
     this.winColor = getComputedStyle(document.body).getPropertyValue(
       "--winColor"
     );
-    this.drawColor = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue("--drawColor");
+    this.drawColor = getComputedStyle(document.body).getPropertyValue(
+      "--drawColor"
+    );
     this.tieColor = getComputedStyle(document.body).getPropertyValue(
       "--tieColor"
     );
