@@ -65,14 +65,14 @@
           </div>
           <div id="app-game-body-main-stats-column3">
             <div id="app-game-prediction">
-              <b :class="'c-turn-' + game.getRound().getTurnId()">
-                {{ game.getRound().getTurnName() }}
-              </b>
+              <b :class="'c-turn-' + game.getRound().getTurnId()">{{
+                game.getRound().getTurnName()
+              }}</b>
               <br />should
-              <b
+              <span
                 :class="'c-' + game.getRound().getPositionValue() + '-rev'"
-                style="border-radius: 100%"
-                >{{ game.getRound().getPositionValue() }}</b
+                style="border-radius: 25%; color: black; padding: 0 0.2em;"
+                >{{ game.getRound().getPositionValue() }}</span
               >.
             </div>
           </div>

@@ -4,6 +4,15 @@
 @use "light";
 @use "oski";
 
+body {
+  --turn0Color: #6aa1df;
+  --turn1Color: #ce6c6c;
+  --winColor: #00ff22;
+  --drawColor: #ffff00;
+  --tieColor: #ffff00;
+  --loseColor: #ff3c00;
+}
+
 body.c-theme-cal {
   --font: #{cal.$font};
   --monoFont: #{cal.$monoFont};
@@ -11,12 +20,6 @@ body.c-theme-cal {
   --primaryColor: #{cal.$primaryColor};
   --secondaryColor: #{cal.$secondaryColor};
   --themeColor: #{cal.$themeColor};
-  --turn0Color: #{cal.$turn0Color};
-  --turn1Color: #{cal.$turn1Color};
-  --winColor: #{cal.$winColor};
-  --drawColor: #{cal.$drawColor};
-  --tieColor: #{cal.$tieColor};
-  --loseColor: #{cal.$loseColor};
 }
 
 body.c-theme-classic {
@@ -26,12 +29,6 @@ body.c-theme-classic {
   --primaryColor: #{classic.$primaryColor};
   --secondaryColor: #{classic.$secondaryColor};
   --themeColor: #{classic.$themeColor};
-  --turn0Color: #{classic.$turn0Color};
-  --turn1Color: #{classic.$turn1Color};
-  --winColor: #{classic.$winColor};
-  --drawColor: #{classic.$drawColor};
-  --tieColor: #{classic.$tieColor};
-  --loseColor: #{classic.$loseColor};
 }
 
 body.c-theme-dark {
@@ -41,12 +38,6 @@ body.c-theme-dark {
   --primaryColor: #{dark.$primaryColor};
   --secondaryColor: #{dark.$secondaryColor};
   --themeColor: #{dark.$themeColor};
-  --turn0Color: #{dark.$turn0Color};
-  --turn1Color: #{dark.$turn1Color};
-  --winColor: #{dark.$winColor};
-  --drawColor: #{dark.$drawColor};
-  --tieColor: #{dark.$tieColor};
-  --loseColor: #{dark.$loseColor};
 }
 
 body.c-theme-light {
@@ -56,12 +47,6 @@ body.c-theme-light {
   --primaryColor: #{light.$primaryColor};
   --secondaryColor: #{light.$secondaryColor};
   --themeColor: #{light.$themeColor};
-  --turn0Color: #{light.$turn0Color};
-  --turn1Color: #{light.$turn1Color};
-  --winColor: #{light.$winColor};
-  --drawColor: #{light.$drawColor};
-  --tieColor: #{light.$tieColor};
-  --loseColor: #{light.$loseColor};
 }
 
 body.c-theme-oski {
@@ -71,10 +56,4 @@ body.c-theme-oski {
   --primaryColor: #{oski.$primaryColor};
   --secondaryColor: #{oski.$secondaryColor};
   --themeColor: #{oski.$themeColor};
-  --turn0Color: #{oski.$turn0Color};
-  --turn1Color: #{oski.$turn1Color};
-  --winColor: #{oski.$winColor};
-  --drawColor: #{oski.$drawColor};
-  --tieColor: #{oski.$tieColor};
-  --loseColor: #{oski.$loseColor};
 }
