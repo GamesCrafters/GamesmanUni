@@ -17,8 +17,15 @@
               ({{ game.getRound().getVariantDescription() }})
             </h2>
             <h3>Game Options</h3>
-            <input type="checkbox" v-model="showClock" />
-            <label for="checkbox">Show Clock</label>
+            <h4>Show/Hide...</h4>
+            <div id="app-game-option-clock" class="app-game-option">
+              <input type="checkbox" v-model="showClock" />
+              <label for="checkbox">Clock</label>
+            </div>
+            <div id="app-game-option-vvh" class="app-game-option">
+              <input type="checkbox" v-model="showVvh" />
+              <label for="checkbox">Visual Value History</label>
+            </div>
           </div>
         </PopupWindow>
       </div>
@@ -65,9 +72,9 @@
           </div>
           <div id="app-game-body-main-stats-column3">
             <div id="app-game-prediction">
-              <b :class="'c-turn-' + game.getRound().getTurnId()">
-                {{ game.getRound().getTurnName() }}
-              </b>
+              <b :class="'c-turn-' + game.getRound().getTurnId()">{{
+                game.getRound().getTurnName()
+              }}</b>
               <br />should
               <span
                 :class="'c-' + game.getRound().getPositionValue() + '-rev'"
@@ -90,7 +97,7 @@
           <GameBoard></GameBoard>
         </div>
       </div>
-      <div id="app-game-body-vvh">
+      <div v-if="showVvh" id="app-game-body-vvh">
         <GameVvh></GameVvh>
       </div>
     </div>
@@ -98,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { CGame } from "@/classes/CGame";
 import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
@@ -115,9 +122,11 @@ import PopupWindow from "@/components/PopupWindow.vue";
   }
 })
 export default class AppGame extends Vue {
-  showGameOptions = false;
   showGameInstruction = false;
+  showGameOptions = false;
   showClock = false;
+  showVvh = true;
+
   interval = setInterval(() => this.updateInterval(), 1000);
   dateTime = moment();
   timer = moment().startOf("day");
@@ -178,6 +187,14 @@ export default class AppGame extends Vue {
 
   redid(): void {
     this.$store.commit("redoMove");
+  }
+
+  @Watch("showVvh")
+  async onShowVvh(): Promise<void> {
+    if (this.showVvh) {
+      await new Promise((resolve, reject) => setTimeout(resolve, 500));
+      this.$store.commit("drawVvh");
+    }
   }
 }
 </script>
