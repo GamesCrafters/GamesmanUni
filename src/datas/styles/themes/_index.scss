@@ -5,12 +5,14 @@
 
 body {
   --themeColor: #bcbec0;
-  --turn0Color: #6aa1df;
-  --turn1Color: #ce6c6c;
-  --winColor: #00ff22;
+  // --turn0Color: #6aa1df;
+  // --turn1Color: #ce6c6c;
+  --turn0Color: #0000ff;
+  --turn1Color: #ff0000;
+  --winColor: #008000;
   --drawColor: #ffff00;
   --tieColor: #ffff00;
-  --loseColor: #ff3c00;
+  --loseColor: #800000;
 }
 
 body.c-theme-cal {
@@ -40,4 +42,3 @@ body.c-theme-light {
   --backgroundColor: #{light.$backgroundColor};
   --primaryColor: #{light.$primaryColor};
 }
-
