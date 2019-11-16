@@ -14,7 +14,7 @@
           <use xlink:href="#board-bar" transform="translate(66) rotate(90)" />
         </g>
         <g id="turn-0-token">
-          <path id="cross-bar" d="M5.343,16.657 L16.657,5.343" />
+          <path id="cross-bar" d="M3,3 L19,19" />
           <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
         </g>
         <circle id="turn-1-token" cx="11" cy="11" r="8" />
