@@ -19,8 +19,13 @@ if (process.env.NODE_ENV === "production") {
     updatefound() {
       console.log("New content is downloading.");
     },
-    updated() {
-      console.log("New content is available; please refresh.");
+    async updated() {
+      console.log(
+        "New content is available; please refresh to get latest patches and updates."
+      );
+      alert(
+        "New content is available; please refresh to get latest patches and updates."
+      );
     },
     offline() {
       console.log(
