@@ -1,5 +1,5 @@
 # GamesmanUni
 
-Try this live on http://nyc.cs.berkeley.edu:9000/.
+Try this live on https://nyc.cs.berkeley.edu/uni/.
 
 ---
