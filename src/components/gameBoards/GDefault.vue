@@ -10,8 +10,7 @@
       <button
         v-for="nextMoveData in game.getRound().getNextMoveDataArray()"
         :key="nextMoveData.move"
-        :class="`c-${nextMoveData.moveValue}-rev`"
-        class="app-game-board-default-move"
+        :class="`c-${nextMoveData.moveValue}`"
         @click="runMove(nextMoveData.move)"
       >
         {{ nextMoveData.move }}
@@ -35,9 +34,3 @@ export default class GDefault extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.app-game-board-default-move {
-  color: black;
-}
-</style>

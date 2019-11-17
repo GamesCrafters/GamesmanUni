@@ -1,11 +1,6 @@
 <template>
-  <div id="app-game-board-ten-regular">
-    <svg
-      width="20em"
-      height="20em"
-      viewBox="0 0 66 66"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+  <div id="app-game-board-ttt-regular">
+    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <g id="board">
           <path id="board-bar" d="M1,22 L65,22" />
@@ -132,9 +127,13 @@ export default class GTttRegular extends Vue {
 
 <style lang="scss" scoped>
 svg {
+  height: 15em;
+  width: 15em;
+  margin: auto;
+  vertical-align: middle;
   > * {
     fill: none;
-    stroke: var(--primaryColor);
+    stroke: var(--neutralColor);
     stroke-width: 2;
   }
 }

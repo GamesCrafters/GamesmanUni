@@ -2,12 +2,14 @@
   <div id="app-game-vvh">
     <h3 id="app-game-vvh-title">Visual Value History</h3>
     <p id="app-game-vvh-colorGuide">
-      <span id="app-game-vvh-colorGuide-win" class="c-win-rev">win</span>
-      <span id="app-game-vvh-colorGuide-draw" class="c-draw-rev">draw</span>
-      <span id="app-game-vvh-colorGuide-tie" class="c-tie-rev">tie</span>
-      <span id="app-game-vvh-colorGuide-lose" class="c-lose-rev">lose</span>
+      <span id="app-game-vvh-colorGuide-win" class="c-win">win</span>
+      <span id="app-game-vvh-colorGuide-draw" class="c-draw">draw</span>
+      <span id="app-game-vvh-colorGuide-tie" class="c-tie">tie</span>
+      <span id="app-game-vvh-colorGuide-lose" class="c-lose">lose</span>
     </p>
-    <canvas :id="vvhSelectorId"></canvas>
+    <div id="app-game-vvh-canvas-container">
+      <canvas :id="vvhSelectorId"></canvas>
+    </div>
   </div>
 </template>
 
@@ -38,21 +40,40 @@ export default class GameVvh extends Vue {
 
 <style scoped lang="scss">
 #app-game-vvh {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  align-content: stretch;
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
 #app-game-vvh-colorGuide {
-  margin: 0.5em;
-  padding: 0.5em;
+  margin: 0.25em;
+  padding: 0.25em;
   > * {
     border-radius: 100%;
-    color: black;
     margin: 0 0.5em;
     padding: 0 1.5em;
+  }
+}
+
+#app-game-vvh-canvas {
+  margin: 0.25em;
+  padding: 0.25em;
+}
+
+@media only screen and (max-width: 40em) {
+  #app-game-vvh {
+    width: 25em;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 0;
+  }
+  #app-game-vvh-canvas-container {
+    margin: 0.25em;
+    padding: 0.25em;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: scroll;
   }
 }
 </style>

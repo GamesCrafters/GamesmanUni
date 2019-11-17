@@ -6,54 +6,55 @@
 
 body {
   background-color: var(--backgroundColor);
-  padding: 0 10% 0 10%;
+  padding: 0 5%;
 }
 
 h1 {
   font-size: 2em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 h2 {
   font-size: 1.5em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 h3 {
   font-size: 1.17em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 h4 {
   font-size: 1em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 h5 {
   font-size: 0.83em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 h6 {
   font-size: 0.75em;
   font-weight: bold;
-  margin: 0.25em;
-  padding: 0.25em;
+  margin: 0.25em 1em;
+  padding: 0.25em 1em;
 }
 
 p {
-  padding: 0 20% 0 20%;
+  font-size: 1em;
   line-height: 2em;
+  padding: 0 20% 0 20%;
 }
 
 b {
@@ -61,44 +62,51 @@ b {
 }
 
 a {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
   &:link {
     font-weight: bold;
   }
 }
 
+nav {
+  padding: 0.25em;
+  margin: 0.25em;
+}
+
 code {
-  border: 0.04em solid var(--themeColor);
-  border-radius: 0.25em;
+  border: 0.04em solid var(--neutralColor);
   font: var(--monoFont);
-  padding: 0.125em 0.25em 0.125em 0.25em;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
 }
 
 button {
   background-color: var(--backgroundColor);
-  border: 0.1em solid var(--themeColor);
+  border: 0.1em solid var(--neutralColor);
   border-radius: 1em;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease-out;
-  &:hover {
-    background-color: var(--themeColor);
-  }
   &:disabled {
     background-color: var(--backgroundColor);
     cursor: auto;
     opacity: 0.5;
   }
+  &:hover {
+    background-color: var(--neutralColor);
+  }
 }
 
 .c-divider {
-  border: 0.03em dotted;
-  margin: 1em;
+  border: 0.04em dotted;
+  margin: 0.5em;
 }
 
 .c-link-router {
   color: var(--primaryColor);
   font-weight: bold;
-  padding-right: 0.3em;
+  padding-right: 0.5em;
   &.router-link-exact-active {
     color: var(--themeColor);
   }
@@ -115,7 +123,7 @@ button {
   }
   .c-dropdown-menu {
     border: 0em;
-    background-color: lightslategray;
+    background-color: var(--neutralColor);
     display: none;
     padding: 0em;
     position: absolute;
@@ -140,71 +148,29 @@ button {
 }
 
 .c-turn-0 {
-  background-color: var(--backgroundColor);
   color: var(--turn0Color);
 }
 
-.c-turn-0-rev {
-  background-color: var(--turn0Color);
-  color: var(--backgroundColor);
-}
-
 .c-turn-1 {
-  background-color: var(--backgroundColor);
   color: var(--turn1Color);
 }
 
-.c-turn-1-rev {
-  background-color: var(--turn1Color);
-  color: var(--backgroundColor);
-}
-
 .c-win {
-  background-color: var(--backgroundColor);
-  color: var(--winColor);
-}
-
-.c-win-rev {
+  color: #ffffff;
   background-color: var(--winColor);
-  color: var(--primaryColor);
 }
 
 .c-draw {
-  background-color: var(--backgroundColor);
-  color: var(--drawColor);
-}
-
-.c-draw-rev {
+  color: #000000;
   background-color: var(--drawColor);
-  color: var(--primaryColor);
 }
 
 .c-tie {
-  background-color: var(--backgroundColor);
-  color: var(--tieColor);
-}
-
-.c-tie-rev {
+  color: #000000;
   background-color: var(--tieColor);
-  color: var(--primaryColor);
 }
 
 .c-lose {
-  background-color: var(--backgroundColor);
-  color: var(--loseColor);
-}
-
-.c-lose-rev {
+  color: #ffffff;
   background-color: var(--loseColor);
-  color: var(--primaryColor);
-}
-
-.c-none {
-  background-color: var(--backgroundColor);
-  color: var(--primaryColor);
-}
-
-.c-none-rev {
-  background-color: var(--primaryColor);
-  color: var(--backgroundColor);
 }

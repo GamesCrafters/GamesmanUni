@@ -5,8 +5,8 @@
         id="app-header-logo"
         alt="Gamesman Logo"
         src="@/assets/app-logo.png"
-        width="200em"
-        height="200em"
+        width="150em"
+        height="150em"
       />
     </router-link>
 
@@ -122,13 +122,3 @@ export default class AppHeader extends Vue {
   }
 }
 </script>
-
-<style scoped lang="scss">
-#app-header-logo {
-  margin: 0;
-  padding: 0;
-}
-#app-header-nav {
-  padding: 0 0 0.5em 0;
-}
-</style>

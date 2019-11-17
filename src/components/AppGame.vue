@@ -72,13 +72,16 @@
           </div>
           <div id="app-game-body-main-stats-column3">
             <div id="app-game-prediction">
-              <b :class="'c-turn-' + game.getRound().getTurnId()">{{
-                game.getRound().getTurnName()
-              }}</b>
+              <b
+                id="app-game-prediction-turn-id"
+                :class="'c-turn-' + game.getRound().getTurnId()"
+              >
+                {{ game.getRound().getTurnName() }}
+              </b>
               <br />should
               <span
-                :class="'c-' + game.getRound().getPositionValue() + '-rev'"
-                style="border-radius: 25%; color: black; padding: 0 0.2em;"
+                id="app-game-prediction-position-value"
+                :class="'c-' + game.getRound().getPositionValue()"
                 >{{ game.getRound().getPositionValue() }}</span
               >.
             </div>
@@ -227,9 +230,11 @@ export default class AppGame extends Vue {
 
 #app-game-header {
   @include flexItem(row, nowrap, center, center, stretch);
-  > * {
-    padding: 0.5em 1em;
-  }
+}
+
+#app-game-title {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
 }
 
 #app-game-body {
@@ -245,47 +250,43 @@ export default class AppGame extends Vue {
 
 #app-game-body-main-stats {
   @include flexItem(row, wrap, space-between, stretch, stretch);
+  padding: 0 0.25em 0 0.25em;
+  margin: 0.25em 0.25em 0 0.25em;
   > * {
     @include flexContent(1, 1, 0);
-  }
-  > * {
-    font: var(--monoFont);
-  }
-}
-
-#app-game-body-main-stats-column1 {
-  @include flexItem(column, nowrap, flex-end, stretch, stretch);
-  > * {
-    border: 0.04em solid var(--themeColor);
-    border-radius: 0.25em;
-    padding: 0.125em 0.25em 0.125em 0.25em;
-  }
-}
-
-#app-game-body-main-stats-column2 {
-  @include flexItem(column, nowrap, flex-end, stretch, stretch);
-  > * {
-    border: 0.04em solid var(--themeColor);
-    border-radius: 0.25em;
-    padding: 0.125em 0.25em 0.125em 0.25em;
-  }
-}
-
-#app-game-body-main-stats-column3 {
-  @include flexItem(column, nowrap, flex-end, stretch, stretch);
-  > * {
-    border: 0.04em solid var(--themeColor);
-    border-radius: 0.25em;
-    padding: 0.125em 0.25em 0.125em 0.25em;
+    @include flexItem(column, nowrap, flex-end, stretch, stretch);
+    > * {
+      border: 0.04em solid var(--neutralColor);
+      border-radius: 0.25em;
+      padding: 0.25em;
+      margin: 0;
+    }
   }
 }
 
 #app-game-body-main-function {
   @include flexItem(row, nowrap, space-around, stretch, stretch);
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  padding: 0.25em;
+  margin: 0 0.5em;
   > * {
     border-radius: 100%;
     margin: 1em;
     padding: 1.5em 1em;
   }
+}
+
+#app-game-body-main-board {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  padding: 0.25em;
+  margin: 0 0.5em 0.5em 0.5em;
+}
+
+#app-game-prediction-position-value {
+  border-radius: 100%;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
 }
 </style>
