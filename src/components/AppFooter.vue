@@ -50,3 +50,10 @@ export default class AppFooter extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+#app-footer {
+  font-size: 1em;
+  line-height: 2em;
+}
+</style>
