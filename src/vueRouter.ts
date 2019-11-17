@@ -28,6 +28,11 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
+      path: "/updates",
+      component: () =>
+        import(/* webpackChunkName: "updates" */ "./views/Updates.vue")
+    },
+    {
       path: "*",
       component: () =>
         import(

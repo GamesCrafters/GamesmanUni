@@ -26,6 +26,7 @@ export default new Vuex.Store({
     serverDataSource: state => state.app.getServerDataSource(),
     games: state => state.app.getGames(),
     game: state => state.app.getGame(),
+    updates: state => state.app.getUpdates(),
 
     gameDataArray: state => state.app.getGames().getGameDataArray(),
 
@@ -121,7 +122,15 @@ export default new Vuex.Store({
       state.app
         .getGame()
         .getHistory()
-        .getMaximumRemoteness()
+        .getMaximumRemoteness(),
+
+    latestCommitCount: state => state.app.getUpdates().getLatestCommitCount(),
+    latestCommitVersionArray: state =>
+      state.app.getUpdates().getLatestCommitVersionArray(),
+    latestCommitMessageArray: state =>
+      state.app.getUpdates().getLatestCommitMessageArray(),
+    latestCommitLinkArray: state =>
+      state.app.getUpdates().getLatestCommitLinkArray()
   },
   mutations: {
     loadingStatus(state, loadingStatus: boolean): void {
@@ -258,7 +267,6 @@ export default new Vuex.Store({
       commit("loadingStatus", false);
       return success;
     },
-
     async startNewGame({ state, commit }): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
@@ -278,6 +286,13 @@ export default new Vuex.Store({
       commit("loadingStatus", true);
       commit("move", move);
       success = await state.app.getGame().runMove();
+      commit("loadingStatus", false);
+      return success;
+    },
+    async initCommits({ state, commit }): Promise<boolean> {
+      let success: boolean = true;
+      commit("loadingStatus", true);
+      success = await state.app.getUpdates().initCommits();
       commit("loadingStatus", false);
       return success;
     }

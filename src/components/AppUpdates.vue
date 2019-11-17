@@ -1,0 +1,75 @@
+<template>
+  <div id="app-updates">
+    <h2 id="app-updates-title">What's new!?</h2>
+    <a
+      class="app-updates-commit-link"
+      v-for="n in latestCommitCount"
+      :key="n"
+      :href="latestCommitLinkArray[n - 1]"
+      target="_blank"
+      rel="noreferrer"
+    >
+      <div class="app-updates-commit-version">
+        {{ latestCommitVersionArray[n - 1] }}
+      </div>
+      <div class="app-updates-commit-message">
+        {{ latestCommitMessageArray[n - 1] }}
+      </div>
+    </a>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+@Component
+export default class AppUpdates extends Vue {
+  get latestCommitCount(): number {
+    return this.$store.getters.latestCommitCount;
+  }
+
+  get latestCommitVersionArray(): Array<string> {
+    return this.$store.getters.latestCommitVersionArray;
+  }
+
+  get latestCommitMessageArray(): Array<string> {
+    return this.$store.getters.latestCommitMessageArray;
+  }
+
+  get latestCommitLinkArray(): Array<string> {
+    return this.$store.getters.latestCommitLinkArray;
+  }
+
+  created(): void {
+    this.$store.dispatch("initCommits");
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.app-updates-commit-link {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 20%;
+  padding: 0 0.25em;
+  text-decoration: none;
+  > * {
+    line-height: 2em;
+    margin: 0 0.25em;
+    padding: 0 0.25em;
+    text-align: left;
+  }
+}
+
+.app-updates-commit-version {
+  flex: 1 1 0;
+  font-weight: bold;
+}
+
+.app-updates-commit-message {
+  flex: 2 1 0;
+}
+</style>

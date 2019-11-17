@@ -54,7 +54,11 @@ h6 {
 p {
   font-size: 1em;
   line-height: 2em;
-  padding: 0 20% 0 20%;
+  padding: 0 20%;
+  text-align: justify;
+  &::first-line {
+    text-indent: 4em;
+  }
 }
 
 b {

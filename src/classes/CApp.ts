@@ -1,6 +1,7 @@
 import { IApp } from "@/interfaces/IApp";
 import { CGames } from "@/classes/CGames";
 import { CGame } from "@/classes/CGame";
+import { CGitHub } from "./CGitHub";
 
 export class CApp implements IApp {
   private loadingStatus: boolean;
@@ -14,6 +15,7 @@ export class CApp implements IApp {
   private readonly serverDataSource: string;
   private readonly games: CGames;
   private readonly game: CGame;
+  private readonly updates: CGitHub;
 
   constructor() {
     this.loadingStatus = true;
@@ -33,6 +35,7 @@ export class CApp implements IApp {
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
     this.games = new CGames();
     this.game = new CGame();
+    this.updates = new CGitHub();
   }
 
   getLoadingStatus(): boolean {
@@ -77,6 +80,10 @@ export class CApp implements IApp {
 
   getGame(): CGame {
     return this.game;
+  }
+
+  getUpdates(): CGitHub {
+    return this.updates;
   }
 
   setLoadingStatus(loadingStatus: boolean): void {

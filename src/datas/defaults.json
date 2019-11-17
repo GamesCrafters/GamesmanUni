@@ -20,6 +20,8 @@
   "vvhSelectorId": "app-game-vvh-canvas",
   "showHint": true,
 
+  "gitHubDataSource": "https://api.github.com/repos/gamescrafters/gamesmanuni",
+
   "maximumRemoteness": 6,
 
   "vvhXLabel": "Remoteness",

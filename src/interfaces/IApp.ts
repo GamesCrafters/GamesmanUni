@@ -1,5 +1,6 @@
 import { CGames } from "@/classes/CGames";
 import { CGame } from "@/classes/CGame";
+import { CGitHub } from "@/classes/CGitHub";
 
 export interface IApp {
   getLoadingStatus(): boolean;
@@ -13,6 +14,7 @@ export interface IApp {
   getServerDataSource(): string;
   getGames(): CGames;
   getGame(): CGame;
+  getUpdates(): CGitHub;
 
   setLoadingStatus(loadingStatus: boolean): void;
   setTheme(theme: string): void;
