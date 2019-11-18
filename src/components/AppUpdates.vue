@@ -22,6 +22,13 @@
         {{ latestCommitMessageArray[n - 1] }}
       </div>
     </a>
+    <a
+      id="app-updates-more"
+      href="https://github.com/GamesCrafters/GamesmanUni/commits/master"
+      target="_blank"
+      rel="noreferrer"
+      >For complete update history...</a
+    >
   </div>
 </template>
 
@@ -86,5 +93,17 @@ export default class AppUpdates extends Vue {
 
 .app-updates-commit-message {
   flex: 2 1 0;
+}
+
+#app-updates-more {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  display: block;
+  font-style: italic;
+  font-weight: normal;
+  line-height: 1.5em;
+  margin: 0 20%;
+  padding: 2em;
+  text-decoration: none;
 }
 </style>
