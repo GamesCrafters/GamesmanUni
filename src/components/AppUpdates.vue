@@ -1,6 +1,12 @@
 <template>
   <div id="app-updates">
     <h2 id="app-updates-title">What's new!?</h2>
+    <div id="app-updates-warning">
+      If latest version listed here does not match
+      <code>GamesmanUniGUI</code> version in footer, new content is available.
+      Please try refreshing the page ( <code>ctrl/command + r</code>) to get
+      latest patches and updates.
+    </div>
     <a
       class="app-updates-commit-link"
       v-for="n in latestCommitCount"
@@ -47,6 +53,15 @@ export default class AppUpdates extends Vue {
 </script>
 
 <style lang="scss" scoped>
+#app-updates-warning {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  font-style: italic;
+  line-height: 1.5em;
+  margin: 0 20%;
+  padding: 2em;
+}
+
 .app-updates-commit-link {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
@@ -57,7 +72,7 @@ export default class AppUpdates extends Vue {
   padding: 0 0.25em;
   text-decoration: none;
   > * {
-    line-height: 2em;
+    line-height: 1.5em;
     margin: 0 0.25em;
     padding: 0 0.25em;
     text-align: left;
