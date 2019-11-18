@@ -246,6 +246,7 @@ export default class AppGame extends Vue {
 
 #app-game-body-main {
   @include flexItem(column, nowrap, flex-start, space-between, stretch);
+  align-self: flex-end;
 }
 
 #app-game-body-main-stats {
