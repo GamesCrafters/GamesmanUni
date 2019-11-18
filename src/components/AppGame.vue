@@ -265,6 +265,12 @@ export default class AppGame extends Vue {
   }
 }
 
+#app-game-prediction-position-value {
+  border-radius: 100%;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
 #app-game-body-main-function {
   @include flexItem(row, nowrap, space-around, stretch, stretch);
   border: 0.04em solid var(--neutralColor);
@@ -285,9 +291,7 @@ export default class AppGame extends Vue {
   margin: 0 0.5em 0.5em 0.5em;
 }
 
-#app-game-prediction-position-value {
-  border-radius: 100%;
-  padding-left: 0.25em;
-  padding-right: 0.25em;
+#app-game-body-vvh {
+  margin: 0 0.25em 0.25em 0.25em;
 }
 </style>

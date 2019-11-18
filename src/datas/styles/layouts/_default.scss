@@ -96,6 +96,12 @@ button {
     background-color: var(--backgroundColor);
     cursor: auto;
     opacity: 0.5;
+    &:hover {
+      background-color: var(--backgroundColor);
+    }
+  }
+  &:focus {
+    outline: none;
   }
   &:hover {
     background-color: var(--neutralColor);
