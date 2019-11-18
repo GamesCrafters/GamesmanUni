@@ -1,7 +1,7 @@
 <template>
   <div id="app-games">
     <h2 id="app-games-title">Games</h2>
-    <p v-for="gameData in gameDataArray" :key="gameData.id">
+    <div v-for="gameData in gameDataArray" :key="gameData.id">
       <router-link
         :to="{
           name: 'game',
@@ -10,7 +10,7 @@
         >{{ gameData.name }} (Server Data Status:
         {{ gameData.status || "unknown" }})</router-link
       >
-    </p>
+    </div>
   </div>
 </template>
 

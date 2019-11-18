@@ -1,21 +1,23 @@
 <template>
   <div id="app-game-board-default">
-    <p id="app-game-board-default-position">
-      <b>Position</b>
-    </p>
-    <pre><code>{{ game.getRound().getPosition() }}</code></pre>
-    <p id="app-game-board-default-moves">
-      <b>Move(s)</b>
-      <br />
-      <button
-        v-for="nextMoveData in game.getRound().getNextMoveDataArray()"
-        :key="nextMoveData.move"
-        :class="`c-${nextMoveData.moveValue}`"
-        @click="runMove(nextMoveData.move)"
-      >
-        {{ nextMoveData.move }}
-      </button>
-    </p>
+    <div id="app-game-board-default-position">
+      <h3 id="app-game-board-default-position-title">Position</h3>
+      <pre><code>{{ game.getRound().getPosition() }}</code></pre>
+    </div>
+    <hr class="c-divider" />
+    <div id="app-game-board-default-moves">
+      <h3 id="app-game-board-default-moves-title">Move(s)</h3>
+      <div id="app-game-board-default-moves-buttons">
+        <button
+          :class="`c-${nextMoveData.moveValue}`"
+          v-for="nextMoveData in game.getRound().getNextMoveDataArray()"
+          :key="nextMoveData.move"
+          @click="runMove(nextMoveData.move)"
+        >
+          {{ nextMoveData.move }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,3 +36,9 @@ export default class GDefault extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+#app-game-board-default-moves-buttons {
+  padding: 0 20%;
+}
+</style>

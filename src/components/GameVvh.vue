@@ -1,12 +1,12 @@
 <template>
   <div id="app-game-vvh">
     <h3 id="app-game-vvh-title">Visual Value History</h3>
-    <p id="app-game-vvh-colorGuide">
+    <div id="app-game-vvh-colorGuide">
       <span id="app-game-vvh-colorGuide-win" class="c-win">win</span>
       <span id="app-game-vvh-colorGuide-draw" class="c-draw">draw</span>
       <span id="app-game-vvh-colorGuide-tie" class="c-tie">tie</span>
       <span id="app-game-vvh-colorGuide-lose" class="c-lose">lose</span>
-    </p>
+    </div>
     <div id="app-game-vvh-canvas-container">
       <canvas :id="vvhSelectorId"></canvas>
     </div>
