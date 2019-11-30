@@ -1,12 +1,39 @@
 <template>
   <div id="app-game-board-ttt-regular">
-    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <!-- <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <g id="board">
           <path id="board-bar" d="M1,22 L65,22" />
           <use xlink:href="#board-bar" transform="translate(0 22)" />
           <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(66) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(66) rotate(90)" /> -->
+    <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <g id="board">
+          <!-- <pattern id="board-bar">
+          </pattern> -->
+          <path id="board-bar" d="M1,1 L81,1" />
+          <use xlink:href="#board-bar" transform="translate(0 10)" />
+          <use xlink:href="#board-bar" transform="translate(0 20)" />
+          <use xlink:href="#board-bar" transform="translate(0 30)" />
+          <use xlink:href="#board-bar" transform="translate(0 40)" />
+          <use xlink:href="#board-bar" transform="translate(0 50)" />
+          <use xlink:href="#board-bar" transform="translate(0 60)" />
+          <use xlink:href="#board-bar" transform="translate(0 70)" />
+          <use xlink:href="#board-bar" transform="translate(0 80)" />
+          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(12) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(22) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(32) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(42) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(52) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(62) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(72) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(82) rotate(90)" />
+          <!-- <g v-for="index in 8" :key="index">
+            <use xlink:href="#board-bar" transform="translate(0 10)" />
+            <use xlink:href="#board-bar" transform="translate(10) rotate(90)" />
+          </g> -->
         </g>
         <g id="turn-0-token">
           <path id="cross-bar" d="M3,3 L19,19" />
