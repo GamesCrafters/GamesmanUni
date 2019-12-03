@@ -81,7 +81,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
-export default class GFoxGeeRegular extends Vue {
+export default class GFoxesRegular extends Vue {
   cellCount: number = 9;
   boardData: {
     [cell: number]: { token: string; hint: string };
