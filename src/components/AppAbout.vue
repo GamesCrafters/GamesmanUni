@@ -2,7 +2,7 @@
   <div id="app-about">
     <ExternalMarkdown
       class="c-markdown"
-      relativePath="about.md"
+      relativePath="AppAbout.md"
     ></ExternalMarkdown>
   </div>
 </template>

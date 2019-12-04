@@ -4,7 +4,7 @@
       <img
         id="app-header-logo"
         alt="Gamesman Logo"
-        src="@/assets/app-logo.png"
+        src="@/assets/LApp.png"
         width="150em"
         height="150em"
       />

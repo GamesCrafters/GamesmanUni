@@ -49,7 +49,10 @@
           <div slot="content">
             <ExternalMarkdown
               class="c-markdown"
-              :relativePath="`gameInstructions/${game.getId()}.md`"
+              :relativePath="
+                `gameInstructions/G${game.getId()[0].toUpperCase() +
+                  game.getId().slice(1)}.md`
+              "
             ></ExternalMarkdown>
           </div>
         </PopupWindow>
@@ -75,9 +78,8 @@
               <b
                 id="app-game-prediction-turn-id"
                 :class="'c-turn-' + game.getRound().getTurnId()"
+                >{{ game.getRound().getTurnName() }}</b
               >
-                {{ game.getRound().getTurnName() }}
-              </b>
               <br />should
               <span
                 id="app-game-prediction-position-value"
