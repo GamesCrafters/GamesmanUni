@@ -66,9 +66,11 @@ export default class GameOptions extends Vue {
   hintVisibility: boolean = this.options.getHintVisibility();
   deltaRemotenessVisibility: boolean = this.options.getDeltaRemotenessVisibility();
   animationDuration: number = this.options.getAnimationDuration();
+
   get game(): CGame {
     return this.$store.getters.game;
   }
+
   get options(): COptions {
     return this.$store.getters.options;
   }
