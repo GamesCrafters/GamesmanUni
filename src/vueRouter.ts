@@ -18,6 +18,12 @@ export default new Router({
         import(/* webpackChunkName: "games" */ "./views/Games.vue")
     },
     {
+      path: "/games/:gameId/variants",
+      name: "variants",
+      component: () =>
+        import(/* webpackChunkName: "variants" */ "./views/Variants.vue")
+    },
+    {
       path: "/games/:gameId/variants/:variantId",
       name: "game",
       component: () => import(/* webpackChunkName: "game" */ "./views/Game.vue")

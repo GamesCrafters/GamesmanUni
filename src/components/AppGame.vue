@@ -7,7 +7,10 @@
       <h2 id="app-game-title">
         {{ game.getName() }}
         <br />
-        ({{ game.getRound().getVariantDescription() }})
+        <router-link
+          :to="{ name: 'variants', params: { gameId: game.getId() } }"
+          >({{ game.getRound().getVariantDescription() }})</router-link
+        >
       </h2>
       <div id="app-game-instruction">
         <GameInstruction></GameInstruction>
