@@ -13,7 +13,6 @@ import GSimRegular from "@/components/gameBoards/GSimRegular.vue";
 import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
 import GTenRegular from "@/components/gameBoards/GTenRegular.vue";
 import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
-import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
 
 @Component({
   components: {
@@ -22,8 +21,7 @@ import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
     GSimRegular,
     GSnakeRegular,
     GTenRegular,
-    GTttRegular,
-    GSnakeRegular
+    GTttRegular
   }
 })
 export default class GameBoard extends Vue {
