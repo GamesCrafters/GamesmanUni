@@ -23,7 +23,7 @@
           id="head"
           cx="11"
           cy="11"
-          r="9"
+          r="8"
           stroke="black"
           stroke-width="1"
           fill="blue"
@@ -40,12 +40,12 @@
           id="tail"
           cx="11"
           cy="11"
-          r="5"
+          r="8"
           stroke="black"
           stroke-width="1"
           fill="red"
         />
-        <circle id="hint" cx="11" cy="11" r="3" />
+        <circle id="hint" cx="11" cy="11" r="3" stroke="0" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
       <use xlink:href="#board" x="0" y="0" />
@@ -53,8 +53,8 @@
         <use
           v-if="boardData[cell].token === 'h'"
           xlink:href="#head"
-          :x="((cell - 1) % 4) * 21 + 0.2"
-          :y="Math.floor((cell - 1) / 4) * 21 + 0.2"
+          :x="((cell - 1) % 4) * 21 + 0.3"
+          :y="Math.floor((cell - 1) / 4) * 21 + 0.3"
         />
         <use
           v-else-if="boardData[cell].token === 'b'"
@@ -65,8 +65,8 @@
         <use
           v-else-if="boardData[cell].token === 't'"
           xlink:href="#tail"
-          :x="((cell - 1) % 4) * 21 + 0.2"
-          :y="Math.floor((cell - 1) / 4) * 21 + 0.2"
+          :x="((cell - 1) % 4) * 21 + 0.3"
+          :y="Math.floor((cell - 1) / 4) * 21 + 0.3"
         />
         <g v-else>
           <use
@@ -89,21 +89,6 @@
         </g>
       </g>
     </svg>
-
-    <hr class="c-divider" />
-    <div id="app-game-board-default-moves">
-      <h3 id="app-game-board-default-moves-title">Move(s)</h3>
-      <div id="app-game-board-default-moves-buttons">
-        <button
-          :class="`c-${nextMoveData.moveValue}`"
-          v-for="nextMoveData in game.getRound().getNextMoveDataArray()"
-          :key="nextMoveData.move"
-          @click="runMove(nextMoveData.move)"
-        >
-          {{ nextMoveData.move }}
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -233,15 +218,19 @@ svg {
 
 .hint- {
   &win {
+    fill: var(--winColor);
     stroke: var(--winColor);
   }
   &draw {
+    fill: var(--drawColor);
     stroke: var(--drawColor);
   }
   &tie {
+    fill: var(--tieColor);
     stroke: var(--tieColor);
   }
   &lose {
+    fill: var(--loseColor);
     stroke: var(--loseColor);
   }
 }
