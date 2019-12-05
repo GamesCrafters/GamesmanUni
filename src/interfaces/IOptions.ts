@@ -8,12 +8,12 @@ export interface IOptions {
   getDeltaRemotenessVisibility(): boolean;
   getAnimationDuration(): number;
 
-  setGameInstructionVisibility(visibleGameInstruction: boolean): void;
-  setGameOptionsVisibility(visibleGameOptions: boolean): void;
-  setClockVisibility(visibleClock: boolean): void;
-  setVvhVisibility(visibleVvh: boolean): void;
-  setNextMovesVisibility(visibleNextMoves: boolean): void;
-  setHintVisibility(visibleHint: boolean): void;
-  setDeltaRemotenessVisibility(visibleDeltaRemoteness: boolean): void;
+  setGameInstructionVisibility(gameInstructionVisiblity: boolean): void;
+  setGameOptionsVisibility(gameOptionsVisiblity: boolean): void;
+  setClockVisibility(clockVisiblity: boolean): void;
+  setVvhVisibility(vvhVisiblity: boolean): void;
+  setNextMovesVisibility(nextMovesVisiblity: boolean): void;
+  setHintVisibility(hintVisiblity: boolean): void;
+  setDeltaRemotenessVisibility(deltaRemotenessVisiblity: boolean): void;
   setAnimationDuration(animationDuration: number): void;
 }

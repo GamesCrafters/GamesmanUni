@@ -1,84 +1,84 @@
 import { IOptions } from "@/interfaces/IOptions";
 
 export class COptions implements IOptions {
-  private visibleGameInstruction: boolean;
-  private visibleGameOptions: boolean;
-  private visibleClock: boolean;
-  private visibleVvh: boolean;
-  private visibleNextMoves: boolean;
-  private visibleHint: boolean;
-  private visibleDeltaRemoteness: boolean;
+  private gameInstructionVisibility: boolean;
+  private gameOptionsVisibility: boolean;
+  private clockVisibility: boolean;
+  private vvhVisibility: boolean;
+  private nextMovesVisibility: boolean;
+  private hintVisibility: boolean;
+  private deltaRemotenessVisibility: boolean;
   private animationDuration: number;
 
   constructor() {
-    this.visibleGameInstruction = require("@/datas/defaults.json").visibleGameInstruction;
-    this.visibleGameOptions = require("@/datas/defaults.json").visibleGameOptions;
-    this.visibleClock = require("@/datas/defaults.json").visibleClock;
-    this.visibleVvh = require("@/datas/defaults.json").visibleVvh;
-    this.visibleNextMoves = require("@/datas/defaults.json").visibleNextMoves;
-    this.visibleHint = require("@/datas/defaults.json").visibleHint;
-    this.visibleDeltaRemoteness = require("@/datas/defaults.json").visibleDeltaRemoteness;
+    this.gameInstructionVisibility = require("@/datas/defaults.json").gameInstructionVisibility;
+    this.gameOptionsVisibility = require("@/datas/defaults.json").gameOptionsVisibility;
+    this.clockVisibility = require("@/datas/defaults.json").clockVisibility;
+    this.vvhVisibility = require("@/datas/defaults.json").vvhVisibility;
+    this.nextMovesVisibility = require("@/datas/defaults.json").nextMovesVisibility;
+    this.hintVisibility = require("@/datas/defaults.json").hintVisibility;
+    this.deltaRemotenessVisibility = require("@/datas/defaults.json").deltaRemotenessVisibility;
     this.animationDuration = require("@/datas/defaults.json").animationDuration;
   }
 
   getGameInstructionVisibility(): boolean {
-    return this.visibleGameInstruction;
+    return this.gameInstructionVisibility;
   }
 
   getGameOptionsVisibility(): boolean {
-    return this.visibleGameOptions;
+    return this.gameOptionsVisibility;
   }
 
   getClockVisibility(): boolean {
-    return this.visibleClock;
+    return this.clockVisibility;
   }
 
   getVvhVisibility(): boolean {
-    return this.visibleVvh;
+    return this.vvhVisibility;
   }
 
   getNextMovesVisibility(): boolean {
-    return this.visibleNextMoves;
+    return this.nextMovesVisibility;
   }
 
   getHintVisibility(): boolean {
-    return this.visibleHint;
+    return this.hintVisibility;
   }
 
   getDeltaRemotenessVisibility(): boolean {
-    return this.visibleDeltaRemoteness;
+    return this.deltaRemotenessVisibility;
   }
 
   getAnimationDuration(): number {
     return this.animationDuration;
   }
 
-  setGameInstructionVisibility(visibleGameInstruction: boolean): void {
-    this.visibleGameInstruction = visibleGameInstruction;
+  setGameInstructionVisibility(gameInstructionVisibility: boolean): void {
+    this.gameInstructionVisibility = gameInstructionVisibility;
   }
 
-  setGameOptionsVisibility(visibleGameOptions: boolean): void {
-    this.visibleGameOptions = visibleGameOptions;
+  setGameOptionsVisibility(gameOptionsVisibility: boolean): void {
+    this.gameOptionsVisibility = gameOptionsVisibility;
   }
 
-  setClockVisibility(visibleClock: boolean): void {
-    this.visibleClock = visibleClock;
+  setClockVisibility(clockVisibility: boolean): void {
+    this.clockVisibility = clockVisibility;
   }
 
-  setVvhVisibility(visibleVvh: boolean): void {
-    this.visibleVvh = visibleVvh;
+  setVvhVisibility(vvhVisibility: boolean): void {
+    this.vvhVisibility = vvhVisibility;
   }
 
-  setNextMovesVisibility(visibleNextMoves: boolean): void {
-    this.visibleNextMoves = visibleNextMoves;
+  setNextMovesVisibility(nextMovesVisibility: boolean): void {
+    this.nextMovesVisibility = nextMovesVisibility;
   }
 
-  setHintVisibility(visibleHint: boolean): void {
-    this.visibleHint = visibleHint;
+  setHintVisibility(hintVisibility: boolean): void {
+    this.hintVisibility = hintVisibility;
   }
 
-  setDeltaRemotenessVisibility(visibleDeltaRemoteness: boolean): void {
-    this.visibleDeltaRemoteness = visibleDeltaRemoteness;
+  setDeltaRemotenessVisibility(deltaRemotenessVisibility: boolean): void {
+    this.deltaRemotenessVisibility = deltaRemotenessVisibility;
   }
 
   setAnimationDuration(animationDuration: number): void {

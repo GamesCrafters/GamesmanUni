@@ -5,6 +5,7 @@ import { TRawPositionData } from "@/types/external/TRawPositionData";
 import { TMoveData } from "@/types/internal/TMoveData";
 import { TVariantData } from "@/types/internal/TVariantData";
 import { IGame } from "@/interfaces/IGame";
+import { COptions } from "@/classes/COptions";
 import { CRound } from "@/classes/CRound";
 import { CHistory } from "@/classes/CHistory";
 
@@ -17,9 +18,9 @@ export class CGame implements IGame {
   private currentVariantData: TVariantData;
   private turnNameDictionary: Map<number, string>;
   private readonly vvhSelectorId: string;
+  private options: COptions;
   private round: CRound;
   private history: CHistory;
-  private showHint: boolean;
 
   constructor() {
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
@@ -38,9 +39,9 @@ export class CGame implements IGame {
       [1, require("@/datas/defaults.json").turn1Name]
     ]);
     this.vvhSelectorId = require("@/datas/defaults.json").vvhSelectorId;
+    this.options = new COptions();
     this.round = new CRound();
     this.history = new CHistory();
-    this.showHint = require("@/datas/defaults.json").showHint;
   }
 
   getId(): string {
@@ -71,16 +72,16 @@ export class CGame implements IGame {
     return this.vvhSelectorId;
   }
 
+  getOptions(): COptions {
+    return this.options;
+  }
+
   getRound(): CRound {
     return this.round;
   }
 
   getHistory(): CHistory {
     return this.history;
-  }
-
-  getShowHint(): boolean {
-    return this.showHint;
   }
 
   setId(id: string): void {
@@ -106,10 +107,6 @@ export class CGame implements IGame {
 
   setTurn1Name(turn1Name: string): void {
     this.turnNameDictionary.set(1, turn1Name);
-  }
-
-  setShowHint(showHint: boolean): void {
-    this.showHint = showHint;
   }
 
   private async loadDetailedGameData(): Promise<boolean> {
@@ -205,9 +202,9 @@ export class CGame implements IGame {
     this.round.setVariantId(oldRound.getVariantId());
     this.round.setVariantDescription(oldRound.getVariantDescription());
     this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
-    this.round.setTurnName(this.turnNameDictionary.get(
-      this.round.getTurnId()
-    ) as string);
+    this.round.setTurnName(
+      this.turnNameDictionary.get(this.round.getTurnId()) as string
+    );
     this.round.setPosition(
       (oldRound
         .getNextMoveDataDictionary()

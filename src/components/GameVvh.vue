@@ -16,21 +16,17 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import { CVvh } from "@/classes/CVvh";
-
 @Component
 export default class GameVvh extends Vue {
   vvhSelectorId: string = this.$store.getters.vvhSelectorId;
-
   @Watch("$store.getters.loadingStatus")
   onAsyncRoundChange(): void {
     !this.$store.getters.loadingStatus && this.$store.commit("drawVvh");
   }
-
   @Watch("$store.getters.roundNumber")
   onSyncRoundChange(): void {
     this.$store.commit("drawVvh");
   }
-
   @Watch("$store.getters.theme")
   onThemeChange(): void {
     this.$store.commit("drawVvh");
@@ -42,10 +38,9 @@ export default class GameVvh extends Vue {
 #app-game-vvh {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
-  margin: 0.25em;
+  margin: 0;
   padding: 0.25em;
 }
-
 #app-game-vvh-colorGuide {
   margin: 0.25em;
   padding: 0.25em;
@@ -55,13 +50,11 @@ export default class GameVvh extends Vue {
     padding: 0 1.5em;
   }
 }
-
 #app-game-vvh-canvas {
   margin: 0.25em;
   padding: 0.25em;
 }
-
-@media only screen and (max-width: 40em) {
+@media only screen and (max-width: 53.625em) {
   #app-game-vvh {
     width: 25em;
     margin-left: auto;
