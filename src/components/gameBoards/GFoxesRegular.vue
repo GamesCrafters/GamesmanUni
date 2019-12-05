@@ -1,7 +1,7 @@
 <template>
   <div id="app-game-board-foxgee-regular">
     <!-- offset, dimensions -->
-    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- defines pieces -->
         <g id="board">
@@ -31,11 +31,8 @@
             <use xlink:href="#board-bar" transform="translate(10) rotate(90)" />
           </g> -->
         </g>
-        <g id="turn-0-token">
-          <path id="cross-bar" d="M3,3 L19,19" />
-          <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
-        </g>
-        <circle id="turn-1-token" cx="11" cy="11" r="8" />
+        <circle id="turn-0-token" cx="5" cy="5" r="2" />
+        <circle id="turn-1-token" cx="5" cy="5" r="2" />
         <circle id="hint" cx="11" cy="11" r="1" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
@@ -43,20 +40,21 @@
       <use xlink:href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
         <!-- use variables here -->
+        <use v-if="cell === 1" />
         <use
-          v-if="boardData[cell].token === 'x'"
+          v-else-if="boardData[cell].token === 'G'"
           xlink:href="#turn-0-token"
-          :x="((cell - 1) % 3) * 22"
-          :y="Math.floor((cell - 1) / 3) * 22"
+          :x="(((cell - 2) % 8) * 10 + 1) * 2"
+          :y="Math.floor((cell - 2) / 8) * 10 + 1"
         />
         <!-- pieces are either player 0 token, p1, or hint (clickable) -->
         <use
-          v-else-if="boardData[cell].token === 'o'"
+          v-else-if="boardData[cell].token === 'F'"
           xlink:href="#turn-1-token"
-          :x="((cell - 1) % 3) * 22"
-          :y="Math.floor((cell - 1) / 3) * 22"
+          :x="((cell - 2) % 8) * 10 + 1"
+          :y="Math.floor((cell - 2) / 8) * 10 + 1"
         />
-        <g v-else>
+        <!-- <g v-else>
           <use
             v-if="boardData[cell].hint"
             :class="'hint-' + boardData[cell].hint"
@@ -71,7 +69,7 @@
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
           />
-        </g>
+        </g> -->
       </g>
     </svg>
   </div>
@@ -81,8 +79,8 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
-export default class GFoxGeeRegular extends Vue {
-  cellCount: number = 9;
+export default class GFoxesRegular extends Vue {
+  cellCount: number = 33;
   boardData: {
     [cell: number]: { token: string; hint: string };
     // fixme
