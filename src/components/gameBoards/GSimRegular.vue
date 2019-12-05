@@ -23,6 +23,9 @@ import { CRound } from "@/classes/CRound";
 export default class GSimRegular extends Vue {
  
   hintText = 'Hide hint';
+  lastSizeOfStack1 = 0;
+  lastSizeOfStack2 = 0;
+
   hint():void{
     if(this.hintText == 'Show hint'){
       this.hintText = 'Hide hint'
@@ -91,32 +94,41 @@ export default class GSimRegular extends Vue {
     } else if (remoteness == 15) {
       this.isBlue = true;
       this.changeColor();
+      return;
     }
+    this.changeColor();
   }
   @Watch("roundNumber")
   onSyncRoundChange(): void {
     var roundNumber = this.$store.getters.roundNumber;
     if (roundNumber > this.lastRoundNumber) {
       this.lastRoundNumber = roundNumber;
-      var move = this.movesStack2.pop();
-      if (move != undefined) {
-        this.isBlue = !this.isBlue;
-        this.movesStack1.push(move);
+      
+        if(this.movesStack1.length == this.lastSizeOfStack1 + 1 && this.movesStack2.length == this.lastSizeOfStack2){
+          console.log('1');
+        }
+        else{
+          var move = this.movesStack2.pop();
+        if(move!=undefined){
+          this.isBlue = !this.isBlue;
+          this.movesStack1.push(move);
         var idString = move.substr(0, 2);
         var id = +idString;
         var colorOfLineString = move.substr(2, 4);
         var isBlue = colorOfLineString == "true" ? true : false;
         this.corresponding[idString].color = isBlue ? "blue": "red";
-        this.changeColor();
-      }
+        }
+        }
     } else if (roundNumber < this.lastRoundNumber) {
       this.lastRoundNumber = roundNumber;
       var lastMove = this.movesStack1.pop();
       this.isBlue = !this.isBlue;
       if (lastMove != undefined) this.movesStack2.push(lastMove);
-      this.changeColor();
     }
-    
+     this.changeColor();
+     this.lastSizeOfStack1 = this.movesStack1.length;
+     this.lastSizeOfStack2 = this.movesStack2.length;
+
   }
   over(): void {
     for (let key in this.corresponding) {
@@ -136,6 +148,7 @@ export default class GSimRegular extends Vue {
 
   movesStack1: String[] = [];
   movesStack2: String[] = [];
+  
   lastRoundNumber: number = -1;
   lastMoveArrayLength: number = 15;
   isBlue: boolean = true;
@@ -143,18 +156,16 @@ export default class GSimRegular extends Vue {
   get game() {
     return this.$store.getters.game;
   }
-  
+   
   changeColor(): void {
-    console.log(1);
+    console.log("Te");
     var array = this.$store.getters.game.getRound().getNextMoveDataArray();
     var length = this.$store.getters.game.getRound().getNextMoveDataArray()
       .length;
-    console.log(length);
     for (var i = 0; i < length; i++) {
       var idString = array[i].move;
       var id = +idString;
       var colorString = array[i].moveValue;
-
       if(this.hintText == "Hide hint"){
          this.corresponding[idString].color = colorString + (this.isBlue?"B":"R");
       }
@@ -164,6 +175,7 @@ export default class GSimRegular extends Vue {
     }
   }
   
+ 
   runMove(id: string) {
     if (this.$store.getters.game.getRound().getNextMoveDataArray().length == 0) {
       this.over();
@@ -173,6 +185,7 @@ export default class GSimRegular extends Vue {
       }
       this.corresponding[id].color = this.isBlue ? "blue" : "red";
       this.movesStack1.push("" + id + this.isBlue);
+
       this.lastMoveArrayLength = this.$store.getters.game
         .getRound()
         .getNextMoveDataArray().length;
@@ -180,31 +193,15 @@ export default class GSimRegular extends Vue {
       var array = this.$store.getters.game.getRound().getNextMoveDataArray();
       var length = this.$store.getters.game.getRound().getNextMoveDataArray()
         .length;
-
       for (var i = 0; i < length; i++) {
         if (+id == array[i].move) {
           this.$store.dispatch("runMove", array[i].move);
         }
       }
-
-      this.lastRoundNumber = this.$store.getters.roundNumber;
-      for (var i = 0; i < length; i++) {
-        
-        var idString = array[i].move;
-        if(idString ==  id){
-          continue;
-        }
-        var colorString = array[i].moveValue;
-
-        if(this.hintText == "Hide hint"){
-          this.corresponding[idString].color = colorString + (this.isBlue?"B":"R");
-        }
-        else{
-          this.corresponding[idString].color = "simpleLine" + (this.isBlue?"B":"R");
-        }
-    }
+    
     }
   }
+
 }
 </script>
 
