@@ -105,7 +105,6 @@ export default class GSimRegular extends Vue {
       this.lastRoundNumber = roundNumber;
       
         if(this.movesStack1.length == this.lastSizeOfStack1 + 1 && this.movesStack2.length == this.lastSizeOfStack2){
-          console.log('1');
         }
         else{
           var move = this.movesStack2.pop();
@@ -158,7 +157,7 @@ export default class GSimRegular extends Vue {
   }
    
   changeColor(): void {
-    console.log("Te");
+
     var array = this.$store.getters.game.getRound().getNextMoveDataArray();
     var length = this.$store.getters.game.getRound().getNextMoveDataArray()
       .length;
@@ -201,7 +200,10 @@ export default class GSimRegular extends Vue {
     
     }
   }
-
+@Watch("loadingStatus")
+  onAsyncRoundChange(): void {
+    !this.loadingStatus && this.changeColor();
+  }
 }
 </script>
 
