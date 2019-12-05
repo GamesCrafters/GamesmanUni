@@ -6,6 +6,8 @@
       <code>GamesmanUniGUI</code> version in footer, new content is available.
       Please try refreshing the page ( <code>ctrl/command + r</code>) to get
       latest patches and updates.
+      <br />
+      <br />All datetimes below are in UTC.
     </div>
     <a
       class="app-updates-commit-link"
