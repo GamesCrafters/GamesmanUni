@@ -32,8 +32,8 @@
         />
         <g v-else>
           <use
-            v-if="boardData[cell].hint"
-            :class="'hint-' + boardData[cell].hint"
+            v-if="nextMovesVisibility && boardData[cell].hint"
+            :class="getHintClass(boardData[cell].hint)"
             xlink:href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
@@ -53,6 +53,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
+import { TMoveData } from "@/types/internal/TMoveData";
 
 @Component
 export default class GTttRegular extends Vue {
@@ -61,24 +62,35 @@ export default class GTttRegular extends Vue {
     [cell: number]: { token: string; hint: string };
   } = this.initBoardData();
 
-  get loadingStatus() {
+  get loadingStatus(): boolean {
     return this.$store.getters.loadingStatus;
   }
 
-  get roundNumber() {
+  get roundNumber(): number {
     return this.$store.getters.roundNumber;
   }
 
-  get position() {
+  get position(): string {
     return this.$store.getters.position;
   }
 
-  get remoteness() {
+  get remoteness(): number {
     return this.$store.getters.remoteness;
   }
 
-  get nextMoveDataArray() {
+  get nextMoveDataArray(): Array<TMoveData> {
     return this.$store.getters.nextMoveDataArray;
+  }
+
+  get nextMovesVisibility(): boolean {
+    return this.$store.getters.nextMovesVisibility;
+  }
+
+  getHintClass(hint: string): string {
+    if (this.$store.getters.hintVisibility) {
+      return "hint-" + hint;
+    }
+    return "";
   }
 
   initBoardData(): { [cell: number]: { token: string; hint: string } } {
@@ -105,11 +117,11 @@ export default class GTttRegular extends Vue {
     this.$store.dispatch("runMove", move);
   }
 
-  created() {
+  created(): void {
     this.boardData = this.initBoardData();
   }
 
-  mounted() {
+  mounted(): void {
     this.updateBoardData();
   }
 
