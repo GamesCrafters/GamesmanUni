@@ -18,7 +18,15 @@
   "turn0Name": "Left Player",
   "turn1Name": "Right Player",
   "vvhSelectorId": "app-game-vvh-canvas",
-  "showHint": true,
+
+  "gameInstructionVisibility": false,
+  "gameOptionsVisibility": false,
+  "clockVisibility": false,
+  "vvhVisibility": false,
+  "nextMovesVisibility": false,
+  "hintVisibility": false,
+  "deltaRemotenessVisibility": false,
+  "animationDuration": 1,
 
   "gitHubDataSource": "https://api.github.com/repos/gamescrafters/gamesmanuni",
 

@@ -8,6 +8,9 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { CGame } from "@/classes/CGame";
 import GDefault from "@/components/gameBoards/GDefault.vue";
+import GFoxesRegular from "@/components/gameBoards/GFoxesRegular.vue";
+import GSimRegular from "@/components/gameBoards/GSimRegular.vue";
+import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
 import GTenRegular from "@/components/gameBoards/GTenRegular.vue";
 import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
 import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
@@ -15,6 +18,9 @@ import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
 @Component({
   components: {
     GDefault,
+    GFoxesRegular,
+    GSimRegular,
+    GSnakeRegular,
     GTenRegular,
     GTttRegular,
     GSnakeRegular

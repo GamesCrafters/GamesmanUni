@@ -1,12 +1,35 @@
 <template>
-  <div id="app-game-board-ttt-regular">
+  <div id="app-game-board-foxgee-regular">
+    <!-- offset, dimensions -->
     <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
       <defs>
+        <!-- defines pieces -->
         <g id="board">
-          <path id="board-bar" d="M1,22 L65,22" />
-          <use xlink:href="#board-bar" transform="translate(0 22)" />
-          <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(66) rotate(90)" />
+          <!-- <pattern id="board-bar">
+          </pattern> -->
+          <!-- below is line from 1, 1 to 81, 1 -->
+          <path id="board-bar" d="M1,1 L81,1" />
+          <use xlink:href="#board-bar" transform="translate(0 10)" />
+          <use xlink:href="#board-bar" transform="translate(0 20)" />
+          <use xlink:href="#board-bar" transform="translate(0 30)" />
+          <use xlink:href="#board-bar" transform="translate(0 40)" />
+          <use xlink:href="#board-bar" transform="translate(0 50)" />
+          <use xlink:href="#board-bar" transform="translate(0 60)" />
+          <use xlink:href="#board-bar" transform="translate(0 70)" />
+          <use xlink:href="#board-bar" transform="translate(0 80)" />
+          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(12) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(22) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(32) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(42) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(52) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(62) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(72) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(82) rotate(90)" />
+          <!-- <g v-for="index in 8" :key="index">
+            <use xlink:href="#board-bar" transform="translate(0 10)" />
+            <use xlink:href="#board-bar" transform="translate(10) rotate(90)" />
+          </g> -->
         </g>
         <g id="turn-0-token">
           <path id="cross-bar" d="M3,3 L19,19" />
@@ -16,14 +39,17 @@
         <circle id="hint" cx="11" cy="11" r="1" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
+
       <use xlink:href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
+        <!-- use variables here -->
         <use
           v-if="boardData[cell].token === 'x'"
           xlink:href="#turn-0-token"
           :x="((cell - 1) % 3) * 22"
           :y="Math.floor((cell - 1) / 3) * 22"
         />
+        <!-- pieces are either player 0 token, p1, or hint (clickable) -->
         <use
           v-else-if="boardData[cell].token === 'o'"
           xlink:href="#turn-1-token"
@@ -32,8 +58,8 @@
         />
         <g v-else>
           <use
-            v-if="nextMovesVisibility && boardData[cell].hint"
-            :class="getHintClass(boardData[cell].hint)"
+            v-if="boardData[cell].hint"
+            :class="'hint-' + boardData[cell].hint"
             xlink:href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
@@ -53,44 +79,33 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { TMoveData } from "@/types/internal/TMoveData";
 
 @Component
-export default class GTttRegular extends Vue {
+export default class GFoxesRegular extends Vue {
   cellCount: number = 9;
   boardData: {
     [cell: number]: { token: string; hint: string };
+    // fixme
   } = this.initBoardData();
 
-  get loadingStatus(): boolean {
+  get loadingStatus() {
     return this.$store.getters.loadingStatus;
   }
 
-  get roundNumber(): number {
+  get roundNumber() {
     return this.$store.getters.roundNumber;
   }
 
-  get position(): string {
+  get position() {
     return this.$store.getters.position;
   }
 
-  get remoteness(): number {
+  get remoteness() {
     return this.$store.getters.remoteness;
   }
 
-  get nextMoveDataArray(): Array<TMoveData> {
+  get nextMoveDataArray() {
     return this.$store.getters.nextMoveDataArray;
-  }
-
-  get nextMovesVisibility(): boolean {
-    return this.$store.getters.nextMovesVisibility;
-  }
-
-  getHintClass(hint: string): string {
-    if (this.$store.getters.hintVisibility) {
-      return "hint-" + hint;
-    }
-    return "";
   }
 
   initBoardData(): { [cell: number]: { token: string; hint: string } } {
@@ -117,11 +132,11 @@ export default class GTttRegular extends Vue {
     this.$store.dispatch("runMove", move);
   }
 
-  created(): void {
+  created() {
     this.boardData = this.initBoardData();
   }
 
-  mounted(): void {
+  mounted() {
     this.updateBoardData();
   }
 

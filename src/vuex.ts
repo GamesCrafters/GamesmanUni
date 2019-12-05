@@ -15,6 +15,7 @@ export default new Vuex.Store({
     appVersion: state => state.appVersion,
     app: state => state.app,
 
+    // CApp.ts
     loadingStatus: state => state.app.getLoadingStatus(),
     themeDictionary: state => state.app.getThemeDictionary(),
     theme: state => state.app.getTheme(),
@@ -28,8 +29,7 @@ export default new Vuex.Store({
     game: state => state.app.getGame(),
     updates: state => state.app.getUpdates(),
 
-    gameDataArray: state => state.app.getGames().getGameDataArray(),
-
+    // CGame.ts
     gameId: state => state.app.getGame().getId(),
     gameName: state => state.app.getGame().getName(),
     variantDataArray: state => state.app.getGame().getVariantDataArray(),
@@ -38,10 +38,87 @@ export default new Vuex.Store({
     variantData: state => state.app.getGame().getVariantData(),
     turnNameDictionary: state => state.app.getGame().getTurnNameDictionary(),
     vvhSelectorId: state => state.app.getGame().getVvhSelectorId(),
+    options: state => state.app.getGame().getOptions(),
     round: state => state.app.getGame().getRound(),
     history: state => state.app.getGame().getHistory(),
-    showHint: state => state.app.getGame().getShowHint(),
 
+    // CGames.ts
+    gameDataArray: state => state.app.getGames().getGameDataArray(),
+
+    // CGitHub.ts
+    latestCommitCount: state => state.app.getUpdates().getLatestCommitCount(),
+    latestCommitDateArray: state =>
+      state.app.getUpdates().getLatestCommitDateArray(),
+    latestCommitMessageArray: state =>
+      state.app.getUpdates().getLatestCommitMessageArray(),
+    latestCommitLinkArray: state =>
+      state.app.getUpdates().getLatestCommitLinkArray(),
+
+    // CHistory.ts
+    currentRoundNumber: state =>
+      state.app
+        .getGame()
+        .getHistory()
+        .getCurrentRoundNumber(),
+    roundArray: state =>
+      state.app
+        .getGame()
+        .getHistory()
+        .getRoundArray(),
+    roundDictionary: state =>
+      state.app
+        .getGame()
+        .getHistory()
+        .getRoundDictionary(),
+    maximumRemoteness: state =>
+      state.app
+        .getGame()
+        .getHistory()
+        .getMaximumRemoteness(),
+
+    // COptions.ts
+    gameInstructionVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getGameInstructionVisibility(),
+    gameOptionsVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getGameOptionsVisibility(),
+    clockVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getClockVisibility(),
+    vvhVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getVvhVisibility(),
+    nextMovesVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getNextMovesVisibility(),
+    hintVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getHintVisibility(),
+    deltaRemotenessVisibility: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getDeltaRemotenessVisibility(),
+    animationDuration: state =>
+      state.app
+        .getGame()
+        .getOptions()
+        .getAnimationDuration(),
+
+    // CRound.ts
     roundNumber: state =>
       state.app
         .getGame()
@@ -101,38 +178,10 @@ export default new Vuex.Store({
       state.app
         .getGame()
         .getRound()
-        .getNextMoveDataDictionary(),
-
-    currentRoundNumber: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getCurrentRoundNumber(),
-    roundArray: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getRoundArray(),
-    roundDictionary: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getRoundDictionary(),
-    maximumRemoteness: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getMaximumRemoteness(),
-
-    latestCommitCount: state => state.app.getUpdates().getLatestCommitCount(),
-    latestCommitVersionArray: state =>
-      state.app.getUpdates().getLatestCommitVersionArray(),
-    latestCommitMessageArray: state =>
-      state.app.getUpdates().getLatestCommitMessageArray(),
-    latestCommitLinkArray: state =>
-      state.app.getUpdates().getLatestCommitLinkArray()
+        .getNextMoveDataDictionary()
   },
   mutations: {
+    // CApp.ts
     loadingStatus(state, loadingStatus: boolean): void {
       state.app.setLoadingStatus(loadingStatus);
     },
@@ -146,6 +195,7 @@ export default new Vuex.Store({
       state.app.setLanguage(language);
     },
 
+    // CGame.ts
     gameId(state, gameId: string): void {
       state.app.getGame().setId(gameId);
     },
@@ -161,9 +211,6 @@ export default new Vuex.Store({
     turn1Name(state, turn1Name: string): void {
       state.app.getGame().setTurn1Name(turn1Name);
     },
-    showHint(state, showHint: boolean): void {
-      state.app.getGame().setShowHint(showHint);
-    },
     undoMove(state): void {
       state.app.getGame().undoMove();
     },
@@ -171,6 +218,65 @@ export default new Vuex.Store({
       state.app.getGame().redoMove();
     },
 
+    // CHistory.ts
+    updateHistory(state, { round, type }): void {
+      state.app
+        .getGame()
+        .getHistory()
+        .updateHistory(round, type);
+    },
+
+    // COptions.ts
+    gameInstructionVisibility(state, gameInstructionVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setGameInstructionVisibility(gameInstructionVisibility);
+    },
+    gameOptionsVisibility(state, gameOptionsVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setGameOptionsVisibility(gameOptionsVisibility);
+    },
+    clockVisibility(state, clockVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setClockVisibility(clockVisibility);
+    },
+    vvhVisibility(state, vvhVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setVvhVisibility(vvhVisibility);
+    },
+    nextMovesVisibility(state, nextMovesVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setNextMovesVisibility(nextMovesVisibility);
+    },
+    hintVisibility(state, hintVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setHintVisibility(hintVisibility);
+    },
+    deltaRemotenessVisibility(state, deltaRemotenessVisibility: boolean): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setDeltaRemotenessVisibility(deltaRemotenessVisibility);
+    },
+    animationDuration(state, animationDuration: number): void {
+      state.app
+        .getGame()
+        .getOptions()
+        .setAnimationDuration(animationDuration);
+    },
+
+    // CRound.ts
     roundNumber(state, roundNumber: number): void {
       state.app
         .getGame()
@@ -244,22 +350,20 @@ export default new Vuex.Store({
         .setNextMoveDataDictionary(nextMoveDataArray);
     },
 
-    updateHistory(state, { round, type }): void {
-      state.app
-        .getGame()
-        .getHistory()
-        .updateHistory(round, type);
-    },
-
+    // CVvh.ts
     drawVvh(state): void {
       const vvh: CVvh = new CVvh(
         state.app.getGame(),
-        state.app.getGame().getShowHint()
+        state.app
+          .getGame()
+          .getOptions()
+          .getHintVisibility()
       );
       vvh.drawVvh();
     }
   },
   actions: {
+    // CGames.ts
     async initGames({ state, commit }): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
@@ -267,6 +371,8 @@ export default new Vuex.Store({
       commit("loadingStatus", false);
       return success;
     },
+
+    // CGame.ts
     async startNewGame({ state, commit }): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
@@ -289,6 +395,8 @@ export default new Vuex.Store({
       commit("loadingStatus", false);
       return success;
     },
+
+    // CGitHub.ts
     async initCommits({ state, commit }): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
