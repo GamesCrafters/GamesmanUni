@@ -28,7 +28,7 @@
   "deltaRemotenessVisibility": false,
   "animationDuration": 1,
 
-  "gitHubDataSou rce": "https://api.github.com/repos/gamescrafters/gamesmanuni",
+  "gitHubDataSource": "https://api.github.com/repos/gamescrafters/gamesmanuni",
 
   "maximumRemoteness": 6,
 

@@ -15,8 +15,8 @@
       target="_blank"
       rel="noreferrer"
     >
-      <div class="app-updates-commit-version">
-        {{ latestCommitVersionArray[n - 1] }}
+      <div class="app-updates-commit-date">
+        {{ latestCommitDateArray[n - 1] }}
       </div>
       <div class="app-updates-commit-message">
         {{ latestCommitMessageArray[n - 1] }}
@@ -41,8 +41,8 @@ export default class AppUpdates extends Vue {
     return this.$store.getters.latestCommitCount;
   }
 
-  get latestCommitVersionArray(): Array<string> {
-    return this.$store.getters.latestCommitVersionArray;
+  get latestCommitDateArray(): Array<string> {
+    return this.$store.getters.latestCommitDateArray;
   }
 
   get latestCommitMessageArray(): Array<string> {
@@ -86,13 +86,16 @@ export default class AppUpdates extends Vue {
   }
 }
 
-.app-updates-commit-version {
+.app-updates-commit-date {
   flex: 1 1 0;
   font-weight: bold;
 }
 
 .app-updates-commit-message {
   flex: 2 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #app-updates-more {

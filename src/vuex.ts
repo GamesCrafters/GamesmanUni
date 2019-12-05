@@ -47,8 +47,8 @@ export default new Vuex.Store({
 
     // CGitHub.ts
     latestCommitCount: state => state.app.getUpdates().getLatestCommitCount(),
-    latestCommitVersionArray: state =>
-      state.app.getUpdates().getLatestCommitVersionArray(),
+    latestCommitDateArray: state =>
+      state.app.getUpdates().getLatestCommitDateArray(),
     latestCommitMessageArray: state =>
       state.app.getUpdates().getLatestCommitMessageArray(),
     latestCommitLinkArray: state =>

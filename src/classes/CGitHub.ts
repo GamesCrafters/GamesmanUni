@@ -5,7 +5,7 @@ export class CGitHub implements IGitHub {
   private readonly gitHubDataSource: string;
   private rawLatestCommitDataArray: Array<any>;
   private latestCommitCount: number;
-  private latestCommitVersionArray: Array<string>;
+  private latestCommitDateArray: Array<string>;
   private latestCommitMessageArray: Array<string>;
   private latestCommitLinkArray: Array<string>;
 
@@ -13,7 +13,7 @@ export class CGitHub implements IGitHub {
     this.gitHubDataSource = require("@/datas/defaults.json").gitHubDataSource;
     this.rawLatestCommitDataArray = new Array<any>();
     this.latestCommitCount = 0;
-    this.latestCommitVersionArray = new Array<string>();
+    this.latestCommitDateArray = new Array<string>();
     this.latestCommitMessageArray = new Array<string>();
     this.latestCommitLinkArray = new Array<string>();
   }
@@ -22,8 +22,8 @@ export class CGitHub implements IGitHub {
     return this.latestCommitCount;
   }
 
-  getLatestCommitVersionArray(): Array<string> {
-    return this.latestCommitVersionArray;
+  getLatestCommitDateArray(): Array<string> {
+    return this.latestCommitDateArray;
   }
 
   getLatestCommitMessageArray(): Array<string> {
@@ -41,11 +41,14 @@ export class CGitHub implements IGitHub {
       const httpResponse: AxiosResponse = await axios.get(commitsSource);
       this.rawLatestCommitDataArray = Object.values(httpResponse.data);
       this.latestCommitCount = this.rawLatestCommitDataArray.length;
-      this.latestCommitVersionArray = this.rawLatestCommitDataArray.map(
-        commitData => commitData.commit.message.split(":")[0]
+      this.latestCommitDateArray = this.rawLatestCommitDataArray.map(
+        commitData =>
+          commitData.commit.committer.date.split("T")[0] +
+          " " +
+          commitData.commit.committer.date.split("T")[1].split("Z")[0]
       );
       this.latestCommitMessageArray = this.rawLatestCommitDataArray.map(
-        commitData => commitData.commit.message.split(":")[1].split("\n")[0]
+        commitData => commitData.commit.message.split("\n")[0]
       );
       this.latestCommitLinkArray = this.rawLatestCommitDataArray.map(
         commitData => commitData.html_url
