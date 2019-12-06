@@ -1,7 +1,7 @@
 <template>
   <div id="app-game-board-foxgee-regular">
     <!-- offset, dimensions -->
-    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- defines pieces -->
         <g id="board">
