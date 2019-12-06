@@ -16,7 +16,8 @@
             stroke="black"
             width="0.5"
           />
-          <use xlink:hrer="#line" transform="(0" 30) />
+          <use xlink:hrer="#line" transform="translate(0 28)" />
+          <use xlink:hrer="#line" transform="translate(0 56)" />
           <!-- </g> -->
           <circle id="dot" cx="5" cy="5" r="1" />
           <use xlink:href="#dot" transform="translate(0 28)" />
@@ -40,6 +41,9 @@
       <!-- use a for loop to put lines on the board.
       Also make dots and have the use tag for those -->
       <use xlink:href="#board" x="0" y="0" />
+      <line id="line" x1="5" y1="5" x2="33" y2="5" stroke="black" width="0.5" />
+      <use xlink:hrer="#line" transform="translate(0 28)" />
+      <use xlink:hrer="#line" transform="translate(0 56)" />
       <!-- <use xlink:href="#line" x="0" y="0" /> -->
       <!-- <g v-for="line in lineCount" :key="line">
         <use
