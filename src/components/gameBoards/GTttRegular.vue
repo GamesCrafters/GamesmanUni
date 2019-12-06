@@ -132,7 +132,6 @@ export default class GTttRegular extends Vue {
 
   @Watch("loadingStatus")
   async onAsyncRoundChange(): Promise<void> {
-    await new Promise((resolve, reject) => setTimeout(resolve, 500));
     !this.loadingStatus && this.updateBoardData();
   }
 
