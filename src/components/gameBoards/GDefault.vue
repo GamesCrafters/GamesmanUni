@@ -12,6 +12,7 @@
           v-for="nextMoveData in nextMoveDataArray"
           :key="nextMoveData.move"
           :class="getHintClass(nextMoveData.moveValue)"
+          :style="{ opacity: nextMoveData.moveValueOpacity }"
           @click="runMove(nextMoveData.move)"
         >
           {{ nextMoveData.move }}

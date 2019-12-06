@@ -131,8 +131,62 @@ export class CRound implements IRound {
     this.remoteness = remoteness;
   }
 
-  setNextMoveDataArray(nextMoveDataArray: Array<TMoveData>): void {
-    this.nextMoveDataArray = nextMoveDataArray;
+  setNextMoveDataArray(
+    rawNextMoveDataArray: Array<{
+      deltaRemoteness: number;
+      move: string;
+      moveValue: string;
+      position: string;
+      positionValue: string;
+      remoteness: number;
+    }>
+  ): void {
+    if (rawNextMoveDataArray.length != 0) {
+      this.nextMoveDataArray.push({
+        deltaRemoteness: rawNextMoveDataArray[0].deltaRemoteness,
+        move: rawNextMoveDataArray[0].move,
+        moveValue: rawNextMoveDataArray[0].moveValue,
+        position: rawNextMoveDataArray[0].position,
+        positionValue: rawNextMoveDataArray[0].positionValue,
+        remoteness: rawNextMoveDataArray[0].remoteness,
+        moveValueOpacity: 1
+      });
+    }
+
+    for (let i: number = 1; i < rawNextMoveDataArray.length; i++) {
+      this.nextMoveDataArray.push({
+        deltaRemoteness: rawNextMoveDataArray[i].deltaRemoteness,
+        move: rawNextMoveDataArray[i].move,
+        moveValue: rawNextMoveDataArray[i].moveValue,
+        position: rawNextMoveDataArray[i].position,
+        positionValue: rawNextMoveDataArray[i].positionValue,
+        remoteness: rawNextMoveDataArray[i].remoteness,
+        moveValueOpacity: 1
+      });
+
+      if (
+        this.nextMoveDataArray[i].moveValue !=
+        this.nextMoveDataArray[i - 1].moveValue
+      ) {
+        this.nextMoveDataArray[i].moveValueOpacity = 1;
+        continue;
+      }
+      if (this.nextMoveDataArray[i - 1].moveValueOpacity === 0.5) {
+        this.nextMoveDataArray[i].moveValueOpacity = 0.5;
+        continue;
+      }
+      if (
+        rawNextMoveDataArray[i].deltaRemoteness !=
+        rawNextMoveDataArray[i - 1].deltaRemoteness
+      ) {
+        this.nextMoveDataArray[i].moveValueOpacity =
+          this.nextMoveDataArray[i - 1].moveValueOpacity - 0.25;
+      } else {
+        this.nextMoveDataArray[i].moveValueOpacity = this.nextMoveDataArray[
+          i - 1
+        ].moveValueOpacity;
+      }
+    }
   }
 
   setNextMoveDataDictionary(nextMoveDataArray: Array<TMoveData>): void {

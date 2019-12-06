@@ -5,6 +5,7 @@ export interface TRawPositionData {
     positionValue: string;
     remoteness: number;
     moves: Array<{
+      deltaRemoteness: number;
       move: string;
       moveValue: string;
       position: string;

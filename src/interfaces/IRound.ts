@@ -24,6 +24,15 @@ export interface IRound {
   setPosition(position: string): void;
   setPositionValue(positionValue: string): void;
   setRemoteness(remoteness: number): void;
-  setNextMoveDataArray(nextMoveDataArray: Array<TMoveData>): void;
+  setNextMoveDataArray(
+    rawNextMoveDataArray: Array<{
+      deltaRemoteness: number;
+      move: string;
+      moveValue: string;
+      position: string;
+      positionValue: string;
+      remoteness: number;
+    }>
+  ): void;
   setNextMoveDataDictionary(nextMoveDataDictionary: Array<TMoveData>): void;
 }

@@ -165,7 +165,7 @@ export class CGame implements IGame {
         this.round.setPositionValue(rawData.response.positionValue);
         this.round.setRemoteness(rawData.response.remoteness);
         this.round.setNextMoveDataArray(rawData.response.moves);
-        this.round.setNextMoveDataDictionary(rawData.response.moves);
+        this.round.setNextMoveDataDictionary(this.round.getNextMoveDataArray());
       }
     } catch (errorMessage) {
       console.error(errorMessage);
