@@ -2,7 +2,9 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { TMoveData } from "@/types/internal/TMoveData";
 import { CApp } from "@/classes/CApp";
-import { CVvh } from "./classes/CVvh";
+import { CGame } from "@/classes/CGame";
+import { COptions } from "@/classes/COptions";
+import { CVvh } from "@/classes/CVvh";
 
 Vue.use(Vuex);
 
@@ -194,6 +196,9 @@ export default new Vuex.Store({
     language(state, language: string): void {
       state.app.setLanguage(language);
     },
+    game(state, game: CGame): void {
+      state.app.setGame(game);
+    },
 
     // CGame.ts
     gameId(state, gameId: string): void {
@@ -210,6 +215,9 @@ export default new Vuex.Store({
     },
     turn1Name(state, turn1Name: string): void {
       state.app.getGame().setTurn1Name(turn1Name);
+    },
+    options(state, options: COptions): void {
+      state.app.getGame().setOptions(options);
     },
     undoMove(state): void {
       state.app.getGame().undoMove();
@@ -373,17 +381,17 @@ export default new Vuex.Store({
     },
 
     // CGame.ts
-    async startNewGame({ state, commit }): Promise<boolean> {
+    async initGame({ state, commit }, gameId: string): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
-      success = await state.app.getGame().startNewGame();
+      success = await state.app.getGame().initGame(gameId);
       commit("loadingStatus", false);
       return success;
     },
-    async initGame({ state, commit }): Promise<boolean> {
+    async startNewGame({ state, commit }, variantId: string): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
-      success = await state.app.getGame().initGame();
+      success = await state.app.getGame().startNewGame(variantId);
       commit("loadingStatus", false);
       return success;
     },

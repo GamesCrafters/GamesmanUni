@@ -30,6 +30,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { TVariantData } from "@/types/internal/TVariantData";
+import { CGame } from "../classes/CGame";
 
 @Component
 export default class GameVariants extends Vue {
@@ -73,9 +74,13 @@ export default class GameVariants extends Vue {
     return logos("./LApp.png");
   }
 
-  created(): void {
-    this.$store.commit("gameId", this.$route.params.gameId);
-    this.$store.dispatch("initGame");
+  async created(): Promise<void> {
+    if (this.$store.getters.gameId != this.$route.params.gameId) {
+      const oldGame: CGame = this.$store.getters.game;
+      this.$store.commit("game", new CGame());
+      this.$store.commit("options", oldGame.getOptions());
+    }
+    await this.$store.dispatch("initGame", this.$route.params.gameId);
   }
 }
 </script>

@@ -20,9 +20,10 @@ export interface IGame {
   setCurrentVariantData(variantId: string): void;
   setTurn0Name(turn0Name: string): void;
   setTurn1Name(turn1Name: string): void;
+  setOptions(options: COptions): void;
 
-  startNewGame(): Promise<boolean>;
-  initGame(id: string): Promise<boolean>;
+  initGame(gameId: string): Promise<boolean>;
+  startNewGame(variantId: string): Promise<boolean>;
   runMove(): Promise<boolean>;
   undoMove(): void;
   redoMove(): void;

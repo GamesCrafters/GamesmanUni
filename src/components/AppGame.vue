@@ -125,12 +125,10 @@ export default class AppGame extends Vue {
     this.timer.add(1, "s");
   }
 
-  created() {
+  async created(): Promise<void> {
     this.initInterval();
-    this.$store.commit("gameId", this.$route.params.gameId);
-    this.$store.commit("currentVariantData", this.$route.params.variantId);
-    this.$store.dispatch("initGame");
-    this.$store.dispatch("startNewGame");
+    await this.$store.dispatch("initGame", this.$route.params.gameId);
+    await this.$store.dispatch("startNewGame", this.$route.params.variantId);
   }
 
   get isInvalidUndo(): boolean {
@@ -143,7 +141,7 @@ export default class AppGame extends Vue {
 
   restarted(): void {
     this.initInterval();
-    this.$store.dispatch("startNewGame");
+    this.$store.dispatch("startNewGame", this.$route.params.variantId);
   }
 
   get isInvalidRedo(): boolean {

@@ -109,6 +109,10 @@ export class CGame implements IGame {
     this.turnNameDictionary.set(1, turn1Name);
   }
 
+  setOptions(options: COptions): void {
+    this.options = options;
+  }
+
   private async loadDetailedGameData(): Promise<boolean> {
     let success: boolean = true;
     if (!this.currentVariantData.id) {
@@ -171,14 +175,16 @@ export class CGame implements IGame {
     return success;
   }
 
-  async initGame(): Promise<boolean> {
+  async initGame(gameId: string): Promise<boolean> {
     let success: boolean = true;
+    this.id = gameId;
     success = await this.loadDetailedGameData();
     return success;
   }
 
-  async startNewGame(): Promise<boolean> {
+  async startNewGame(variantId: string): Promise<boolean> {
     let success: boolean = true;
+    this.setCurrentVariantData(variantId);
     this.round = new CRound();
     this.round.setVariantId(this.currentVariantData.id);
     this.round.setVariantDescription(this.currentVariantData.description);

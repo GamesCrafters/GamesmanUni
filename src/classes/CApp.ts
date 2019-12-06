@@ -14,7 +14,7 @@ export class CApp implements IApp {
   private readonly serverDataVersion: string;
   private readonly serverDataSource: string;
   private readonly games: CGames;
-  private readonly game: CGame;
+  private game: CGame;
   private readonly updates: CGitHub;
 
   constructor() {
@@ -100,5 +100,9 @@ export class CApp implements IApp {
 
   setLanguage(language: string): void {
     this.language = language;
+  }
+
+  setGame(game: CGame): void {
+    this.game = game;
   }
 }

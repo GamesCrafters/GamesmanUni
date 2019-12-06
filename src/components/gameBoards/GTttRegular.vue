@@ -54,6 +54,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { TMoveData } from "@/types/internal/TMoveData";
+import { COptions } from "../../classes/COptions";
 
 @Component
 export default class GTttRegular extends Vue {
@@ -64,6 +65,10 @@ export default class GTttRegular extends Vue {
 
   get loadingStatus(): boolean {
     return this.$store.getters.loadingStatus;
+  }
+
+  get options(): COptions {
+    return this.$store.getters.options;
   }
 
   get roundNumber(): number {
@@ -126,7 +131,8 @@ export default class GTttRegular extends Vue {
   }
 
   @Watch("loadingStatus")
-  onAsyncRoundChange(): void {
+  async onAsyncRoundChange(): Promise<void> {
+    await new Promise((resolve, reject) => setTimeout(resolve, 500));
     !this.loadingStatus && this.updateBoardData();
   }
 
