@@ -270,6 +270,9 @@ export default class GSimRegular extends Vue {
   }
 
   runMove(id: string) {
+    if(this.corresponding[id].idOfLine == "red" || this.corresponding[id].idOfLine == "blue"){
+      return;
+    }
     this.$store.dispatch("runMove", id);
   }
   @Watch("loadingStatus")
