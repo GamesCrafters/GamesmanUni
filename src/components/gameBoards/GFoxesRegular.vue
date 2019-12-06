@@ -7,6 +7,7 @@
         <g id="board">
           <!-- <pattern id="board-bar">
           </pattern> -->
+
           <!-- below is line from 1, 1 to 81, 1 -->
           <path id="board-bar" d="M1,1 L81,1" />
           <use xlink:href="#board-bar" transform="translate(0 10)" />
@@ -26,50 +27,58 @@
           <use xlink:href="#board-bar" transform="translate(62) rotate(90)" />
           <use xlink:href="#board-bar" transform="translate(72) rotate(90)" />
           <use xlink:href="#board-bar" transform="translate(82) rotate(90)" />
-          <!-- <g v-for="index in 8" :key="index">
-            <use xlink:href="#board-bar" transform="translate(0 10)" />
-            <use xlink:href="#board-bar" transform="translate(10) rotate(90)" />
-          </g> -->
         </g>
-        <g id="turn-0-token">
-          <path id="cross-bar" d="M3,3 L19,19" />
-          <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
-        </g>
-        <circle id="turn-1-token" cx="11" cy="11" r="8" />
-        <circle id="hint" cx="11" cy="11" r="1" />
+        <circle id="turn-0-token" cx="5" cy="5" r="2" />
+        <circle id="turn-1-token" cx="5" cy="5" r="2" />
+        <circle id="hint" cx="1" cy="1" r="2.5" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
 
       <use xlink:href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
-        <!-- use variables here -->
+        <use v-if="cell === 1" />
         <use
-          v-if="boardData[cell].token === 'x'"
+          v-else-if="boardData[cell].token === 'G' && (cell - 2) % 8 < 4"
           xlink:href="#turn-0-token"
-          :x="((cell - 1) % 3) * 22"
-          :y="Math.floor((cell - 1) / 3) * 22"
+          :x="(((cell - 2) * 2) % 8) * 10 + 11"
+          :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
-        <!-- pieces are either player 0 token, p1, or hint (clickable) -->
         <use
-          v-else-if="boardData[cell].token === 'o'"
-          xlink:href="#turn-1-token"
-          :x="((cell - 1) % 3) * 22"
-          :y="Math.floor((cell - 1) / 3) * 22"
+          v-else-if="boardData[cell].token === 'G' && (cell - 2) % 8 > 3"
+          xlink:href="#turn-0-token"
+          :x="(((cell - 2) * 2) % 8) * 10 + 1"
+          :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
-        <g v-else>
+        <use
+          v-else-if="boardData[cell].token === 'F' && (cell - 2) % 8 < 4"
+          xlink:href="#turn-1-token"
+          :x="(((cell - 2) * 2) % 8) * 10 + 11"
+          :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
+        />
+        <use
+          v-else-if="boardData[cell].token === 'F' && (cell - 2) % 8 > 3"
+          xlink:href="#turn-1-token"
+          :x="(((cell - 2) * 2) % 8) * 10 + 1"
+          :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
+        />
+
+        <g>
+          <!-- for hints: fix coords to alternate -->
           <use
             v-if="boardData[cell].hint"
             :class="'hint-' + boardData[cell].hint"
             xlink:href="#hint"
-            :x="((cell - 1) % 3) * 22"
-            :y="Math.floor((cell - 1) / 3) * 22"
+            :x="(((cell - 2) * 2) % 8) * 10 + 11"
+            :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
           />
+          <!-- change runMove to have correctly formatted argument
+          not sure if cell.toString() is the correct arg for backend to process -->
           <use
             :class="remoteness && 'move-pointer'"
             @click="remoteness && runMove(cell.toString())"
             xlink:href="#move"
-            :x="((cell - 1) % 3) * 22"
-            :y="Math.floor((cell - 1) / 3) * 22"
+            :x="(((cell - 2) * 2) % 8) * 10 + 1"
+            :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
           />
         </g>
       </g>
@@ -82,10 +91,10 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
 export default class GFoxesRegular extends Vue {
-  cellCount: number = 9;
+  cellCount: number = 33;
+
   boardData: {
     [cell: number]: { token: string; hint: string };
-    // fixme
   } = this.initBoardData();
 
   get loadingStatus() {
@@ -150,6 +159,7 @@ export default class GFoxesRegular extends Vue {
     this.updateBoardData();
   }
 }
+document.write(nextMoveDataArray());
 </script>
 
 <style lang="scss" scoped>
