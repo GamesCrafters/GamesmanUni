@@ -159,7 +159,7 @@ export default class GFoxesRegular extends Vue {
     this.updateBoardData();
   }
 }
-document.write(nextMoveDataArray());
+// document.write(nextMoveDataArray());
 </script>
 
 <style lang="scss" scoped>
