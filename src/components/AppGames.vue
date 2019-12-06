@@ -16,6 +16,9 @@
           height="150em"
         />
         <h3 class="app-games-game-name">{{ gameData.name }}</h3>
+        <h4 class="app-games-game-data-status">
+          Data Status: {{ gameData.status }}
+        </h4>
       </router-link>
     </div>
   </div>

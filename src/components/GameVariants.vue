@@ -22,6 +22,9 @@
         <h3 class="app-game-variants-variant-description">
           {{ variantData.description }}
         </h3>
+        <h4 class="app-game-variants-variant-data-status">
+          Data Status: {{ variantData.status }}
+        </h4>
       </router-link>
     </div>
   </div>
