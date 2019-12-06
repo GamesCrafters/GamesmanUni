@@ -68,6 +68,6 @@ export default class GDefault extends Vue {
 }
 
 #app-game-board-default-moves-buttons {
-  padding: 0 20%;
+  padding: 0.5em 20%;
 }
 </style>

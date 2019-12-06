@@ -52,6 +52,7 @@ import { CGame } from "@/classes/CGame";
 import { COptions } from "@/classes/COptions";
 import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
+
 @Component({
   components: {
     ExternalMarkdown,
@@ -74,6 +75,7 @@ export default class GameOptions extends Vue {
   get options(): COptions {
     return this.$store.getters.options;
   }
+
   updateOptions(): void {
     this.$store.commit(
       "gameInstructionVisibility",
@@ -103,11 +105,12 @@ export default class GameOptions extends Vue {
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  padding: 0.25em;
   width: 15em;
-}
-.app-game-option {
-  input {
-    margin-right: 1em;
+  .app-game-option {
+    input {
+      margin-right: 1em;
+    }
   }
 }
 </style>
