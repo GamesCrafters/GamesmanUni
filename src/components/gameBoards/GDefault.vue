@@ -12,7 +12,11 @@
           v-for="nextMoveData in nextMoveDataArray"
           :key="nextMoveData.move"
           :class="getHintClass(nextMoveData.moveValue)"
-          :style="{ opacity: nextMoveData.moveValueOpacity }"
+          :style="{
+            opacity: deltaRemotenessVisibility
+              ? nextMoveData.moveValueOpacity
+              : 1
+          }"
           @click="runMove(nextMoveData.move)"
         >
           {{ nextMoveData.move }}
@@ -44,6 +48,10 @@ export default class GDefault extends Vue {
 
   get nextMovesVisibility(): boolean {
     return this.$store.getters.nextMovesVisibility;
+  }
+
+  get deltaRemotenessVisibility(): boolean {
+    return this.$store.getters.deltaRemotenessVisibility;
   }
 
   getHintClass(moveValue: string): string {
