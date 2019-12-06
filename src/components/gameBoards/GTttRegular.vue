@@ -34,6 +34,11 @@
           <use
             v-if="nextMovesVisibility && boardData[cell].hint"
             :class="getHintClass(boardData[cell].hint)"
+            :style="{
+              opacity: deltaRemotenessVisibility
+                ? boardData[cell].hintOpacity
+                : 1
+            }"
             xlink:href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
@@ -60,7 +65,7 @@ import { COptions } from "../../classes/COptions";
 export default class GTttRegular extends Vue {
   cellCount: number = 9;
   boardData: {
-    [cell: number]: { token: string; hint: string };
+    [cell: number]: { token: string; hint: string; hintOpacity: number };
   } = this.initBoardData();
 
   get loadingStatus(): boolean {
@@ -91,6 +96,10 @@ export default class GTttRegular extends Vue {
     return this.$store.getters.nextMovesVisibility;
   }
 
+  get deltaRemotenessVisibility(): boolean {
+    return this.$store.getters.deltaRemotenessVisibility;
+  }
+
   getHintClass(hint: string): string {
     if (this.$store.getters.hintVisibility) {
       return "hint-" + hint;
@@ -98,10 +107,14 @@ export default class GTttRegular extends Vue {
     return "";
   }
 
-  initBoardData(): { [cell: number]: { token: string; hint: string } } {
-    let boardData: { [cell: number]: { token: string; hint: string } } = {};
+  initBoardData(): {
+    [cell: number]: { token: string; hint: string; hintOpacity: number };
+  } {
+    let boardData: {
+      [cell: number]: { token: string; hint: string; hintOpacity: number };
+    } = {};
     for (let cell: number = 1; cell <= this.cellCount; cell++) {
-      boardData[cell] = { token: "", hint: "" };
+      boardData[cell] = { token: "", hint: "", hintOpacity: 1 };
     }
     return boardData;
   }
@@ -114,6 +127,8 @@ export default class GTttRegular extends Vue {
       }
       for (let nextMoveData of this.nextMoveDataArray) {
         this.boardData[+nextMoveData.move].hint = nextMoveData.moveValue;
+        this.boardData[+nextMoveData.move].hintOpacity =
+          nextMoveData.moveValueOpacity;
       }
     }
   }
