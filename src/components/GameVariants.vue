@@ -30,17 +30,21 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { TVariantData } from "@/types/internal/TVariantData";
+
 @Component
 export default class GameVariants extends Vue {
   get gameId(): string {
     return this.$store.getters.gameId;
   }
+
   get gameName(): string {
     return this.$store.getters.gameName;
   }
+
   get variantDataArray(): Array<TVariantData> {
     return this.$store.getters.variantDataArray;
   }
+
   getLogoSource(variantData: TVariantData): any {
     const logos = require.context("@/assets/", false);
     try {
@@ -68,6 +72,7 @@ export default class GameVariants extends Vue {
     }
     return logos("./LApp.png");
   }
+
   created(): void {
     this.$store.commit("gameId", this.$route.params.gameId);
     this.$store.dispatch("initGame");

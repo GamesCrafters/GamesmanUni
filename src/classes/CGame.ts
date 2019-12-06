@@ -60,7 +60,7 @@ export class CGame implements IGame {
     return this.variantDataDictionary;
   }
 
-  getVariantData(): TVariantData {
+  getCurrentVariantData(): TVariantData {
     return this.currentVariantData;
   }
 
@@ -92,7 +92,7 @@ export class CGame implements IGame {
     this.name = name;
   }
 
-  setVariantData(variantId: string): void {
+  setCurrentVariantData(variantId: string): void {
     this.currentVariantData = this.variantDataDictionary.get(variantId) || {
       id: "",
       description: "",
@@ -111,35 +111,37 @@ export class CGame implements IGame {
 
   private async loadDetailedGameData(): Promise<boolean> {
     let success: boolean = true;
-    const detailedGameDataSource: string = `${this.serverDataSource}/games/${this.id}`;
-    try {
-      const httpResponse: AxiosResponse = await axios.get(
-        detailedGameDataSource
-      );
-      const rawData: TRawGameData | TRawErrorData = httpResponse.data;
-      if (rawData.status === "ok") {
-        this.name = rawData.response.name;
-        this.variantDataArray = rawData.response.variants.map(
-          rawVariantData => ({
-            id: rawVariantData.variantId,
-            description: rawVariantData.description,
-            status: rawVariantData.status,
-            startPosition: rawVariantData.startPosition
-          })
+    if (!this.currentVariantData.id) {
+      const detailedGameDataSource: string = `${this.serverDataSource}/games/${this.id}`;
+      try {
+        const httpResponse: AxiosResponse = await axios.get(
+          detailedGameDataSource
         );
-        this.variantDataDictionary = new Map<string, TVariantData>();
-        for (let i: number = 0; i < this.variantDataArray.length; i++) {
-          this.variantDataDictionary.set(
-            this.variantDataArray[i].id,
-            this.variantDataArray[i]
+        const rawData: TRawGameData | TRawErrorData = httpResponse.data;
+        if (rawData.status === "ok") {
+          this.name = rawData.response.name;
+          this.variantDataArray = rawData.response.variants.map(
+            rawVariantData => ({
+              id: rawVariantData.variantId,
+              description: rawVariantData.description,
+              status: rawVariantData.status,
+              startPosition: rawVariantData.startPosition
+            })
           );
+          this.variantDataDictionary = new Map<string, TVariantData>();
+          for (let i: number = 0; i < this.variantDataArray.length; i++) {
+            this.variantDataDictionary.set(
+              this.variantDataArray[i].id,
+              this.variantDataArray[i]
+            );
+          }
+          this.round.setVariantId(this.variantDataArray[0].id);
         }
-        this.round.setVariantId(this.variantDataArray[0].id);
+      } catch (errorMessage) {
+        console.error(errorMessage);
+        console.error("Error: Failed to load detailed game data from server.");
+        success = false;
       }
-    } catch (errorMessage) {
-      console.error(errorMessage);
-      console.error("Error: Failed to load detailed game data from server.");
-      success = false;
     }
     return success;
   }
@@ -169,11 +171,14 @@ export class CGame implements IGame {
     return success;
   }
 
+  async initGame(): Promise<boolean> {
+    let success: boolean = true;
+    success = await this.loadDetailedGameData();
+    return success;
+  }
+
   async startNewGame(): Promise<boolean> {
     let success: boolean = true;
-    this.currentVariantData = this.variantDataDictionary.get(
-      this.round.getVariantId()
-    ) as TVariantData;
     this.round = new CRound();
     this.round.setVariantId(this.currentVariantData.id);
     this.round.setVariantDescription(this.currentVariantData.description);
@@ -185,22 +190,13 @@ export class CGame implements IGame {
     return success;
   }
 
-  async initGame(): Promise<boolean> {
-    let success: boolean = true;
-    success = await this.loadDetailedGameData();
-    success = await this.startNewGame();
-    return success;
-  }
-
   async runMove(): Promise<boolean> {
     let success = true;
     this.round.setMoveValue(this.round.getMove());
     this.history.updateHistory(this.round, "last");
-    const oldRound = this.round;
-    this.round = new CRound();
+    const oldRound: CRound = this.round;
+    this.round = new CRound(oldRound);
     this.round.setRoundNumber(oldRound.getRoundNumber() + 1);
-    this.round.setVariantId(oldRound.getVariantId());
-    this.round.setVariantDescription(oldRound.getVariantDescription());
     this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
     this.round.setTurnName(
       this.turnNameDictionary.get(this.round.getTurnId()) as string

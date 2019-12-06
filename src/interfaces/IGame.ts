@@ -8,7 +8,7 @@ export interface IGame {
   getName(): string;
   getVariantDataArray(): Array<TVariantData>;
   getVariantDataDictionary(): Map<string, TVariantData>;
-  getVariantData(): TVariantData;
+  getCurrentVariantData(): TVariantData;
   getTurnNameDictionary(): Map<number, string>;
   getVvhSelectorId(): string;
   getOptions(): COptions;
@@ -17,7 +17,7 @@ export interface IGame {
 
   setId(id: string): void;
   setName(name: string): void;
-  setVariantData(variantId: string): void;
+  setCurrentVariantData(variantId: string): void;
   setTurn0Name(turn0Name: string): void;
   setTurn1Name(turn1Name: string): void;
 

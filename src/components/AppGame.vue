@@ -71,11 +71,12 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { CGame } from "@/classes/CGame";
+import { COptions } from "@/classes/COptions";
 import GameOptions from "@/components/GameOptions.vue";
 import GameInstruction from "@/components/GameInstruction.vue";
 import GameBoard from "@/components/GameBoard.vue";
 import GameVvh from "@/components/GameVvh.vue";
-import { COptions } from "../classes/COptions";
+
 @Component({
   components: {
     GameOptions,
@@ -88,58 +89,74 @@ export default class AppGame extends Vue {
   interval = setInterval(() => this.updateInterval(), 1000);
   dateTime = moment();
   timer = moment().startOf("day");
+
   get date() {
     return this.dateTime.format("LL");
   }
+
   get time() {
     return this.dateTime.format("LTS");
   }
+
   get game(): CGame {
     return this.$store.getters.game;
   }
+
   get options(): COptions {
     return this.$store.getters.options;
   }
+
   get vvhVisibility(): boolean {
     return this.$store.getters.vvhVisibility;
   }
+
   metaInfo() {
     return { title: this.game.getName() };
   }
+
   initInterval(): void {
     clearInterval(this.interval);
     this.timer = moment().startOf("day");
     this.interval = setInterval(() => this.updateInterval(), 1000);
   }
+
   updateInterval(): void {
     this.dateTime = moment();
     this.timer.add(1, "s");
   }
+
   created() {
     this.initInterval();
     this.$store.commit("gameId", this.$route.params.gameId);
-    this.$store.commit("variantId", this.$route.params.variantId);
+    this.$store.commit("currentVariantData", this.$route.params.variantId);
     this.$store.dispatch("initGame");
+    this.$store.dispatch("startNewGame");
   }
+
   get isInvalidUndo(): boolean {
     return this.game.getHistory().getCurrentRoundNumber() === 1;
   }
+
   undid(): void {
     this.$store.commit("undoMove");
   }
+
   restarted(): void {
     this.initInterval();
     this.$store.dispatch("startNewGame");
   }
+
   get isInvalidRedo(): boolean {
     return (
       this.game.getHistory().getCurrentRoundNumber() >=
       this.game.getHistory().getRoundArray().length
     );
   }
+
   redid(): void {
     this.$store.commit("redoMove");
   }
+
   @Watch("vvhVisibility")
   async onShowVvh(): Promise<void> {
     if (this.vvhVisibility) {
@@ -165,32 +182,39 @@ export default class AppGame extends Vue {
   align-items: $alignItems;
   align-content: $alignContent;
 }
+
 @mixin flexContent($flexGrow: 0, $flexShrink: 1, $flexBasis: auto) {
   flex-grow: $flexGrow;
   flex-shrink: $flexShrink;
   flex-basis: $flexBasis;
 }
+
 #app-game {
   @include flexItem(column, nowrap, flex-start, stretch, stretch);
 }
+
 #app-game-header {
   @include flexItem(row, nowrap, center, center, stretch);
 }
+
 #app-game-title {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
 }
+
 #app-game-body {
   @include flexItem(row, wrap, space-between, flex-end, stretch);
   > * {
     @include flexContent(1, 1, 0);
   }
 }
+
 #app-game-body-main {
   @include flexItem(column, nowrap, flex-start, space-between, stretch);
   margin: 0.25em;
   padding: 0.25em;
 }
+
 #app-game-body-main-clock {
   @include flexItem(row, nowrap, space-around, stretch, stretch);
   > * {
@@ -201,6 +225,7 @@ export default class AppGame extends Vue {
     padding: 0.25em;
   }
 }
+
 #app-game-body-main-function {
   @include flexItem(row, nowrap, space-around, stretch, stretch);
   border: 0.04em solid var(--neutralColor);
@@ -213,6 +238,7 @@ export default class AppGame extends Vue {
     padding: 1.5em 1em;
   }
 }
+
 #app-game-body-main-stats {
   @include flexItem(row, wrap, space-between, stretch, stretch);
   margin: 0;
@@ -225,6 +251,7 @@ export default class AppGame extends Vue {
     padding: 0.25em;
   }
 }
+
 #app-game-body-main-prediction {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
@@ -236,12 +263,14 @@ export default class AppGame extends Vue {
     padding-right: 0.25em;
   }
 }
+
 #app-game-body-main-board {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
   padding: 0.25em;
   margin: 0;
 }
+
 #app-game-body-vvh {
   margin: 0.25em;
   padding: 0.25em;

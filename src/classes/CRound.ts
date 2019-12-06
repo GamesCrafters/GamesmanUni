@@ -15,19 +15,26 @@ export class CRound implements IRound {
   private nextMoveDataArray: Array<TMoveData>;
   private nextMoveDataDictionary: Map<string, TMoveData>;
 
-  constructor() {
-    this.roundNumber = 1;
-    this.variantId = "";
-    this.variantDescription = "";
-    this.turnId = 0;
-    this.turnName = "";
-    this.move = "";
-    this.moveValue = "";
-    this.position = "";
-    this.positionValue = "";
-    this.remoteness = require("@/datas/defaults.json").maximumRemoteness;
-    this.nextMoveDataArray = new Array<TMoveData>();
-    this.nextMoveDataDictionary = new Map<string, TMoveData>();
+  constructor(previousRound?: CRound) {
+    this.roundNumber = (previousRound && previousRound.roundNumber) || 1;
+    this.variantId = (previousRound && previousRound.variantId) || "";
+    this.variantDescription =
+      (previousRound && previousRound.variantDescription) || "";
+    this.turnId = (previousRound && previousRound.turnId) || 0;
+    this.turnName = (previousRound && previousRound.turnName) || "";
+    this.move = (previousRound && previousRound.move) || "";
+    this.moveValue = (previousRound && previousRound.moveValue) || "";
+    this.position = (previousRound && previousRound.position) || "";
+    this.positionValue = (previousRound && previousRound.positionValue) || "";
+    this.remoteness =
+      (previousRound && previousRound.remoteness) ||
+      require("@/datas/defaults.json").maximumRemoteness;
+    this.nextMoveDataArray =
+      (previousRound && previousRound.nextMoveDataArray) ||
+      new Array<TMoveData>();
+    this.nextMoveDataDictionary =
+      (previousRound && previousRound.nextMoveDataDictionary) ||
+      new Map<string, TMoveData>();
   }
 
   getRoundNumber(): number {

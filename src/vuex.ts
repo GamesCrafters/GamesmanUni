@@ -35,7 +35,7 @@ export default new Vuex.Store({
     variantDataArray: state => state.app.getGame().getVariantDataArray(),
     variantDataDictionary: state =>
       state.app.getGame().getVariantDataDictionary(),
-    variantData: state => state.app.getGame().getVariantData(),
+    currentVariantData: state => state.app.getGame().getCurrentVariantData(),
     turnNameDictionary: state => state.app.getGame().getTurnNameDictionary(),
     vvhSelectorId: state => state.app.getGame().getVvhSelectorId(),
     options: state => state.app.getGame().getOptions(),
@@ -202,8 +202,8 @@ export default new Vuex.Store({
     gameName(state, gameName: string): void {
       state.app.getGame().setName(gameName);
     },
-    variantData(state, variantId: string): void {
-      state.app.getGame().setVariantData(variantId);
+    currentVariantData(state, variantId: string): void {
+      state.app.getGame().setCurrentVariantData(variantId);
     },
     turn0Name(state, turn0Name: string): void {
       state.app.getGame().setTurn0Name(turn0Name);

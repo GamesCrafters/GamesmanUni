@@ -25,11 +25,13 @@
 import { Component, Vue } from "vue-property-decorator";
 import { TGameData } from "@/types/internal/TGameData";
 import { CGames } from "@/classes/CGames";
+
 @Component
 export default class AppGames extends Vue {
   get gameDataArray(): Array<TGameData> {
     return this.$store.getters.gameDataArray;
   }
+
   getLogoSource(gameData: TGameData): any {
     const logos = require.context("@/assets/", false);
     try {
@@ -47,6 +49,7 @@ export default class AppGames extends Vue {
     }
     return logos("./LApp.png");
   }
+
   created(): void {
     this.$store.dispatch("initGames");
   }
@@ -60,12 +63,14 @@ export default class AppGames extends Vue {
   justify-content: center;
   padding: 0 20%;
 }
+
 .app-games-game {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
   margin: 0.25em;
   padding: 0.25em;
 }
+
 .app-games-game-logo,
 .app-games-game-name {
   display: block;
