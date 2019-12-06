@@ -164,7 +164,6 @@ export default class GSimRegular extends Vue {
       color: "simpleLineB",
       idOfLine: "46"
     };
-
     return co;
   }
   get loadingStatus() {
