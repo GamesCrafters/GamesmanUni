@@ -1,6 +1,6 @@
 export interface IGitHub {
   getLatestCommitCount(): number;
-  getLatestCommitVersionArray(): Array<string>;
+  getLatestCommitDateArray(): Array<string>;
   getLatestCommitMessageArray(): Array<string>;
   getLatestCommitLinkArray(): Array<string>;
 }

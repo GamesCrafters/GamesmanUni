@@ -2,90 +2,26 @@
   <div id="app-game">
     <div id="app-game-header">
       <div id="app-game-options">
-        <button id="app-game-options-button" @click="showGameOptions = true">
-          ⚙️
-        </button>
-        <PopupWindow
-          id="app-game-options-popup"
-          v-if="showGameOptions"
-          @close="showGameOptions = false"
-        >
-          <div slot="content">
-            <h2>
-              {{ game.getName() }}
-              <br />
-              ({{ game.getRound().getVariantDescription() }})
-            </h2>
-            <h3>Game Options</h3>
-            <h4>Show/Hide...</h4>
-            <div id="app-game-option-clock" class="app-game-option">
-              <input type="checkbox" v-model="showClock" />
-              <label for="checkbox">Clock</label>
-            </div>
-            <div id="app-game-option-vvh" class="app-game-option">
-              <input type="checkbox" v-model="showVvh" />
-              <label for="checkbox">Visual Value History</label>
-            </div>
-          </div>
-        </PopupWindow>
+        <GameOptions></GameOptions>
       </div>
       <h2 id="app-game-title">
         {{ game.getName() }}
         <br />
-        ({{ game.getRound().getVariantDescription() }})
+        <router-link
+          :to="{ name: 'variants', params: { gameId: game.getId() } }"
+          >({{ game.getRound().getVariantDescription() }})</router-link
+        >
       </h2>
       <div id="app-game-instruction">
-        <button
-          id="app-game-instruction-button"
-          @click="showGameInstruction = true"
-        >
-          𝓲
-        </button>
-        <PopupWindow
-          id="app-game-instruction-popup"
-          v-if="showGameInstruction"
-          @close="showGameInstruction = false"
-        >
-          <div slot="content">
-            <ExternalMarkdown
-              class="c-markdown"
-              :relativePath="`gameInstructions/${game.getId()}.md`"
-            ></ExternalMarkdown>
-          </div>
-        </PopupWindow>
+        <GameInstruction></GameInstruction>
       </div>
     </div>
     <div id="app-game-body">
       <div id="app-game-body-main">
-        <div id="app-game-body-main-stats">
-          <div id="app-game-body-main-stats-column1">
-            <b id="app-game-data">
-              Move #{{ game.getRound().getRoundNumber() }}
-              <br />
-              Remoteness {{ game.getRound().getRemoteness() }}
-            </b>
-          </div>
-          <div v-if="showClock" id="app-game-body-main-stats-column2">
-            <div id="app-game-date">{{ date }}</div>
-            <div id="app-game-time">{{ time }}</div>
-            <div id="app-game-timer">{{ timer.format("HH:mm:ss") }}</div>
-          </div>
-          <div id="app-game-body-main-stats-column3">
-            <div id="app-game-prediction">
-              <b
-                id="app-game-prediction-turn-id"
-                :class="'c-turn-' + game.getRound().getTurnId()"
-              >
-                {{ game.getRound().getTurnName() }}
-              </b>
-              <br />should
-              <span
-                id="app-game-prediction-position-value"
-                :class="'c-' + game.getRound().getPositionValue()"
-                >{{ game.getRound().getPositionValue() }}</span
-              >.
-            </div>
-          </div>
+        <div v-if="options.getClockVisibility()" id="app-game-body-main-clock">
+          <div id="app-game-time">{{ time }}</div>
+          <div id="app-game-date">{{ date }}</div>
+          <div id="app-game-timer">{{ timer.format("HH:mm:ss") }}</div>
         </div>
         <div id="app-game-body-main-function">
           <button id="app-game-undo" @click="undid" :disabled="isInvalidUndo">
@@ -96,11 +32,35 @@
             Redo
           </button>
         </div>
+        <div id="app-game-body-main-stats">
+          <div id="app-game-round">
+            Move #{{ game.getRound().getRoundNumber() }}
+          </div>
+          <div v-if="options.getHintVisibility()" id="app-game-remoteness">
+            Remoteness {{ game.getRound().getRemoteness() }}
+          </div>
+        </div>
+        <div
+          v-if="options.getHintVisibility()"
+          id="app-game-body-main-prediction"
+        >
+          <b
+            id="app-game-prediction-turn-id"
+            :class="'c-turn-' + game.getRound().getTurnId()"
+            >{{ game.getRound().getTurnName() }}</b
+          >
+          should
+          <span
+            id="app-game-prediction-position-value"
+            :class="'c-' + game.getRound().getPositionValue()"
+            >{{ game.getRound().getPositionValue() }}</span
+          >.
+        </div>
         <div id="app-game-body-main-board">
           <GameBoard></GameBoard>
         </div>
       </div>
-      <div v-if="showVvh" id="app-game-body-vvh">
+      <div v-if="options.getVvhVisibility()" id="app-game-body-vvh">
         <GameVvh></GameVvh>
       </div>
     </div>
@@ -111,25 +71,21 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { CGame } from "@/classes/CGame";
-import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
+import { COptions } from "@/classes/COptions";
+import GameOptions from "@/components/GameOptions.vue";
+import GameInstruction from "@/components/GameInstruction.vue";
 import GameBoard from "@/components/GameBoard.vue";
 import GameVvh from "@/components/GameVvh.vue";
-import PopupWindow from "@/components/PopupWindow.vue";
 
 @Component({
   components: {
-    ExternalMarkdown,
+    GameOptions,
+    GameInstruction,
     GameBoard,
-    GameVvh,
-    PopupWindow
+    GameVvh
   }
 })
 export default class AppGame extends Vue {
-  showGameInstruction = false;
-  showGameOptions = false;
-  showClock = false;
-  showVvh = true;
-
   interval = setInterval(() => this.updateInterval(), 1000);
   dateTime = moment();
   timer = moment().startOf("day");
@@ -144,6 +100,14 @@ export default class AppGame extends Vue {
 
   get game(): CGame {
     return this.$store.getters.game;
+  }
+
+  get options(): COptions {
+    return this.$store.getters.options;
+  }
+
+  get vvhVisibility(): boolean {
+    return this.$store.getters.vvhVisibility;
   }
 
   metaInfo() {
@@ -161,11 +125,10 @@ export default class AppGame extends Vue {
     this.timer.add(1, "s");
   }
 
-  created() {
+  async created(): Promise<void> {
     this.initInterval();
-    this.$store.commit("gameId", this.$route.params.gameId);
-    this.$store.commit("variantId", this.$route.params.variantId);
-    this.$store.dispatch("initGame");
+    await this.$store.dispatch("initGame", this.$route.params.gameId);
+    await this.$store.dispatch("startNewGame", this.$route.params.variantId);
   }
 
   get isInvalidUndo(): boolean {
@@ -178,7 +141,7 @@ export default class AppGame extends Vue {
 
   restarted(): void {
     this.initInterval();
-    this.$store.dispatch("startNewGame");
+    this.$store.dispatch("startNewGame", this.$route.params.variantId);
   }
 
   get isInvalidRedo(): boolean {
@@ -192,9 +155,9 @@ export default class AppGame extends Vue {
     this.$store.commit("redoMove");
   }
 
-  @Watch("showVvh")
+  @Watch("vvhVisibility")
   async onShowVvh(): Promise<void> {
-    if (this.showVvh) {
+    if (this.vvhVisibility) {
       await new Promise((resolve, reject) => setTimeout(resolve, 500));
       this.$store.commit("drawVvh");
     }
@@ -238,7 +201,7 @@ export default class AppGame extends Vue {
 }
 
 #app-game-body {
-  @include flexItem(row, wrap, space-around, flex-start, stretch);
+  @include flexItem(row, wrap, space-between, flex-end, stretch);
   > * {
     @include flexContent(1, 1, 0);
   }
@@ -246,29 +209,19 @@ export default class AppGame extends Vue {
 
 #app-game-body-main {
   @include flexItem(column, nowrap, flex-start, space-between, stretch);
-  align-self: flex-end;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 
-#app-game-body-main-stats {
-  @include flexItem(row, wrap, space-between, stretch, stretch);
-  padding: 0 0.25em 0 0.25em;
-  margin: 0.25em 0.25em 0 0.25em;
+#app-game-body-main-clock {
+  @include flexItem(row, nowrap, space-around, stretch, stretch);
   > * {
     @include flexContent(1, 1, 0);
-    @include flexItem(column, nowrap, flex-end, stretch, stretch);
-    > * {
-      border: 0.04em solid var(--neutralColor);
-      border-radius: 0.25em;
-      padding: 0.25em;
-      margin: 0;
-    }
+    border: 0.04em solid var(--neutralColor);
+    border-radius: 0.25em;
+    margin: 0;
+    padding: 0.25em;
   }
-}
-
-#app-game-prediction-position-value {
-  border-radius: 100%;
-  padding-left: 0.25em;
-  padding-right: 0.25em;
 }
 
 #app-game-body-main-function {
@@ -276,11 +229,36 @@ export default class AppGame extends Vue {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
   padding: 0.25em;
-  margin: 0 0.5em;
+  margin: 0;
   > * {
     border-radius: 100%;
-    margin: 1em;
+    margin: 0.5em;
     padding: 1.5em 1em;
+  }
+}
+
+#app-game-body-main-stats {
+  @include flexItem(row, wrap, space-between, stretch, stretch);
+  margin: 0;
+  padding: 0;
+  > * {
+    @include flexContent(1, 1, 0);
+    border: 0.04em solid var(--neutralColor);
+    border-radius: 0.25em;
+    margin: 0;
+    padding: 0.25em;
+  }
+}
+
+#app-game-body-main-prediction {
+  border: 0.04em solid var(--neutralColor);
+  border-radius: 0.25em;
+  margin: 0;
+  padding: 0.25em;
+  #app-game-prediction-position-value {
+    border-radius: 100%;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
   }
 }
 
@@ -288,10 +266,11 @@ export default class AppGame extends Vue {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
   padding: 0.25em;
-  margin: 0 0.5em 0.5em 0.5em;
+  margin: 0;
 }
 
 #app-game-body-vvh {
-  margin: 0 0.25em 0.25em 0.25em;
+  margin: 0.25em;
+  padding: 0.25em;
 }
 </style>

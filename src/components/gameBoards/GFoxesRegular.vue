@@ -1,10 +1,13 @@
 <template>
   <div id="app-game-board-foxgee-regular">
     <!-- offset, dimensions -->
-    <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- defines pieces -->
         <g id="board">
+          <!-- <pattern id="board-bar">
+          </pattern> -->
+
           <!-- below is line from 1, 1 to 81, 1 -->
           <path id="board-bar" d="M1,1 L81,1" />
           <use xlink:href="#board-bar" transform="translate(0 10)" />

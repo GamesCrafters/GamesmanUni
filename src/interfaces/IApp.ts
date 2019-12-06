@@ -20,4 +20,5 @@ export interface IApp {
   setTheme(theme: string): void;
   setLayout(layout: string): void;
   setLanguage(language: string): void;
+  setGame(game: CGame): void;
 }

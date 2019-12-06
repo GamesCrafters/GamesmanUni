@@ -1,15 +1,26 @@
 <template>
-  <div id="app-game-board-ttt-regular">
-    <svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+  <div id="app-game-board-ten-regular">
+    <svg
+      width="20em"
+      height="20em"
+      viewBox="0 0 86 86"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <defs>
         <g id="board">
-          <path id="board-bar" d="M1,22 L65,22" />
-          <use xlink:href="#board-bar" transform="translate(0 22)" />
+          <path id="board-bar" d="M1,1 L85,1" />
+          <use xlink:href="#board-bar" transform="translate(0 21)" />
+          <use xlink:href="#board-bar" transform="translate(0 42)" />
+          <use xlink:href="#board-bar" transform="translate(0 63)" />
+          <use xlink:href="#board-bar" transform="translate(0 84)" />
+          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(23) rotate(90)" />
           <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(66) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(65) rotate(90)" />
+          <use xlink:href="#board-bar" transform="translate(86) rotate(90)" />
         </g>
         <g id="turn-0-token">
-          <path id="cross-bar" d="M3,3 L19,19" />
+          <path id="cross-bar" d="M5.343,16.657 L16.657,5.343" />
           <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
         </g>
         <circle id="turn-1-token" cx="11" cy="11" r="8" />
@@ -32,8 +43,8 @@
         />
         <g v-else>
           <use
-            v-if="nextMovesVisibility && boardData[cell].hint"
-            :class="getHintClass(boardData[cell].hint)"
+            v-if="boardData[cell].hint"
+            :class="'hint-' + boardData[cell].hint"
             xlink:href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
@@ -53,49 +64,32 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { TMoveData } from "@/types/internal/TMoveData";
-import { COptions } from "../../classes/COptions";
 
 @Component
-export default class GTttRegular extends Vue {
+export default class GSnakeRegular extends Vue {
   cellCount: number = 9;
   boardData: {
     [cell: number]: { token: string; hint: string };
   } = this.initBoardData();
 
-  get loadingStatus(): boolean {
+  get loadingStatus() {
     return this.$store.getters.loadingStatus;
   }
 
-  get options(): COptions {
-    return this.$store.getters.options;
-  }
-
-  get roundNumber(): number {
+  get roundNumber() {
     return this.$store.getters.roundNumber;
   }
 
-  get position(): string {
+  get position() {
     return this.$store.getters.position;
   }
 
-  get remoteness(): number {
+  get remoteness() {
     return this.$store.getters.remoteness;
   }
 
-  get nextMoveDataArray(): Array<TMoveData> {
+  get nextMoveDataArray() {
     return this.$store.getters.nextMoveDataArray;
-  }
-
-  get nextMovesVisibility(): boolean {
-    return this.$store.getters.nextMovesVisibility;
-  }
-
-  getHintClass(hint: string): string {
-    if (this.$store.getters.hintVisibility) {
-      return "hint-" + hint;
-    }
-    return "";
   }
 
   initBoardData(): { [cell: number]: { token: string; hint: string } } {
@@ -122,16 +116,16 @@ export default class GTttRegular extends Vue {
     this.$store.dispatch("runMove", move);
   }
 
-  created(): void {
+  created() {
     this.boardData = this.initBoardData();
   }
 
-  mounted(): void {
+  mounted() {
     this.updateBoardData();
   }
 
   @Watch("loadingStatus")
-  async onAsyncRoundChange(): Promise<void> {
+  onAsyncRoundChange(): void {
     !this.loadingStatus && this.updateBoardData();
   }
 
@@ -144,14 +138,10 @@ export default class GTttRegular extends Vue {
 
 <style lang="scss" scoped>
 svg {
-  height: 15em;
-  width: 15em;
-  margin: auto;
-  vertical-align: middle;
   > * {
     fill: none;
-    stroke: var(--neutralColor);
-    stroke-width: 2;
+    stroke: var(--primaryColor);
+    stroke-width: 1;
   }
 }
 
