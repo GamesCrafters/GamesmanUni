@@ -141,6 +141,7 @@ export class CRound implements IRound {
       remoteness: number;
     }>
   ): void {
+    this.nextMoveDataArray = new Array<TMoveData>();
     if (rawNextMoveDataArray.length != 0) {
       this.nextMoveDataArray.push({
         deltaRemoteness: rawNextMoveDataArray[0].deltaRemoteness,
