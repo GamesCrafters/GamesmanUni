@@ -29,6 +29,7 @@
             class="c-dropdown-menu-choice"
             v-for="key in Array.from(themeDictionary.keys())"
             :key="key"
+            :style="key === theme && { background: 'var(--themeColor)' }"
             @click="changeTheme(key)"
           >
             {{ themeDictionary.get(key) }}
@@ -45,6 +46,7 @@
             class="c-dropdown-menu-choice"
             v-for="key in Array.from(layoutDictionary.keys())"
             :key="key"
+            :style="key === layout && { background: 'var(--themeColor)' }"
             @click="changeLayout(key)"
           >
             {{ layoutDictionary.get(key) }}
@@ -61,6 +63,7 @@
             class="c-dropdown-menu-choice"
             v-for="key in Array.from(languageDictionary.keys())"
             :key="key"
+            :style="key === language && { background: 'var(--themeColor)' }"
             @click="changeLanguage(key)"
           >
             {{ languageDictionary.get(key) }}
