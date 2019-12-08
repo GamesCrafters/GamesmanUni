@@ -1,9 +1,15 @@
 {
   "themeDictionary": {
+    "blackboard": "Blackboard",
     "cal": "Cal",
     "classic": "Classic",
     "dark": "Dark",
-    "light": "Light"
+    "greenboard": "Greenboard",
+    "light": "Light",
+    "rose": "Rose",
+    "sepia": "Sepia",
+    "space": "Space",
+    "terminal": "Terminal"
   },
   "theme": "light",
 
