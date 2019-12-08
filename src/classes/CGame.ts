@@ -142,10 +142,14 @@ export class CGame implements IGame {
           this.round.setVariantId(this.variantDataArray[0].id);
         }
       } catch (errorMessage) {
+        success = false;
         console.error(errorMessage);
         console.error("Error: Failed to load detailed game data from server.");
-        success = false;
+        return success;
       }
+      console.info(
+        `Successfully loaded detailed game data from: ${detailedGameDataSource}.`
+      );
     }
     return success;
   }
@@ -168,10 +172,14 @@ export class CGame implements IGame {
         this.round.setNextMoveDataDictionary(this.round.getNextMoveDataArray());
       }
     } catch (errorMessage) {
+      success = false;
       console.error(errorMessage);
       console.error("Error: Failed to load position data from server.");
-      success = false;
+      return success;
     }
+    console.info(
+      `Successfully loaded position data from: ${positionDataSource}.`
+    );
     return success;
   }
 

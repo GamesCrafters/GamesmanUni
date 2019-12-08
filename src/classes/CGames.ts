@@ -31,10 +31,14 @@ export class CGames implements IGames {
         }));
       }
     } catch (errorMessage) {
+      success = false;
       console.error(errorMessage);
       console.error("Error: Failed to load games from server.");
-      success = false;
+      return success;
     }
+    console.info(
+      `Successfully loaded game data array from: ${gamesDataSource}.`
+    );
     return success;
   }
 

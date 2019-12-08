@@ -54,10 +54,14 @@ export class CGitHub implements IGitHub {
         commitData => commitData.html_url
       );
     } catch (errorMessage) {
+      success = false;
       console.error(errorMessage);
       console.error("Error: Failed to load update/commit data from server.");
-      success = false;
+      return success;
     }
+    console.info(
+      `Successfully loaded raw latest commits from: ${commitsSource}.`
+    );
     return success;
   }
 
