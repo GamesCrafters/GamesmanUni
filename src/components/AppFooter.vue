@@ -5,7 +5,7 @@
     >
     |
     <span id="app-footer-backend-version"
-      >GamesmanServer v{{ dataVersion }}</span
+      >GamesmanUniversalAPI v{{ dataVersion }}</span
     >
     |
     <span id="app-footer-github">
