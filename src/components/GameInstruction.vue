@@ -27,6 +27,7 @@ import { CGame } from "@/classes/CGame";
 import { COptions } from "@/classes/COptions";
 import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
+
 @Component({
   components: {
     ExternalMarkdown,
@@ -37,9 +38,11 @@ export default class gameInstruction extends Vue {
   get game(): CGame {
     return this.$store.getters.game;
   }
+
   get options(): COptions {
     return this.$store.getters.options;
   }
+
   hideGameInstruction(): void {
     this.$store.commit("gameInstructionVisibility", false);
   }

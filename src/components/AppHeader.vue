@@ -79,31 +79,31 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class AppHeader extends Vue {
-  get themeDictionary() {
+  get themeDictionary(): Map<string, string> {
     return this.$store.getters.themeDictionary;
   }
 
-  get theme() {
+  get theme(): string {
     return this.$store.getters.theme;
   }
 
-  get layoutDictionary() {
+  get layoutDictionary(): Map<string, string> {
     return this.$store.getters.layoutDictionary;
   }
 
-  get layout() {
+  get layout(): string {
     return this.$store.getters.layout;
   }
 
-  get languageDictionary() {
+  get languageDictionary(): Map<string, string> {
     return this.$store.getters.languageDictionary;
   }
 
-  get language() {
+  get language(): string {
     return this.$store.getters.language;
   }
 
-  created() {
+  created(): void {
     document.body.classList.add(`c-theme-${this.theme}`);
     document.body.classList.add(`c-layout-${this.layout}`);
   }

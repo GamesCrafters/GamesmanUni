@@ -1,5 +1,5 @@
-import { CGames } from "@/classes/CGames";
 import { CGame } from "@/classes/CGame";
+import { CGames } from "@/classes/CGames";
 import { CGitHub } from "@/classes/CGitHub";
 
 export interface IApp {

@@ -46,6 +46,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
+import { CGame } from "@/classes/CGame";
 import { CRound } from "@/classes/CRound";
 
 @Component
@@ -61,15 +62,23 @@ export default class GTenRegular extends Vue {
     };
   } = this.initBoardData();
 
-  get loadingStatus() {
+  get loadingStatus(): boolean {
     return this.$store.getters.loadingStatus;
   }
 
-  get game() {
+  get game(): CGame {
     return this.$store.getters.game;
   }
 
-  initBoardData() {
+  initBoardData(): {
+    [cell: string]: {
+      token: string;
+      hint: string;
+      clickable: boolean;
+      move: string;
+      board: string;
+    };
+  } {
     let boardData: {
       [cell: string]: {
         token: string;
@@ -91,16 +100,16 @@ export default class GTenRegular extends Vue {
     return boardData;
   }
 
-  created() {
+  created(): void {
     this.boardData = this.initBoardData();
   }
 
-  mounted() {
+  mounted(): void {
     this.updateBoardData();
   }
 
   @Watch("$store.getters.loadingStatus")
-  updateBoardData() {
+  updateBoardData(): void {
     if (!this.loadingStatus) {
       this.boardData = this.initBoardData();
       const rounds: Array<CRound> = this.$store.getters.roundArray;

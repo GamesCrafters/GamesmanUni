@@ -59,7 +59,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { TMoveData } from "@/types/internal/TMoveData";
-import { COptions } from "../../classes/COptions";
+import { COptions } from "@/classes/COptions";
 
 @Component
 export default class GTttRegular extends Vue {

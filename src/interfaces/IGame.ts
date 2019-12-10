@@ -1,7 +1,7 @@
 import { TVariantData } from "@/types/internal/TVariantData";
+import { CHistory } from "@/classes/CHistory";
 import { COptions } from "@/classes/COptions";
 import { CRound } from "@/classes/CRound";
-import { CHistory } from "@/classes/CHistory";
 
 export interface IGame {
   getId(): string;

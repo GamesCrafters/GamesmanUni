@@ -5,9 +5,9 @@ import { TRawPositionData } from "@/types/external/TRawPositionData";
 import { TMoveData } from "@/types/internal/TMoveData";
 import { TVariantData } from "@/types/internal/TVariantData";
 import { IGame } from "@/interfaces/IGame";
+import { CHistory } from "@/classes/CHistory";
 import { COptions } from "@/classes/COptions";
 import { CRound } from "@/classes/CRound";
-import { CHistory } from "@/classes/CHistory";
 
 export class CGame implements IGame {
   private readonly serverDataSource: string;

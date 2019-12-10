@@ -33,7 +33,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { TVariantData } from "@/types/internal/TVariantData";
-import { CGame } from "../classes/CGame";
+import { CGame } from "@/classes/CGame";
 
 @Component
 export default class GameVariants extends Vue {
@@ -47,6 +47,10 @@ export default class GameVariants extends Vue {
 
   get variantDataArray(): Array<TVariantData> {
     return this.$store.getters.variantDataArray;
+  }
+
+  metaInfo(): { title: string } {
+    return { title: this.gameName + " Variants" };
   }
 
   getLogoSource(variantData: TVariantData): any {
@@ -95,12 +99,14 @@ export default class GameVariants extends Vue {
   justify-content: center;
   padding: 0 20%;
 }
+
 .app-game-variants-variant {
   border: 0.04em solid var(--neutralColor);
   border-radius: 0.25em;
   margin: 0.25em;
   padding: 0.25em;
 }
+
 .app-game-variants-variant-logo,
 .app-game-variants-variant-description {
   display: block;

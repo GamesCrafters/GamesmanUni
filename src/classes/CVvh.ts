@@ -370,7 +370,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setRoundTurnColorGuide() {
+  private setRoundTurnColorGuide(): void {
     this.ctx.lineWidth = 0;
     this.ctx.globalAlpha = 0.2;
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {

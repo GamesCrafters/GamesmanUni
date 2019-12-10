@@ -1,7 +1,7 @@
 import { IApp } from "@/interfaces/IApp";
-import { CGames } from "@/classes/CGames";
 import { CGame } from "@/classes/CGame";
-import { CGitHub } from "./CGitHub";
+import { CGames } from "@/classes/CGames";
+import { CGitHub } from "@/classes/CGitHub";
 
 export class CApp implements IApp {
   private loadingStatus: boolean;

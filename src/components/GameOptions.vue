@@ -50,12 +50,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import { CGame } from "@/classes/CGame";
 import { COptions } from "@/classes/COptions";
-import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
 import PopupWindow from "@/components/PopupWindow.vue";
 
 @Component({
   components: {
-    ExternalMarkdown,
     PopupWindow
   }
 })

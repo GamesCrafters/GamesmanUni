@@ -59,7 +59,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { TMoveData } from "@/types/internal/TMoveData";
-import { COptions } from "../../classes/COptions";
+import { COptions } from "@/classes/COptions";
 
 @Component
 export default class GTttMisere extends Vue {
@@ -160,9 +160,9 @@ export default class GTttMisere extends Vue {
 <style lang="scss" scoped>
 svg {
   height: 15em;
-  width: 15em;
   margin: auto;
   vertical-align: middle;
+  width: 15em;
   > * {
     fill: none;
     stroke: var(--neutralColor);

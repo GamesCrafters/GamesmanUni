@@ -41,11 +41,11 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class AppFooter extends Vue {
-  get appVersion() {
+  get appVersion(): string {
     return this.$store.getters.appVersion;
   }
 
-  get dataVersion() {
+  get dataVersion(): string {
     return this.$store.getters.serverDataVersion;
   }
 }

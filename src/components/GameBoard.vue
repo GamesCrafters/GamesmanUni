@@ -29,7 +29,7 @@ import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
   }
 })
 export default class GameBoard extends Vue {
-  getGameBoardComponentName() {
+  getGameBoardComponentName(): string {
     const gameId: string = this.$store.getters.gameId;
     const gameName: string = this.$store.getters.gameName;
     const variantId: string = this.$store.getters.variantId;

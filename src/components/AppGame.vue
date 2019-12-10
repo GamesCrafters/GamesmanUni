@@ -72,16 +72,16 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { CGame } from "@/classes/CGame";
 import { COptions } from "@/classes/COptions";
-import GameOptions from "@/components/GameOptions.vue";
-import GameInstruction from "@/components/GameInstruction.vue";
 import GameBoard from "@/components/GameBoard.vue";
+import GameInstruction from "@/components/GameInstruction.vue";
+import GameOptions from "@/components/GameOptions.vue";
 import GameVvh from "@/components/GameVvh.vue";
 
 @Component({
   components: {
-    GameOptions,
-    GameInstruction,
     GameBoard,
+    GameInstruction,
+    GameOptions,
     GameVvh
   }
 })
@@ -90,11 +90,11 @@ export default class AppGame extends Vue {
   dateTime = moment();
   timer = moment().startOf("day");
 
-  get date() {
+  get date(): string {
     return this.dateTime.format("LL");
   }
 
-  get time() {
+  get time(): string {
     return this.dateTime.format("LTS");
   }
 
@@ -110,8 +110,13 @@ export default class AppGame extends Vue {
     return this.$store.getters.vvhVisibility;
   }
 
-  metaInfo() {
-    return { title: this.game.getName() };
+  metaInfo(): { title: string } {
+    return {
+      title:
+        this.game.getName() +
+        " Game: " +
+        this.game.getCurrentVariantData().description
+    };
   }
 
   initInterval(): void {
