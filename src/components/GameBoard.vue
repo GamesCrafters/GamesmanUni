@@ -13,6 +13,7 @@ import GFoxesRegular from "@/components/gameBoards/GFoxesRegular.vue";
 import GSimRegular from "@/components/gameBoards/GSimRegular.vue";
 import GSnakeRegular from "@/components/gameBoards/GSnakeRegular.vue";
 import GTenRegular from "@/components/gameBoards/GTenRegular.vue";
+import GTttMisere from "@/components/gameBoards/GTttMisere.vue";
 import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
 
 @Component({
@@ -23,6 +24,7 @@ import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
     GSimRegular,
     GSnakeRegular,
     GTenRegular,
+    GTttMisere,
     GTttRegular
   }
 })
