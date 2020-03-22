@@ -21,17 +21,6 @@
           :data-turn="richPositionData.turn"
         >
           <defs>
-            <marker
-              id="app-game-board-default-arrow-marker-turn"
-              viewBox="0 0 10 10"
-              refX="5"
-              refY="5"
-              markerWidth="4"
-              markerHeight="4"
-              orient="auto-start-reverse"
-            >
-              <circle cx="5" cy="5" r="3" />
-            </marker>
             <!-- Arrow markers with different move values -->
             <template v-for="(value, i) in ['', 'win', 'draw', 'tie', 'lose']">
               <marker
@@ -47,7 +36,7 @@
                 markerHeight="4"
                 orient="auto-start-reverse"
               >
-                <path d="M 0 0 L 10 5 L 0 10 z" />
+                <path d="M 0 1 L 10 5 L 0 9 z" />
               </marker>
             </template>
           </defs>
@@ -103,32 +92,36 @@
                     ? arrow.move.hintOpacity
                     : 1
               }"
-              marker-start="url(#app-game-board-default-arrow-marker-turn)"
               :marker-end="getHintArrowMarker(arrow.move)"
             />
           </g>
         </svg>
       </template>
     </div>
-    <hr v-if="nextMovesVisibility" class="c-divider" />
-    <div v-if="nextMovesVisibility" id="app-game-board-default-moves">
-      <h3 id="app-game-board-default-moves-title">Move(s)</h3>
-      <div id="app-game-board-default-moves-buttons" v-if="nextMoveDataArray">
-        <button
-          v-for="nextMoveData in nextMoveDataArray"
-          :key="nextMoveData.move"
-          :class="getMoveButtonHintClass(nextMoveData.moveValue)"
-          :style="{
-            opacity: deltaRemotenessVisibility
-              ? nextMoveData.moveValueOpacity
-              : 1
-          }"
-          @click="runMove(nextMoveData.move)"
+    <template v-if="richPositionData.type == GDefaultPositionTypes.String">
+      <hr v-if="nextMovesVisibility" class="c-divider" />
+      <div v-if="nextMovesVisibility" id="app-game-board-default-moves">
+        <h3 id="app-game-board-default-moves-title">Move(s)</h3>
+        <div
+          id="app-game-board-default-moves-buttons"
+          v-if="!loadingStatus && nextMoveDataArray"
         >
-          {{ nextMoveData.move }}
-        </button>
+          <button
+            v-for="nextMoveData in nextMoveDataArray"
+            :key="nextMoveData.move"
+            :class="getMoveButtonHintClass(nextMoveData.moveValue)"
+            :style="{
+              opacity: deltaRemotenessVisibility
+                ? nextMoveData.moveValueOpacity
+                : 1
+            }"
+            @click="runMove(nextMoveData.move)"
+          >
+            {{ nextMoveData.move }}
+          </button>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -241,6 +234,7 @@ export default class GDefault extends Vue {
             return makeDefaultStringPosition();
           }
         });
+      arrows = arrows.sort(this.compareArrowSquaredLength);
       return {
         type: GDefaultPositionTypes.UWAPIRegular2D,
         turn: matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B,
@@ -290,10 +284,42 @@ export default class GDefault extends Vue {
     return [i % richPositionData.rows, Math.floor(i / richPositionData.rows)];
   }
 
+  computeSquaredLength(ax: number, ay: number, bx: number, by: number): number {
+    return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
+  }
+
+  /**
+   * Sort DESC
+   */
+  compareArrowSquaredLength(
+    a: GDefaultRegular2DBoardArrow,
+    b: GDefaultRegular2DBoardArrow
+  ): number {
+    const aFromCoords = this.calcRegular2DBoardTopLeftCoords(a.from);
+    const aToCoords = this.calcRegular2DBoardTopLeftCoords(a.to);
+    const bFromCoords = this.calcRegular2DBoardTopLeftCoords(b.from);
+    const bToCoords = this.calcRegular2DBoardTopLeftCoords(b.to);
+    return (
+      this.computeSquaredLength(
+        bFromCoords[0],
+        bFromCoords[1],
+        bToCoords[0],
+        bToCoords[1]
+      ) -
+      this.computeSquaredLength(
+        aFromCoords[0],
+        aFromCoords[1],
+        aToCoords[0],
+        aToCoords[1]
+      )
+    );
+  }
+
   formatArrowPolylinePoints(
     arrow: GDefaultRegular2DBoardArrow,
     multiplier: number,
-    endOffset: number = 7
+    startOffset: number = 7,
+    endOffset: number = 3
   ): string {
     let fromCoords = this.calcRegular2DBoardTopLeftCoords(arrow.from).map(
       a => (a + 0.5) * multiplier
@@ -303,9 +329,10 @@ export default class GDefault extends Vue {
     );
     const dir = [toCoords[0] - fromCoords[0], toCoords[1] - fromCoords[1]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
+    const startOffsetPct = startOffset / length;
     const endOffsetPct = endOffset / length;
-    fromCoords[0] += dir[0] * endOffsetPct;
-    fromCoords[1] += dir[1] * endOffsetPct;
+    fromCoords[0] += dir[0] * startOffsetPct;
+    fromCoords[1] += dir[1] * startOffsetPct;
     toCoords[0] -= dir[0] * endOffsetPct;
     toCoords[1] -= dir[1] * endOffsetPct;
     return (
@@ -350,12 +377,12 @@ export default class GDefault extends Vue {
 
   @Watch("loadingStatus")
   async onAsyncRoundChange(): Promise<void> {
-    !this.loadingStatus && this.updateRichPositionData();
+    this.updateRichPositionData();
   }
 
   @Watch("roundNumber")
   onSyncRoundChange(): void {
-    !this.loadingStatus && this.updateRichPositionData();
+    this.updateRichPositionData();
   }
 
   @Watch("hint")
@@ -421,15 +448,6 @@ export default class GDefault extends Vue {
   }
 }
 
-#app-game-board-default-arrow-marker-turn {
-  [data-turn="A"] & {
-    fill: var(--turn0Color);
-  }
-  [data-turn="B"] & {
-    fill: var(--turn1Color);
-  }
-}
-
 #app-game-board-default-arrow-marker {
   fill: var(--primaryColor);
 
@@ -451,6 +469,15 @@ export default class GDefault extends Vue {
   }
   &-lose {
     fill: var(--loseColor);
+  }
+}
+
+@keyframes pulsing-arrow {
+  0% {
+    stroke-width: 1;
+  }
+  100% {
+    stroke-width: 1.5;
   }
 }
 
@@ -477,6 +504,14 @@ export default class GDefault extends Vue {
     &lose {
       stroke: var(--loseColor);
     }
+  }
+
+  &:hover {
+    animation-name: pulsing-arrow;
+    animation-duration: 0.3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
   }
 }
 </style>
