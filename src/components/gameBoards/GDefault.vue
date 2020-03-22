@@ -200,7 +200,9 @@ export default class GDefault extends Vue {
 
     let matches;
     if (
-      (matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)$/))
+      (matches = position.match(
+        /^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)(?:_(.*))?$/
+      ))
     ) {
       // Regular 2D position
       let board: GDefaultRegular2DBoardCell[] = matches[4]
