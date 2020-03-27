@@ -64,8 +64,10 @@
 <p align="center">
     <a alt="GitHub package.json version" href="https://github.com/GamesCrafters/GamesmanUni/blob/master/package.json" rel="noreferrer" target="_blank">
         <img src="https://img.shields.io/github/package-json/v/GamesCrafters/GamesmanUni"></a>
-    <a alt"Website" href="https://nyc.cs.berkeley.edu/uni" rel="noreferrer" target="_blank">
-        <img alt="Website" src="https://img.shields.io/website?label=GamesmanUni%20website%20status&url=https%3A%2F%2Fnyc.cs.berkeley.edu%2Funi"></a>
+    <a alt="Website" href="https://nyc.cs.berkeley.edu/uni" rel="noreferrer" target="_blank">
+        <img src="https://img.shields.io/website?label=GamesmanUni%20website%20status&url=https%3A%2F%2Fnyc.cs.berkeley.edu%2Funi"></a>
+    <a alt="License" href="https://github.com/GamesCrafters/GamesmanUni/blob/master/LICENSE" rel="noreferrer" target="_blank">
+        <img src="https://img.shields.io/github/license/GamesCrafters/GamesmanUni"></a>
 </p>
 
 <!-- ####################################################################### -->
