@@ -150,6 +150,12 @@ serve -s dist
 - _Detailed project documentation on design decisions, repository organization and coding styles, & contribution guides on issue templates, commit procedures and pull requests are coming soon!_
 
 <!-- ####################################################################### -->
+<!-- license -->
+
+## License
+[GPL-3.0](https://github.com/GamesCrafters/GamesmanUni/blob/master/LICENSE)
+
+<!-- ####################################################################### -->
 <!-- acknowledgement -->
 
 ## Acknowledgment
