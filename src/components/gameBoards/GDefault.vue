@@ -14,9 +14,9 @@
           xmlns="http://www.w3.org/2000/svg"
           :viewBox="
             '-2 -2 ' +
-              (richPositionData.rows * 20 + 4) +
+              (richPositionData.columns * 20 + 4) +
               ' ' +
-              (richPositionData.columns * 20 + 4)
+              (richPositionData.rows * 20 + 4)
           "
           :data-turn="richPositionData.turn"
         >
@@ -281,7 +281,10 @@ export default class GDefault extends Vue {
     let richPositionData = this.richPositionData;
     if (richPositionData.type != GDefaultPositionTypes.UWAPIRegular2D)
       return [0, 0];
-    return [i % richPositionData.rows, Math.floor(i / richPositionData.rows)];
+    return [
+      i % richPositionData.columns,
+      Math.floor(i / richPositionData.columns)
+    ];
   }
 
   computeSquaredLength(ax: number, ay: number, bx: number, by: number): number {
