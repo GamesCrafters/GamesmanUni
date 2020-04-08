@@ -45,7 +45,7 @@
           />
           <use
             :class="remoteness && 'move-pointer'"
-            @click="remoteness && runMove(cell.toString())"
+            @click="remoteness && runMove(boardData[cell].move)"
             xlink:href="#move"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
@@ -111,10 +111,15 @@ export default class GTttRegular extends Vue {
     [cell: number]: { token: string; hint: string; hintOpacity: number };
   } {
     let boardData: {
-      [cell: number]: { token: string; hint: string; hintOpacity: number };
+      [cell: number]: {
+        token: string;
+        move: string;
+        hint: string;
+        hintOpacity: number;
+      };
     } = {};
     for (let cell: number = 1; cell <= this.cellCount; cell++) {
-      boardData[cell] = { token: "", hint: "", hintOpacity: 1 };
+      boardData[cell] = { token: "", move: "", hint: "", hintOpacity: 1 };
     }
     return boardData;
   }
@@ -123,12 +128,14 @@ export default class GTttRegular extends Vue {
     if (!this.loadingStatus) {
       this.boardData = this.initBoardData();
       for (let cell: number = 1; cell <= this.cellCount; cell++) {
-        this.boardData[cell].token = this.position[cell - 1];
+        this.boardData[cell].token = this.position[7 + cell];
       }
       for (let nextMoveData of this.nextMoveDataArray) {
-        this.boardData[+nextMoveData.move].hint = nextMoveData.moveValue;
-        this.boardData[+nextMoveData.move].hintOpacity =
-          nextMoveData.moveValueOpacity;
+        Object.assign(this.boardData[+nextMoveData.move[4] + 1], {
+          move: nextMoveData.move,
+          hint: nextMoveData.moveValue,
+          hintOpacity: nextMoveData.moveValueOpacity
+        });
       }
     }
   }
