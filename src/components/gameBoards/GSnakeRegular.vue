@@ -144,7 +144,7 @@ export default class GSnakeRegular extends Vue {
     if (!this.loadingStatus) {
       this.boardData = this.initBoardData();
       for (let cell: number = 1; cell <= this.cellCount; cell++) {
-        this.boardData[cell].token = this.position[cell - 1];
+        this.boardData[cell].token = this.position[1 + cell];
       }
       var a = 111;
       for (let nextMoveData of this.nextMoveDataArray) {

@@ -121,16 +121,16 @@ export default class GTenRegular extends Vue {
       ) {
         if (rounds[roundIndex].getMove() != "") {
           this.boardData[
-            rounds[roundIndex].getPosition()
+            rounds[roundIndex].getPosition().substring(2)
           ].token = `turn-${rounds[roundIndex].getTurnId()}-token`;
         }
       }
       for (let nextMoveData of round.getNextMoveDataArray()) {
-        this.boardData[nextMoveData.position].move = nextMoveData.move;
-        this.boardData[
-          nextMoveData.position
-        ].hint = `hint-${nextMoveData.moveValue}`;
-        this.boardData[nextMoveData.position].clickable = true;
+        Object.assign(this.boardData[nextMoveData.position.substring(2)], {
+          move: nextMoveData.move,
+          hint: `hint-${nextMoveData.moveValue}`,
+          clickable: true
+        });
       }
     }
   }
