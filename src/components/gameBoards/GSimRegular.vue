@@ -209,7 +209,7 @@ export default class GSimRegular extends Vue {
     if (!this.loadingStatus) {
       console.log(this.nextMoveDataArray);
       var array = this.nextMoveDataArray;
-      var position = this.position;
+      var position = this.position.substring(2);
       var nums = [
         "12",
         "13",
@@ -270,7 +270,10 @@ export default class GSimRegular extends Vue {
   }
 
   runMove(id: string) {
-    if(this.corresponding[id].idOfLine == "red" || this.corresponding[id].idOfLine == "blue"){
+    if (
+      this.corresponding[id].idOfLine == "red" ||
+      this.corresponding[id].idOfLine == "blue"
+    ) {
       return;
     }
     this.$store.dispatch("runMove", id);
