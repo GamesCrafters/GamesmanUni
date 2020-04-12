@@ -14,9 +14,9 @@
           xmlns="http://www.w3.org/2000/svg"
           :viewBox="
             '-2 -2 ' +
-              (richPositionData.rows * 20 + 4) +
+              (richPositionData.columns * 20 + 4) +
               ' ' +
-              (richPositionData.columns * 20 + 4)
+              (richPositionData.rows * 20 + 4)
           "
           :data-turn="richPositionData.turn"
         >
@@ -59,7 +59,7 @@
               height="20"
             />
             <text
-              v-if="cell.token != '-'"
+              v-if="cell.token != '-' && cell.token != '*'"
               :x="coords[0] * 20 + 10"
               :y="coords[1] * 20 + 10"
               :class="
@@ -194,15 +194,19 @@ export default class GDefault extends Vue {
     let matches;
     if (
       (matches = position.match(
-        /^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)(?:_(.*))?$/
+        /^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/
       ))
     ) {
       // Regular 2D position
-      let board: GDefaultRegular2DBoardCell[] = matches[4]
+      const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
+      const numRows = parseInt(matches[2]);
+      const numColumns = parseInt(matches[3]);
+      const board: GDefaultRegular2DBoardCell[] = matches[4]
         .split("")
         .map(token => ({
           token
         }));
+
       let arrows: GDefaultRegular2DBoardArrow[] = [];
       if (!this.loadingStatus && this.nextMoveDataArray)
         this.nextMoveDataArray.forEach(nextMoveData => {
@@ -213,7 +217,7 @@ export default class GDefault extends Vue {
           };
           let matches;
           if (
-            (matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)$/))
+            (matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))
           ) {
             // Add a piece to the board
             const to = parseInt(matches[2]);
@@ -228,18 +232,29 @@ export default class GDefault extends Vue {
               to: parseInt(matches[2]),
               move
             });
+          } else if (
+            (matches = nextMoveData.move.match(/^S_([LR])_([0-9]+)_([0-9]+)$/))
+          ) {
+            // Shift the board
+            const dir = matches[1];
+            const row = parseInt(matches[2]);
+            const amt = parseInt(matches[3]); // Not visualizing this at the moment
+            arrows.push({
+              from: dir == "R" ? numColumns * row : numColumns * (row + 1) - 1,
+              to:
+                dir == "R" ? numColumns * row + 1 : numColumns * (row + 1) - 2,
+              move
+            });
           } else {
             console.error("NOTREACHED");
-            // Fallback to string type position
-            return makeDefaultStringPosition();
           }
         });
       arrows = arrows.sort(this.compareArrowSquaredLength);
       return {
         type: GDefaultPositionTypes.UWAPIRegular2D,
-        turn: matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B,
-        rows: parseInt(matches[2]),
-        columns: parseInt(matches[3]),
+        turn: turn,
+        rows: numRows,
+        columns: numColumns,
         board,
         arrows
       };
@@ -281,7 +296,10 @@ export default class GDefault extends Vue {
     let richPositionData = this.richPositionData;
     if (richPositionData.type != GDefaultPositionTypes.UWAPIRegular2D)
       return [0, 0];
-    return [i % richPositionData.rows, Math.floor(i / richPositionData.rows)];
+    return [
+      i % richPositionData.columns,
+      Math.floor(i / richPositionData.columns)
+    ];
   }
 
   computeSquaredLength(ax: number, ay: number, bx: number, by: number): number {
