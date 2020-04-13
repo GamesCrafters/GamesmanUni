@@ -1,8 +1,12 @@
 <template>
   <div id="app-game-board-sim-regular">
-    <svg viewBox="0 0 122 66" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      viewBox="0 0 122 66"
+      id="viewbox-sim-regular"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <line
-        v-for="(id, idx) in corresponding"
+        v-for="(id, idx) in remaining"
         :key="idx"
         :class="id.color"
         @click="runMove(id.idOfLine)"
@@ -10,6 +14,21 @@
         :y1="id.index2"
         :x2="id.index3"
         :y2="id.index4"
+        v-on:mouseenter="onMouseHover(id, idx)"
+        v-on:mouseleave="onMouseLeave()"
+        stroke-linecap="round"
+      />
+      <line
+        v-if="topLineId != ''"
+        :key="topLineId"
+        :class="topLineInfo.color"
+        @click="runMove(topLineInfo.idOfLine)"
+        :x1="topLineInfo.index1"
+        :y1="topLineInfo.index2"
+        :x2="topLineInfo.index3"
+        :y2="topLineInfo.index4"
+        v-on:mouseenter="onMouseHover(id, topLineId)"
+        v-on:mouseleave="onMouseLeave()"
         stroke-linecap="round"
       />
     </svg>
@@ -22,6 +41,54 @@ import { CRound } from "@/classes/CRound";
 
 @Component
 export default class GSimRegular extends Vue {
+  topLineId: string = "";
+  topLineInfo: {
+    index1: string;
+    index2: string;
+    index3: string;
+    index4: string;
+    color: string;
+    idOfLine: string;
+  } = {
+    index1: "",
+    index2: "",
+    index3: "",
+    index4: "",
+    color: "",
+    idOfLine: "",
+  };
+  onMouseLeave() {
+    this.topLineInfo = {
+      index1: "",
+      index2: "",
+      index3: "",
+      index4: "",
+      color: "",
+      idOfLine: "",
+    };
+    this.topLineId = "";
+  }
+  onMouseHover(
+    id: {
+      index1: string;
+      index2: string;
+      index3: string;
+      index4: string;
+      color: string;
+      idOfLine: string;
+    },
+    idx: string
+  ): void {
+    this.topLineInfo = id;
+    this.topLineId = idx;
+  }
+  get remaining() {
+    let copy = JSON.parse(JSON.stringify(this.corresponding));
+    if (this.topLineId !== "") {
+      delete copy[this.topLineId];
+    }
+    return copy;
+  }
   corresponding: {
     [id: string]: {
       index1: string;
@@ -32,6 +99,7 @@ export default class GSimRegular extends Vue {
       idOfLine: string;
     };
   } = this.correspond();
+
   correspond() {
     let co: {
       [id: string]: {
@@ -50,7 +118,7 @@ export default class GSimRegular extends Vue {
       index3: "75",
       index4: "7",
       color: "simpleLineB",
-      idOfLine: "56"
+      idOfLine: "56",
     };
     co["16"] = {
       index1: "75",
@@ -58,7 +126,7 @@ export default class GSimRegular extends Vue {
       index3: "90",
       index4: "33",
       color: "simpleLineB",
-      idOfLine: "16"
+      idOfLine: "16",
     };
     co["12"] = {
       index1: "90",
@@ -66,7 +134,7 @@ export default class GSimRegular extends Vue {
       index3: "75",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "12"
+      idOfLine: "12",
     };
     co["23"] = {
       index1: "75",
@@ -74,7 +142,7 @@ export default class GSimRegular extends Vue {
       index3: "45",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "23"
+      idOfLine: "23",
     };
     co["34"] = {
       index1: "45",
@@ -82,7 +150,7 @@ export default class GSimRegular extends Vue {
       index3: "30",
       index4: "33",
       color: "simpleLineB",
-      idOfLine: "34"
+      idOfLine: "34",
     };
     co["45"] = {
       index1: "30",
@@ -90,7 +158,7 @@ export default class GSimRegular extends Vue {
       index3: "45",
       index4: "7",
       color: "simpleLineB",
-      idOfLine: "45"
+      idOfLine: "45",
     };
     co["25"] = {
       index1: "45",
@@ -98,7 +166,7 @@ export default class GSimRegular extends Vue {
       index3: "75",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "25"
+      idOfLine: "25",
     };
     co["36"] = {
       index1: "75",
@@ -106,7 +174,7 @@ export default class GSimRegular extends Vue {
       index3: "45",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "36"
+      idOfLine: "36",
     };
     co["14"] = {
       index1: "90",
@@ -114,7 +182,7 @@ export default class GSimRegular extends Vue {
       index3: "30",
       index4: "33",
       color: "simpleLineB",
-      idOfLine: "14"
+      idOfLine: "14",
     };
     co["15"] = {
       index1: "45",
@@ -122,7 +190,7 @@ export default class GSimRegular extends Vue {
       index3: "90",
       index4: "33",
       color: "simpleLineB",
-      idOfLine: "15"
+      idOfLine: "15",
     };
     co["26"] = {
       index1: "75",
@@ -130,7 +198,7 @@ export default class GSimRegular extends Vue {
       index3: "75",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "26"
+      idOfLine: "26",
     };
     co["13"] = {
       index1: "90",
@@ -138,7 +206,7 @@ export default class GSimRegular extends Vue {
       index3: "45",
       index4: "59",
       color: "simpleLineB",
-      idOfLine: "13"
+      idOfLine: "13",
     };
     co["24"] = {
       index1: "75",
@@ -146,7 +214,7 @@ export default class GSimRegular extends Vue {
       index3: "30",
       index4: "33",
       color: "simpleLineB",
-      idOfLine: "24"
+      idOfLine: "24",
     };
     co["35"] = {
       index1: "45",
@@ -154,7 +222,7 @@ export default class GSimRegular extends Vue {
       index3: "45",
       index4: "7",
       color: "simpleLineB",
-      idOfLine: "35"
+      idOfLine: "35",
     };
     co["46"] = {
       index1: "30",
@@ -162,7 +230,7 @@ export default class GSimRegular extends Vue {
       index3: "75",
       index4: "7",
       color: "simpleLineB",
-      idOfLine: "46"
+      idOfLine: "46",
     };
     return co;
   }
@@ -207,7 +275,6 @@ export default class GSimRegular extends Vue {
 
   changeColor(): void {
     if (!this.loadingStatus) {
-      console.log(this.nextMoveDataArray);
       var array = this.nextMoveDataArray;
       var position = this.position.substring(2);
       var nums = [
@@ -225,7 +292,7 @@ export default class GSimRegular extends Vue {
         "36",
         "45",
         "46",
-        "56"
+        "56",
       ];
 
       var numOfBlue = 0;
@@ -256,7 +323,6 @@ export default class GSimRegular extends Vue {
         }
       }
       if (array.length == 0) {
-        console.log("sdfag");
         for (var i = 0; i < nums.length; i++) {
           if (position[i] == "x") {
             continue;
@@ -271,8 +337,8 @@ export default class GSimRegular extends Vue {
 
   runMove(id: string) {
     if (
-      this.corresponding[id].idOfLine == "red" ||
-      this.corresponding[id].idOfLine == "blue"
+      this.corresponding[id].color == "red" ||
+      this.corresponding[id].color == "blue"
     ) {
       return;
     }
@@ -291,67 +357,55 @@ export default class GSimRegular extends Vue {
 
 <style lang="scss" scoped>
 .simpleLineB {
-  opacity: 0.25;
   stroke: rgb(219, 219, 78);
   stroke-width: 2;
 }
 .simpleLineB:hover {
-  opacity: 1;
   stroke: blue;
   stroke-width: 2;
   cursor: pointer;
 }
 .simpleLineR {
-  opacity: 0.25;
   stroke: rgb(219, 219, 78);
   stroke-width: 2;
 }
 .simpleLineR:hover {
-  opacity: 1;
   stroke: red;
   stroke-width: 2;
   cursor: pointer;
 }
 .winB {
-  opacity: 0.25;
   stroke: #008000;
   stroke-width: 2;
 }
 .winB:hover {
-  opacity: 1;
   stroke: blue;
   stroke-width: 2;
   cursor: pointer;
 }
 .loseB {
-  opacity: 0.25;
   stroke: #800000;
   stroke-width: 2;
 }
 .loseB:hover {
-  opacity: 1;
   stroke: blue;
   stroke-width: 2;
   cursor: pointer;
 }
 .winR {
-  opacity: 0.25;
   stroke: #008000;
   stroke-width: 2;
 }
 .winR:hover {
-  opacity: 1;
   stroke: red;
   stroke-width: 2;
   cursor: pointer;
 }
 .loseR {
-  opacity: 0.25;
   stroke: #800000;
   stroke-width: 2;
 }
 .loseR:hover {
-  opacity: 1;
   stroke: red;
   stroke-width: 2;
   cursor: pointer;
@@ -365,7 +419,6 @@ export default class GSimRegular extends Vue {
   stroke-width: 2;
 }
 .over {
-  opacity: 0.25;
   stroke: rgb(179, 219, 186);
   stroke-width: 2;
 }
