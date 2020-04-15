@@ -338,7 +338,8 @@ export default class GSimRegular extends Vue {
   runMove(id: string) {
     if (
       this.corresponding[id].color == "red" ||
-      this.corresponding[id].color == "blue"
+      this.corresponding[id].color == "blue" ||
+      this.corresponding[id].color == "over"
     ) {
       return;
     }
