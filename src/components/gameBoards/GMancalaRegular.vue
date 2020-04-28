@@ -1,50 +1,57 @@
 <template>
   <div id="app-game-board-mancala-regular">
-    <svg viewBox="0 0 90 30" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <g id="board">
-          <circle id="pocket" r="4" cx="16.875" cy="7.5" />
-          <path id="store" d="M 1.625 7.5 L 1.625 22.5 A 4 4 180 0 0 9.625 22.5
-                L 9.625 7.5 A 4 4 0 0 0 1.625 7.5" />
-          <use xlink:href="#pocket" transform="translate(11.25)" />
-          <use xlink:href="#pocket" transform="translate(22.5)" />
-          <use xlink:href="#pocket" transform="translate(33.75)" />
-          <use xlink:href="#pocket" transform="translate(45)" />
-          <use xlink:href="#pocket" transform="translate(56.25)" />
-          <use xlink:href="#pocket" transform="translate(0 15)" />
-          <use xlink:href="#pocket" transform="translate(11.25 15)" />
-          <use xlink:href="#pocket" transform="translate(22.5 15)" />
-          <use xlink:href="#pocket" transform="translate(33.75 15)" />
-          <use xlink:href="#pocket" transform="translate(45 15)" />
-          <use xlink:href="#pocket" transform="translate(56.25 15)" />
-          <use xlink:href="#store" transform="translate(78.75)" />
+    <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+
+      <g id="board">
+
+        <g
+          v-for="store in getAllStores"
+          :key="store.id">
+          <path id="store"
+          :d="store.d"
+          />
+          <circle id="pieces"
+            v-for="(position, index) in piecesInBins[+store.index]"
+            :key="index"
+            r="1" :cx="position[0]" :cy="position[1]"
+          />
         </g>
-      </defs>
-      <use xlink:href="#board" x="0" y="0" />
+
+        <g id="pocket"
+          v-for="pocket in getAllPockets"
+          :key="pocket.id"
+          @click="pocket.nextMove == '' ? 1 : runMove(pocket.nextMove)">
+          <circle
+            r="4"
+            :cx="pocket.x"
+            :cy="pocket.y"
+            :class="pocket.class"
+            :opacity="pocket.opacity"
+          />
+          <circle id="pieces"
+            v-for="(position, index) in piecesInBins[+pocket.index]"
+            :key="index"
+            r="1" :cx="position[0]" :cy="position[1]"
+          />
+        </g>
+      </g>
+
+
+      <text id="count"
+        v-for="store in getAllStores"
+        :key="store.id"
+        :x="store.countX"
+        :y="store.countY"
+      >{{ currPosition[store.index] }}</text>
+
+      <text id="count"
+        v-for="pocket in getAllPockets"
+        :key="pocket.id"
+        :x="pocket.countX"
+        :y="pocket.countY"
+      >{{ currPosition[pocket.index] }}</text>
     </svg>
 
-    <hr v-if="nextMovesVisibility" class="c-divider" />
-    <div v-if="nextMovesVisibility" id="app-game-board-default-moves">
-      <h3 id="app-game-board-default-moves-title">Move(s)</h3>
-      <div
-        id="app-game-board-default-moves-buttons"
-        v-if="!loadingStatus && nextMoveDataArray"
-      >
-        <button
-          v-for="nextMoveData in nextMoveDataArray"
-          :key="nextMoveData.move"
-          :class="getMoveButtonHintClass(nextMoveData.moveValue)"
-          :style="{
-            opacity: deltaRemotenessVisibility
-              ? nextMoveData.moveValueOpacity
-              : 1
-          }"
-          @click="runMove(nextMoveData.move)"
-        >
-          {{ nextMoveData.move }}
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -55,24 +62,245 @@ import { CRound } from "@/classes/CRound";
 
 @Component
 export default class GMancalaRegular extends Vue {
-  richPositionData = this.generateRichPositionData();
+  position = this.generatePosition();
+  allPockets: {
+    [id: string]: {
+      index: number;
+      x: number;
+      y: number;
+      countX: number;
+      countY: number;
+      class: string;
+      opacity: number;
+      nextMove: string;
+    };
+  } = this.pocket();
 
-  generateRichPositionData(): string {
-    let position: string = this.$store.getters.position;
+  allStores: {
+    [id: string]: {
+      x: number;
+      y: number;
+      index: number;
+      d: string;
+      countX: number;
+      countY: number;
+    };
+  } = this.store();
 
-    function makeDefaultStringPosition(): string {
-      let str = position;
-      str = str.replace(/^;/, "");
-      str = str.replace(/;$/, "");
-      str = str.replace(/;/g, "\n");
-      str = str.replace(/=/g, " = ");
-      return str
-    }
-    return makeDefaultStringPosition();
+  pieces = this.generatePiecesInBins(this.position);
+
+  pocket() {
+    let po: {
+      [id: string]: {
+        index: number;
+        x: number;
+        y: number;
+        countX: number;
+        countY: number;
+        class: string;
+        opacity: number;
+        nextMove: string;
+      };
+    } = {};
+
+    po["po1"] = {
+      index: 1,
+      x: 20,
+      y: 7.5,
+      countX: 20,
+      countY: 3,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    po["po2"] = {
+      index: 2,
+      x: 30,
+      y: 7.5,
+      countX: 30,
+      countY: 3,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    po["po3"] = {
+      index: 3,
+      x: 40,
+      y: 7.5,
+      countX: 40,
+      countY: 3,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    po["po7"] = {
+      index: 5,
+      x: 40,
+      y: 22.5,
+      countX: 40,
+      countY: 29,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    po["po6"] = {
+      index: 6,
+      x: 30,
+      y: 22.5,
+      countX: 30,
+      countY: 29,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    po["po5"] = {
+      index: 7,
+      x: 20,
+      y: 22.5,
+      countX: 20,
+      countY: 29,
+      class: "default-pocket",
+      opacity: 1,
+      nextMove: ""
+    };
+
+    return po;
   }
 
-  updateRichPositionData(): void {
-    this.richPositionData = this.generateRichPositionData();
+  store() {
+    let sto: {
+      [id: string]: {
+        x: number;
+        y: number;
+        index: number;
+        d: string;
+        countX: number;
+        countY: number;
+      };
+    } = {};
+
+    sto["sto0"] = {
+      x: 10,
+      y: 15,
+      index: 0,
+      d: "M 6 7.5 L 6 22.5 A 4 4 180 0 0 14 22.5 L 14 7.5 A 4 4 0 0 0 6 7.5",
+      countX: 4,
+      countY: 15
+    };
+
+    sto["sto4"] = {
+      x: 50,
+      y: 15,
+      index: 4,
+      d: "M 46 7.5 L 46 22.5 A 4 4 180 0 0 54 22.5 L 54 7.5 A 4 4 0 0 0 46 7.5",
+      countX: 56,
+      countY: 15
+    };
+
+    return sto;
+  }
+
+  generatePosition(): string[] {
+    let position: string = this.$store.getters.position;
+    return position.split(";")[0].split("s");
+  }
+
+  generatePiecePositions(binX: number, binY: number, numPieces: number): number[][] {
+    let positions: number[][] = [];
+    function generateBinOffsets(binX: number, binY: number): number[] {
+      let offsets = [binX-1, binY, binX+1, binY, binX-3, binY, binX+3, binY,
+        binX, binY-2, binX-2, binY-2, binX+2, binY-2, binX, binY+2, binX-2,
+        binY+2, binX+2, binY+2, binX-2, binY-1, binX, binY-1, binX+2, binY-1,
+        binX-2, binY+1, binX, binY+1, binX+2, binY+1, binX-1, binY-3, binX+1,
+        binY-3, binX-1, binY+3, binX+1, binY+3, binX-1, binY-2, binX+1,
+        binY-2, binX-1, binY, binX+1, binY];
+      return offsets;
+    }
+
+    let offsets = generateBinOffsets(binX, binY);
+    for (let i = 0; i < numPieces; i++) {
+      let curr: number[] = [offsets[i*2], offsets[i*2+1]];
+      positions.push(curr);
+    }
+    return positions;
+  }
+
+  generatePiecesInBins(position: string[]): number[][][] {
+    let bins: number[][][] = [];
+    let pieces: string[] = position;
+
+    for (let pocket in this.allPockets) {
+      let x = this.allPockets[pocket].x;
+      let y = this.allPockets[pocket].y;
+      let index = +(this.allPockets[pocket].index);
+      bins.push(this.generatePiecePositions(x, y, +pieces[index]));
+    }
+
+    for (let store in this.allStores) {
+      let x = this.allStores[store].x;
+      let y = this.allStores[store].y;
+      let index = +(this.allStores[store].index);
+      bins.splice(index, 0, this.generatePiecePositions(x, y, +pieces[index]));
+    }
+
+    return bins;
+  }
+
+  updatePosition(): void {
+    this.position = this.generatePosition();
+    this.pieces = this.generatePiecesInBins(this.position);
+    this.updateNextMove();
+  }
+
+  updateNextMove(): void {
+    this.resetStyles();
+    for (let nextMoveData of this.nextMoveDataArray) {
+      let idStr = "po" + nextMoveData.move;
+      let nextMoveClass = this.getMoveButtonHintClass(nextMoveData.moveValue);
+      if (nextMoveClass == "") {
+        nextMoveClass = "default-pocket";
+      }
+
+      let nextMoveOpacity = 1;
+      if (this.$store.getters.deltaRemotenessVisibility && this.$store.getters.hintVisibility) {
+        nextMoveOpacity = nextMoveData.moveValueOpacity;
+      }
+
+      this.allPockets[idStr].class = nextMoveClass;
+      this.allPockets[idStr].opacity = nextMoveOpacity;
+      this.allPockets[idStr].nextMove = nextMoveData.move;
+    }
+  }
+
+  resetStyles(): void {
+    for (let po in this.allPockets) {
+      this.allPockets[po].class = "default-pocket";
+      this.allPockets[po].opacity = 1;
+      this.allPockets[po].nextMove = "";
+    }
+  }
+
+  get getAllPockets() {
+    let copy = JSON.parse(JSON.stringify(this.allPockets));
+    return copy;
+  }
+
+  get getAllStores() {
+    let copy = JSON.parse(JSON.stringify(this.allStores));
+    return copy;
+  }
+
+  get piecesInBins() {
+    return this.pieces;
+  }
+
+  get currPosition() {
+    return this.position;
   }
 
   get hintVisibility() {
@@ -111,26 +339,27 @@ export default class GMancalaRegular extends Vue {
   }
 
   created(): void {
-    this.updateRichPositionData();
+    this.updatePosition();
   }
 
   mounted(): void {
-    this.updateRichPositionData();
+    this.updatePosition();
   }
 
   @Watch("loadingStatus")
   async onAsyncRoundChange(): Promise<void> {
-    this.updateRichPositionData();
+    this.updatePosition();
   }
 
   @Watch("roundNumber")
   onSyncRoundChange(): void {
-    this.updateRichPositionData();
+    this.updatePosition();
   }
 
-  @Watch("hint")
+  @Watch("hintVisibility")
   onHintChange(): void {
-    this.updateRichPositionData();
+    console.log("reached");
+    this.updatePosition();
   }
 }
 </script>
@@ -138,34 +367,63 @@ export default class GMancalaRegular extends Vue {
 <style lang="scss" scoped>
 svg {
   height: 15em;
-  width: 45em;
+  width: 30em;
   margin: auto;
   vertical-align: middle;
-  > * {
-    fill: #d2b48c;
+  #board {
     stroke: var(--neutralColor);
     stroke-width: 0.5;
   }
+
+  #store {
+    fill: #d2b48c;
+  }
+
+  #pieces {
+    fill: #ADD8E6;
+    stroke: #00008b;
+    stroke-width: 0.25;
+  }
+
+  #count {
+    font-size: 2.5px;
+    text-anchor: middle;
+  }
+
+  #pocket:hover {
+    opacity: 50%;
+  }
+
 }
 
 #app-game-board-default-moves-buttons {
   padding: 0.5em 20%;
 }
 
+.default-pocket {
+  fill: #d2b48c;
+}
+
+.c-win {
+  fill: var(--winColor);
+}
+
+.c-lose {
+  fill: var(--loseColor);
+}
+
+.c-tie {
+  fill: var(--tieColor);
+}
+
+.c-draw {
+  fill: var(--drawColor);
+}
+
 .app-game-board-default-cell {
   stroke: var(--neutralColor);
   stroke-width: 1;
   fill: var(--backgroundColor);
-
-  // Highlight cells placed with a token
-  &.placed {
-    fill: var(--neutralColor);
-  }
-
-  // Highlight move cells on hover
-  g:hover > &.move {
-    fill: var(--neutralColor);
-  }
 }
 
 </style>
