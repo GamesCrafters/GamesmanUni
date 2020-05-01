@@ -32,11 +32,11 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
     this.turnNameDictionary = new Map([
       [0, require("@/datas/defaults.json").turn0Name],
-      [1, require("@/datas/defaults.json").turn1Name]
+      [1, require("@/datas/defaults.json").turn1Name],
     ]);
     this.vvhSelectorId = require("@/datas/defaults.json").vvhSelectorId;
     this.options = new COptions();
@@ -80,6 +80,13 @@ export class CGame implements IGame {
     return this.round;
   }
 
+  getGoalDescription(): string {
+    if (this.name === "Bagh Chal") {
+      return "To move: Tigers may leap over the goat to capture it. Once the goat is captured, it is removed from the board. To win: If you are a tiger, you must capture five goats. For the goat to win, they must protect themselves by surrounding the tigers so that they are unable to move. The game is played in two phases. During the first phase, goats are placed on the board by one player, while the tigers move from their initial position in the four corners of the board. During the second phase, both tigers and goats move. The player with the goats moves first by placing a piece on an empty intersection. The play then alternates to the tiger, which is allowed to move into an open adjacent position along the lines of the board. Play continues until all the goats are placed on the board. If possible during phase one, a tiger may capture a goat by jumping over it to an empty adjacent spot. When a goat is captured, it is removed from the board. Jumps can occur in any direction except backwards as long as the jump is to an open spot next to the goat. Tigers are not allowed to jump over their own pieces. During phase two or takedown, goats are allowed to move to an empty adjacent point along the lines of the board.";
+    }
+    return "";
+  }
+
   getHistory(): CHistory {
     return this.history;
   }
@@ -97,7 +104,7 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
   }
 
@@ -125,11 +132,11 @@ export class CGame implements IGame {
         if (rawData.status === "ok") {
           this.name = rawData.response.name;
           this.variantDataArray = rawData.response.variants.map(
-            rawVariantData => ({
+            (rawVariantData) => ({
               id: rawVariantData.variantId,
               description: rawVariantData.description,
               status: rawVariantData.status,
-              startPosition: rawVariantData.startPosition
+              startPosition: rawVariantData.startPosition,
             })
           );
           this.variantDataDictionary = new Map<string, TVariantData>();

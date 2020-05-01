@@ -13,6 +13,7 @@ export interface IGame {
   getVvhSelectorId(): string;
   getOptions(): COptions;
   getRound(): CRound;
+  getGoalDescription(): string;
   getHistory(): CHistory;
 
   setId(id: string): void;

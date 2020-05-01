@@ -64,6 +64,11 @@
         <GameVvh></GameVvh>
       </div>
     </div>
+    <div id="app-game-about">
+      <body>
+        {{ game.getGoalDescription() }}
+      </body>
+    </div>
   </div>
 </template>
 
@@ -82,8 +87,8 @@ import GameVvh from "@/components/GameVvh.vue";
     GameBoard,
     GameInstruction,
     GameOptions,
-    GameVvh
-  }
+    GameVvh,
+  },
 })
 export default class AppGame extends Vue {
   interval = setInterval(() => this.updateInterval(), 1000);
@@ -115,7 +120,7 @@ export default class AppGame extends Vue {
       title:
         this.game.getName() +
         " Game: " +
-        this.game.getCurrentVariantData().description
+        this.game.getCurrentVariantData().description,
     };
   }
 
