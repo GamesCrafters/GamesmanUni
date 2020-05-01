@@ -9,7 +9,7 @@
         :key="variantData.id"
         :to="{
           name: 'game',
-          params: { gameId: gameId, variantId: variantData.id }
+          params: { gameId: gameId, variantId: variantData.id },
         }"
       >
         <img
@@ -63,7 +63,7 @@ export default class GameVariants extends Vue {
             this.gameId.slice(1) +
             variantData.id[0].toUpperCase() +
             variantData.id.slice(1) +
-            ".svg"
+            ".png"
         )
       ) {
         return logos(
@@ -72,7 +72,7 @@ export default class GameVariants extends Vue {
             this.gameId.slice(1) +
             variantData.id[0].toUpperCase() +
             variantData.id.slice(1) +
-            ".svg"
+            ".png"
         );
       }
     } catch (errorMessage) {

@@ -40,11 +40,11 @@ export default class AppGames extends Vue {
     try {
       if (
         logos(
-          "./L" + gameData.id[0].toUpperCase() + gameData.id.slice(1) + ".svg"
+          "./L" + gameData.id[0].toUpperCase() + gameData.id.slice(1) + ".png"
         )
       ) {
         return logos(
-          "./L" + gameData.id[0].toUpperCase() + gameData.id.slice(1) + ".svg"
+          "./L" + gameData.id[0].toUpperCase() + gameData.id.slice(1) + ".png"
         );
       }
     } catch (errorMessage) {
