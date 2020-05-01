@@ -9,14 +9,15 @@
     "rose": "Rose",
     "sepia": "Sepia",
     "space": "Space",
-    "terminal": "Terminal"
+    "terminal": "Terminal",
+    "neon": "Neon"
   },
   "theme": "light",
 
   "layoutDictionary": { "default": "Default" },
   "layout": "default",
 
-  "languageDictionary": { "cn": "🇨🇳 简体中文", "en": "🇺🇸 English" },
+  "languageDictionary": { "cn": "🇨🇳 简体中文", "en": "🇺🇸 English", "hi": "🇮🇳 हिन्दी"},
   "language": "en",
 
   "serverDataVersion": "1",

@@ -8,11 +8,25 @@ import AppAbout from "@/components/AppAbout.vue";
 
 @Component({
   components: {
-    AppAbout
+    AppAbout,
   },
   metaInfo: {
-    title: "About"
-  }
+    title: "About",
+  },
 })
 export default class About extends Vue {}
 </script>
+
+<i18n>
+{
+  "en": {
+    "title": "About"
+  },
+  "hi": {
+     "title": "हमारे बारे में"
+  },
+  "cn": {
+      "title": "简介"
+  }
+}
+</i18n>

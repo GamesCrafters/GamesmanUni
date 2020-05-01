@@ -8,6 +8,7 @@
 @use "rose";
 @use "sepia";
 @use "space";
+@use "neon";
 
 body {
   --themeColor: #778899;
@@ -99,4 +100,12 @@ body.c-theme-space {
   --backgroundColor: #{space.$backgroundColor};
   --primaryColor: #{space.$primaryColor};
   --neutralColor: #{space.$neutralColor};
+}
+
+body.c-theme-neon {
+  --font: #{neon.$font};
+  --monoFont: #{neon.$monoFont};
+  --backgroundColor: #{neon.$backgroundColor};
+  --primaryColor: #{neon.$primaryColor};
+  --neutralColor: #{neon.$neutralColor};
 }

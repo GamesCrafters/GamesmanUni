@@ -13,8 +13,16 @@ import ExternalMarkdown from "@/components/ExternalMarkdown.vue";
 
 @Component({
   components: {
-    ExternalMarkdown
-  }
+    ExternalMarkdown,
+  },
 })
 export default class AppAbout extends Vue {}
 </script>
+
+<i18n>
+{
+  "hi": {
+     "title": "हमारे बारे में "
+  }
+}
+</i18n>
