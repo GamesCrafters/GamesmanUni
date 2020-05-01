@@ -1,26 +1,25 @@
 <template>
   <div id="app-game-board-mancala-regular">
     <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
-
       <g id="board">
-
-        <g
-          v-for="store in getAllStores"
-          :key="store.id">
-          <path id="store"
-          :d="store.d"
-          />
-          <circle id="pieces"
+        <g v-for="store in getAllStores" :key="store.id">
+          <path id="store" :d="store.d" />
+          <circle
+            id="pieces"
             v-for="(position, index) in piecesInBins[+store.index]"
             :key="index"
-            r="1" :cx="position[0]" :cy="position[1]"
+            r="1"
+            :cx="position[0]"
+            :cy="position[1]"
           />
         </g>
 
-        <g id="pocket"
+        <g
+          id="pocket"
           v-for="pocket in getAllPockets"
           :key="pocket.id"
-          @click="pocket.nextMove == '' ? 1 : runMove(pocket.nextMove)">
+          @click="pocket.nextMove == '' ? 1 : runMove(pocket.nextMove)"
+        >
           <circle
             r="4"
             :cx="pocket.x"
@@ -28,30 +27,37 @@
             :class="pocket.class"
             :opacity="pocket.opacity"
           />
-          <circle id="pieces"
+          <circle
+            id="pieces"
             v-for="(position, index) in piecesInBins[+pocket.index]"
             :key="index"
-            r="1" :cx="position[0]" :cy="position[1]"
+            r="1"
+            :cx="position[0]"
+            :cy="position[1]"
           />
         </g>
       </g>
 
-
-      <text id="count"
+      <text
+        id="count"
         v-for="store in getAllStores"
         :key="store.id"
         :x="store.countX"
         :y="store.countY"
-      >{{ currPosition[store.index] }}</text>
+      >
+        {{ currPosition[store.index] }}
+      </text>
 
-      <text id="count"
+      <text
+        id="count"
         v-for="pocket in getAllPockets"
         :key="pocket.id"
         :x="pocket.countX"
         :y="pocket.countY"
-      >{{ currPosition[pocket.index] }}</text>
+      >
+        {{ currPosition[pocket.index] }}
+      </text>
     </svg>
-
   </div>
 </template>
 
@@ -111,7 +117,7 @@ export default class GMancalaRegular extends Vue {
       countY: 3,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     po["po2"] = {
@@ -122,7 +128,7 @@ export default class GMancalaRegular extends Vue {
       countY: 3,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     po["po3"] = {
@@ -133,7 +139,7 @@ export default class GMancalaRegular extends Vue {
       countY: 3,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     po["po7"] = {
@@ -144,7 +150,7 @@ export default class GMancalaRegular extends Vue {
       countY: 29,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     po["po6"] = {
@@ -155,7 +161,7 @@ export default class GMancalaRegular extends Vue {
       countY: 29,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     po["po5"] = {
@@ -166,7 +172,7 @@ export default class GMancalaRegular extends Vue {
       countY: 29,
       class: "default-pocket",
       opacity: 1,
-      nextMove: ""
+      nextMove: "",
     };
 
     return po;
@@ -190,7 +196,7 @@ export default class GMancalaRegular extends Vue {
       index: 0,
       d: "M 6 7.5 L 6 22.5 A 4 4 180 0 0 14 22.5 L 14 7.5 A 4 4 0 0 0 6 7.5",
       countX: 4,
-      countY: 15
+      countY: 15,
     };
 
     sto["sto4"] = {
@@ -199,7 +205,7 @@ export default class GMancalaRegular extends Vue {
       index: 4,
       d: "M 46 7.5 L 46 22.5 A 4 4 180 0 0 54 22.5 L 54 7.5 A 4 4 0 0 0 46 7.5",
       countX: 56,
-      countY: 15
+      countY: 15,
     };
 
     return sto;
@@ -210,21 +216,69 @@ export default class GMancalaRegular extends Vue {
     return position.split(";")[0].split("s");
   }
 
-  generatePiecePositions(binX: number, binY: number, numPieces: number): number[][] {
+  generatePiecePositions(
+    binX: number,
+    binY: number,
+    numPieces: number
+  ): number[][] {
     let positions: number[][] = [];
     function generateBinOffsets(binX: number, binY: number): number[] {
-      let offsets = [binX-1, binY, binX+1, binY, binX-3, binY, binX+3, binY,
-        binX, binY-2, binX-2, binY-2, binX+2, binY-2, binX, binY+2, binX-2,
-        binY+2, binX+2, binY+2, binX-2, binY-1, binX, binY-1, binX+2, binY-1,
-        binX-2, binY+1, binX, binY+1, binX+2, binY+1, binX-1, binY-3, binX+1,
-        binY-3, binX-1, binY+3, binX+1, binY+3, binX-1, binY-2, binX+1,
-        binY-2, binX-1, binY, binX+1, binY];
+      let offsets = [
+        binX - 1,
+        binY,
+        binX + 1,
+        binY,
+        binX - 3,
+        binY,
+        binX + 3,
+        binY,
+        binX,
+        binY - 2,
+        binX - 2,
+        binY - 2,
+        binX + 2,
+        binY - 2,
+        binX,
+        binY + 2,
+        binX - 2,
+        binY + 2,
+        binX + 2,
+        binY + 2,
+        binX - 2,
+        binY - 1,
+        binX,
+        binY - 1,
+        binX + 2,
+        binY - 1,
+        binX - 2,
+        binY + 1,
+        binX,
+        binY + 1,
+        binX + 2,
+        binY + 1,
+        binX - 1,
+        binY - 3,
+        binX + 1,
+        binY - 3,
+        binX - 1,
+        binY + 3,
+        binX + 1,
+        binY + 3,
+        binX - 1,
+        binY - 2,
+        binX + 1,
+        binY - 2,
+        binX - 1,
+        binY,
+        binX + 1,
+        binY,
+      ];
       return offsets;
     }
 
     let offsets = generateBinOffsets(binX, binY);
     for (let i = 0; i < numPieces; i++) {
-      let curr: number[] = [offsets[i*2], offsets[i*2+1]];
+      let curr: number[] = [offsets[i * 2], offsets[i * 2 + 1]];
       positions.push(curr);
     }
     return positions;
@@ -237,14 +291,14 @@ export default class GMancalaRegular extends Vue {
     for (let pocket in this.allPockets) {
       let x = this.allPockets[pocket].x;
       let y = this.allPockets[pocket].y;
-      let index = +(this.allPockets[pocket].index);
+      let index = +this.allPockets[pocket].index;
       bins.push(this.generatePiecePositions(x, y, +pieces[index]));
     }
 
     for (let store in this.allStores) {
       let x = this.allStores[store].x;
       let y = this.allStores[store].y;
-      let index = +(this.allStores[store].index);
+      let index = +this.allStores[store].index;
       bins.splice(index, 0, this.generatePiecePositions(x, y, +pieces[index]));
     }
 
@@ -267,7 +321,10 @@ export default class GMancalaRegular extends Vue {
       }
 
       let nextMoveOpacity = 1;
-      if (this.$store.getters.deltaRemotenessVisibility && this.$store.getters.hintVisibility) {
+      if (
+        this.$store.getters.deltaRemotenessVisibility &&
+        this.$store.getters.hintVisibility
+      ) {
         nextMoveOpacity = nextMoveData.moveValueOpacity;
       }
 
@@ -380,7 +437,7 @@ svg {
   }
 
   #pieces {
-    fill: #ADD8E6;
+    fill: #add8e6;
     stroke: #00008b;
     stroke-width: 0.25;
   }
@@ -391,9 +448,8 @@ svg {
   }
 
   #pocket:hover {
-    opacity: 50%;
+    opacity: 0.5;
   }
-
 }
 
 #app-game-board-default-moves-buttons {
@@ -425,5 +481,4 @@ svg {
   stroke-width: 1;
   fill: var(--backgroundColor);
 }
-
 </style>
