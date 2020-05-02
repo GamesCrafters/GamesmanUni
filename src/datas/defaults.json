@@ -16,7 +16,12 @@
   "layoutDictionary": { "default": "Default" },
   "layout": "default",
 
-  "languageDictionary": { "cn": "🇨🇳 简体中文", "en": "🇺🇸 English" },
+  "languageDictionary": {
+    "cn": "🇨🇳 简体中文",
+    "en": "🇺🇸 English",
+    "es": "🇲🇽 Español",
+    "hi": "🇮🇳 हिन्दी"
+  },
   "language": "en",
 
   "serverDataVersion": "1",

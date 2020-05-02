@@ -10,8 +10,8 @@ import VueMarkdown from "vue-markdown";
 
 @Component({
   components: {
-    VueMarkdown
-  }
+    VueMarkdown,
+  },
 })
 export default class AppWelcome extends Vue {}
 </script>
@@ -23,6 +23,12 @@ export default class AppWelcome extends Vue {}
   },
   "en": {
     "title": "Welcome!"
+  },
+  "es": {
+    "title": "¡Bienvenido!"
+  },
+  "hi": {
+    "title": "आपका स्वागत है!"
   }
 }
 </i18n>
