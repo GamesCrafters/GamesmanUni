@@ -1,11 +1,23 @@
 <template>
   <div id="app-footer">
     <span id="app-footer-frontend-version"
-      >GamesmanUniGUI v{{ appVersion }}</span
+      ><a
+        href="https://github.com/GamesCrafters/GamesmanUni"
+        target="_blank"
+        rel="noreferrer"
+        >GamesmanUni</a
+      >
+      v{{ appVersion }}</span
     >
     |
     <span id="app-footer-backend-version"
-      >GamesmanUniversalAPI v{{ dataVersion }}</span
+      ><a
+        href="https://github.com/GamesCrafters/GamesCraftersUWAPI"
+        target="_blank"
+        rel="noreferrer"
+        >GamesCraftersUWAPI</a
+      >
+      v{{ dataVersion }}</span
     >
     |
     <span id="app-footer-github">
@@ -14,6 +26,15 @@
         target="_blank"
         rel="noreferrer"
         >GitHub</a
+      >
+    </span>
+    |
+    <span id="app-footer-unidoc">
+      <a
+        href="https://sites.google.com/berkeley.edu/gamesmanuni-doc"
+        target="_blank"
+        rel="noreferrer"
+        >Documentation</a
       >
     </span>
     |

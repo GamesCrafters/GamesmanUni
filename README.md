@@ -3,7 +3,7 @@
 
 <p align="center">
     <a alt="GamesCrafters logo" href="https://github.com/GamesCrafters" rel="noreferrer" target="_blank">
-        <img src="src/assets/LApp.png?sanitize=true"></a>
+        <img src="src/assets/LApp.png?sanitize=true" width="150px" height="150px"></a>
 </p>
 
 <!-- ####################################################################### -->
@@ -126,28 +126,16 @@ serve -s dist
 ```
 
 <!-- ####################################################################### -->
-<!-- support -->
+<!-- documentation -->
 
-## Support
-
-- Please open an issue for bugs and supports.
-- _Issue templates are coming soon!_
+## Documentation
+For more information about the project and contribution guide, please visit [GamesmanUni Documentation](https://sites.google.com/berkeley.edu/gamesmanuni-doc).
 
 <!-- ####################################################################### -->
-<!-- roadmap -->
+<!-- license -->
 
-## Roadmap
-
-- _Roadmap is coming soon!_
-
-<!-- ####################################################################### -->
-<!-- contributing -->
-
-## Contributing
-
-- Pull requests are welcome. For all the changes on the master branch, please open an issue first to discuss what you would like to change so that the contributions are not overlapped and your effort will not go to waste!
-- Please make sure to update tests as appropriate (even though E2E and unit tests are not updated for the existing project code).
-- _Detailed project documentation on design decisions, repository organization and coding styles, & contribution guides on issue templates, commit procedures and pull requests are coming soon!_
+## License
+[GPL-3.0](https://github.com/GamesCrafters/GamesmanUni/blob/master/LICENSE)
 
 <!-- ####################################################################### -->
 <!-- license -->
