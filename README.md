@@ -138,12 +138,6 @@ For more information about the project and contribution guide, please visit [Gam
 [GPL-3.0](https://github.com/GamesCrafters/GamesmanUni/blob/master/LICENSE)
 
 <!-- ####################################################################### -->
-<!-- license -->
-
-## License
-[GPL-3.0](https://github.com/GamesCrafters/GamesmanUni/blob/master/LICENSE)
-
-<!-- ####################################################################### -->
 <!-- acknowledgement -->
 
 ## Acknowledgment
