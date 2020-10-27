@@ -171,7 +171,7 @@ export class CVvh implements IVvh {
   private setCanvasResolution(): void {
     this.canvas.style.width = this.canvas.width + "px";
     this.canvas.style.height = this.canvas.height + "px";
-    let devicePixelRatio = window.devicePixelRatio || 1;
+    const devicePixelRatio = window.devicePixelRatio || 1;
     this.canvas.width *= devicePixelRatio;
     this.canvas.height *= devicePixelRatio;
     this.ctx.scale(devicePixelRatio, devicePixelRatio);
@@ -431,7 +431,7 @@ export class CVvh implements IVvh {
       } else if (roundData.getPositionValue() === "tie") {
         x = [
           this.remotenessToX(roundData.getRemoteness(), 0),
-          this.remotenessToX(roundData.getRemoteness(), 1)
+          this.remotenessToX(roundData.getRemoteness(), 1),
         ];
       } else if (roundData.getPositionValue() === "lose") {
         x = this.remotenessToX(
