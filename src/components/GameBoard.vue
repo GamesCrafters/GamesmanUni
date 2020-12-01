@@ -16,6 +16,7 @@ import GTenRegular from "@/components/gameBoards/GTenRegular.vue";
 import GTttMisere from "@/components/gameBoards/GTttMisere.vue";
 import GTttRegular from "@/components/gameBoards/GTttRegular.vue";
 import GMancalaRegular from "@/components/gameBoards/GMancalaRegular.vue";
+import GDaoRegular from "@/components/gameBoards/GDaoRegular.vue";
 
 @Component({
   components: {
@@ -27,8 +28,9 @@ import GMancalaRegular from "@/components/gameBoards/GMancalaRegular.vue";
     GTenRegular,
     GTttMisere,
     GTttRegular,
-    GMancalaRegular
-  }
+    GMancalaRegular,
+    GDaoRegular,
+  },
 })
 export default class GameBoard extends Vue {
   getGameBoardComponentName(): string {
