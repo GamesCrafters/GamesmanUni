@@ -2,6 +2,7 @@
   "name": "gamesmanuni",
   "version": "4.0.0-beta.70",
   "private": true,
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "vue-cli-service build",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
