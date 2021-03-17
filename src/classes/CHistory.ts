@@ -35,9 +35,8 @@ export class CHistory implements IHistory {
     if (type === "last") {
       this.roundArray[this.roundArray.length - 1] = round;
     } else if (type === "curr") {
-      const lastRoundNumber = this.currentRoundNumber;
       this.currentRoundNumber = round.getRoundNumber();
-      if (this.currentRoundNumber <= lastRoundNumber) {
+      if (this.currentRoundNumber <= this.roundArray.length) {
         const startIndex = this.currentRoundNumber - 1;
         const lastIndex = this.roundArray.length - 1;
         const deleteCount = lastIndex - startIndex + 1;
@@ -53,21 +52,21 @@ export class CHistory implements IHistory {
       this.roundArray.push(round);
       this.roundDictionary.set(this.currentRoundNumber, round);
       this.maximumRemoteness = Math.max(
-        ...this.roundArray.map(round => round.getRemoteness())
+        ...this.roundArray.map((round) => round.getRemoteness())
       );
     } else if (type === "undo") {
       this.currentRoundNumber -= 1;
       this.maximumRemoteness = Math.max(
         ...this.roundArray
           .slice(0, this.currentRoundNumber)
-          .map(round => round.getRemoteness())
+          .map((round) => round.getRemoteness())
       );
     } else if (type === "redo") {
       this.currentRoundNumber += 1;
       this.maximumRemoteness = Math.max(
         ...this.roundArray
           .slice(0, this.currentRoundNumber)
-          .map(round => round.getRemoteness())
+          .map((round) => round.getRemoteness())
       );
     }
   }
