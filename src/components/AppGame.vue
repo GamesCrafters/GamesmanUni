@@ -8,7 +8,10 @@
         {{ game.getName() }}
         <br />
         <router-link
-          :to="{ name: 'variants', params: { gameId: game.getId() } }"
+          :to="{
+            name: 'variants',
+            params: { gameType: game.getType(), gameId: game.getId() },
+          }"
           >({{ game.getRound().getVariantDescription() }})</router-link
         >
       </h2>
@@ -60,7 +63,10 @@
           <GameBoard></GameBoard>
         </div>
       </div>
-      <div v-if="options.getVvhVisibility()" id="app-game-body-vvh">
+      <div
+        v-if="options.getVvhVisibility() && game.getType() != 'puzzles'"
+        id="app-game-body-vvh"
+      >
         <GameVvh></GameVvh>
       </div>
     </div>
@@ -82,8 +88,8 @@ import GameVvh from "@/components/GameVvh.vue";
     GameBoard,
     GameInstruction,
     GameOptions,
-    GameVvh
-  }
+    GameVvh,
+  },
 })
 export default class AppGame extends Vue {
   interval = setInterval(() => this.updateInterval(), 1000);
@@ -115,7 +121,7 @@ export default class AppGame extends Vue {
       title:
         this.game.getName() +
         " Game: " +
-        this.game.getCurrentVariantData().description
+        this.game.getCurrentVariantData().description,
     };
   }
 
@@ -132,7 +138,10 @@ export default class AppGame extends Vue {
 
   async created(): Promise<void> {
     this.initInterval();
-    await this.$store.dispatch("initGame", this.$route.params.gameId);
+    await this.$store.dispatch("initGame", {
+      gameId: this.$route.params.gameId,
+      gameType: this.$route.params.gameType,
+    });
     await this.$store.dispatch("startNewGame", this.$route.params.variantId);
   }
 

@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import { TMoveData } from "@/types/internal/TMoveData";
 import { CApp } from "@/classes/CApp";
 import { CGame } from "@/classes/CGame";
+import { CGames } from "@/classes/CGames";
 import { COptions } from "@/classes/COptions";
 import { CVvh } from "@/classes/CVvh";
 
@@ -11,176 +12,98 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     appVersion: process.env.VUE_APP_VERSION,
-    app: new CApp()
+    app: new CApp(),
   },
   getters: {
-    appVersion: state => state.appVersion,
-    app: state => state.app,
+    appVersion: (state) => state.appVersion,
+    app: (state) => state.app,
 
     // CApp.ts
-    loadingStatus: state => state.app.getLoadingStatus(),
-    themeDictionary: state => state.app.getThemeDictionary(),
-    theme: state => state.app.getTheme(),
-    layoutDictionary: state => state.app.getLayoutDictionary(),
-    layout: state => state.app.getLayout(),
-    languageDictionary: state => state.app.getLanguageDictionary(),
-    language: state => state.app.getLanguage(),
-    serverDataVersion: state => state.app.getServerDataVersion(),
-    serverDataSource: state => state.app.getServerDataSource(),
-    games: state => state.app.getGames(),
-    game: state => state.app.getGame(),
-    updates: state => state.app.getUpdates(),
+    loadingStatus: (state) => state.app.getLoadingStatus(),
+    themeDictionary: (state) => state.app.getThemeDictionary(),
+    theme: (state) => state.app.getTheme(),
+    layoutDictionary: (state) => state.app.getLayoutDictionary(),
+    layout: (state) => state.app.getLayout(),
+    languageDictionary: (state) => state.app.getLanguageDictionary(),
+    language: (state) => state.app.getLanguage(),
+    serverDataVersion: (state) => state.app.getServerDataVersion(),
+    serverDataSource: (state) => state.app.getServerDataSource(),
+    games: (state) => state.app.getGames(),
+    game: (state) => state.app.getGame(),
+    updates: (state) => state.app.getUpdates(),
 
     // CGame.ts
-    gameId: state => state.app.getGame().getId(),
-    gameName: state => state.app.getGame().getName(),
-    variantDataArray: state => state.app.getGame().getVariantDataArray(),
-    variantDataDictionary: state =>
+    gameId: (state) => state.app.getGame().getId(),
+    gameName: (state) => state.app.getGame().getName(),
+    gameType: (state) => state.app.getGame().getType(),
+    variantDataArray: (state) => state.app.getGame().getVariantDataArray(),
+    variantDataDictionary: (state) =>
       state.app.getGame().getVariantDataDictionary(),
-    currentVariantData: state => state.app.getGame().getCurrentVariantData(),
-    turnNameDictionary: state => state.app.getGame().getTurnNameDictionary(),
-    vvhSelectorId: state => state.app.getGame().getVvhSelectorId(),
-    options: state => state.app.getGame().getOptions(),
-    round: state => state.app.getGame().getRound(),
-    history: state => state.app.getGame().getHistory(),
+    currentVariantData: (state) => state.app.getGame().getCurrentVariantData(),
+    turnNameDictionary: (state) => state.app.getGame().getTurnNameDictionary(),
+    vvhSelectorId: (state) => state.app.getGame().getVvhSelectorId(),
+    options: (state) => state.app.getGame().getOptions(),
+    round: (state) => state.app.getGame().getRound(),
+    history: (state) => state.app.getGame().getHistory(),
 
     // CGames.ts
-    gameDataArray: state => state.app.getGames().getGameDataArray(),
+    gameDataArray: (state) => state.app.getGames().getGameDataArray(),
+
+    // CGames.ts (Puzzle)
+    puzzleDataArray: (state) => state.app.getGames().getPuzzleDataArray(),
 
     // CGitHub.ts
-    latestCommitCount: state => state.app.getUpdates().getLatestCommitCount(),
-    latestCommitDateArray: state =>
+    latestCommitCount: (state) => state.app.getUpdates().getLatestCommitCount(),
+    latestCommitDateArray: (state) =>
       state.app.getUpdates().getLatestCommitDateArray(),
-    latestCommitMessageArray: state =>
+    latestCommitMessageArray: (state) =>
       state.app.getUpdates().getLatestCommitMessageArray(),
-    latestCommitLinkArray: state =>
+    latestCommitLinkArray: (state) =>
       state.app.getUpdates().getLatestCommitLinkArray(),
 
     // CHistory.ts
-    currentRoundNumber: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getCurrentRoundNumber(),
-    roundArray: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getRoundArray(),
-    roundDictionary: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getRoundDictionary(),
-    maximumRemoteness: state =>
-      state.app
-        .getGame()
-        .getHistory()
-        .getMaximumRemoteness(),
+    currentRoundNumber: (state) =>
+      state.app.getGame().getHistory().getCurrentRoundNumber(),
+    roundArray: (state) => state.app.getGame().getHistory().getRoundArray(),
+    roundDictionary: (state) =>
+      state.app.getGame().getHistory().getRoundDictionary(),
+    maximumRemoteness: (state) =>
+      state.app.getGame().getHistory().getMaximumRemoteness(),
 
     // COptions.ts
-    gameInstructionVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getGameInstructionVisibility(),
-    gameOptionsVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getGameOptionsVisibility(),
-    clockVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getClockVisibility(),
-    vvhVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getVvhVisibility(),
-    nextMovesVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getNextMovesVisibility(),
-    hintVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getHintVisibility(),
-    deltaRemotenessVisibility: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getDeltaRemotenessVisibility(),
-    animationDuration: state =>
-      state.app
-        .getGame()
-        .getOptions()
-        .getAnimationDuration(),
+    gameInstructionVisibility: (state) =>
+      state.app.getGame().getOptions().getGameInstructionVisibility(),
+    gameOptionsVisibility: (state) =>
+      state.app.getGame().getOptions().getGameOptionsVisibility(),
+    clockVisibility: (state) =>
+      state.app.getGame().getOptions().getClockVisibility(),
+    vvhVisibility: (state) =>
+      state.app.getGame().getOptions().getVvhVisibility(),
+    nextMovesVisibility: (state) =>
+      state.app.getGame().getOptions().getNextMovesVisibility(),
+    hintVisibility: (state) =>
+      state.app.getGame().getOptions().getHintVisibility(),
+    deltaRemotenessVisibility: (state) =>
+      state.app.getGame().getOptions().getDeltaRemotenessVisibility(),
+    animationDuration: (state) =>
+      state.app.getGame().getOptions().getAnimationDuration(),
 
     // CRound.ts
-    roundNumber: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getRoundNumber(),
-    variantId: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getVariantId(),
-    variantDescription: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getVariantDescription(),
-    turnId: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getTurnId(),
-    turnName: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getTurnName(),
-    move: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getMove(),
-    moveValue: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getMoveValue(),
-    position: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getPosition(),
-    positionValue: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getPositionValue(),
-    remoteness: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getRemoteness(),
-    nextMoveDataArray: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getNextMoveDataArray(),
-    nextMoveDataDictionary: state =>
-      state.app
-        .getGame()
-        .getRound()
-        .getNextMoveDataDictionary()
+    roundNumber: (state) => state.app.getGame().getRound().getRoundNumber(),
+    variantId: (state) => state.app.getGame().getRound().getVariantId(),
+    variantDescription: (state) =>
+      state.app.getGame().getRound().getVariantDescription(),
+    turnId: (state) => state.app.getGame().getRound().getTurnId(),
+    turnName: (state) => state.app.getGame().getRound().getTurnName(),
+    move: (state) => state.app.getGame().getRound().getMove(),
+    moveValue: (state) => state.app.getGame().getRound().getMoveValue(),
+    position: (state) => state.app.getGame().getRound().getPosition(),
+    positionValue: (state) => state.app.getGame().getRound().getPositionValue(),
+    remoteness: (state) => state.app.getGame().getRound().getRemoteness(),
+    nextMoveDataArray: (state) =>
+      state.app.getGame().getRound().getNextMoveDataArray(),
+    nextMoveDataDictionary: (state) =>
+      state.app.getGame().getRound().getNextMoveDataDictionary(),
   },
   mutations: {
     // CApp.ts
@@ -199,6 +122,9 @@ export default new Vuex.Store({
     game(state, game: CGame): void {
       state.app.setGame(game);
     },
+    games(state, games: CGames): void {
+      state.app.setGames(games);
+    },
 
     // CGame.ts
     gameId(state, gameId: string): void {
@@ -206,6 +132,9 @@ export default new Vuex.Store({
     },
     gameName(state, gameName: string): void {
       state.app.getGame().setName(gameName);
+    },
+    gameType(state, gameType: string): void {
+      state.app.getGame().setType(gameType);
     },
     currentVariantData(state, variantId: string): void {
       state.app.getGame().setCurrentVariantData(variantId);
@@ -228,10 +157,7 @@ export default new Vuex.Store({
 
     // CHistory.ts
     updateHistory(state, { round, type }): void {
-      state.app
-        .getGame()
-        .getHistory()
-        .updateHistory(round, type);
+      state.app.getGame().getHistory().updateHistory(round, type);
     },
 
     // COptions.ts
@@ -248,16 +174,10 @@ export default new Vuex.Store({
         .setGameOptionsVisibility(gameOptionsVisibility);
     },
     clockVisibility(state, clockVisibility: boolean): void {
-      state.app
-        .getGame()
-        .getOptions()
-        .setClockVisibility(clockVisibility);
+      state.app.getGame().getOptions().setClockVisibility(clockVisibility);
     },
     vvhVisibility(state, vvhVisibility: boolean): void {
-      state.app
-        .getGame()
-        .getOptions()
-        .setVvhVisibility(vvhVisibility);
+      state.app.getGame().getOptions().setVvhVisibility(vvhVisibility);
     },
     nextMovesVisibility(state, nextMovesVisibility: boolean): void {
       state.app
@@ -266,10 +186,7 @@ export default new Vuex.Store({
         .setNextMovesVisibility(nextMovesVisibility);
     },
     hintVisibility(state, hintVisibility: boolean): void {
-      state.app
-        .getGame()
-        .getOptions()
-        .setHintVisibility(hintVisibility);
+      state.app.getGame().getOptions().setHintVisibility(hintVisibility);
     },
     deltaRemotenessVisibility(state, deltaRemotenessVisibility: boolean): void {
       state.app
@@ -278,78 +195,42 @@ export default new Vuex.Store({
         .setDeltaRemotenessVisibility(deltaRemotenessVisibility);
     },
     animationDuration(state, animationDuration: number): void {
-      state.app
-        .getGame()
-        .getOptions()
-        .setAnimationDuration(animationDuration);
+      state.app.getGame().getOptions().setAnimationDuration(animationDuration);
     },
 
     // CRound.ts
     roundNumber(state, roundNumber: number): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setRoundNumber(roundNumber);
+      state.app.getGame().getRound().setRoundNumber(roundNumber);
     },
     variantId(state, variantId: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setVariantId(variantId);
+      state.app.getGame().getRound().setVariantId(variantId);
     },
     variantDescription(state, variantDescription: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setVariantDescription(variantDescription);
+      state.app.getGame().getRound().setVariantDescription(variantDescription);
     },
     turnId(state, turnId: number): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setTurnId(turnId);
+      state.app.getGame().getRound().setTurnId(turnId);
     },
     turnName(state, turnName: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setTurnName(turnName);
+      state.app.getGame().getRound().setTurnName(turnName);
     },
     move(state, move: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setMove(move);
+      state.app.getGame().getRound().setMove(move);
     },
     moveValue(state, move: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setMoveValue(move);
+      state.app.getGame().getRound().setMoveValue(move);
     },
     position(state, position: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setPosition(position);
+      state.app.getGame().getRound().setPosition(position);
     },
     positionValue(state, positionValue: string): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setPositionValue(positionValue);
+      state.app.getGame().getRound().setPositionValue(positionValue);
     },
     remoteness(state, remoteness: number): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setRemoteness(remoteness);
+      state.app.getGame().getRound().setRemoteness(remoteness);
     },
     nextMoveDataArray(state, nextMoveDataArray: Array<TMoveData>): void {
-      state.app
-        .getGame()
-        .getRound()
-        .setNextMoveDataArray(nextMoveDataArray);
+      state.app.getGame().getRound().setNextMoveDataArray(nextMoveDataArray);
     },
     nextMoveDataDictionary(state, nextMoveDataArray: Array<TMoveData>): void {
       state.app
@@ -362,13 +243,10 @@ export default new Vuex.Store({
     drawVvh(state): void {
       const vvh: CVvh = new CVvh(
         state.app.getGame(),
-        state.app
-          .getGame()
-          .getOptions()
-          .getHintVisibility()
+        state.app.getGame().getOptions().getHintVisibility()
       );
       vvh.drawVvh();
-    }
+    },
   },
   actions: {
     // CGames.ts
@@ -381,10 +259,10 @@ export default new Vuex.Store({
     },
 
     // CGame.ts
-    async initGame({ state, commit }, gameId: string): Promise<boolean> {
+    async initGame({ state, commit }, payload): Promise<boolean> {
       let success: boolean = true;
       commit("loadingStatus", true);
-      success = await state.app.getGame().initGame(gameId);
+      success = await state.app.getGame().initGame(payload);
       commit("loadingStatus", false);
       return success;
     },
@@ -411,6 +289,6 @@ export default new Vuex.Store({
       success = await state.app.getUpdates().initCommits();
       commit("loadingStatus", false);
       return success;
-    }
-  }
+    },
+  },
 });

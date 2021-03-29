@@ -9,7 +9,11 @@
         :key="variantData.id"
         :to="{
           name: 'game',
-          params: { gameId: gameId, variantId: variantData.id },
+          params: {
+            gameType: gameType,
+            gameId: gameId,
+            variantId: variantData.id,
+          },
         }"
       >
         <img
@@ -39,6 +43,11 @@ import { CGame } from "@/classes/CGame";
 export default class GameVariants extends Vue {
   get gameId(): string {
     return this.$store.getters.gameId;
+  }
+
+  get gameType(): string {
+    console.warn(this.$store.getters.game.getType());
+    return this.$store.getters.gameType;
   }
 
   get gameName(): string {
@@ -87,7 +96,10 @@ export default class GameVariants extends Vue {
       this.$store.commit("game", new CGame());
       this.$store.commit("options", oldGame.getOptions());
     }
-    await this.$store.dispatch("initGame", this.$route.params.gameId);
+    await this.$store.dispatch("initGame", {
+      gameId: this.$route.params.gameId,
+      gameType: this.$route.params.gameType,
+    });
   }
 }
 </script>

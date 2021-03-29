@@ -5,6 +5,7 @@ import { CRound } from "@/classes/CRound";
 
 export interface IGame {
   getId(): string;
+  getType(): string;
   getName(): string;
   getVariantDataArray(): Array<TVariantData>;
   getVariantDataDictionary(): Map<string, TVariantData>;
@@ -22,7 +23,7 @@ export interface IGame {
   setTurn1Name(turn1Name: string): void;
   setOptions(options: COptions): void;
 
-  initGame(gameId: string): Promise<boolean>;
+  initGame(payload: any): Promise<boolean>;
   startNewGame(variantId: string): Promise<boolean>;
   runMove(): Promise<boolean>;
   undoMove(): void;

@@ -1,12 +1,20 @@
 <template>
   <div id="app-games">
-    <h2 id="app-games-title">Games</h2>
+    <div id="app-games-title">
+      <h2>{{ title }}</h2>
+    </div>
     <div id="app-games-games-container">
       <router-link
         class="app-games-game"
         v-for="gameData in gameDataArray"
         :key="gameData.id"
-        :to="{ name: 'variants', params: { gameId: gameData.id } }"
+        :to="{
+          name: 'variants',
+          params: {
+            gameType: gameType,
+            gameId: gameData.id,
+          },
+        }"
       >
         <img
           class="app-games-game-logo"
@@ -31,7 +39,24 @@ import { CGames } from "@/classes/CGames";
 
 @Component
 export default class AppGames extends Vue {
+  get title(): string {
+    if (this.$route.name == "puzzles") {
+      return "Puzzles";
+    }
+    return "Games";
+  }
+
+  get gameType(): string {
+    if (this.$route.name == "puzzles") {
+      return "puzzles";
+    }
+    return "games";
+  }
+
   get gameDataArray(): Array<TGameData> {
+    if (this.$route.name == "puzzles") {
+      return this.$store.getters.puzzleDataArray;
+    }
     return this.$store.getters.gameDataArray;
   }
 
@@ -53,8 +78,11 @@ export default class AppGames extends Vue {
     return logos("./LApp.png");
   }
 
-  created(): void {
-    this.$store.dispatch("initGames");
+  async created(): Promise<void> {
+    if (this.$store.getters.gameType != this.$route.params.gameType) {
+      this.$store.commit("games", new CGames());
+    }
+    await this.$store.dispatch("initGames", this.$route.params.gameType);
   }
 }
 </script>
