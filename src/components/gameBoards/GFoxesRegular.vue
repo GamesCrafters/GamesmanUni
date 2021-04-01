@@ -10,23 +10,23 @@
 
           <!-- below is line from 1, 1 to 81, 1 -->
           <path id="board-bar" d="M1,1 L81,1" />
-          <use xlink:href="#board-bar" transform="translate(0 10)" />
-          <use xlink:href="#board-bar" transform="translate(0 20)" />
-          <use xlink:href="#board-bar" transform="translate(0 30)" />
-          <use xlink:href="#board-bar" transform="translate(0 40)" />
-          <use xlink:href="#board-bar" transform="translate(0 50)" />
-          <use xlink:href="#board-bar" transform="translate(0 60)" />
-          <use xlink:href="#board-bar" transform="translate(0 70)" />
-          <use xlink:href="#board-bar" transform="translate(0 80)" />
-          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(12) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(22) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(32) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(42) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(52) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(62) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(72) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(82) rotate(90)" />
+          <use href="#board-bar" transform="translate(0 10)" />
+          <use href="#board-bar" transform="translate(0 20)" />
+          <use href="#board-bar" transform="translate(0 30)" />
+          <use href="#board-bar" transform="translate(0 40)" />
+          <use href="#board-bar" transform="translate(0 50)" />
+          <use href="#board-bar" transform="translate(0 60)" />
+          <use href="#board-bar" transform="translate(0 70)" />
+          <use href="#board-bar" transform="translate(0 80)" />
+          <use href="#board-bar" transform="translate(2) rotate(90)" />
+          <use href="#board-bar" transform="translate(12) rotate(90)" />
+          <use href="#board-bar" transform="translate(22) rotate(90)" />
+          <use href="#board-bar" transform="translate(32) rotate(90)" />
+          <use href="#board-bar" transform="translate(42) rotate(90)" />
+          <use href="#board-bar" transform="translate(52) rotate(90)" />
+          <use href="#board-bar" transform="translate(62) rotate(90)" />
+          <use href="#board-bar" transform="translate(72) rotate(90)" />
+          <use href="#board-bar" transform="translate(82) rotate(90)" />
         </g>
         <circle id="turn-0-token" cx="5" cy="5" r="2" />
         <circle id="turn-1-token" cx="5" cy="5" r="2" />
@@ -34,30 +34,30 @@
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
 
-      <use xlink:href="#board" x="0" y="0" />
+      <use href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
         <use v-if="cell === 1" />
         <use
           v-else-if="boardData[cell].token === 'G' && (cell - 2) % 8 < 4"
-          xlink:href="#turn-0-token"
+          href="#turn-0-token"
           :x="(((cell - 2) * 2) % 8) * 10 + 11"
           :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
         <use
           v-else-if="boardData[cell].token === 'G' && (cell - 2) % 8 > 3"
-          xlink:href="#turn-0-token"
+          href="#turn-0-token"
           :x="(((cell - 2) * 2) % 8) * 10 + 1"
           :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
         <use
           v-else-if="boardData[cell].token === 'F' && (cell - 2) % 8 < 4"
-          xlink:href="#turn-1-token"
+          href="#turn-1-token"
           :x="(((cell - 2) * 2) % 8) * 10 + 11"
           :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
         <use
           v-else-if="boardData[cell].token === 'F' && (cell - 2) % 8 > 3"
-          xlink:href="#turn-1-token"
+          href="#turn-1-token"
           :x="(((cell - 2) * 2) % 8) * 10 + 1"
           :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
         />
@@ -67,7 +67,7 @@
           <use
             v-if="boardData[cell].hint"
             :class="'hint-' + boardData[cell].hint"
-            xlink:href="#hint"
+            href="#hint"
             :x="(((cell - 2) * 2) % 8) * 10 + 11"
             :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
           />
@@ -76,7 +76,7 @@
           <use
             :class="remoteness && 'move-pointer'"
             @click="remoteness && runMove(cell.toString())"
-            xlink:href="#move"
+            href="#move"
             :x="(((cell - 2) * 2) % 8) * 10 + 1"
             :y="Math.floor(((cell - 2) * 2) / 8) * 10 + 1"
           />
