@@ -1,8 +1,8 @@
 {
   "name": "gamesmanuni",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-alpha.1",
   "private": true,
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "vue-cli-service build",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
