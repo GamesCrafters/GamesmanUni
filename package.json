@@ -1,6 +1,6 @@
 {
   "name": "gamesmanuni",
-  "version": "5.0.0-alpha.1",
+  "version": "5.0.0-alpha.2",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -17,6 +17,7 @@
     ]
   },
   "dependencies": {
+    "@vue/composition-api": "^1.0.0-rc.6",
     "axios": "^0.21.1",
     "core-js": "^3.10.0",
     "moment": "^2.29.1",
