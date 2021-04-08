@@ -73,6 +73,8 @@
 <!-- ####################################################################### -->
 <!-- about -->
 
+This branch is the refactorization of `GamesmanUni` to Vue 3, in particular using Composition API. At the same time, the project structure will be reorganized to be more intuitive and easier to contribute while the dependencies that are no longer maintained will be replaced with appropriate solution.
+
 `GamesmanUni` is a web implementation of `GamesmanClassic` in `C`, developed as part of [GamesCrafters](http://gamescrafters.berkeley.edu/) research and development group at [University of California, Berkeley](https://www.berkeley.edu/). `Gamesman` is a finite, two-person, perfect-information game generator based on Master thesis by [Professor Dan Garcia](https://people.eecs.berkeley.edu/~ddgarcia/).
 
 <!-- ####################################################################### -->
