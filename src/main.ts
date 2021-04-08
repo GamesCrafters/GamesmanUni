@@ -1,4 +1,5 @@
 import "@/vueAxios";
+import "@/vueCompositionAPI";
 import "@/vueMeta";
 import "@/registerServiceWorker";
 import Vue from "vue";
@@ -13,5 +14,5 @@ new Vue({
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
