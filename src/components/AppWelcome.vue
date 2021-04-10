@@ -5,14 +5,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import VueMarkdown from "vue-markdown";
+import { Vue } from "vue-property-decorator";
 
-@Component({
-  components: {
-    VueMarkdown,
-  },
-})
 export default class AppWelcome extends Vue {}
 </script>
 
