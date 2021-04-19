@@ -14,9 +14,9 @@
           xmlns="http://www.w3.org/2000/svg"
           :viewBox="
             '-2 -2 ' +
-              (richPositionData.columns * 20 + 4) +
-              ' ' +
-              (richPositionData.rows * 20 + 4)
+            (richPositionData.columns * 20 + 4) +
+            ' ' +
+            (richPositionData.rows * 20 + 4)
           "
           :data-turn="richPositionData.turn"
         >
@@ -26,7 +26,7 @@
               <marker
                 :id="
                   'app-game-board-default-arrow-marker' +
-                    (value ? '-' + value : '')
+                  (value ? '-' + value : '')
                 "
                 :key="i"
                 viewBox="0 0 10 10"
@@ -50,8 +50,8 @@
             <rect
               :class="
                 'app-game-board-default-cell ' +
-                  (cell.move ? 'move ' : '') +
-                  (cell.token != '-' && !cell.move ? 'placed ' : '')
+                (cell.move ? 'move ' : '') +
+                (cell.token != '-' && !cell.move ? 'placed ' : '')
               "
               :x="coords[0] * 20"
               :y="coords[1] * 20"
@@ -64,14 +64,14 @@
               :y="coords[1] * 20 + 10"
               :class="
                 'app-game-board-default-token ' +
-                  (cell.move ? 'move ' : '') +
-                  getBoardMoveElementHintClass(cell.move)
+                (cell.move ? 'move ' : '') +
+                getBoardMoveElementHintClass(cell.move)
               "
               :style="{
                 opacity:
                   hintVisibility && deltaRemotenessVisibility && cell.move
                     ? cell.move.hintOpacity
-                    : 1
+                    : 1,
               }"
             >
               {{ cell.token }}
@@ -83,14 +83,14 @@
               :points="formatArrowPolylinePoints(arrow, 20)"
               :class="
                 'app-game-board-default-arrow ' +
-                  getBoardMoveElementHintClass(arrow.move)
+                getBoardMoveElementHintClass(arrow.move)
               "
               @click="runMove(arrow.move.str)"
               :style="{
                 opacity:
                   hintVisibility && deltaRemotenessVisibility
                     ? arrow.move.hintOpacity
-                    : 1
+                    : 1,
               }"
               :marker-end="getHintArrowMarker(arrow.move)"
             />
@@ -113,7 +113,7 @@
             :style="{
               opacity: deltaRemotenessVisibility
                 ? nextMoveData.moveValueOpacity
-                : 1
+                : 1,
             }"
             @click="runMove(nextMoveData.move)"
           >
@@ -132,12 +132,12 @@ import { CRound } from "@/classes/CRound";
 
 enum GDefaultPositionTypes {
   String,
-  UWAPIRegular2D
+  UWAPIRegular2D,
 }
 
 enum UWAPITurn {
   A = "A",
-  B = "B"
+  B = "B",
 }
 
 interface GDefaultRegular2DMove {
@@ -187,7 +187,7 @@ export default class GDefault extends Vue {
       str = str.replace(/=/g, " = ");
       return {
         type: GDefaultPositionTypes.String,
-        str
+        str,
       };
     }
 
@@ -203,17 +203,17 @@ export default class GDefault extends Vue {
       const numColumns = parseInt(matches[3]);
       const board: GDefaultRegular2DBoardCell[] = matches[4]
         .split("")
-        .map(token => ({
-          token
+        .map((token) => ({
+          token,
         }));
 
       let arrows: GDefaultRegular2DBoardArrow[] = [];
       if (!this.loadingStatus && this.nextMoveDataArray)
-        this.nextMoveDataArray.forEach(nextMoveData => {
+        this.nextMoveDataArray.forEach((nextMoveData) => {
           const move = {
             str: nextMoveData.move,
             hint: nextMoveData.moveValue,
-            hintOpacity: nextMoveData.moveValueOpacity
+            hintOpacity: nextMoveData.moveValueOpacity,
           };
           let matches;
           if (
@@ -230,7 +230,7 @@ export default class GDefault extends Vue {
             arrows.push({
               from: parseInt(matches[1]),
               to: parseInt(matches[2]),
-              move
+              move,
             });
           } else if (
             (matches = nextMoveData.move.match(/^S_([LR])_([0-9]+)_([0-9]+)$/))
@@ -243,7 +243,7 @@ export default class GDefault extends Vue {
               from: dir == "R" ? numColumns * row : numColumns * (row + 1) - 1,
               to:
                 dir == "R" ? numColumns * row + 1 : numColumns * (row + 1) - 2,
-              move
+              move,
             });
           } else {
             console.error("NOTREACHED");
@@ -256,7 +256,7 @@ export default class GDefault extends Vue {
         rows: numRows,
         columns: numColumns,
         board,
-        arrows
+        arrows,
       };
     } else {
       // Unrecognized position
@@ -298,7 +298,7 @@ export default class GDefault extends Vue {
       return [0, 0];
     return [
       i % richPositionData.columns,
-      Math.floor(i / richPositionData.columns)
+      Math.floor(i / richPositionData.columns),
     ];
   }
 
@@ -340,10 +340,10 @@ export default class GDefault extends Vue {
     endOffset: number = 3
   ): string {
     let fromCoords = this.calcRegular2DBoardTopLeftCoords(arrow.from).map(
-      a => (a + 0.5) * multiplier
+      (a) => (a + 0.5) * multiplier
     );
     let toCoords = this.calcRegular2DBoardTopLeftCoords(arrow.to).map(
-      a => (a + 0.5) * multiplier
+      (a) => (a + 0.5) * multiplier
     );
     const dir = [toCoords[0] - fromCoords[0], toCoords[1] - fromCoords[1]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
@@ -531,5 +531,12 @@ export default class GDefault extends Vue {
     animation-timing-function: ease-in-out;
     animation-direction: alternate;
   }
+}
+
+svg {
+  height: 15em;
+  width: 15em;
+  margin: auto;
+  vertical-align: middle;
 }
 </style>
