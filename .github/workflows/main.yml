@@ -2,17 +2,15 @@
 name: test
 on: push
 
-env:
-  FIRST_NAME: Mona
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: ls -a via OPEN SSH Private Key
+      - name: Pushing build to NYC
         uses: fifsky/ssh-action@master
         with:
           command: |
             ls -a
           host: nyc.cs.berkeley.edu
           user: uni
-          pass: gobears
+          pass: ${{ secrets.KEY }}
