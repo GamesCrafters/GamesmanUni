@@ -1,0 +1,8 @@
+- name: ls -a via ssh
+  uses: fifsky/ssh-action@master
+  with:
+    command: |
+      ls -a
+    host: nyc.cs.berkeley.edu
+    user: uni
+    pass: gobears
