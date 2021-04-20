@@ -13,4 +13,4 @@ jobs:
             ls -a
           host: nyc.cs.berkeley.edu
           user: uni
-          pass: ${{ secrets.KEY }}
+          key: ${{ secrets.KEY }}
