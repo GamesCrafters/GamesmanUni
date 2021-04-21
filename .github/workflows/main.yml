@@ -12,5 +12,5 @@ jobs:
           command: |
             ls -a
           host: nyc.cs.berkeley.edu
-          user: uni
+          user: github
           key: ${{ secrets.KEY }}
