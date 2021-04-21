@@ -10,6 +10,8 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
+            cd /home/uni
+            touch helloworld
             ls -a
           host: nyc.cs.berkeley.edu
           user: github
