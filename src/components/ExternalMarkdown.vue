@@ -1,21 +1,21 @@
 <template>
   <div class="app-external-markdown">
-    <vue-markdown
+    <vue-markdown-it
       class="c-markdown"
-      :source="markdownTextSource"
-      :anchorAttributes="anchorAttributes"
-    ></vue-markdown>
+      :content="markdownTextSource"
+      :options="options"
+    ></vue-markdown-it>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import VueMarkdown from "vue-markdown";
+import MarkdownItVue from "markdown-it-vue";
 
 @Component({
   components: {
-    VueMarkdown
-  }
+    "vue-markdown-it": Vue.extend(MarkdownItVue),
+  },
 })
 export default class ExternalMarkdown extends Vue {
   @Prop() readonly relativePath!: string | undefined;
@@ -69,10 +69,35 @@ export default class ExternalMarkdown extends Vue {
     return require("raw-loader!@/" + this.fileNotFoundFileFullPath).default;
   }
 
-  get anchorAttributes(): { target: string; rel: string } {
+  get options() {
     return {
-      target: "_blank",
-      rel: "noopener noreferrer nofollow"
+      linkAttributes: {
+        attrs: {
+          target: "_blank",
+          rel: "noopener noreferrer nofollow",
+        },
+      },
+      katex: {
+        throwOnError: false,
+        errorColor: "#cc0000",
+      },
+      icons: "font-awesome",
+      githubToc: {
+        tocFirstLevel: 2,
+        tocLastLevel: 3,
+        tocClassName: "toc",
+        anchorLinkSymbol: "",
+        anchorLinkSpace: false,
+        anchorClassName: "anchor",
+        anchorLinkSymbolClassName: "octicon octicon-link",
+      },
+      mermaid: {
+        theme: "default",
+      },
+      image: {
+        hAlign: "left",
+        viewer: true,
+      },
     };
   }
 }

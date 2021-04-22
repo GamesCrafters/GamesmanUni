@@ -9,15 +9,15 @@
       <defs>
         <g id="board">
           <path id="board-bar" d="M1,1 L85,1" />
-          <use xlink:href="#board-bar" transform="translate(0 21)" />
-          <use xlink:href="#board-bar" transform="translate(0 42)" />
-          <use xlink:href="#board-bar" transform="translate(0 63)" />
-          <use xlink:href="#board-bar" transform="translate(0 84)" />
-          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(23) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(65) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(86) rotate(90)" />
+          <use href="#board-bar" transform="translate(0 21)" />
+          <use href="#board-bar" transform="translate(0 42)" />
+          <use href="#board-bar" transform="translate(0 63)" />
+          <use href="#board-bar" transform="translate(0 84)" />
+          <use href="#board-bar" transform="translate(2) rotate(90)" />
+          <use href="#board-bar" transform="translate(23) rotate(90)" />
+          <use href="#board-bar" transform="translate(44) rotate(90)" />
+          <use href="#board-bar" transform="translate(65) rotate(90)" />
+          <use href="#board-bar" transform="translate(86) rotate(90)" />
         </g>
         <circle
           id="head"
@@ -48,23 +48,23 @@
         <circle id="hint" cx="11" cy="11" r="3" stroke="0" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
-      <use xlink:href="#board" x="0" y="0" />
+      <use href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
         <use
           v-if="boardData[cell].token === 'h'"
-          xlink:href="#head"
+          href="#head"
           :x="((cell - 1) % 4) * 21 + 0.3"
           :y="Math.floor((cell - 1) / 4) * 21 + 0.3"
         />
         <use
           v-else-if="boardData[cell].token === 'b'"
-          xlink:href="#body"
+          href="#body"
           :x="((cell - 1) % 4) * 21 + 3.5"
           :y="Math.floor((cell - 1) / 4) * 21 + 3.5"
         />
         <use
           v-else-if="boardData[cell].token === 't'"
-          xlink:href="#tail"
+          href="#tail"
           :x="((cell - 1) % 4) * 21 + 0.3"
           :y="Math.floor((cell - 1) / 4) * 21 + 0.3"
         />
@@ -72,7 +72,7 @@
           <use
             v-if="boardData[cell].hint"
             :class="'hint-' + boardData[cell].hint"
-            xlink:href="#hint"
+            href="#hint"
             :x="((cell - 1) % 4) * 21"
             :y="Math.floor((cell - 1) / 4) * 21"
           />
@@ -82,7 +82,7 @@
               remoteness &&
                 runMove('[' + referrHead + ' ' + cell.toString() + ']')
             "
-            xlink:href="#move"
+            href="#move"
             :x="((cell - 1) % 4) * 21"
             :y="Math.floor((cell - 1) / 4) * 21"
           />

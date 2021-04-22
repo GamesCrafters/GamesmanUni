@@ -9,35 +9,35 @@
       <defs>
         <g id="board">
           <path id="board-bar" d="M1,1 L85,1" />
-          <use xlink:href="#board-bar" transform="translate(0 21)" />
-          <use xlink:href="#board-bar" transform="translate(0 42)" />
-          <use xlink:href="#board-bar" transform="translate(0 63)" />
-          <use xlink:href="#board-bar" transform="translate(0 84)" />
-          <use xlink:href="#board-bar" transform="translate(2) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(23) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(65) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(86) rotate(90)" />
+          <use href="#board-bar" transform="translate(0 21)" />
+          <use href="#board-bar" transform="translate(0 42)" />
+          <use href="#board-bar" transform="translate(0 63)" />
+          <use href="#board-bar" transform="translate(0 84)" />
+          <use href="#board-bar" transform="translate(2) rotate(90)" />
+          <use href="#board-bar" transform="translate(23) rotate(90)" />
+          <use href="#board-bar" transform="translate(44) rotate(90)" />
+          <use href="#board-bar" transform="translate(65) rotate(90)" />
+          <use href="#board-bar" transform="translate(86) rotate(90)" />
         </g>
         <g id="turn-0-token">
           <path id="cross-bar" d="M5.343,16.657 L16.657,5.343" />
-          <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
+          <use href="#cross-bar" transform="translate(22) rotate(90)" />
         </g>
         <circle id="turn-1-token" cx="11" cy="11" r="8" />
         <circle id="hint" cx="11" cy="11" r="1" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
-      <use xlink:href="#board" x="0" y="0" />
+      <use href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
         <use
           v-if="boardData[cell].token === 'x'"
-          xlink:href="#turn-0-token"
+          href="#turn-0-token"
           :x="((cell - 1) % 3) * 22"
           :y="Math.floor((cell - 1) / 3) * 22"
         />
         <use
           v-else-if="boardData[cell].token === 'o'"
-          xlink:href="#turn-1-token"
+          href="#turn-1-token"
           :x="((cell - 1) % 3) * 22"
           :y="Math.floor((cell - 1) / 3) * 22"
         />
@@ -45,14 +45,14 @@
           <use
             v-if="boardData[cell].hint"
             :class="'hint-' + boardData[cell].hint"
-            xlink:href="#hint"
+            href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
           />
           <use
             :class="remoteness && 'move-pointer'"
             @click="remoteness && runMove(cell.toString())"
-            xlink:href="#move"
+            href="#move"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
           />

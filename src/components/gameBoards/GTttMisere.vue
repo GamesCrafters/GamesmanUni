@@ -4,29 +4,29 @@
       <defs>
         <g id="board">
           <path id="board-bar" d="M1,22 L65,22" />
-          <use xlink:href="#board-bar" transform="translate(0 22)" />
-          <use xlink:href="#board-bar" transform="translate(44) rotate(90)" />
-          <use xlink:href="#board-bar" transform="translate(66) rotate(90)" />
+          <use href="#board-bar" transform="translate(0 22)" />
+          <use href="#board-bar" transform="translate(44) rotate(90)" />
+          <use href="#board-bar" transform="translate(66) rotate(90)" />
         </g>
         <g id="turn-0-token">
           <path id="cross-bar" d="M3,3 L19,19" />
-          <use xlink:href="#cross-bar" transform="translate(22) rotate(90)" />
+          <use href="#cross-bar" transform="translate(22) rotate(90)" />
         </g>
         <circle id="turn-1-token" cx="11" cy="11" r="8" />
         <circle id="hint" cx="11" cy="11" r="1" />
         <rect id="move" x="1" y="1" width="20" height="20" />
       </defs>
-      <use xlink:href="#board" x="0" y="0" />
+      <use href="#board" x="0" y="0" />
       <g v-for="cell in cellCount" :key="cell">
         <use
           v-if="boardData[cell].token === 'x'"
-          xlink:href="#turn-0-token"
+          href="#turn-0-token"
           :x="((cell - 1) % 3) * 22"
           :y="Math.floor((cell - 1) / 3) * 22"
         />
         <use
           v-else-if="boardData[cell].token === 'o'"
-          xlink:href="#turn-1-token"
+          href="#turn-1-token"
           :x="((cell - 1) % 3) * 22"
           :y="Math.floor((cell - 1) / 3) * 22"
         />
@@ -37,16 +37,16 @@
             :style="{
               opacity: deltaRemotenessVisibility
                 ? boardData[cell].hintOpacity
-                : 1
+                : 1,
             }"
-            xlink:href="#hint"
+            href="#hint"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
           />
           <use
             :class="remoteness && 'move-pointer'"
             @click="remoteness && runMove(boardData[cell].move)"
-            xlink:href="#move"
+            href="#move"
             :x="((cell - 1) % 3) * 22"
             :y="Math.floor((cell - 1) / 3) * 22"
           />
@@ -134,7 +134,7 @@ export default class GTttMisere extends Vue {
         Object.assign(this.boardData[+nextMoveData.move[4] + 1], {
           move: nextMoveData.move,
           hint: nextMoveData.moveValue,
-          hintOpacity: nextMoveData.moveValueOpacity
+          hintOpacity: nextMoveData.moveValueOpacity,
         });
       }
     }
