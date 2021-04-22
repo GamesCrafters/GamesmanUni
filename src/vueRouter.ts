@@ -22,7 +22,7 @@ export default new Router({
       path: "/puzzles",
       name: "puzzles",
       component: () =>
-        import(/* webpackChunkName: "games" */ "./views/Games.vue"),
+        import(/* webpackChunkName: "puzzles" */ "./views/Games.vue"),
     },
     {
       path: "/:gameType/:gameId/variants",
