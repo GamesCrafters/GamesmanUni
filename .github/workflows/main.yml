@@ -10,9 +10,13 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /home/uni
-            touch helloworld
-            ls -a
+            cd /home/uni/GamesmanUni
+            cat "Pulling from GitHub"
+            git pull
+            cat "Building prod"
+            yarn build
+            cat "Pushing to prod"
+            sudo rsync -au /home/uni/dist/ /var/www/html/uni/
           host: nyc.cs.berkeley.edu
           user: github
           key: ${{ secrets.KEY }}
