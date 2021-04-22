@@ -13,7 +13,7 @@ export class CApp implements IApp {
   private language: string;
   private readonly serverDataVersion: string;
   private readonly serverDataSource: string;
-  private games: CGames;
+  private readonly games: CGames;
   private game: CGame;
   private readonly updates: CGitHub;
 
@@ -104,9 +104,5 @@ export class CApp implements IApp {
 
   setGame(game: CGame): void {
     this.game = game;
-  }
-
-  setGames(games: CGames): void {
-    this.games = games;
   }
 }
