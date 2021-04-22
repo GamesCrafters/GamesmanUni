@@ -236,8 +236,12 @@ export class CGame implements IGame {
     this.history.updateHistory(this.round, "last");
     const oldRound: CRound = this.round;
     this.round = new CRound(oldRound);
+    if (this.type == "puzzles") {
+      this.round.setTurnId(oldRound.getTurnId());
+    } else {
+      this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
+    }
     this.round.setRoundNumber(oldRound.getRoundNumber() + 1);
-    this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
     this.round.setTurnName(
       this.turnNameDictionary.get(this.round.getTurnId()) as string
     );

@@ -44,7 +44,7 @@
           </div>
         </div>
         <div
-          v-if="options.getHintVisibility()"
+          v-if="options.getHintVisibility() && game.getType() != 'puzzles'"
           id="app-game-body-main-prediction"
         >
           <b
@@ -63,10 +63,7 @@
           <GameBoard></GameBoard>
         </div>
       </div>
-      <div
-        v-if="options.getVvhVisibility() && game.getType() != 'puzzles'"
-        id="app-game-body-vvh"
-      >
+      <div v-if="options.getVvhVisibility()" id="app-game-body-vvh">
         <GameVvh></GameVvh>
       </div>
     </div>

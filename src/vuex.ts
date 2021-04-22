@@ -6,6 +6,7 @@ import { CGame } from "@/classes/CGame";
 import { CGames } from "@/classes/CGames";
 import { COptions } from "@/classes/COptions";
 import { CVvh } from "@/classes/CVvh";
+import { CPvvh } from "@/classes/CPvvh";
 
 Vue.use(Vuex);
 
@@ -241,10 +242,16 @@ export default new Vuex.Store({
 
     // CVvh.ts
     drawVvh(state): void {
-      const vvh: CVvh = new CVvh(
+      let vvh: CVvh = new CVvh(
         state.app.getGame(),
         state.app.getGame().getOptions().getHintVisibility()
       );
+      if (state.app.getGame().getType() == "puzzles") {
+        vvh = new CPvvh(
+          state.app.getGame(),
+          state.app.getGame().getOptions().getHintVisibility()
+        );
+      }
       vvh.drawVvh();
     },
   },
