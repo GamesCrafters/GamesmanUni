@@ -11,11 +11,11 @@ jobs:
         with:
           command: |
             cd /home/uni/GamesmanUni
-            cat "Pulling from GitHub"
-            git pull
-            cat "Building prod"
+            echo "Pulling from GitHub"
+            sudo git pull
+            echo "Building prod"
             yarn build
-            cat "Pushing to prod"
+            echo "Pushing to prod"
             sudo rsync -au /home/uni/GamesmanUni/dist/ /var/www/html/uni/
           host: nyc.cs.berkeley.edu
           user: github
