@@ -53,7 +53,7 @@ export default class ExternalMarkdown extends Vue {
     );
   }
 
-  async uuu(): Promise<string> {
+  async instructionPromise(): Promise<string> {
     const u: string =
       this.game.getDataSource() + "/instructions/" + this.game.getId();
 
@@ -74,10 +74,6 @@ export default class ExternalMarkdown extends Vue {
   }
 
   get markdownTextSource(): string {
-    /*let t = this;
-    this.uuu().then(function(r) { t.instructions = r});
-    return this.instructions;
-    */
     try {
       console.log("full path: " + this.fullPathInCurrentLanguage);
       if (
@@ -86,10 +82,12 @@ export default class ExternalMarkdown extends Vue {
         )
       ) {
         let t = this;
-        this.uuu().then(function (r) {
+        this.instructionPromise().then(function (r) {
           t.instructions = r;
         });
-        return this.instructions;
+        if (this.instructions !== "file not found") {
+          return this.instructions;
+        }
       }
       if (require("raw-loader!@/" + this.fullPathInCurrentLanguage)) {
         return require("raw-loader!@/" + this.fullPathInCurrentLanguage)
