@@ -32,11 +32,11 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
     this.turnNameDictionary = new Map([
       [0, require("@/datas/defaults.json").turn0Name],
-      [1, require("@/datas/defaults.json").turn1Name]
+      [1, require("@/datas/defaults.json").turn1Name],
     ]);
     this.vvhSelectorId = require("@/datas/defaults.json").vvhSelectorId;
     this.options = new COptions();
@@ -50,6 +50,10 @@ export class CGame implements IGame {
 
   getName(): string {
     return this.name;
+  }
+
+  getDataSource(): string {
+    return this.serverDataSource;
   }
 
   getVariantDataArray(): Array<TVariantData> {
@@ -97,7 +101,7 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
   }
 
@@ -125,11 +129,11 @@ export class CGame implements IGame {
         if (rawData.status === "ok") {
           this.name = rawData.response.name;
           this.variantDataArray = rawData.response.variants.map(
-            rawVariantData => ({
+            (rawVariantData) => ({
               id: rawVariantData.variantId,
               description: rawVariantData.description,
               status: rawVariantData.status,
-              startPosition: rawVariantData.startPosition
+              startPosition: rawVariantData.startPosition,
             })
           );
           this.variantDataDictionary = new Map<string, TVariantData>();

@@ -6,6 +6,7 @@ import { CRound } from "@/classes/CRound";
 export interface IGame {
   getId(): string;
   getName(): string;
+  getDataSource(): string;
   getVariantDataArray(): Array<TVariantData>;
   getVariantDataDictionary(): Map<string, TVariantData>;
   getCurrentVariantData(): TVariantData;

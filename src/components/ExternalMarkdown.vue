@@ -11,6 +11,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import MarkdownItVue from "markdown-it-vue";
+import { CGame } from "@/classes/CGame";
+import axios, { AxiosResponse } from "axios";
+import { TRawErrorData } from "@/types/external/TRawErrorData";
+import { TRawInstructionData } from "@/types/external/TRawInstructionData";
 
 @Component({
   components: {
@@ -19,6 +23,11 @@ import MarkdownItVue from "markdown-it-vue";
 })
 export default class ExternalMarkdown extends Vue {
   @Prop() readonly relativePath!: string | undefined;
+  @Prop() instructions!: string;
+
+  get game(): CGame {
+    return this.$store.getters.game;
+  }
 
   get fileNotFoundFileFullPath(): string {
     return "datas/markdowns/" + this.$i18n.locale + "/FileNotFound.md";
@@ -44,8 +53,44 @@ export default class ExternalMarkdown extends Vue {
     );
   }
 
-  get markdownTextSource(): string {
+  async uuu(): Promise<string> {
+    const u: string =
+      this.game.getDataSource() + "/instructions/" + this.game.getId();
+
+    let r: string = "";
+
     try {
+      const httpResponse: AxiosResponse = await axios.get(u);
+      const rawData: TRawInstructionData | TRawErrorData = httpResponse.data;
+      if (rawData.status == "ok") {
+        r = rawData.response;
+        console.log("r = " + r);
+        return r;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return "file not found";
+  }
+
+  get markdownTextSource(): string {
+    /*let t = this;
+    this.uuu().then(function(r) { t.instructions = r});
+    return this.instructions;
+    */
+    try {
+      console.log("full path: " + this.fullPathInCurrentLanguage);
+      if (
+        this.fullPathInCurrentLanguage.startsWith(
+          "datas/markdowns/en/gameInstructions"
+        )
+      ) {
+        let t = this;
+        this.uuu().then(function (r) {
+          t.instructions = r;
+        });
+        return this.instructions;
+      }
       if (require("raw-loader!@/" + this.fullPathInCurrentLanguage)) {
         return require("raw-loader!@/" + this.fullPathInCurrentLanguage)
           .default;
