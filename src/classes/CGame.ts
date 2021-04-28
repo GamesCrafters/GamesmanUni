@@ -13,7 +13,6 @@ export class CGame implements IGame {
   private readonly serverDataSource: string;
   private id: string;
   private name: string;
-  private instructions: string;
   private variantDataArray: Array<TVariantData>;
   private variantDataDictionary: Map<string, TVariantData>;
   private currentVariantData: TVariantData;
@@ -27,7 +26,6 @@ export class CGame implements IGame {
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
     this.id = "";
     this.name = "";
-    this.instructions = "";
     this.variantDataArray = new Array<TVariantData>();
     this.variantDataDictionary = new Map<string, TVariantData>();
     this.currentVariantData = {
@@ -52,10 +50,6 @@ export class CGame implements IGame {
 
   getName(): string {
     return this.name;
-  }
-
-  getInstructions(): string {
-    return this.instructions;
   }
 
   getDataSource(): string {
