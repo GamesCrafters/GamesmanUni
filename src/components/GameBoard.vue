@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app-game-board">
     <component :is="getGameBoardComponentName()"></component>
   </div>
@@ -61,4 +61,4 @@ export default class GameBoard extends Vue {
     return "GDefault";
   }
 }
-</script>
+</script> -->

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app-game-options">
     <button
       id="app-game-options-button"
@@ -111,4 +111,4 @@ export default class GameOptions extends Vue {
     }
   }
 }
-</style>
+</style> -->
