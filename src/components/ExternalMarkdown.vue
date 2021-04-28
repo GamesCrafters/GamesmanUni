@@ -14,7 +14,7 @@ import MarkdownItVue from "markdown-it-vue";
 import { CGame } from "@/classes/CGame";
 import axios, { AxiosResponse } from "axios";
 import { TRawErrorData } from "@/types/external/TRawErrorData";
-import { TRawInstructionData } from "@/types/external/TRawInstructionData";
+import { TRawGameData } from "@/types/external/TRawGameData";
 
 @Component({
   components: {
@@ -54,16 +54,15 @@ export default class ExternalMarkdown extends Vue {
   }
 
   async instructionPromise(): Promise<string> {
-    const u: string =
-      this.game.getDataSource() + "/instructions/" + this.game.getId();
+    const u: string = this.game.getDataSource() + "/games/" + this.game.getId();
 
     let r: string = "";
 
     try {
       const httpResponse: AxiosResponse = await axios.get(u);
-      const rawData: TRawInstructionData | TRawErrorData = httpResponse.data;
+      const rawData: TRawGameData | TRawErrorData = httpResponse.data;
       if (rawData.status == "ok") {
-        r = rawData.response;
+        r = rawData.response.instructions;
         console.log("r = " + r);
         return r;
       }
