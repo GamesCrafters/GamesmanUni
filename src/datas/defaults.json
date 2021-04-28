@@ -25,7 +25,7 @@
   "language": "en",
 
   "serverDataVersion": "1",
-  "serverDataSource": "http://127.0.0.1:5000",
+  "serverDataSource": "https://nyc.cs.berkeley.edu/universal/v1",
   "turn0Name": "Left Player",
   "turn1Name": "Right Player",
   "vvhSelectorId": "app-game-vvh-canvas",
