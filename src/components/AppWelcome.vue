@@ -1,34 +1,26 @@
 <template>
-  <div id="app-home">
-    <h2 id="app-home-title">{{ $t("title") }}</h2>
-  </div>
+    <h2>{{ t("title") }}</h2>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import VueMarkdown from "vue-markdown";
+<script lang="ts" setup>
+    import { useI18n } from "vue-i18n";
 
-@Component({
-  components: {
-    VueMarkdown,
-  },
-})
-export default class AppWelcome extends Vue {}
+    const { t } = useI18n();
 </script>
 
-<i18n>
+<i18n lang="json">
 {
-  "cn": {
-    "title": "欢迎！"
-  },
-  "en": {
-    "title": "Welcome!"
-  },
-  "es": {
-    "title": "¡Bienvenido!"
-  },
-  "hi": {
-    "title": "आपका स्वागत है!"
-  }
+    "cn": {
+        "title": "欢迎！"
+    },
+    "en": {
+        "title": "Welcome!"
+    },
+    "es": {
+        "title": "¡Bienvenido!"
+    },
+    "hi": {
+        "title": "आपका स्वागत है!"
+    }
 }
 </i18n>

@@ -1,72 +1,42 @@
 {
-  "name": "gamesmanuni",
-  "version": "5.0.0-alpha.3",
-  "private": true,
-  "license": "AGPL-3.0-or-later",
-  "scripts": {
-    "build": "vue-cli-service build",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
-    "lint": "vue-cli-service lint",
-    "serve": "vue-cli-service serve",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
-  },
-  "lint-staged": {
-    "*.{js,vue,ts}": [
-      "vue-cli-service lint"
-    ]
-  },
-  "dependencies": {
-    "@vue/composition-api": "^1.0.0-rc.6",
-    "axios": "^0.21.1",
-    "core-js": "^3.10.0",
-    "moment": "^2.29.1",
-    "register-service-worker": "^1.7.2",
-    "vue": "^2.6.12",
-    "vue-axios": "^3.2.4",
-    "vue-class-component": "^7.2.6",
-    "vue-i18n": "^8.24.2",
-    "vue-markdown": "^2.2.4",
-    "vue-meta": "^2.4.0",
-    "vue-property-decorator": "^9.1.2",
-    "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
-  },
-  "devDependencies": {
-    "@intlify/eslint-plugin-vue-i18n": "^0.11.1",
-    "@intlify/vue-i18n-loader": "^1.1.0",
-    "@types/chai": "^4.2.15",
-    "@types/mocha": "^8.2.2",
-    "@types/vue-markdown": "^2.2.1",
-    "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "@vue/cli-plugin-babel": "^4.5.12",
-    "@vue/cli-plugin-e2e-cypress": "^4.5.12",
-    "@vue/cli-plugin-eslint": "^4.5.12",
-    "@vue/cli-plugin-pwa": "^4.5.12",
-    "@vue/cli-plugin-typescript": "^4.5.12",
-    "@vue/cli-plugin-unit-mocha": "^4.5.12",
-    "@vue/cli-service": "^4.5.12",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "@vue/test-utils": "^1.1.3",
-    "babel-eslint": "^10.1.0",
-    "chai": "^4.3.4",
-    "eslint": "^7.23.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.8.0",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "raw-loader": "^4.0.2",
-    "sass": "^1.32.8",
-    "sass-loader": "^10.1.1",
-    "serve": "^11.3.2",
-    "typescript": "^4.2.3",
-    "vue-cli-plugin-i18n": "^2.0.3",
-    "vue-template-compiler": "^2.6.12"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  }
+    "dependencies": {
+        "@mdi/font": "5.9.55",
+        "axios": "0.21.1",
+        "markdown-it-link-attributes": "3.0.0",
+        "roboto-fontface": "0.10.0",
+        "vue": "3.0.11",
+        "vue-axios": "3.2.4",
+        "vue-i18n": "9.1.6",
+        "vue-meta": "3.0.0-alpha.4",
+        "vue-router": "4.0.6",
+        "vue3-markdown-it": "1.0.8",
+        "vuetify": "3.0.0-alpha.2",
+        "vuex": "4.0.0"
+    },
+    "devDependencies": {
+        "@intlify/vite-plugin-vue-i18n": "2.1.2",
+        "@octokit/types": "6.13.1",
+        "@types/markdown-it-link-attributes": "3.0.0",
+        "@vitejs/plugin-vue": "1.2.1",
+        "@vue/compiler-sfc": "3.0.11",
+        "pre-commit": "1.2.2",
+        "prettier": "2.2.1",
+        "sass": "1.32.11",
+        "sass-loader": "10.1.1",
+        "typescript": "4.3.0-dev.20210426",
+        "vite": "2.0.5",
+        "vite-plugin-package-version": "0.0.5",
+        "vue-cli-plugin-vuetify": "2.3.1",
+        "vue-tsc": "0.0.25"
+    },
+    "license": "AGPL-3.0-or-later",
+    "name": "gamesmanuni",
+    "pre-commit": [],
+    "private": true,
+    "scripts": {
+        "build": "vite build",
+        "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; vite",
+        "serve": "vite preview"
+    },
+    "version": "5.0.0-alpha.4"
 }

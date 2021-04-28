@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app-game-vvh">
     <h3 id="app-game-vvh-title">Visual Value History</h3>
     <div id="app-game-vvh-colorGuide">
@@ -76,4 +76,4 @@ export default class GameVvh extends Vue {
     overflow-x: scroll;
   }
 }
-</style>
+</style> -->

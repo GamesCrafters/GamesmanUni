@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="app-game-board-ten-regular">
     <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
       <g v-for="i in cellCount" :key="i">
@@ -194,4 +194,4 @@ export default class GTenRegular extends Vue {
 .move {
   fill: rgba(0, 0, 0, 0);
 }
-</style>
+</style> -->
