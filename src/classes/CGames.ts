@@ -50,7 +50,9 @@ export class CGames implements IGames {
 
   private async loadPuzzleDataArray(): Promise<boolean> {
     let success: boolean = true;
-    const gamesDataSource: string = `https://nyc.cs.berkeley.edu/puzzles/`;
+    const gamesDataSource: string = `${
+      require("@/datas/defaults.json").serverDataSourcePuzzles
+    }/puzzles/`;
     try {
       const httpResponse: AxiosResponse = await axios.get(gamesDataSource);
       const rawData: TRawGamesData | TRawErrorData = httpResponse.data;
