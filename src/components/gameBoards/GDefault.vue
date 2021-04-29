@@ -532,11 +532,4 @@ export default class GDefault extends Vue {
     animation-direction: alternate;
   }
 }
-
-svg {
-  height: 15em;
-  width: 15em;
-  margin: auto;
-  vertical-align: middle;
-}
 </style>
