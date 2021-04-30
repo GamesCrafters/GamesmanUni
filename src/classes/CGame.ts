@@ -128,7 +128,9 @@ export class CGame implements IGame {
     if (!this.currentVariantData.id) {
       let url = `${this.serverDataSource}/games/${this.id}`;
       if (this.type == "puzzles") {
-        url = `https://nyc.cs.berkeley.edu/puzzles/${this.id}`;
+        url = `${
+          require("@/datas/defaults.json").serverDataSourcePuzzles
+        }/puzzles/${this.id}`;
       }
       const detailedGameDataSource: string = url;
       try {
@@ -173,8 +175,9 @@ export class CGame implements IGame {
     let positionDataSource: string = this.serverDataSource;
     positionDataSource += `/games/${this.id}`;
     if (this.type == "puzzles") {
-      positionDataSource = `https://nyc.cs.berkeley.edu/`;
-      positionDataSource += `/puzzles/${this.id}`;
+      positionDataSource = `${
+        require("@/datas/defaults.json").serverDataSourcePuzzles
+      }/puzzles/${this.id}`;
     }
     positionDataSource += `/variants/${this.currentVariantData.id}`;
     positionDataSource += `/positions/${encodeURIComponent(

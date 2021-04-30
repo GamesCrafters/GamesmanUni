@@ -26,6 +26,7 @@
 
   "serverDataVersion": "1",
   "serverDataSource": "https://nyc.cs.berkeley.edu/universal/v1",
+  "serverDataSourcePuzzles": "https://nyc.cs.berkeley.edu/",
   "turn0Name": "Left Player",
   "turn1Name": "Right Player",
   "vvhSelectorId": "app-game-vvh-canvas",
