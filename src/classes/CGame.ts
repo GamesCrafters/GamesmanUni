@@ -176,7 +176,7 @@ export class CGame implements IGame {
     positionDataSource += `/games/${this.id}`;
     if (this.type == "puzzles") {
       positionDataSource = `${
-        require("@/datas/defaults.json").serverDataSourcePuzzles
+        require("@/datas/defaults.json").serverDataSource
       }/puzzles/${this.id}`;
     }
     positionDataSource += `/variants/${this.currentVariantData.id}`;
