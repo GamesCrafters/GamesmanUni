@@ -1,31 +1,26 @@
 {
     "dependencies": {
-        "@mdi/font": "5.9.55",
         "axios": "0.21.1",
         "markdown-it-link-attributes": "3.0.0",
-        "roboto-fontface": "0.10.0",
         "vue": "3.0.11",
         "vue-axios": "3.2.4",
         "vue-i18n": "9.1.6",
-        "vue-meta": "3.0.0-alpha.4",
         "vue-router": "4.0.6",
         "vue3-markdown-it": "1.0.8",
         "vuex": "4.0.0"
     },
     "devDependencies": {
         "@intlify/vite-plugin-vue-i18n": "2.1.2",
-        "@octokit/types": "6.13.1",
-        "@types/markdown-it-link-attributes": "3.0.0",
-        "@vitejs/plugin-vue": "1.2.1",
+        "@octokit/types": "6.14.1",
+        "@types/markdown-it-link-attributes": "3.0.1",
+        "@vitejs/plugin-vue": "1.2.2",
         "@vue/compiler-sfc": "3.0.11",
         "pre-commit": "1.2.2",
         "prettier": "2.2.1",
-        "sass": "1.32.11",
-        "sass-loader": "10.1.1",
+        "sass": "1.32.12",
         "typescript": "4.3.0-dev.20210426",
         "vite": "2.2.3",
         "vite-plugin-package-version": "0.0.5",
-        "vue-cli-plugin-vuetify": "2.3.1",
         "vue-tsc": "0.0.25"
     },
     "license": "AGPL-3.0-or-later",
@@ -33,9 +28,9 @@
     "pre-commit": [],
     "private": true,
     "scripts": {
-        "build": "vite build",
-        "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; vite",
+        "build": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vite build --debug",
+        "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vite --debug",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.7"
+    "version": "5.0.0-alpha.8"
 }
