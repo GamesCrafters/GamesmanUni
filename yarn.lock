@@ -542,10 +542,10 @@ entities@~2.1.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.1.0.tgz#992d3129cf7df6870b96c57858c249a120f8b8b5"
   integrity sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==
 
-esbuild@^0.8.52:
-  version "0.8.57"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.57.tgz#a42d02bc2b57c70bcd0ef897fe244766bb6dd926"
-  integrity sha512-j02SFrUwFTRUqiY0Kjplwjm1psuzO1d6AjaXKuOR9hrY0HuPsT6sV42B6myW34h1q4CRy+Y3g4RU/cGJeI/nNA==
+esbuild@^0.9.3:
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.9.7.tgz#ea0d639cbe4b88ec25fbed4d6ff00c8d788ef70b"
+  integrity sha512-VtUf6aQ89VTmMLKrWHYG50uByMF4JQlVysb8dmg6cOgW8JnFCipmz7p+HNBl+RR3LLCuBxFGVauAe2wfnF9bLg==
 
 escalade@^3.1.1:
   version "3.1.1"
@@ -1427,12 +1427,12 @@ vite-plugin-package-version@0.0.5:
   resolved "https://registry.yarnpkg.com/vite-plugin-package-version/-/vite-plugin-package-version-0.0.5.tgz#68e714d06a3b764697f627a58bc27e4d940617b8"
   integrity sha512-2VFl0jyYtbGLd9mKrteEXnbKVU0HsdMVWJcU20VbwHX/7WHpxBnuXkcydRHLCDlRFSZBi0IWbXc9ro0hz9IJyA==
 
-vite@2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.0.5.tgz#ac46857a3fa8686d077921e61bd48a986931df1d"
-  integrity sha512-QTgEDbq1WsTtr6j+++ewjhBFEk6c8v0xz4fb/OWJQKNYU8ZZtphOshwOqAlnarSstPBtWCBR0tsugXx6ajfoUg==
+vite@2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.2.3.tgz#1acbdfa56ac00e00e7ccb6988f63f130c2f99dbb"
+  integrity sha512-PtjyBL4GtACM+uT5q5hi2+AlMBbb6YI2b2bam6QI8ZdZt4FezseF0yZHQx0G+b3po9jIJ/GS5N9gc5Yq9Rue7g==
   dependencies:
-    esbuild "^0.8.52"
+    esbuild "^0.9.3"
     postcss "^8.2.1"
     resolve "^1.19.0"
     rollup "^2.38.5"
@@ -1507,11 +1507,6 @@ vue@3.0.11:
     "@vue/compiler-dom" "3.0.11"
     "@vue/runtime-dom" "3.0.11"
     "@vue/shared" "3.0.11"
-
-vuetify@3.0.0-alpha.2:
-  version "3.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.0.0-alpha.2.tgz#06d6031ed7fd2d9afb3b2be8cb93e70a42228207"
-  integrity sha512-sp5J4Ul6PHH8e8Du0AP4v+D65+rV9tbjIXtig2TWu2U+xlPt/LWMWHgxEF1bMJr1Ni1izmYXKSpuKB3//uZpxg==
 
 vuex@4.0.0:
   version "4.0.0"
