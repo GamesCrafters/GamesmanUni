@@ -1,7 +1,7 @@
 <template>
-    <AppGame />
+    <!-- <AppGame /> -->
 </template>
 
 <script lang="ts" setup>
-    import AppGame from "./AppGame.vue";
+    // import AppGame from "./AppGame.vue";
 </script>
