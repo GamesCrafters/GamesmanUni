@@ -12,6 +12,7 @@ import { CRound } from "@/classes/CRound";
 export class CGame implements IGame {
   private readonly serverDataSource: string;
   private id: string;
+  private type: string;
   private name: string;
   private variantDataArray: Array<TVariantData>;
   private variantDataDictionary: Map<string, TVariantData>;
@@ -25,6 +26,7 @@ export class CGame implements IGame {
   constructor() {
     this.serverDataSource = require("@/datas/defaults.json").serverDataSource;
     this.id = "";
+    this.type = "";
     this.name = "";
     this.variantDataArray = new Array<TVariantData>();
     this.variantDataDictionary = new Map<string, TVariantData>();
@@ -32,11 +34,11 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
     this.turnNameDictionary = new Map([
       [0, require("@/datas/defaults.json").turn0Name],
-      [1, require("@/datas/defaults.json").turn1Name]
+      [1, require("@/datas/defaults.json").turn1Name],
     ]);
     this.vvhSelectorId = require("@/datas/defaults.json").vvhSelectorId;
     this.options = new COptions();
@@ -46,6 +48,10 @@ export class CGame implements IGame {
 
   getId(): string {
     return this.id;
+  }
+
+  getType(): string {
+    return this.type;
   }
 
   getName(): string {
@@ -88,6 +94,10 @@ export class CGame implements IGame {
     this.id = id;
   }
 
+  setType(type: string): void {
+    this.type = type;
+  }
+
   setName(name: string): void {
     this.name = name;
   }
@@ -97,7 +107,7 @@ export class CGame implements IGame {
       id: "",
       description: "",
       status: "",
-      startPosition: ""
+      startPosition: "",
     };
   }
 
@@ -116,7 +126,11 @@ export class CGame implements IGame {
   private async loadDetailedGameData(): Promise<boolean> {
     let success: boolean = true;
     if (!this.currentVariantData.id) {
-      const detailedGameDataSource: string = `${this.serverDataSource}/games/${this.id}`;
+      let url = `${this.serverDataSource}/games/${this.id}`;
+      if (this.type == "puzzles") {
+        url = `https://nyc.cs.berkeley.edu/puzzles/${this.id}`;
+      }
+      const detailedGameDataSource: string = url;
       try {
         const httpResponse: AxiosResponse = await axios.get(
           detailedGameDataSource
@@ -125,11 +139,11 @@ export class CGame implements IGame {
         if (rawData.status === "ok") {
           this.name = rawData.response.name;
           this.variantDataArray = rawData.response.variants.map(
-            rawVariantData => ({
+            (rawVariantData) => ({
               id: rawVariantData.variantId,
               description: rawVariantData.description,
               status: rawVariantData.status,
-              startPosition: rawVariantData.startPosition
+              startPosition: rawVariantData.startPosition,
             })
           );
           this.variantDataDictionary = new Map<string, TVariantData>();
@@ -158,10 +172,15 @@ export class CGame implements IGame {
     let success: boolean = true;
     let positionDataSource: string = this.serverDataSource;
     positionDataSource += `/games/${this.id}`;
+    if (this.type == "puzzles") {
+      positionDataSource = `https://nyc.cs.berkeley.edu/`;
+      positionDataSource += `/puzzles/${this.id}`;
+    }
     positionDataSource += `/variants/${this.currentVariantData.id}`;
     positionDataSource += `/positions/${encodeURIComponent(
       this.round.getPosition()
     )}`;
+
     try {
       const httpResponse: AxiosResponse = await axios.get(positionDataSource);
       const rawData: TRawPositionData | TRawErrorData = httpResponse.data;
@@ -180,12 +199,19 @@ export class CGame implements IGame {
     console.info(
       `Successfully loaded position data from: ${positionDataSource}.`
     );
+
     return success;
   }
 
-  async initGame(gameId: string): Promise<boolean> {
+  async initGame(payload: any): Promise<boolean> {
+    const gameId: string = payload.gameId;
+    const gameType: string = payload.gameType;
+
+    // console.warn(payload.gameType);
+
     let success: boolean = true;
     this.id = gameId;
+    this.type = gameType;
     success = await this.loadDetailedGameData();
     return success;
   }
@@ -210,8 +236,12 @@ export class CGame implements IGame {
     this.history.updateHistory(this.round, "last");
     const oldRound: CRound = this.round;
     this.round = new CRound(oldRound);
+    if (this.type == "puzzles") {
+      this.round.setTurnId(oldRound.getTurnId());
+    } else {
+      this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
+    }
     this.round.setRoundNumber(oldRound.getRoundNumber() + 1);
-    this.round.setTurnId((oldRound.getTurnId() + 1) % 2);
     this.round.setTurnName(
       this.turnNameDictionary.get(this.round.getTurnId()) as string
     );

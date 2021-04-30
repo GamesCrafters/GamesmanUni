@@ -4,63 +4,63 @@ import { CHistory } from "@/classes/CHistory";
 import { CRound } from "@/classes/CRound";
 
 export class CVvh implements IVvh {
-  private history: CHistory;
-  private maximumRemoteness: number;
-  private currentRoundNumber: number;
+  protected history: CHistory;
+  protected maximumRemoteness: number;
+  protected currentRoundNumber: number;
 
-  private showHint: boolean;
+  protected showHint: boolean;
 
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
+  protected canvas: HTMLCanvasElement;
+  protected ctx: CanvasRenderingContext2D;
 
-  private font: any;
-  private primaryColor: any;
-  private winColor: any;
-  private drawColor: any;
-  private tieColor: any;
-  private loseColor: any;
-  private turn0Color: any;
-  private turn1Color: any;
+  protected font: any;
+  protected primaryColor: any;
+  protected winColor: any;
+  protected drawColor: any;
+  protected tieColor: any;
+  protected loseColor: any;
+  protected turn0Color: any;
+  protected turn1Color: any;
 
-  private turn0Name: string;
-  private turn1Name: string;
+  protected turn0Name: string;
+  protected turn1Name: string;
 
-  private xLabel: string;
-  private yLeftLabel: string;
-  private yRightLabel: string;
+  protected xLabel: string;
+  protected yLeftLabel: string;
+  protected yRightLabel: string;
 
-  private padding: number;
+  protected padding: number;
 
-  private turnNameHeight: number;
-  private xLabelHeight: number;
-  private xCoordinateHeight: number;
-  private rowHeight: number;
+  protected turnNameHeight: number;
+  protected xLabelHeight: number;
+  protected xCoordinateHeight: number;
+  protected rowHeight: number;
 
-  private rowCount: number;
-  private gridHeight: number;
-  private canvasHeight: number;
+  protected rowCount: number;
+  protected gridHeight: number;
+  protected canvasHeight: number;
 
-  private yLabelWidth: number;
-  private yCoordinateWidth: number;
-  private columnWidth: number;
+  protected yLabelWidth: number;
+  protected yCoordinateWidth: number;
+  protected columnWidth: number;
 
-  private columnCount: number;
-  private gridWidth: number;
-  private canvasWidth: number;
+  protected columnCount: number;
+  protected gridWidth: number;
+  protected canvasWidth: number;
 
-  private gridTop: number;
-  private gridBottom: number;
-  private gridLeft: number;
-  private gridMiddleX: number;
-  private gridRight: number;
+  protected gridTop: number;
+  protected gridBottom: number;
+  protected gridLeft: number;
+  protected gridMiddleX: number;
+  protected gridRight: number;
 
-  private pointRadius: number;
-  private linkWidth: number;
-  private xBarWidth: number;
-  private xIntervalBarWidth: number;
-  private xInterval: number;
+  protected pointRadius: number;
+  protected linkWidth: number;
+  protected xBarWidth: number;
+  protected xIntervalBarWidth: number;
+  protected xInterval: number;
 
-  private pointCoordinates: {
+  protected pointCoordinates: {
     [round: number]: { x: number | [number, number]; y: number };
   };
 
@@ -163,12 +163,12 @@ export class CVvh implements IVvh {
     this.setGraph();
   }
 
-  private setCanvasShape(): void {
+  protected setCanvasShape(): void {
     this.canvas.height = this.canvasHeight;
     this.canvas.width = this.canvasWidth;
   }
 
-  private setCanvasResolution(): void {
+  protected setCanvasResolution(): void {
     this.canvas.style.width = this.canvas.width + "px";
     this.canvas.style.height = this.canvas.height + "px";
     const devicePixelRatio = window.devicePixelRatio || 1;
@@ -177,13 +177,13 @@ export class CVvh implements IVvh {
     this.ctx.scale(devicePixelRatio, devicePixelRatio);
   }
 
-  private setVvhFrame(): void {
+  protected setVvhFrame(): void {
     this.ctx.strokeStyle = this.primaryColor;
     this.ctx.rect(0, 0, this.canvasWidth, this.canvasHeight);
     this.ctx.stroke();
   }
 
-  private setText(
+  protected setText(
     text: string,
     x: number,
     y: number,
@@ -204,7 +204,7 @@ export class CVvh implements IVvh {
     this.ctx.restore();
   }
 
-  private setTurnNames(): void {
+  protected setTurnNames(): void {
     this.setText(
       this.turn0Name,
       this.gridMiddleX - this.gridWidth / 3,
@@ -219,18 +219,18 @@ export class CVvh implements IVvh {
     );
   }
 
-  private remotenessToX(remoteness: number, turn: number): number {
+  protected remotenessToX(remoteness: number, turn: number): number {
     if (turn === 0) {
       return this.gridLeft + (remoteness + 0.5) * this.columnWidth;
     }
     return this.gridRight - (remoteness + 0.5) * this.columnWidth;
   }
 
-  private roundToY(round: number): number {
+  protected roundToY(round: number): number {
     return this.gridTop + (round - 0.5) * this.rowHeight;
   }
 
-  private setXLabel(): void {
+  protected setXLabel(): void {
     this.setText(
       this.xLabel,
       this.canvasWidth / 2,
@@ -246,7 +246,7 @@ export class CVvh implements IVvh {
     );
   }
 
-  private setXCoordinates(): void {
+  protected setXCoordinates(): void {
     this.setText(
       "D",
       this.gridMiddleX,
@@ -291,7 +291,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setYLabel(): void {
+  protected setYLabel(): void {
     this.setText(
       this.yLeftLabel,
       this.gridLeft - this.yCoordinateWidth - this.yLabelWidth / 2,
@@ -309,7 +309,7 @@ export class CVvh implements IVvh {
     );
   }
 
-  private setYCoordinates(): void {
+  protected setYCoordinates(): void {
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
       if (
         (this.history.getRoundDictionary().get(round) as CRound).getTurnId() ===
@@ -370,7 +370,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setRoundTurnColorGuide(): void {
+  protected setRoundTurnColorGuide(): void {
     this.ctx.lineWidth = 0;
     this.ctx.globalAlpha = 0.2;
     for (let round: number = 1; round <= this.currentRoundNumber; round++) {
@@ -392,7 +392,7 @@ export class CVvh implements IVvh {
     this.ctx.globalAlpha = 1;
   }
 
-  private setGrid(): void {
+  protected setGrid(): void {
     this.ctx.strokeStyle = this.primaryColor;
     for (
       let remoteness: number = 0;
@@ -420,7 +420,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private getPointCoordinates(): void {
+  protected getPointCoordinates(): void {
     let roundData: CRound;
     let x: number | [number, number];
     let y: number;
@@ -449,7 +449,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private valueToColor(value: string): any {
+  protected valueToColor(value: string): any {
     if (value === "win") {
       return this.winColor;
     } else if (value === "draw") {
@@ -461,7 +461,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setLink(
+  protected setLink(
     x1: number,
     y1: number,
     x2: number,
@@ -476,7 +476,7 @@ export class CVvh implements IVvh {
     this.ctx.stroke();
   }
 
-  private setPoint(x: number, y: number, color: string): void {
+  protected setPoint(x: number, y: number, color: string): void {
     this.ctx.fillStyle = color;
     this.ctx.beginPath();
     this.ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI);
@@ -484,7 +484,7 @@ export class CVvh implements IVvh {
     this.ctx.fill();
   }
 
-  private setLinks(): void {
+  protected setLinks(): void {
     let x1, y1, x2, y2, color;
     for (let round = 1; round < this.currentRoundNumber; round++) {
       x1 = this.pointCoordinates[round].x;
@@ -509,7 +509,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setPoints(): void {
+  protected setPoints(): void {
     let x, y, color;
     for (let round = 1; round <= this.currentRoundNumber; round++) {
       x = this.pointCoordinates[round].x;
@@ -529,7 +529,7 @@ export class CVvh implements IVvh {
     }
   }
 
-  private setGraph(): void {
+  protected setGraph(): void {
     this.setLinks();
     this.setPoints();
   }
