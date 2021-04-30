@@ -38,5 +38,5 @@
         "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; vite",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.5"
+    "version": "5.0.0-alpha.6"
 }
