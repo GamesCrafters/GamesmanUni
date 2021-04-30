@@ -24,7 +24,9 @@
     ];
 
     const docs = import.meta.glob("../models/docs/*/*.md");
-    Object.keys(docs).map((path) => (docs[path] = () => import(/* @vite-ignore */ `${path}?raw`)));
+    console.log(Object.keys(docs));
+    Object.keys(docs).map((path) => (docs[path] = () => import(`../${path.slice(3, -3)}.md?raw`)));
+
     const source = ref("");
     const getSource = () => {
         try {
