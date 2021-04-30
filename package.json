@@ -1,6 +1,6 @@
 {
   "name": "gamesmanuni",
-  "version": "4.0.0-beta.80",
+  "version": "4.0.0-beta.81",
   "private": true,
   "license": "GPL-3.0-or-later",
   "scripts": {
@@ -19,13 +19,13 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.10.0",
-    "markdown-it-vue": "^1.1.6",
     "moment": "^2.29.1",
     "register-service-worker": "^1.7.2",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.4",
     "vue-class-component": "^7.2.6",
     "vue-i18n": "^8.24.2",
+    "vue-markdown": "^2.2.4",
     "vue-meta": "^2.4.0",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.1",
@@ -36,6 +36,7 @@
     "@intlify/vue-i18n-loader": "^1.1.0",
     "@types/chai": "^4.2.15",
     "@types/mocha": "^8.2.2",
+    "@types/vue-markdown": "^2.2.1",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
