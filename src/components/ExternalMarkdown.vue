@@ -24,7 +24,6 @@
     ];
 
     const docs = import.meta.glob("../models/docs/*/*.md");
-    console.log(Object.keys(docs));
     Object.keys(docs).map((path) => (docs[path] = () => import(`../${path.slice(3, -3)}.md?raw`)));
 
     const source = ref("");

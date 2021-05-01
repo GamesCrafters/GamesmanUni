@@ -15,7 +15,20 @@ export type AppGameOptionsData = {
     showVisualValueHistory: boolean;
 };
 
+export type AppGameMoveData = {
+    deltaRemoteness: number;
+    move: string;
+    moveValue: string;
+    position: string;
+    positionValue: string;
+    remoteness: number;
+    moveValueOpacity: number;
+};
+
+export type AppGameMovesData = Array<AppGameMoveData>;
+
 export type AppGameRoundData = {
+    availableMoves: AppGameMovesData;
     id: number;
     move: string;
     moveValue: string;
@@ -23,6 +36,8 @@ export type AppGameRoundData = {
     positionValue: string;
     remoteness: number;
 };
+
+export type AppGameHistoryData = Array<AppGameRoundData>;
 
 export type AppGameVariantData = {
     description: string;
@@ -36,9 +51,11 @@ export type AppGameVariantsData = Array<AppGameVariantData>;
 export type AppGameData = {
     author: string;
     description: string;
+    history: AppGameHistoryData;
     id: string;
     name: string;
     options: AppGameOptionsData;
+    round: AppGameRoundData;
     status: string;
     type: string;
     variant: AppGameVariantData;
