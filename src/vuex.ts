@@ -123,9 +123,6 @@ export default new Vuex.Store({
     game(state, game: CGame): void {
       state.app.setGame(game);
     },
-    games(state, games: CGames): void {
-      state.app.setGames(games);
-    },
 
     // CGame.ts
     gameId(state, gameId: string): void {
