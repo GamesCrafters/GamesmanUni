@@ -12,17 +12,17 @@
     },
     "devDependencies": {
         "@intlify/vite-plugin-vue-i18n": "2.1.2",
-        "@octokit/types": "6.14.1",
+        "@octokit/types": "6.14.2",
         "@types/markdown-it-link-attributes": "3.0.1",
         "@vitejs/plugin-vue": "1.2.2",
         "@vue/compiler-sfc": "3.0.11",
         "pre-commit": "1.2.2",
         "prettier": "2.2.1",
         "sass": "1.32.12",
-        "typescript": "4.3.0-dev.20210426",
+        "typescript": "4.3.0-dev.20210501",
         "vite": "2.2.3",
         "vite-plugin-package-version": "0.0.5",
-        "vue-tsc": "0.0.25"
+        "vue-tsc": "0.0.26"
     },
     "license": "AGPL-3.0-or-later",
     "name": "gamesmanuni",
@@ -33,5 +33,5 @@
         "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit; yarn vite --debug",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.11"
+    "version": "5.0.0-alpha.12"
 }
