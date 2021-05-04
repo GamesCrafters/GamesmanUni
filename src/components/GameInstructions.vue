@@ -1,20 +1,26 @@
 <template>
     <button @click="store.commit(mutationTypes.showInstruction, true)">𝓲</button>
-    <PopupWindow v-if="game.options.showInstruction" @close="closeGameInstruction()">
-        <ExternalMarkdown class="c-markdown" :relativePath="`gameInstructions-${game.id}.md`"></ExternalMarkdown>
+    <PopupWindow v-if="store.state.app.game.options.showInstruction" @close="store.commit(mutationTypes.showInstruction, false)">
+        <VueMarkdownIt class="c-markdown" :break="true" :linkify="true" :plugins="plugins" :source="store.state.app.game.instructions" />
     </PopupWindow>
 </template>
 
 <script lang="ts" setup>
-    import { ref } from "vue";
+    import VueMarkdownIt from "vue3-markdown-it";
+    import MarkdownItLinkAttributes from "markdown-it-link-attributes";
     import { mutationTypes, useStore } from "../plugins/store";
-    import ExternalMarkdown from "./ExternalMarkdown.vue";
     import PopupWindow from "./PopupWindow.vue";
 
     const store = useStore();
-    const game = ref(store.state.app.game);
-    const closeGameInstruction = (): void => {
-        store.commit(mutationTypes.showInstruction, false);
-        game.value = store.state.app.game;
-    };
+    const plugins = [
+        {
+            plugin: MarkdownItLinkAttributes,
+            options: {
+                attrs: {
+                    target: "_blank",
+                    rel: "noopener noreferrer nofollow",
+                },
+            },
+        },
+    ];
 </script>
