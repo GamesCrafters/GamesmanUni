@@ -30,37 +30,25 @@
 </template>
 
 <script lang="ts" setup>
-    import { onMounted, ref, watch } from "vue";
+    import { computed } from "vue";
     import { actionTypes, useStore } from "../plugins/store";
 
-    type BoardData = { token: string; move: string; hint: string; hintOpacity: number };
-    type Board = Record<number, BoardData>;
+    type CellData = { token: string; move: string; hint: string; hintOpacity: number };
+    type BoardData = Record<number, CellData>;
 
     const store = useStore();
 
-    const cellCount: number = 9;
+    const cellCount = 9;
 
-    const initiateBoard = (): Board => {
-        let board: Board = {};
-        for (let cell: number = 1; cell <= cellCount; cell++) board[cell] = { token: "", move: "", hint: "", hintOpacity: 1 };
+    const board = computed(() => {
+        let board: BoardData = {};
+        // console.log(store.state.app.game.round.id, store.state.app.game.history[0]);
+        for (let cell: number = 1; cell <= cellCount; cell++) board[cell] = { token: store.state.app.game.round.position[7 + cell], move: "", hint: "", hintOpacity: 1 };
+        for (let availableMove of store.state.app.game.round.availableMoves) Object.assign(board[+availableMove.move[4] + 1], { move: availableMove.move, hint: availableMove.moveValue, hintOpacity: availableMove.moveValueOpacity });
         return board;
-    };
-
-    let board = ref(initiateBoard());
-
-    const updateBoard = (): void => {
-        board.value = initiateBoard();
-        for (let cell: number = 1; cell <= cellCount; cell++) board.value[cell].token = store.state.app.game.round.position[7 + cell];
-        // for (let availableMove of store.state.app.game.round.availableMoves) Object.assign(board[+availableMove.move[4] + 1], { move: availableMove.move, hint: availableMove.moveValue, hintOpacity: availableMove.moveValueOpacity });
-    };
+    });
 
     const getHintClass = (hint: string): string => (store.state.app.game.options.showNextMoveHints ? "hint-" + hint : "");
-
-    onMounted(updateBoard);
-    watch(
-        () => store.state.app.game.round.id,
-        () => updateBoard()
-    );
 </script>
 
 <style lang="scss" scoped>
