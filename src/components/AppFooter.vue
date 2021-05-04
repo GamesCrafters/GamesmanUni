@@ -66,4 +66,7 @@
         font-size: 1em;
         line-height: 2em;
     }
+    .app-footer-externalLink {
+        display: inline-block;
+    }
 </style>
