@@ -18,13 +18,9 @@ const getters: GetterTree<StateData, StateData> & GettersData = {};
 export enum mutationTypes {
     setApp = "setApp",
     setLatestCommitHistory = "setLatestCommitHistory",
-    setGame = "setGame",
-    setGames = "setGames",
     setLocale = "setLocale",
     setOptions = "setOptions",
     setTheme = "setTheme",
-    setVariant = "setVariant",
-    setVariants = "setVariants",
     showInstruction = "showInstruction",
     showOptions = "showOptions",
 }
@@ -32,13 +28,9 @@ export enum mutationTypes {
 type MutationsData = {
     [mutationTypes.setApp](state: StateData, app?: gamesmanUniTypes.AppData): void;
     [mutationTypes.setLatestCommitHistory](state: StateData, latestCommitHistory?: gamesmanUniTypes.AppLatestCommitHistoryData): void;
-    [mutationTypes.setGame](state: StateData, game?: gamesmanUniTypes.AppGameData): void;
-    [mutationTypes.setGames](state: StateData, games?: gamesmanUniTypes.AppGamesData): void;
     [mutationTypes.setLocale](state: StateData, locale?: string): void;
     [mutationTypes.setOptions](state: StateData, options?: gamesmanUniTypes.AppGameOptionsData): void;
     [mutationTypes.setTheme](state: StateData, theme?: string): void;
-    [mutationTypes.setVariant](state: StateData, variant?: gamesmanUniTypes.AppGameVariantData): void;
-    [mutationTypes.setVariants](state: StateData, variants?: gamesmanUniTypes.AppGameVariantsData): void;
     [mutationTypes.showInstruction](state: StateData, showInstruction?: boolean): void;
     [mutationTypes.showOptions](state: StateData, showOptions?: boolean): void;
 };
@@ -46,12 +38,6 @@ type MutationsData = {
 const mutations: MutationTree<StateData> & MutationsData = {
     setApp: (state: StateData, app?: gamesmanUniTypes.AppData): void => {
         state.app = app ? app : state.app;
-    },
-    setGame: (state: StateData, game?: gamesmanUniTypes.AppGameData): void => {
-        state.app.game = game ? game : state.app.game;
-    },
-    setGames: (state: StateData, games?: gamesmanUniTypes.AppGamesData): void => {
-        state.app.games = games ? games : state.app.games;
     },
     setLatestCommitHistory: (state: StateData, latestCommitHistory?: gamesmanUniTypes.AppLatestCommitHistoryData): void => {
         state.app.latestCommitHistory = latestCommitHistory ? latestCommitHistory : state.app.latestCommitHistory;
@@ -64,12 +50,6 @@ const mutations: MutationTree<StateData> & MutationsData = {
     },
     setTheme: (state: StateData, theme?: string): void => {
         state.app.preferences.theme = theme ? theme : state.app.preferences.theme;
-    },
-    setVariant: (state: StateData, variant?: gamesmanUniTypes.AppGameVariantData): void => {
-        state.app.game.variant = variant ? variant : state.app.game.variant;
-    },
-    setVariants: (state: StateData, variants?: gamesmanUniTypes.AppGameVariantsData): void => {
-        state.app.game.variants = variants ? variants : state.app.game.variants;
     },
     showInstruction: (state: StateData, showInstruction?: boolean): void => {
         state.app.game.options.showInstruction = showInstruction != undefined ? showInstruction : state.app.game.options.showInstruction;
