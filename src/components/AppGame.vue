@@ -72,15 +72,6 @@
         initiateInterval();
         store.dispatch(actionTypes.restartGame);
     };
-    watch(
-        () => game.value.options.showVisualValueHistory,
-        async (): Promise<void> => {
-            if (game.value.options.showVisualValueHistory) {
-                await new Promise((resolve) => setTimeout(resolve, 500));
-                store.dispatch(actionTypes.drawVisualValueHistory);
-            }
-        }
-    );
 </script>
 
 <style scoped lang="scss">

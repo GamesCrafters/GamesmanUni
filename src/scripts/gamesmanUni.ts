@@ -45,10 +45,10 @@ export async function loadGameVariants(app: gamesmanUniTypes.AppData, type: stri
     app.game.name = rawGameVariants.response.name;
     (app.game.players =
         type === "puzzles"
-            ? [{ id: "player", name: "Player" }]
+            ? [{ id: 1, name: "Player" }]
             : [
-                  { id: "left", name: "Left Player" },
-                  { id: "right", name: "Right Player" },
+                  { id: 1, name: "Left Player" },
+                  { id: 2, name: "Right Player" },
               ]),
         (app.game.type = type);
     app.game.variants = rawGameVariants.response.variants.map((rawGameVariant) => ({
