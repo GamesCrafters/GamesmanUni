@@ -22,16 +22,22 @@ export const defaultApp: AppData = {
             showStopWatch: false,
             showVisualValueHistory: true,
         },
+        players: [],
         round: {
             availableMoves: [],
             id: 0,
             move: "",
             moveValue: "",
+            player: {
+                id: "",
+                name: "",
+            },
             position: "",
             positionValue: "",
             remoteness: Number.POSITIVE_INFINITY,
         },
         status: "",
+        turn: 0,
         type: "",
         variant: {
             description: "",

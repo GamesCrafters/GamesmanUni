@@ -34,6 +34,7 @@ export type RawOnePlayerGameVariantsData = {
 export type RawTwoPlayersGameVariantsData = {
     response: {
         gameId: string;
+        instructions: string;
         name: string;
         variants: Array<{
             description: string;
