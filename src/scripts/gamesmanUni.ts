@@ -117,60 +117,49 @@ export async function initiateGame(app: gamesmanUniTypes.AppData, type: string, 
         console.error(`Error: Failed to load game data.`);
         return undefined;
     }
-    app.game.round.availableMoves = updatedApp.game.round.availableMoves;
+    app = updatedApp;
     app.game.round.id = 1;
     app.game.round.player = app.game.players[app.game.turn - 1];
-    app.game.round.position = app.game.variant.startPosition;
-    app.game.round.positionValue = updatedApp.game.round.positionValue;
-    app.game.round.remoteness = updatedApp.game.round.remoteness;
-    app.game.history = [app.game.round];
+    app.game.history = [{ ...app.game.round }];
     return app;
 }
 
 export function restartGame(app: gamesmanUniTypes.AppData): gamesmanUniTypes.AppData {
     app.game.turn = 1;
-    app.game.round.availableMoves = app.game.history[0].availableMoves;
-    app.game.round.id = 1;
+    app.game.round = { ...app.game.history[0] };
     app.game.round.move = "";
     app.game.round.moveValue = "";
-    app.game.round.player = app.game.players[0];
-    app.game.round.position = app.game.history[0].position;
-    app.game.round.positionValue = app.game.history[0].positionValue;
-    app.game.round.remoteness = app.game.history[0].remoteness;
-    app.game.history = [app.game.round];
+    app.game.history = [{ ...app.game.round }];
     return app;
 }
 
 export async function runMove(app: gamesmanUniTypes.AppData, move: string): Promise<gamesmanUniTypes.AppData | undefined> {
-    const moveData = app.game.round.availableMoves.find((availableMove) => availableMove.move === app.game.round.move)!;
+    const moveData = app.game.round.availableMoves.find((availableMove) => availableMove.move === move)!;
     app.game.round.move = move;
     app.game.round.moveValue = moveData.moveValue;
-    app.game.history[app.game.round.id - 1] = app.game.round;
+    app.game.history[app.game.history.indexOf(app.game.history.find((round) => round.id === app.game.round.id)!)] = { ...app.game.round };
     app.game.turn = app.game.type === "puzzles" ? 1 : app.game.turn === 1 ? 2 : 1;
     const updatedApp = await loadGamePosition(app, app.game.type, app.game.id, app.game.variant.id, moveData.position);
     if (!updatedApp) {
         console.error(`Error: Failed to load game data.`);
         return undefined;
     }
-    app.game.round.availableMoves = updatedApp.game.round.availableMoves;
+    app = updatedApp;
     app.game.round.id += 1;
     app.game.round.move = "";
     app.game.round.moveValue = "";
     app.game.round.player = app.game.players[app.game.turn - 1];
-    app.game.round.position = updatedApp.game.round.position;
-    app.game.round.positionValue = updatedApp.game.round.positionValue;
-    app.game.round.remoteness = updatedApp.game.round.remoteness;
-    app.game.history = [app.game.round];
+    app.game.history.push({ ...app.game.round });
     return app;
 }
 
 export function undoMove(app: gamesmanUniTypes.AppData): gamesmanUniTypes.AppData {
-    app.game.round = app.game.history.find((round) => round.id === app.game.round.id - 1)!;
+    app.game.round = { ...app.game.history.find((round) => round.id === app.game.round.id - 1)! };
     return app;
 }
 
 export function redoMove(app: gamesmanUniTypes.AppData): gamesmanUniTypes.AppData {
-    app.game.round = app.game.history.find((round) => round.id === app.game.round.id + 1)!;
+    app.game.round = { ...app.game.history.find((round) => round.id === app.game.round.id + 1)! };
     return app;
 }
 

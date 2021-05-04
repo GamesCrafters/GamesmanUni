@@ -33,14 +33,14 @@
                 <div id="app-game-body-main-board"><GameBoard /></div>
             </div>
             <div v-if="game.options.showVisualValueHistory" id="app-game-body-vvh">
-                <!-- <GameVisualValueHistory /> -->
+                <GameVisualValueHistory />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { ref, watch } from "vue";
+    import { computed, ref, watch } from "vue";
     import moment from "moment";
     import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../plugins/store";
@@ -51,11 +51,10 @@
 
     const route = useRoute();
     const store = useStore();
-    const game = ref(store.state.app.game);
-    store.dispatch(actionTypes.initiateGame, { type: route.params.type as string, gameId: route.params.gameId as string, variantId: route.params.variantId as string }).then(() => {
-        game.value = { ...store.state.app.game };
+    const game = computed(() => {
+        return store.state.app.game;
     });
-
+    store.dispatch(actionTypes.initiateGame, { type: route.params.type as string, gameId: route.params.gameId as string, variantId: route.params.variantId as string });
     let dateTime = ref(moment());
     let timer = ref(moment().startOf("day"));
     const updateInterval = (): void => {
