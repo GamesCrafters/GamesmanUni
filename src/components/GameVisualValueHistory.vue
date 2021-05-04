@@ -118,11 +118,16 @@
             ctx.restore();
         };
         const setTurnNames = () => {
-            setText(turn1Name, gridMiddleX - gridWidth / 3, padding + turnNameHeight / 2, turn0Color);
-            setText(turn2Name, gridMiddleX + gridWidth / 3, padding + turnNameHeight / 2, turn1Color);
+            if (game.value.type !== "puzzles") {
+                setText(turn1Name, gridMiddleX - gridWidth / 3, padding + turnNameHeight / 2, turn0Color);
+                setText(turn2Name, gridMiddleX + gridWidth / 3, padding + turnNameHeight / 2, turn1Color);
+            }
         };
 
         const remotenessToX = (remoteness: number, id: number): number => {
+            if (game.value.type === "puzzles") {
+                return gridRight + 4 - (remoteness + 0.5) * 2 * columnWidth;
+            }
             if (id === 1) {
                 return gridLeft + (remoteness + 0.5) * columnWidth;
             }
@@ -137,13 +142,20 @@
             setText(xLabel, canvasWidth / 2, gridBottom + xCoordinateHeight + xLabelHeight / 2, primaryColor);
         };
         const setXCoordinates = () => {
-            setText("D", gridMiddleX, gridTop - xCoordinateHeight / 2, primaryColor);
-            setText("D", gridMiddleX, gridBottom + xCoordinateHeight / 2, primaryColor);
+            if (game.value.type === "puzzles") {
+                setText("L", gridLeft, gridTop - xCoordinateHeight / 2, primaryColor);
+                setText("L", gridLeft, gridBottom + xCoordinateHeight / 2, primaryColor);
+            } else {
+                setText("D", gridMiddleX, gridTop - xCoordinateHeight / 2, primaryColor);
+                setText("D", gridMiddleX, gridBottom + xCoordinateHeight / 2, primaryColor);
+            }
             for (let remoteness: number = 0; remoteness <= maximumRemoteness; remoteness += xInterval) {
                 setText(remoteness.toString(), remotenessToX(remoteness, 1), gridTop - xCoordinateHeight / 2, primaryColor);
                 setText(remoteness.toString(), remotenessToX(remoteness, 2), gridTop - xCoordinateHeight / 2, primaryColor);
-                setText(remoteness.toString(), remotenessToX(remoteness, 1), gridBottom + xCoordinateHeight / 2, primaryColor);
-                setText(remoteness.toString(), remotenessToX(remoteness, 2), gridBottom + xCoordinateHeight / 2, primaryColor);
+                if (game.value.type !== "puzzles") {
+                    setText(remoteness.toString(), remotenessToX(remoteness, 1), gridBottom + xCoordinateHeight / 2, primaryColor);
+                    setText(remoteness.toString(), remotenessToX(remoteness, 2), gridBottom + xCoordinateHeight / 2, primaryColor);
+                }
             }
         };
         const setYLabel = () => {
@@ -208,14 +220,18 @@
             let y: number;
             for (let round = 1; round <= currentRoundNumber; round++) {
                 roundData = history.filter((roundData) => roundData.id == round)[0];
-                if (roundData.positionValue === "draw") {
-                    x = gridMiddleX;
-                } else if (roundData.positionValue === "tie") {
-                    x = [remotenessToX(roundData.remoteness, 1), remotenessToX(roundData.remoteness, 2)];
-                } else if (roundData.positionValue === "lose") {
-                    x = remotenessToX(roundData.remoteness, roundData.player.id === 1 ? 2 : 1);
+                if (game.value.type === "puzzles") {
+                    x = roundData.positionValue === "lose" ? gridLeft : remotenessToX(roundData.remoteness, roundData.player.id);
                 } else {
-                    x = remotenessToX(roundData.remoteness, roundData.player.id);
+                    if (roundData.positionValue === "draw") {
+                        x = gridMiddleX;
+                    } else if (roundData.positionValue === "tie") {
+                        x = [remotenessToX(roundData.remoteness, 1), remotenessToX(roundData.remoteness, 2)];
+                    } else if (roundData.positionValue === "lose") {
+                        x = remotenessToX(roundData.remoteness, roundData.player.id === 1 ? 2 : 1);
+                    } else {
+                        x = remotenessToX(roundData.remoteness, roundData.player.id);
+                    }
                 }
                 y = roundToY(round);
                 pointCoordinates[round] = { x: x, y: y };
