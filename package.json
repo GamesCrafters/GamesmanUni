@@ -34,5 +34,5 @@
         "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit; yarn vite --debug",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.19"
+    "version": "5.0.0-alpha.20"
 }

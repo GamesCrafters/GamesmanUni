@@ -30,7 +30,7 @@ export const defaultApp: AppData = {
             move: "",
             moveValue: "",
             player: {
-                id: "",
+                id: 0,
                 name: "",
             },
             position: "",
