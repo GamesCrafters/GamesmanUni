@@ -11,6 +11,7 @@ export const defaultApp: AppData = {
         description: "",
         history: [],
         id: "",
+        instructions: "",
         name: "",
         options: {
             showDateTime: false,

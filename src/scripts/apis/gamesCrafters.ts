@@ -20,6 +20,7 @@ export type RawOnePlayerGameVariantsData = {
         dateCreated: string;
         description: string;
         gameId: string;
+        instructions: string;
         name: string;
         variants: Array<{
             description: string;

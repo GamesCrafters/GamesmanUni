@@ -29,6 +29,7 @@ export type AppGameData = {
     description: string;
     history: AppGameHistoryData;
     id: string;
+    instructions: string;
     name: string;
     options: AppGameOptionsData;
     players: AppGamePlayersData;

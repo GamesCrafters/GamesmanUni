@@ -15,6 +15,7 @@ export async function loadGames(app: gamesmanUniTypes.AppData, type: string): Pr
         description: app.game.description,
         history: app.game.history,
         id: rawGame.gameId,
+        instructions: app.game.instructions,
         name: rawGame.name,
         options: app.game.options,
         players: app.game.players,
@@ -40,6 +41,7 @@ export async function loadGameVariants(app: gamesmanUniTypes.AppData, type: stri
         app.game.description = (<RawOnePlayerGameVariantsData>rawGameVariants).response.description;
     }
     app.game.id = gameId;
+    app.game.instructions = rawGameVariants.response.instructions;
     app.game.name = rawGameVariants.response.name;
     (app.game.players =
         type === "puzzles"
