@@ -84,7 +84,6 @@ type ActionContext = Omit<BaseActionContext<StateData, StateData>, "commit"> & {
 };
 
 export enum actionTypes {
-    drawVisualValueHistory = "drawVisualValueHistory",
     loadGames = "loadGames",
     loadVariants = "loadVariants",
     initiateGame = "initiateGame",
@@ -96,7 +95,6 @@ export enum actionTypes {
 }
 
 type ActionsData = {
-    [actionTypes.drawVisualValueHistory](context: ActionContext): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, type: string): Promise<void>;
     [actionTypes.loadVariants](context: ActionContext, payload: { type: string; gameId: string }): Promise<void>;
     [actionTypes.initiateGame](context: ActionContext, payload: { type: string; gameId: string; variantId: string }): Promise<void>;
@@ -108,7 +106,6 @@ type ActionsData = {
 };
 
 const actions: ActionTree<StateData, StateData> & ActionsData = {
-    drawVisualValueHistory: async (context: ActionContext): Promise<void> => {},
     loadGames: async (context: ActionContext, type: string): Promise<void> => {
         const app = await gamesmanUni.loadGames(context.state.app, type);
         context.commit(mutationTypes.setApp, app);
