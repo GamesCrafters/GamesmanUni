@@ -16,6 +16,7 @@ type GettersData = {};
 const getters: GetterTree<StateData, StateData> & GettersData = {};
 
 export enum mutationTypes {
+    setApp = "setApp",
     setLatestCommitHistory = "setLatestCommitHistory",
     setGame = "setGame",
     setGames = "setGames",
@@ -29,6 +30,7 @@ export enum mutationTypes {
 }
 
 type MutationsData = {
+    [mutationTypes.setApp](state: StateData, app?: gamesmanUniTypes.AppData): void;
     [mutationTypes.setLatestCommitHistory](state: StateData, latestCommitHistory?: gamesmanUniTypes.AppLatestCommitHistoryData): void;
     [mutationTypes.setGame](state: StateData, game?: gamesmanUniTypes.AppGameData): void;
     [mutationTypes.setGames](state: StateData, games?: gamesmanUniTypes.AppGamesData): void;
@@ -42,35 +44,38 @@ type MutationsData = {
 };
 
 const mutations: MutationTree<StateData> & MutationsData = {
+    setApp: (state: StateData, app?: gamesmanUniTypes.AppData): void => {
+        state.app = app ? app : state.app;
+    },
     setGame: (state: StateData, game?: gamesmanUniTypes.AppGameData): void => {
-        state.app.game = game ? game : defaultApp.game;
+        state.app.game = game ? game : state.app.game;
     },
     setGames: (state: StateData, games?: gamesmanUniTypes.AppGamesData): void => {
-        state.app.games = games ? games : defaultApp.games;
+        state.app.games = games ? games : state.app.games;
     },
     setLatestCommitHistory: (state: StateData, latestCommitHistory?: gamesmanUniTypes.AppLatestCommitHistoryData): void => {
-        state.app.latestCommitHistory = latestCommitHistory ? latestCommitHistory : defaultApp.latestCommitHistory;
+        state.app.latestCommitHistory = latestCommitHistory ? latestCommitHistory : state.app.latestCommitHistory;
     },
     setLocale: (state: StateData, locale?: string): void => {
-        state.app.preferences.locale = locale ? locale : defaultApp.preferences.locale;
+        state.app.preferences.locale = locale ? locale : state.app.preferences.locale;
     },
     setOptions: (state: StateData, options?: gamesmanUniTypes.AppGameOptionsData): void => {
-        state.app.game.options = options ? options : defaultApp.game.options;
+        state.app.game.options = options ? options : state.app.game.options;
     },
     setTheme: (state: StateData, theme?: string): void => {
-        state.app.preferences.theme = theme ? theme : defaultApp.preferences.theme;
+        state.app.preferences.theme = theme ? theme : state.app.preferences.theme;
     },
     setVariant: (state: StateData, variant?: gamesmanUniTypes.AppGameVariantData): void => {
-        state.app.game.variant = variant ? variant : defaultApp.game.variant;
+        state.app.game.variant = variant ? variant : state.app.game.variant;
     },
     setVariants: (state: StateData, variants?: gamesmanUniTypes.AppGameVariantsData): void => {
-        state.app.game.variants = variants ? variants : defaultApp.game.variants;
+        state.app.game.variants = variants ? variants : state.app.game.variants;
     },
     showInstruction: (state: StateData, showInstruction?: boolean): void => {
-        state.app.game.options.showInstruction = showInstruction != undefined ? showInstruction : defaultApp.game.options.showInstruction;
+        state.app.game.options.showInstruction = showInstruction != undefined ? showInstruction : state.app.game.options.showInstruction;
     },
     showOptions: (state: StateData, showOptions?: boolean): void => {
-        state.app.game.options.showOptions = showOptions != undefined ? showOptions : defaultApp.game.options.showOptions;
+        state.app.game.options.showOptions = showOptions != undefined ? showOptions : state.app.game.options.showOptions;
     },
 };
 
@@ -80,53 +85,64 @@ type ActionContext = Omit<BaseActionContext<StateData, StateData>, "commit"> & {
 
 export enum actionTypes {
     drawVisualValueHistory = "drawVisualValueHistory",
-    initiateGame = "initiateGame",
     loadGames = "loadGames",
     loadVariants = "loadVariants",
-    loadLatestCommitHistory = "loadLatestCommitHistory",
+    initiateGame = "initiateGame",
+    restartGame = "restartGame",
+    runMove = "runMove",
     redoMove = "redoMove",
     undoMove = "undoMove",
+    loadLatestCommitHistory = "loadLatestCommitHistory",
 }
 
 type ActionsData = {
     [actionTypes.drawVisualValueHistory](context: ActionContext): Promise<void>;
-    [actionTypes.initiateGame](context: ActionContext, payload: { type: string; gameId: string; variantId: string }): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, type: string): Promise<void>;
     [actionTypes.loadVariants](context: ActionContext, payload: { type: string; gameId: string }): Promise<void>;
-    [actionTypes.loadLatestCommitHistory](context: ActionContext): Promise<void>;
+    [actionTypes.initiateGame](context: ActionContext, payload: { type: string; gameId: string; variantId: string }): Promise<void>;
+    [actionTypes.restartGame](context: ActionContext): void;
+    [actionTypes.runMove](context: ActionContext, move: string): Promise<void>;
     [actionTypes.redoMove](context: ActionContext): void;
     [actionTypes.undoMove](context: ActionContext): void;
+    [actionTypes.loadLatestCommitHistory](context: ActionContext): Promise<void>;
 };
 
 const actions: ActionTree<StateData, StateData> & ActionsData = {
     drawVisualValueHistory: async (context: ActionContext): Promise<void> => {},
-    initiateGame: async (context: ActionContext, payload: { type: string; gameId: string; variantId: string }): Promise<void> => {
-        if (!context.state.app.game.name) {
-            await context.dispatch(actionTypes.loadVariants, { type: payload.type, gameId: payload.gameId });
-        }
-        context.commit(mutationTypes.setVariant, context.state.app.game.variants.find((variant) => variant.id === payload.variantId)!);
-        const game = await gamesmanUni.loadGamePosition(context.state.app, payload.type, payload.gameId, payload.variantId, context.state.app.game.variant.startPosition);
-        context.commit(mutationTypes.setGame, game);
-    },
     loadGames: async (context: ActionContext, type: string): Promise<void> => {
-        const games = await gamesmanUni.loadGames(context.state.app, type);
-        context.commit(mutationTypes.setGames, games);
+        const app = await gamesmanUni.loadGames(context.state.app, type);
+        context.commit(mutationTypes.setApp, app);
     },
     loadVariants: async (context: ActionContext, payload: { type: string; gameId: string }): Promise<void> => {
-        const game = await gamesmanUni.loadGameVariants(context.state.app, payload.type, payload.gameId);
-        context.commit(mutationTypes.setGame, game);
+        const app = await gamesmanUni.loadGameVariants(context.state.app, payload.type, payload.gameId);
+        context.commit(mutationTypes.setApp, app);
+    },
+    initiateGame: async (context: ActionContext, payload: { type: string; gameId: string; variantId: string }): Promise<void> => {
+        if (!context.state.app.games.length) {
+            await context.dispatch(actionTypes.loadVariants, { type: payload.type, gameId: payload.gameId });
+        }
+        const app = await gamesmanUni.initiateGame(context.state.app, payload.type, payload.gameId, payload.variantId);
+        context.commit(mutationTypes.setApp, app);
+    },
+    restartGame: (context: ActionContext): void => {
+        const app = gamesmanUni.restartGame(context.state.app);
+        context.commit(mutationTypes.setApp, app);
+    },
+    runMove: async (context: ActionContext, move: string): Promise<void> => {
+        const app = await gamesmanUni.runMove(context.state.app, move);
+        context.commit(mutationTypes.setApp, app);
+    },
+    redoMove: (context: ActionContext): void => {
+        const app = gamesmanUni.redoMove(context.state.app);
+        context.commit(mutationTypes.setApp, app);
+    },
+    undoMove: (context: ActionContext): void => {
+        const app = gamesmanUni.undoMove(context.state.app);
+        context.commit(mutationTypes.setApp, app);
     },
     loadLatestCommitHistory: async (context: ActionContext): Promise<void> => {
         const latestCommitHistory = await gamesmanUni.loadLatestCommitHistory(context.state.app);
         context.commit(mutationTypes.setLatestCommitHistory, latestCommitHistory);
-    },
-    redoMove: (context: ActionContext): void => {
-        const game = gamesmanUni.redoMove(context.state.app.game);
-        context.commit(mutationTypes.setGame, game);
-    },
-    undoMove: (context: ActionContext): void => {
-        const game = gamesmanUni.undoMove(context.state.app.game);
-        context.commit(mutationTypes.setGame, game);
     },
 };
 

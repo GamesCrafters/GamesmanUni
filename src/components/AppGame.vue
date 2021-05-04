@@ -6,7 +6,7 @@
                 {{ game.name }}<br />
                 <router-link :to="{ name: 'variants', params: { gameType: route.params.type, gameId: route.params.gameId } }">({{ game.variant.description }})</router-link>
             </h2>
-            <div id="app-game-instruction"><GameInstruction /></div>
+            <div id="app-game-instruction"><GameInstructions /></div>
         </div>
         <div id="app-game-body">
             <div id="app-game-body-main">
@@ -24,16 +24,16 @@
                     <div id="app-game-round">Move #{{ game.round.id }}</div>
                     <div v-if="game.options.showNextMoveHints" id="app-game-remoteness">Remoteness {{ game.round.remoteness }}</div>
                 </div>
-                <!-- <div v-if="options.getHintVisibility() && game.getType() != 'puzzles'" id="app-game-body-main-prediction">
-                    <b id="app-game-prediction-turn-id" :class="'c-turn-' + game.getRound().getTurnId()">{{ game.getRound().getTurnName() }}</b>
+                <div v-if="game.options.showNextMoveHints" id="app-game-body-main-prediction">
+                    <b id="app-game-prediction-turn-id" :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b>
                     should
-                    <span id="app-game-prediction-position-value" :class="'c-' + game.getRound().getPositionValue()">{{ game.getRound().getPositionValue() }}</span
+                    <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">{{ game.round.positionValue }}</span
                     >.
-                </div> -->
-                <div id="app-game-body-main-board"><!-- <GameBoard/> --></div>
+                </div>
+                <div id="app-game-body-main-board"><GameBoard /></div>
             </div>
             <div v-if="game.options.showVisualValueHistory" id="app-game-body-vvh">
-                <GameVisualValueHistory />
+                <!-- <GameVisualValueHistory /> -->
             </div>
         </div>
     </div>
@@ -45,7 +45,8 @@
     import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../plugins/store";
     import GameOptions from "./GameOptions.vue";
-    import GameInstruction from "./GameInstruction.vue";
+    import GameInstructions from "./GameInstructions.vue";
+    import GameBoard from "./GameBoard.vue";
     import GameVisualValueHistory from "./GameVisualValueHistory.vue";
 
     const route = useRoute();
@@ -70,13 +71,13 @@
     initiateInterval();
     const restartGame = async (): Promise<void> => {
         initiateInterval();
-        store.dispatch(actionTypes.initiateGame, { type: route.params.type as string, gameId: route.params.gameId as string, variantId: route.params.variantId as string });
+        store.dispatch(actionTypes.restartGame);
     };
     watch(
         () => game.value.options.showVisualValueHistory,
         async (): Promise<void> => {
             if (game.value.options.showVisualValueHistory) {
-                await new Promise((resolve, reject) => setTimeout(resolve, 500));
+                await new Promise((resolve) => setTimeout(resolve, 500));
                 store.dispatch(actionTypes.drawVisualValueHistory);
             }
         }

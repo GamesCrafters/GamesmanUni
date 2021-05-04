@@ -174,11 +174,11 @@
         }
     }
 
-    .c-turn-0 {
+    .c-turn-1 {
         color: var(--turn0Color);
     }
 
-    .c-turn-1 {
+    .c-turn-2 {
         color: var(--turn1Color);
     }
 
