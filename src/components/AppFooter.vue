@@ -10,10 +10,10 @@
     const store = useStore();
     const commonAttributes = { rel: "noopener noreferrer nofollow", target: "_blank" };
     const externalLinks = [
-        { attributes: { href: "https://github.com/GamesCrafters/GamesmanUni", ...commonAttributes }, value: `GamesmanUni v${store.state.app.version}` },
+        { attributes: { href: "https://github.com/GamesCrafters/GamesmanUni/tree/next", ...commonAttributes }, value: `GamesmanUni v${store.state.app.version}` },
+        { attributes: { href: "https://nyc.cs.berkeley.edu/wiki/GamesmanUni_5", ...commonAttributes }, value: "RFC" },
+        { attributes: { href: "https://github.com/GamesCrafters/GamesmanPuzzles", ...commonAttributes }, value: "GamesmanPuzzles" },
         { attributes: { href: "https://github.com/GamesCrafters/GamesCraftersUWAPI", ...commonAttributes }, value: "GamesCraftersUWAPI" },
-        { attributes: { href: "https://github.com/GamesCrafters/GamesmanUni", ...commonAttributes }, value: "GitHub" },
-        { attributes: { href: "https://sites.google.com/berkeley.edu/gamesmanuni-doc", ...commonAttributes }, value: "Documentation" },
         { attributes: { href: "https://gamescrafters.berkeley.edu", ...commonAttributes }, value: "© GamesCrafters" },
         { attributes: { href: "https://regents.universityofcalifornia.edu", ...commonAttributes }, value: "© UC Regents" },
     ];
