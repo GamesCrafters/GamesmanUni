@@ -1,4 +1,10 @@
 <!-- ####################################################################### -->
+<!-- GamesmanUni 5 -->
+
+### Check the `[next](https://github.com/GamesCrafters/GamesmanUni/tree/next)` Branch for GamesmanUni 5 Alpha Development with Vue 3
+--------------
+
+<!-- ####################################################################### -->
 <!-- logo -->
 
 <p align="center">
