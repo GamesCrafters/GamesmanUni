@@ -1,4 +1,7 @@
 <template>
+    <metainfo>
+        <template v-slot:title="{ content }">{{ content }} | GamesmanUni</template>
+    </metainfo>
     <AppHeader />
     <hr class="c-divider" />
     <router-view />

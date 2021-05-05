@@ -1,3 +1,3 @@
-// import { createMetaManager } from "vue-meta";
+import { createMetaManager } from "vue-meta";
 
-// export const metaManager = createMetaManager();
+export const metaManager = createMetaManager();
