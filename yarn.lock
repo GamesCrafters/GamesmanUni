@@ -2985,10 +2985,10 @@ vfile@^4.0.0, vfile@^4.0.1:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
-vite-plugin-package-version@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/vite-plugin-package-version/-/vite-plugin-package-version-0.0.5.tgz#68e714d06a3b764697f627a58bc27e4d940617b8"
-  integrity sha512-2VFl0jyYtbGLd9mKrteEXnbKVU0HsdMVWJcU20VbwHX/7WHpxBnuXkcydRHLCDlRFSZBi0IWbXc9ro0hz9IJyA==
+vite-plugin-package-version@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-package-version/-/vite-plugin-package-version-1.0.0.tgz#2f0fc943aa005f06efd0985259fb57cd6896dff3"
+  integrity sha512-iRKIKHtXwHaOrzjQ6jUkK2oVriltWvJ6I5kbMUq1Otk9e5F4r6OmqOnbe7iG4FfDQI6xN/PhqcRdG2YB1z4FAg==
 
 vite@2.2.4:
   version "2.2.4"
