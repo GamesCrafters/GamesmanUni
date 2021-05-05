@@ -48,7 +48,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 0 20%;
+        padding: 0 10%;
     }
     .variant {
         border: 0.04em solid var(--neutralColor);

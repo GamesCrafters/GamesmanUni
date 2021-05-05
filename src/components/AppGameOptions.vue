@@ -1,6 +1,6 @@
 <template>
     <button @click="store.commit(mutationTypes.showOptions, true)">⚙️</button>
-    <PopupWindow v-if="game.options.showOptions" @close="updateOptions()">
+    <AppPopupWindow v-if="game.options.showOptions" @close="updateOptions()">
         <h2>
             {{ game.name }}
             <br />
@@ -30,13 +30,13 @@
                 <label for="checkbox">Delta Remoteness</label>
             </div>
         </div>
-    </PopupWindow>
+    </AppPopupWindow>
 </template>
 
 <script lang="ts" setup>
     import { ref } from "vue";
     import { mutationTypes, useStore } from "../plugins/store";
-    import PopupWindow from "./PopupWindow.vue";
+    import AppPopupWindow from "./AppPopupWindow.vue";
 
     const store = useStore();
     const game = ref(store.state.app.game);
