@@ -1,12 +1,12 @@
 <template>
     <div id="app-game">
         <div id="app-game-header">
-            <div id="app-game-options"><GameOptions /></div>
+            <div id="app-game-options"><AppGameOptions /></div>
             <h2 id="app-game-title">
                 {{ game.name }}<br />
                 <router-link :to="{ name: 'variants', params: { gameType: route.params.type, gameId: route.params.gameId } }">({{ game.variant.description }})</router-link>
             </h2>
-            <div id="app-game-instruction"><GameInstructions /></div>
+            <div id="app-game-instruction"><AppGameInstructions /></div>
         </div>
         <div id="app-game-body">
             <div id="app-game-body-main">
@@ -30,24 +30,24 @@
                     <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">{{ game.round.positionValue }}</span
                     >.
                 </div>
-                <div id="app-game-body-main-board"><GameBoard /></div>
+                <div id="app-game-body-main-board"><AppGameBoard /></div>
             </div>
             <div v-if="game.options.showVisualValueHistory" id="app-game-body-vvh">
-                <GameVisualValueHistory />
+                <AppGameVisualValueHistory />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref, watch } from "vue";
+    import { computed, ref } from "vue";
     import moment from "moment";
     import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../plugins/store";
-    import GameOptions from "./GameOptions.vue";
-    import GameInstructions from "./GameInstructions.vue";
-    import GameBoard from "./GameBoard.vue";
-    import GameVisualValueHistory from "./GameVisualValueHistory.vue";
+    import AppGameOptions from "./AppGameOptions.vue";
+    import AppGameInstructions from "./AppGameInstructions.vue";
+    import AppGameBoard from "./AppGameBoard.vue";
+    import AppGameVisualValueHistory from "./AppGameVisualValueHistory.vue";
 
     const route = useRoute();
     const store = useStore();

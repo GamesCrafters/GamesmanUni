@@ -2,7 +2,7 @@
     <h2>puzzles</h2>
     <div id="app-puzzles-puzzles-container">
         <router-link class="app-puzzles-puzzle" v-for="puzzle in puzzles" :key="puzzle.id" :to="{ name: 'variants', params: { type: 'puzzles', gameId: puzzle.id } }">
-            <img class="app-puzzles-puzzle-logo" :src="getLogoSource(puzzle)" :alt="puzzle.name + ' Logo'" width="150" />
+            <img class="app-puzzles-puzzle-logo" :src="getLogoSource(puzzle)" :alt="puzzle.name + ' Logo'" width="100" />
             <h3 class="app-puzzles-puzzle-name">{{ puzzle.name }}</h3>
             <h4>Data Status: {{ puzzle.status }}</h4>
         </router-link>
@@ -45,7 +45,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 0 20%;
+        padding: 0 10%;
     }
 
     .app-puzzles-puzzle {

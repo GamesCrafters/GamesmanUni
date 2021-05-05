@@ -2,7 +2,7 @@
     <h2>Games</h2>
     <div id="app-games-games-container">
         <router-link class="app-games-game" v-for="gameData in games" :key="gameData.id" :to="{ name: 'variants', params: { type: 'games', gameId: gameData.id } }">
-            <img class="app-games-game-logo" :src="getLogoSource(gameData)" :alt="gameData.name + ' Logo'" width="150" />
+            <img class="app-games-game-logo" :src="getLogoSource(gameData)" :alt="gameData.name + ' Logo'" width="100" />
             <h3 class="app-games-game-name">{{ gameData.name }}</h3>
             <h4>Data Status: {{ gameData.status }}</h4>
         </router-link>
@@ -45,7 +45,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 0 20%;
+        padding: 0 10%;
     }
 
     .app-games-game {

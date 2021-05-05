@@ -1,7 +1,7 @@
 <template>
-    <GameVariants />
+    <AppGameVariants />
 </template>
 
 <script lang="ts" setup>
-    import GameVariants from "./GameVariants.vue";
+    import AppGameVariants from "./AppGameVariants.vue";
 </script>
