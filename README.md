@@ -1,9 +1,3 @@
-# TBS
+# GamesmanUni 5
 
--   Docker
--   Vue Meta v3
--   Vuetify
-    -   @mdi/font
-    -   sass-loader
-    -   roboto-fontface
-    -   vue-cli-plugin-vuetify
+| [Sneak Peek](https://uni5alpha.netlify.app)
