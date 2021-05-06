@@ -272,8 +272,8 @@
         }
     }
     svg {
-        height: 15em;
-        width: 15em;
+        height: 20em;
+        width: 20em;
         margin: auto;
         vertical-align: middle;
     }
