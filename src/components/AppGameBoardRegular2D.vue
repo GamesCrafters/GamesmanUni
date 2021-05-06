@@ -63,7 +63,7 @@
 
     console.log("Checking if custom game board exists for this regular 2D board game...");
     const regular2DGameBoards: Record<string, any> = {
-        // "ttt-regular": AppGameBoardRegular2DTttRegular,
+        "ttt-regular": AppGameBoardRegular2DTttRegular,
     };
     const gameBoard: string = `${store.state.app.game.id}-${store.state.app.game.variant.id}`;
     const customGameBoardExists: boolean = gameBoard in regular2DGameBoards;
