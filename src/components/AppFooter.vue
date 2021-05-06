@@ -22,6 +22,9 @@
 <style lang="scss" scoped>
     #app-footer {
         text-align: center;
+        &::first-line {
+            text-indent: 0;
+        }
         a {
             display: inline-block;
         }
