@@ -31,7 +31,7 @@
 <script lang="ts" setup>
     import { computed } from "vue";
     import { actionTypes, useStore } from "../plugins/store";
-    import AppGameBoardRegular2DTttRegular from "./AppGameBoardRegular2DTttRegular.vue";
+    import AppGameBoardRegular2DTtt from "./AppGameBoardRegular2DTtt.vue";
 
     enum UWAPITurn {
         A = "A",
@@ -63,7 +63,8 @@
 
     console.log("Checking if custom game board exists for this regular 2D board game...");
     const regular2DGameBoards: Record<string, any> = {
-        "ttt-regular": AppGameBoardRegular2DTttRegular,
+        "ttt-misere": AppGameBoardRegular2DTtt,
+        "ttt-regular": AppGameBoardRegular2DTtt,
     };
     const gameBoard: string = `${store.state.app.game.id}-${store.state.app.game.variant.id}`;
     const customGameBoardExists: boolean = gameBoard in regular2DGameBoards;
