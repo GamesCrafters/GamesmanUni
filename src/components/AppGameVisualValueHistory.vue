@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, watch } from "vue";
+    import { computed, onMounted, watch } from "vue";
     import { useStore } from "../plugins/store";
 
     const store = useStore();
@@ -41,11 +41,11 @@
         const drawColor = getComputedStyle(document.body).getPropertyValue("--drawColor");
         const tieColor = getComputedStyle(document.body).getPropertyValue("--tieColor");
         const loseColor = getComputedStyle(document.body).getPropertyValue("--loseColor");
-        const turn0Color = getComputedStyle(document.body).getPropertyValue("--turn0Color");
-        const turn1Color = getComputedStyle(document.body).getPropertyValue("--turn1Color");
+        const turn1Color = getComputedStyle(document.body).getPropertyValue("--turn0Color");
+        const turn2Color = getComputedStyle(document.body).getPropertyValue("--turn1Color");
 
         const turn1Name = store.state.app.game.players[0].name;
-        const turn2Name = store.state.app.game.players[1].name;
+        const turn2Name = store.state.app.game.type === "puzzles" ? "" : store.state.app.game.players[1].name;
 
         const xLabel = "Remoteness";
         const yLeftLabel = "Moves";
@@ -118,9 +118,11 @@
             ctx.restore();
         };
         const setTurnNames = () => {
-            if (game.value.type !== "puzzles") {
-                setText(turn1Name, gridMiddleX - gridWidth / 3, padding + turnNameHeight / 2, turn0Color);
-                setText(turn2Name, gridMiddleX + gridWidth / 3, padding + turnNameHeight / 2, turn1Color);
+            if (game.value.type === "puzzles") {
+                setText(turn1Name, gridMiddleX, padding + turnNameHeight / 2, turn1Color);
+            } else {
+                setText(turn1Name, gridMiddleX - gridWidth / 3, padding + turnNameHeight / 2, turn1Color);
+                setText(turn2Name, gridMiddleX + gridWidth / 3, padding + turnNameHeight / 2, turn2Color);
             }
         };
 
@@ -186,9 +188,9 @@
             ctx.globalAlpha = 0.2;
             for (let round: number = 1; round <= currentRoundNumber; round++) {
                 if (history.filter((roundData) => roundData.id === round)[0].player.id === 1) {
-                    ctx.fillStyle = turn0Color;
-                } else {
                     ctx.fillStyle = turn1Color;
+                } else {
+                    ctx.fillStyle = turn2Color;
                 }
                 ctx.fillRect(gridLeft + columnWidth / 2, gridTop + (round - 1) * rowHeight, gridWidth - columnWidth, rowHeight);
             }
@@ -317,6 +319,7 @@
         getPointCoordinates();
         setGraph();
     };
+    onMounted(() => drawVvh());
     watch(
         () => [store.state.app.preferences.theme, store.state.app.game.round.id],
         () => drawVvh()
