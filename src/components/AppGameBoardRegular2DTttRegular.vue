@@ -42,7 +42,6 @@
 
     const board = computed(() => {
         let board: BoardData = {};
-        // console.log(store.state.app.game.round.id, store.state.app.game.history[0]);
         for (let cell: number = 1; cell <= cellCount; cell++) board[cell] = { token: store.state.app.game.round.position[7 + cell], move: "", hint: "", hintOpacity: 1 };
         for (let availableMove of store.state.app.game.round.availableMoves) Object.assign(board[+availableMove.move[4] + 1], { move: availableMove.move, hint: availableMove.moveValue, hintOpacity: availableMove.moveValueOpacity });
         return board;
