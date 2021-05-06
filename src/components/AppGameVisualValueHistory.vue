@@ -319,9 +319,8 @@
         getPointCoordinates();
         setGraph();
     };
-    onMounted(() => drawVvh());
     watch(
-        () => [store.state.app.preferences.theme, store.state.app.game.round.id],
+        () => [store.state.app.preferences.theme, store.state.app.game.round.id, store.state.app.game.id, store.state.app.game.variant.id],
         () => drawVvh()
     );
 </script>
