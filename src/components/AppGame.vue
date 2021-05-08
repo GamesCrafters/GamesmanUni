@@ -1,20 +1,19 @@
 <template>
-    <div id="app-game">
-        <div id="app-game-header">
-            <div id="app-game-options"><AppGameOptions /></div>
+    <template id="app-game">
+        <template id="app-game-header">
+            <AppGameOptions id="app-game-options" />
             <h2 id="app-game-title">
-                {{ game.name }}<br />
-                <router-link :to="{ name: 'variants', params: { gameType: route.params.type, gameId: route.params.gameId } }">({{ game.variant.description }})</router-link>
+                {{ game.name }}<br /><router-link :to="{ name: 'variants', params: { gameType: game.type, gameId: game.id } }">({{ game.variant.description }})</router-link>
             </h2>
-            <div id="app-game-instruction"><AppGameInstructions /></div>
-        </div>
-        <div id="app-game-body">
-            <div id="app-game-body-main">
-                <div id="app-game-body-main-clock">
-                    <div v-if="game.options.showDateTime" id="app-game-time">{{ dateTime.format("LTS") }}</div>
-                    <div v-if="game.options.showDateTime" id="app-game-date">{{ dateTime.format("LL") }}</div>
+            <AppGameInstructions id="app-game-instruction" />
+        </template>
+        <template id="app-game-body">
+            <template id="app-game-body-main">
+                <template id="app-game-body-main-clock">
+                    <div v-if="game.options.showTime" id="app-game-time">{{ dateTime.format("LTS") }}</div>
+                    <div v-if="game.options.showDate" id="app-game-date">{{ dateTime.format("LL") }}</div>
                     <div v-if="game.options.showStopWatch" id="app-game-timer">{{ timer.format("HH:mm:ss") }}</div>
-                </div>
+                </template>
                 <div id="app-game-body-main-function">
                     <button id="app-game-undo" @click="store.dispatch(actionTypes.undoMove)" :disabled="game.round.id <= 1">Undo</button>
                     <button id="app-game-restart" @click="restartGame()">Restart</button>
@@ -25,18 +24,36 @@
                     <div v-if="game.options.showNextMoveHints" id="app-game-remoteness">Remoteness {{ game.round.remoteness }}</div>
                 </div>
                 <div v-if="game.options.showNextMoveHints" id="app-game-body-main-prediction">
-                    <b id="app-game-prediction-turn-id" :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b>
-                    should
-                    <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">{{ game.round.positionValue }}</span
-                    >.
+                    <template v-if="game.round.remoteness">
+                        <b :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b>
+                        should
+                        <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">{{ game.round.positionValue }}</span
+                        >.
+                    </template>
+                    <template v-else="game.round.remoteness">
+                        <template v-if="game.round.positionValue === 'win'">
+                            <b :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b>
+                            has
+                            <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">won</span>.
+                        </template>
+                        <template v-else-if="game.round.positionValue === 'lose'">
+                            <b :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b>
+                            has
+                            <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">lost</span>.
+                        </template>
+                        <template v-else-if="game.round.positionValue === 'tie'">
+                            <b class="c-turn-1">{{ game.players[0].name }}</b> and <b class="c-turn-2">{{ game.players[1].name }}</b> <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue">tied</span>.
+                        </template>
+                        <template v-else>
+                            <b :class="'c-turn-' + game.turn">{{ game.round.player.name }}</b> should <span id="app-game-prediction-position-value" :class="'c-' + game.round.positionValue"> {{ game.round.positionValue }} </span>.
+                        </template>
+                    </template>
                 </div>
                 <div id="app-game-body-main-board"><AppGameBoard /></div>
-            </div>
-            <div v-if="game.options.showVisualValueHistory" id="app-game-body-vvh">
-                <AppGameVisualValueHistory />
-            </div>
-        </div>
-    </div>
+            </template>
+            <AppGameVisualValueHistory v-if="game.options.showVisualValueHistory" id="app-game-body-vvh" />
+        </template>
+    </template>
 </template>
 
 <script lang="ts" setup>
@@ -77,8 +94,8 @@
 <style scoped lang="scss">
     @mixin flexItem($flexDirection: row, $flexWrap: nowrap, $justifyContent: flex-start, $alignItems: stretch, $alignContent: stretch) {
         display: flex;
-        flex-direction: $flexDirection;
-        flex-wrap: $flexWrap;
+        flex-direction: $flexDirection; // row, column
+        flex-wrap: $flexWrap; // wrap, nowrap
         justify-content: $justifyContent;
         align-items: $alignItems;
         align-content: $alignContent;
