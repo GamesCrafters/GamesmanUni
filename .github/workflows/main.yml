@@ -10,7 +10,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /home/uni/GamesmanUni
+            cd GamesmanUni
             echo "Pulling from GitHub ---------------------------------------------------"
             git pull
             echo "Checking and installing new dependencies ------------------------------"
@@ -18,7 +18,7 @@ jobs:
             echo "Building prod ---------------------------------------------------------"
             yarn build
             echo "Pushing to prod -------------------------------------------------------"
-            sudo rsync -au /home/uni/GamesmanUni/dist/ /var/www/html/uni/
+            sudo rsync -au dist/ /var/www/html/uni/
           host: nyc.cs.berkeley.edu
           user: github
           key: ${{ secrets.KEY }}
