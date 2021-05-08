@@ -60,13 +60,14 @@ export type AppGameMoveData = {
 export type AppGameMovesData = Array<AppGameMoveData>;
 
 export type AppGameOptionsData = {
-    showDateTime: boolean;
+    showDate: boolean;
     showInstruction: boolean;
     showNextMoves: boolean;
     showNextMoveDeltaRemotenesses: boolean;
     showNextMoveHints: boolean;
     showOptions: boolean;
     showStopWatch: boolean;
+    showTime: boolean;
     showVisualValueHistory: boolean;
 };
 

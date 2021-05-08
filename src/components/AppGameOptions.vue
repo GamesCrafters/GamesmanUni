@@ -10,8 +10,16 @@
         <div id="app-game-option-show-hide-container">
             <h4>Show/Hide...</h4>
             <div class="app-game-option">
-                <input type="checkbox" v-model="options.showDateTime" />
-                <label for="checkbox">Date and Time</label>
+                <input type="checkbox" v-model="options.showTime" />
+                <label for="checkbox">Time</label>
+            </div>
+            <div class="app-game-option">
+                <input type="checkbox" v-model="options.showDate" />
+                <label for="checkbox">Date</label>
+            </div>
+            <div class="app-game-option">
+                <input type="checkbox" v-model="options.showStopWatch" />
+                <label for="checkbox">Stop Watch</label>
             </div>
             <div class="app-game-option">
                 <input type="checkbox" v-model="options.showVisualValueHistory" />
