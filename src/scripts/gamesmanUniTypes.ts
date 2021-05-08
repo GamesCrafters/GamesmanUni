@@ -1,9 +1,12 @@
+import type { RawPositionData } from "./apis/gamesCrafters";
+
 export type AppData = {
     externalDataSources: AppExternalDataSourcesData;
     game: AppGameData;
     games: AppGamesData;
     latestCommitHistory: AppLatestCommitHistoryData;
     preferences: AppPreferencesData;
+    puzzles: AppGamesData;
     version: string;
 };
 
@@ -33,6 +36,7 @@ export type AppGameData = {
     name: string;
     options: AppGameOptionsData;
     players: AppGamePlayersData;
+    preFetchedRawPositionDatas: AppGamePreFetchedRawPositionDatas;
     round: AppGameRoundData;
     status: string;
     turn: number;
@@ -70,6 +74,8 @@ export type AppGamePlayerData = {
     id: number;
     name: string;
 };
+
+export type AppGamePreFetchedRawPositionDatas = Record<string, RawPositionData>;
 
 export type AppGamePlayersData = Array<AppGamePlayerData>;
 

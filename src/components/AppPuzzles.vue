@@ -21,9 +21,9 @@
 
     const puzzles: Ref<AppGamesData> = ref([]);
     store.dispatch(actionTypes.loadGames, "puzzles").then(() => {
-        if (store.state.app.games) {
+        if (store.state.app.puzzles) {
             success.value = true;
-            puzzles.value = store.state.app.games;
+            puzzles.value = store.state.app.puzzles;
         }
     });
 
