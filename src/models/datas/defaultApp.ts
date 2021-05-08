@@ -24,6 +24,7 @@ export const defaultApp: AppData = {
             showVisualValueHistory: true,
         },
         players: [],
+        preFetchedRawPositionDatas: {},
         round: {
             availableMoves: [],
             id: 0,
@@ -55,5 +56,6 @@ export const defaultApp: AppData = {
         locale: "en",
         fallbackLocale: "en",
     },
+    puzzles: [],
     version: <string>import.meta.env.PACKAGE_VERSION,
 };

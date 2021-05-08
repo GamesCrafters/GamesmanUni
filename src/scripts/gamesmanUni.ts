@@ -1,5 +1,5 @@
 import { loadRawGames, loadRawGameVariants, loadRawGamePosition } from "./apis/gamesCrafters";
-import type { RawOnePlayerGameVariantsData } from "./apis/gamesCrafters";
+import type { RawOnePlayerGameVariantsData, RawPositionData } from "./apis/gamesCrafters";
 import { loadRawLatestCommitHistoryData } from "./apis/gitHub";
 import type * as gamesmanUniTypes from "./gamesmanUniTypes";
 
@@ -10,7 +10,7 @@ export async function loadGames(app: gamesmanUniTypes.AppData, type: string): Pr
         console.error(`Error: Failed to load raw ${type} data.`);
         return undefined;
     }
-    app.games = rawGames.response.map((rawGame) => ({
+    const updateGames = rawGames.response.map((rawGame) => ({
         author: app.game.author,
         description: app.game.description,
         history: app.game.history,
@@ -19,6 +19,7 @@ export async function loadGames(app: gamesmanUniTypes.AppData, type: string): Pr
         name: rawGame.name,
         options: app.game.options,
         players: app.game.players,
+        preFetchedRawPositionDatas: {},
         round: app.game.round,
         status: rawGame.status,
         turn: app.game.turn,
@@ -26,6 +27,8 @@ export async function loadGames(app: gamesmanUniTypes.AppData, type: string): Pr
         variant: app.game.variant,
         variants: app.game.variants,
     }));
+    if (type === "puzzles") app.puzzles = updateGames;
+    else app.games = updateGames;
     return app;
 }
 
@@ -61,11 +64,15 @@ export async function loadGameVariants(app: gamesmanUniTypes.AppData, type: stri
 }
 
 async function loadGamePosition(app: gamesmanUniTypes.AppData, type: string, gameId: string, variantId: string, position: string): Promise<gamesmanUniTypes.AppData | undefined> {
-    const gamePositionDataSource: string = type === "puzzles" ? `${app.externalDataSources.onePlayerGamesDataSource}/${gameId}/variants/${variantId}/positions/${position}` : `${app.externalDataSources.twoPlayersGamesDataSource}/${gameId}/variants/${variantId}/positions/${position}`;
-    const rawGamePosition = await loadRawGamePosition(gamePositionDataSource);
-    if (!rawGamePosition) {
-        console.error(`Error: Failed to load raw ${gameId} position data.`);
-        return undefined;
+    let rawGamePosition: RawPositionData | undefined;
+    if (position in app.game.preFetchedRawPositionDatas) rawGamePosition = app.game.preFetchedRawPositionDatas[position];
+    else {
+        const gamePositionDataSource: string = type === "puzzles" ? `${app.externalDataSources.onePlayerGamesDataSource}/${gameId}/variants/${variantId}/positions/${position}` : `${app.externalDataSources.twoPlayersGamesDataSource}/${gameId}/variants/${variantId}/positions/${position}`;
+        rawGamePosition = await loadRawGamePosition(gamePositionDataSource);
+        if (!rawGamePosition) {
+            console.error(`Error: Failed to load raw ${gameId} position data.`);
+            return undefined;
+        }
     }
     app.game.round.availableMoves = [];
     if (rawGamePosition.response.moves.length) {
@@ -106,6 +113,19 @@ async function loadGamePosition(app: gamesmanUniTypes.AppData, type: string, gam
     app.game.round.position = rawGamePosition.response.position;
     app.game.round.positionValue = rawGamePosition.response.positionValue;
     app.game.round.remoteness = rawGamePosition.response.remoteness;
+    return app;
+}
+
+export async function preFetchRawGamePositionForAvailableMoves(app: gamesmanUniTypes.AppData): Promise<gamesmanUniTypes.AppData> {
+    const gamePositionBaseDataSource: string = app.game.type === "puzzles" ? `${app.externalDataSources.onePlayerGamesDataSource}/${app.game.id}/variants/${app.game.variant.id}/positions/` : `${app.externalDataSources.twoPlayersGamesDataSource}/${app.game.id}/variants/${app.game.variant.id}/positions/`;
+    app.game.preFetchedRawPositionDatas = {};
+    for (let availableMove of app.game.round.availableMoves) {
+        const gamePositionDataSource: string = gamePositionBaseDataSource + availableMove.position;
+        const rawGamePosition = await loadRawGamePosition(gamePositionDataSource);
+        if (rawGamePosition) {
+            app.game.preFetchedRawPositionDatas[availableMove.position] = rawGamePosition;
+        }
+    }
     return app;
 }
 
