@@ -1,0 +1,3 @@
+# GamesmanUni API
+
+**Coming soon!**

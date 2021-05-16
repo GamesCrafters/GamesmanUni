@@ -1,10 +1,10 @@
 import { createApp } from "vue";
-import { i18n } from "./plugins/i18n";
-import { store } from "./plugins/store";
-import { router } from "./plugins/router";
-import { metaManager } from "./plugins/meta";
-import { axios, VueAxios } from "./plugins/axios";
-import { VueMarkdownIt } from "./plugins/markdownIt";
+import { i18n } from "./scripts/plugins/i18n";
+import { store } from "./scripts/plugins/store";
+import { router } from "./scripts/plugins/router";
+import { metaManager } from "./scripts/plugins/meta";
+import { axios, VueAxios } from "./scripts/plugins/axios";
+import { VueMarkdownIt } from "./scripts/plugins/markdownIt";
 import App from "./App.vue";
 
 const app = createApp(App);

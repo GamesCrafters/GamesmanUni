@@ -1,6 +1,6 @@
-node_modules
+*.local
 .DS_Store
 dist
 dist-ssr
-*.local
+node_modules
 yarn-error.log

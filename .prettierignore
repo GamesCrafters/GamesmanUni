@@ -1,8 +1,9 @@
-node_modules
+*.local
 .DS_Store
+.prettierignore
 dist
 dist-ssr
-*.local
+LICENSE
+node_modules
 yarn-error.log
 yarn.lock
-LICENSE

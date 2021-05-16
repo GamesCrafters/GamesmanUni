@@ -1,0 +1,237 @@
+@forward "themes";
+
+@mixin reservedColors {
+    --drawColor: #ffff00;
+    --loseColor: #800000;
+    --themeColor: #778899;
+    --tieColor: #ffff00;
+    --turn1Color: #0000ff;
+    --turn2Color: #ff0000;
+    --winColor: #008000;
+}
+
+* {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    color: var(--primaryColor);
+    font-family: var(--regularFontFamily);
+    font-size: 1rem;
+    font-weight: 200;
+    line-height: 2rem;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+html {
+    font-size: 11px;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 1.17rem;
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+h5 {
+    font-size: 0.83rem;
+    font-weight: 400;
+}
+
+h6 {
+    font-size: 0.67rem;
+    font-weight: 400;
+}
+
+code,
+i,
+li,
+p,
+pre {
+    text-align: justify;
+}
+
+b {
+    font-weight: 400;
+}
+
+a {
+    &:link {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+}
+
+code {
+    border: 0.1rem solid var(--neutralColor);
+    border-radius: 5%;
+    font-family: var(--fixedWidthFontFamily);
+    padding: 0.1rem 0.5rem;
+}
+
+button {
+    border-radius: 1rem;
+    border: 0.1rem solid var(--primaryColor);
+    box-shadow: 0.25rem 0.25rem 0.1rem 0.01rem var(--primaryColor);
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    transition: all 0.3s ease-out;
+    &:disabled {
+        cursor: auto;
+        opacity: 0.5;
+        &:hover {
+            background-color: var(--backgroundColor);
+            color: var(--primaryColor);
+            transform: translateY(0);
+        }
+    }
+    &:focus {
+        outline: none;
+    }
+    &:hover {
+        transform: translateY(-0.25rem);
+    }
+}
+
+#app {
+    @include reservedColors;
+}
+
+.uni-dropdown {
+    display: inline-block;
+    * {
+        text-align: left;
+    }
+    .uni-dropdown-selection {
+        border: 0.1rem solid var(--primaryColor);
+        border-radius: 1rem;
+        font-weight: 400;
+        padding: 0.5rem;
+    }
+    .uni-dropdown-menu {
+        background-color: var(--neutralColor);
+        border: 0.1rem solid var(--primaryColor);
+        border-radius: 1rem;
+        display: none;
+        max-height: 70vh;
+        overflow-y: scroll;
+        position: absolute;
+        z-index: 1;
+    }
+    .uni-dropdown-menu-option {
+        border-radius: 1rem;
+        cursor: pointer;
+        &:hover,
+        &:active {
+            background-color: var(--themeColor);
+        }
+        padding: 0 1.5rem 0 1rem;
+    }
+    &:hover,
+    &:active {
+        .uni-dropdown-selection {
+            background-color: var(--themeColor);
+        }
+        .uni-dropdown-menu {
+            display: block;
+        }
+    }
+}
+
+.uni-toggle-button {
+    // https://danklammer.com/articles/simple-css-toggle-switch/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 62px;
+    height: 32px;
+    display: inline-block;
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: var(--neutralColor);
+    transition: background-color ease 0.3s;
+    &:before {
+        content: "on off";
+        display: block;
+        position: absolute;
+        z-index: 2;
+        width: 28px;
+        height: 28px;
+        background: var(--primaryColor);
+        left: 2px;
+        top: 2px;
+        border-radius: 50%;
+        font: 10px/28px Helvetica;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-indent: -22px;
+        word-spacing: 37px;
+        color: var(--primaryColor);
+        text-shadow: -1px -1px rgba(0, 0, 0, 0.15);
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
+    }
+    &:checked {
+        background-color: var(--themeColor);
+    }
+    &:checked:before {
+        left: 32px;
+    }
+}
+
+.uni-turn-1 {
+    background-color: lightblue;
+    color: var(--turn1Color);
+}
+
+.uni-turn-2 {
+    background-color: lightpink;
+    color: var(--turn2Color);
+}
+
+.uni-win {
+    background-color: var(--winColor);
+    color: #ffffff;
+}
+
+.uni-draw {
+    background-color: var(--drawColor);
+    color: #000000;
+}
+
+.uni-tie {
+    background-color: var(--tieColor);
+    color: #000000;
+}
+
+.uni-lose {
+    background-color: var(--loseColor);
+    color: #ffffff;
+}
