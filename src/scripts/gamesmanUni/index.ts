@@ -106,12 +106,7 @@ export const initiateMatch = async (
         startingPlayerId: string;
     }
 ) => {
-    if (!Object.keys(app.gameTypes[payload.gameType].games).length) {
-        const updatedApp = await loadGames(app, payload);
-        if (updatedApp) app = updatedApp;
-        else return undefined;
-    }
-    if (!Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length) {
+    if (!Object.keys(app.gameTypes[payload.gameType].games).length || !Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length) {
         const updatedApp = await loadVariants(app, payload);
         if (updatedApp) app = updatedApp;
         else return undefined;
