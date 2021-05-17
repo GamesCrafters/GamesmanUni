@@ -33,10 +33,10 @@
     const gameType = computed(() => route.params.type as string);
     const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
     const games = computed(() => store.getters.games(gameType.value).games);
-    store.dispatch(actionTypes.loadGames, { type: gameType.value });
     watch(
         () => route.params.type as string,
-        () => route.params.type && store.dispatch(actionTypes.loadGames, { type: gameType.value }) && console.log(gameType.value)
+        () => route.params.type && store.dispatch(actionTypes.loadGames, { type: gameType.value }),
+        { immediate: true }
     );
 </script>
 
