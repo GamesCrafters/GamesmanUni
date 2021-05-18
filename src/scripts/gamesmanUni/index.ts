@@ -15,8 +15,9 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
             ...Defaults.defaultGame,
             id: game.gameId,
             name: game.name,
-            type: "puzzles",
+            type: payload.gameType,
             status: game.status,
+            variants: { ...Defaults.defaultVariants },
         };
     app.gameTypes[payload.gameType].lastUpdated = new Date().getTime();
     return app;
@@ -28,7 +29,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
         if (updatedApp) app = updatedApp;
         else return undefined;
     }
-    if (!payload.force && Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length && (new Date().getTime() - app.gameTypes[payload.gameType].games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
+    if (!payload.force && app.gameTypes[payload.gameType].games[payload.gameId] && Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length && (new Date().getTime() - app.gameTypes[payload.gameType].games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
     const variants = await GCTAPI.loadVariants(baseDataSource + `/${payload.gameId}`, payload);
     if (!variants) return undefined;
@@ -38,6 +39,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     app.gameTypes[payload.gameType].games[payload.gameId].dateCreated = (<GCTAPITypes.OnePlayerGameVariants>variants).response.dateCreated;
     app.gameTypes[payload.gameType].games[payload.gameId].description = (<GCTAPITypes.OnePlayerGameVariants>variants).response.description;
     app.gameTypes[payload.gameType].games[payload.gameId].instructions = variants.response.instructions;
+    app.gameTypes[payload.gameType].games[payload.gameId].variants.variants = {};
     for (const variant of variants.response.variants)
         app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[variant.variantId] = {
             id: variant.variantId,
@@ -128,7 +130,7 @@ export const initiateMatch = async (
             playerId: payload.startingPlayerId,
             move: "",
             moveValue: "",
-            position: game.positions[game.startPosition],
+            position: {...game.positions[game.startPosition]},
         },
         turn: 0,
         created: new Date().getTime(),
@@ -194,12 +196,16 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
 
 export const undoMove = (app: Types.App) => {
     app.currentMatch.round = { ...app.currentMatch.rounds[app.currentMatch.round.id - 1] };
+    app.currentMatch.round.move = "";
+    app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
 export const redoMove = (app: Types.App) => {
     app.currentMatch.round = { ...app.currentMatch.rounds[app.currentMatch.round.id + 1] };
+    app.currentMatch.round.move = "";
+    app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
