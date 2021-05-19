@@ -40,20 +40,20 @@
                 <!-- Move Coordinates -->
                 <template v-if="currentRoundId >= 2">
                     <template v-for="roundNumber in currentRoundId - 1" :key="roundNumber">
-                        <text class="move-coordinate" v-if="isPuzzleGame || currentRounds[roundNumber].playerId === currentLeftPlayerId" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle" :textLength="0.6 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">{{ currentRounds[roundNumber].move }}</text>
-                        <text class="move-coordinate" v-else :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle" :textLength="0.6 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">{{ currentRounds[roundNumber].move }}</text>
+                        <text class="move-coordinate" v-if="isPuzzleGame || currentRounds[roundNumber].playerId === currentLeftPlayerId" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].move }}</text>
+                        <text class="move-coordinate" v-else :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].move }}</text>
                     </template>
                     <template v-if="isEndOfMatch">
                         <template v-if="isPuzzleGame">
-                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="0.3 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">🥳</text>
+                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle">🥳</text>
                         </template>
                         <template v-else-if="currentPositionValue === 'tie'">
-                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="0.3 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">🤔</text>
-                            <text class="move-coordinate" :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="0.3 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">🤔</text>
+                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle">🤔</text>
+                            <text class="move-coordinate" :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle">🤔</text>
                         </template>
                         <template v-else>
-                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="0.3 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">{{ (currentPlayerId === currentLeftPlayerId && currentPositionValue === "win") || (currentPlayerId !== currentLeftPlayerId && currentPositionValue === "lose") ? "🥳" : "😢" }}</text>
-                            <text class="move-coordinate" :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="0.3 * yCoordinateWidth" lengthAdjust="spacingAndGlyphs">{{ (currentPlayerId !== currentLeftPlayerId && currentPositionValue === "win") || (currentPlayerId === currentLeftPlayerId && currentPositionValue === "lose") ? "🥳" : "😢" }}</text>
+                            <text class="move-coordinate" :x="yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle">{{ (currentPlayerId === currentLeftPlayerId && currentPositionValue === "win") || (currentPlayerId !== currentLeftPlayerId && currentPositionValue === "lose") ? "🥳" : "😢" }}</text>
+                            <text class="move-coordinate" :x="chartWidth - yCoordinateWidth / 2" :y="xCoordinateHeight + currentRoundId * rowHeight - rowHeight / 3" dominant-baseline="middle" text-anchor="middle">{{ (currentPlayerId !== currentLeftPlayerId && currentPositionValue === "win") || (currentPlayerId === currentLeftPlayerId && currentPositionValue === "lose") ? "🥳" : "😢" }}</text>
                         </template>
                     </template>
                 </template>
@@ -234,13 +234,13 @@
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
     const rowHeight = ref(4);
-    const xCoordinateHeight = ref(4);
+    const xCoordinateHeight = ref(3);
     const rowCount = computed(() => currentRoundId.value);
     const gridHeight = computed(() => rowHeight.value * rowCount.value);
     const chartHeight = computed(() => gridHeight.value + 2 * xCoordinateHeight.value);
 
     const chartWidth = ref(100);
-    const yCoordinateWidth = ref(10);
+    const yCoordinateWidth = ref(5);
     const columnCount = computed(() => (isPuzzleGame.value ? maximumRemoteness.value + 1 : 2 * (maximumRemoteness.value + 1)));
     const gridWidth = computed(() => chartWidth.value - (isPuzzleGame.value ? yCoordinateWidth.value : 2 * yCoordinateWidth.value));
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
@@ -364,7 +364,7 @@
                 flex-direction: row;
                 flex-wrap: nowrap;
                 justify-content: space-between;
-                padding: 1rem;
+                padding: 0.5rem;
                 position: relative;
                 > * {
                     flex: 1 1 auto;
