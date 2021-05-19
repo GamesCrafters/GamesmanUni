@@ -26,15 +26,15 @@
             <!-- Chart -->
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`" xmlns="http://www.w3.org/2000/svg">
                 <!-- D Symbols -->
-                <text class="draw-symbol" :x="chartWidth / 2" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">D</text>
-                <text class="draw-symbol" :x="chartWidth / 2" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">D</text>
+                <text class="draw-symbol" :x="chartWidth / 2" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">D</text>
+                <text class="draw-symbol" :x="chartWidth / 2" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle">D</text>
 
                 <!-- Remoteness Coordinates -->
                 <template v-for="(_, remoteness) in maximumRemoteness + 1" :key="remoteness">
-                    <text class="remoteness-coordinate" v-if="!isPuzzleGame && remoteness % xInterval === 0" :x="yCoordinateWidth + remoteness * columnWidth" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">{{ remoteness }}</text>
-                    <text class="remoteness-coordinate" v-if="remoteness % xInterval === 0" :x="chartWidth - (yCoordinateWidth + remoteness * columnWidth)" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">{{ remoteness }}</text>
-                    <text class="remoteness-coordinate" v-if="!isPuzzleGame && remoteness % xInterval === 0" :x="yCoordinateWidth + remoteness * columnWidth" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">{{ remoteness }}</text>
-                    <text class="remoteness-coordinate" v-if="remoteness % xInterval === 0" :x="chartWidth - (yCoordinateWidth + remoteness * columnWidth)" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle" :textLength="2.5 / columnWidth" lengthAdjust="spacingAndGlyphs">{{ remoteness }}</text>
+                    <text class="remoteness-coordinate" v-if="!isPuzzleGame && remoteness % xInterval === 0" :x="yCoordinateWidth + remoteness * columnWidth" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ remoteness }}</text>
+                    <text class="remoteness-coordinate" v-if="remoteness % xInterval === 0" :x="chartWidth - (yCoordinateWidth + remoteness * columnWidth)" :y="xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ remoteness }}</text>
+                    <text class="remoteness-coordinate" v-if="!isPuzzleGame && remoteness % xInterval === 0" :x="yCoordinateWidth + remoteness * columnWidth" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle">{{ remoteness }}</text>
+                    <text class="remoteness-coordinate" v-if="remoteness % xInterval === 0" :x="chartWidth - (yCoordinateWidth + remoteness * columnWidth)" :y="chartHeight - xCoordinateHeight / 3" dominant-baseline="middle" text-anchor="middle">{{ remoteness }}</text>
                 </template>
 
                 <!-- Move Coordinates -->
@@ -299,15 +299,15 @@
             > #chart {
                 > .draw-symbol {
                     fill: var(--primaryColor);
-                    font-size: 0.2rem;
+                    font-size: 0.1rem;
                 }
                 > .remoteness-coordinate {
                     fill: var(--primaryColor);
-                    font-size: 0.2rem;
+                    font-size: 0.1rem;
                 }
                 > .move-coordinate {
                     fill: var(--primaryColor);
-                    font-size: 0.2rem;
+                    font-size: 0.1rem;
                 }
                 > #grid-base {
                     fill: white;
