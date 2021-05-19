@@ -3,6 +3,7 @@ import * as GCTAPITypes from "../apis/gamesCrafters/types";
 import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
+import { store } from "../plugins/store";
 
 export const loadGames = async (app: Types.App, payload: { gameType: string; force?: boolean }) => {
     if (!payload.force && Object.keys(app.gameTypes[payload.gameType].games).length && (new Date().getTime() - app.gameTypes[payload.gameType].lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
@@ -130,7 +131,7 @@ export const initiateMatch = async (
             playerId: payload.startingPlayerId,
             move: "",
             moveValue: "",
-            position: {...game.positions[game.startPosition]},
+            position: { ...game.positions[game.startPosition] },
         },
         turn: 0,
         created: new Date().getTime(),
@@ -154,6 +155,7 @@ export const exitMatch = (app: Types.App) => {
     if (isEndOfMatch(app)) app.currentMatch.ended = new Date().getTime();
     for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
     app.currentMatch = { ...Defaults.defaultMatch };
+    console.dir(app.currentMatch);
     return app;
 };
 
@@ -162,12 +164,12 @@ export const restartMatch = (app: Types.App) => {
     app = exitMatch(app);
     app.currentMatch = { ...oldMatch };
     app.currentMatch.id = generateMatchId(app);
-    app.currentMatch.startingPlayerId = app.currentMatch.rounds[1].playerId;
     app.currentMatch.round = {
         ...app.currentMatch.rounds[1],
         move: "",
         moveValue: "",
     };
+    app.currentMatch.rounds = {};
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     app.currentMatch.turn = app.currentMatch.players.indexOf(app.currentMatch.startingPlayerId) + 1;
     app.currentMatch.created = new Date().getTime();
@@ -194,16 +196,20 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     return app;
 };
 
-export const undoMove = (app: Types.App) => {
-    app.currentMatch.round = { ...app.currentMatch.rounds[app.currentMatch.round.id - 1] };
+export const undoMove = (app: Types.App, payload?: { count?: number }) => {
+    const count = payload && payload.count ? payload.count : 1;
+    const newRoundId = Math.max(1, app.currentMatch.round.id - count);
+    app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
-export const redoMove = (app: Types.App) => {
-    app.currentMatch.round = { ...app.currentMatch.rounds[app.currentMatch.round.id + 1] };
+export const redoMove = (app: Types.App, payload?: { count?: number }) => {
+    const count = payload && payload.count ? payload.count : 1;
+    const newRoundId = Math.min(Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id)), app.currentMatch.round.id + count);
+    app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();

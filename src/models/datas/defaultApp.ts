@@ -97,7 +97,9 @@ export const defaultOptions: Types.Options = {
     showNextMoveHints: true,
     showNextMoves: true,
     showOptions: false,
-    showVisualValueHistory: true,
+    showVvh: true,
+    showVvhGuides: true,
+    showVvhMeters: false,
 };
 
 export const defaultMatches: Types.Matches = {};

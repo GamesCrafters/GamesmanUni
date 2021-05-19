@@ -107,7 +107,9 @@ export type Options = {
     showNextMoveHints: boolean;
     showNextMoves: boolean;
     showOptions: boolean;
-    showVisualValueHistory: boolean;
+    showVvh: boolean;
+    showVvhGuides: boolean;
+    showVvhMeters: boolean;
 };
 
 export type Matches = Record<number, Match>;
