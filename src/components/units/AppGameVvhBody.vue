@@ -298,12 +298,15 @@
             }
             > #chart {
                 > .draw-symbol {
+                    fill: var(--primaryColor);
                     font-size: 0.2rem;
                 }
                 > .remoteness-coordinate {
+                    fill: var(--primaryColor);
                     font-size: 0.2rem;
                 }
                 > .move-coordinate {
+                    fill: var(--primaryColor);
                     font-size: 0.2rem;
                 }
                 > #grid-base {
@@ -324,7 +327,7 @@
                 }
                 > .remoteness-bar,
                 > .remoteness-interval-bar {
-                    stroke: var(--primaryColor);
+                    stroke: black;
                 }
                 > .position-value,
                 > .next-move-position-value,
