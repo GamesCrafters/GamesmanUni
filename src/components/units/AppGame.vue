@@ -29,17 +29,10 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-around;
         padding: 1rem;
         > * {
-            flex: 1 1 auto;
             margin: 1rem;
-        }
-        &:first-child {
-            flex: 1 1 auto;
-        }
-        &:nth-child(2) {
-            flex: 2 1 auto;
         }
     }
 </style>

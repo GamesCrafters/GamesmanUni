@@ -17,6 +17,7 @@
         align-content: normal;
         align-items: stretch;
         display: flex;
+        flex: 1 1 auto;
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
