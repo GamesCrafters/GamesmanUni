@@ -1,9 +1,9 @@
 <template>
     <div id="app-game-variants">
-        <h2>{{ game.name }}</h2>
+        <h2>{{ gameName }}</h2>
         <h3>Game Variants</h3>
         <div id="variants" v-if="game">
-            <router-link v-for="variant in game.variants.variants" :key="variant.id" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
+            <router-link v-for="variant in gameVariants" :key="variant.id" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
                 <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.description + ' Logo'" style="width: 8rem" />
                 <p>{{ variant.description }}</p>
                 <i>Data Status: {{ variant.status }}</i>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, watch } from "vue";
+    import { computed } from "vue";
     import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
@@ -21,8 +21,9 @@
     const store = useStore();
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
-    console.log(gameType.value, gameId.value);
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
+    const gameName = computed(() => (game.value ? game.value.name : ""));
+    const gameVariants = computed(() => game.value.variants.variants);
     const getLogoSource = (variantId: string) => {
         const images = import.meta.globEager("../../models/images/*.png");
         const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
@@ -40,11 +41,7 @@
         }
         return images[appLogoFilePath].default;
     };
-    watch(
-        () => route.params.gameId as string,
-        () => store.dispatch(actionTypes.loadVariants, { type: gameType.value, gameId: gameId.value }),
-        { immediate: true }
-    );
+    store.dispatch(actionTypes.loadVariants, { type: gameType.value, gameId: gameId.value });
 </script>
 
 <style lang="scss" scoped>

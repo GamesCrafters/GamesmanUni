@@ -20,6 +20,5 @@
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        margin: 0 0 1rem 0;
     }
 </style>
