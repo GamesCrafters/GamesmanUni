@@ -18,9 +18,9 @@
     const position = computed(() => store.getters.currentPosition);
     const gameBoards: Record<string, any> = {};
     const getGameBoardComponent = () => {
-        if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)) return AppGameBodyBoardRegular2D;
-        const gameBoard = `${gameId}-${variantId}`;
-        if (gameBoard in gameBoards) return gameBoards[gameBoard];
+        // if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)) return AppGameBodyBoardRegular2D;
+        // const gameBoard = `${gameId}-${variantId}`;
+        // if (gameBoard in gameBoards) return gameBoards[gameBoard];
         return AppGameBodyBoardFallback;
     };
 </script>

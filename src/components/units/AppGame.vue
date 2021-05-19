@@ -1,16 +1,16 @@
 <template>
     <div id="app-game">
-        <AppGameBody id="body" />
-        <AppGameVisualValueHistory id="vvh" />
+        <AppGameBody />
+        <AppGameVvh />
     </div>
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { onBeforeRouteLeave, useRoute } from "vue-router";
+    import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameBody from "./AppGameBody.vue";
-    import AppGameVisualValueHistory from "./AppGameVisualValueHistory.vue";
+    import AppGameVvh from "./AppGameVvh.vue";
 
     const route = useRoute();
     const store = useStore();
@@ -20,9 +20,6 @@
     const matchType = "pvp";
     const startingPlayerId = "p1";
     store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value, matchType, startingPlayerId });
-    onBeforeRouteLeave(() => {
-        store.dispatch(actionTypes.exitMatch);
-    });
 </script>
 
 <style lang="scss" scoped>
@@ -34,13 +31,15 @@
         flex-wrap: wrap;
         justify-content: center;
         padding: 1rem;
-        > #body {
+        > * {
             flex: 1 1 auto;
             margin: 1rem;
         }
-        > #vvh {
+        &:first-child {
+            flex: 1 1 auto;
+        }
+        &:nth-child(2) {
             flex: 2 1 auto;
-            margin: 1rem;
         }
     }
 </style>
