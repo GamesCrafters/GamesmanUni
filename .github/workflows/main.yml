@@ -3,14 +3,35 @@ name: test
 on: push
 
 jobs:
-  build:
+  dev:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/dev'
     steps:
       - name: Pushing build to NYC
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd GamesmanUni
+            cd dev/GamesmanUni
+            echo "Pulling from GitHub ---------------------------------------------------"
+            git pull
+            echo "Checking and installing new dependencies ------------------------------"
+            yarn install
+            echo "Building prod ---------------------------------------------------------"
+            yarn build
+            echo "Pushing to prod -------------------------------------------------------"
+            sudo rsync -au dist/ /var/www/html/dev/uni/
+          host: nyc.cs.berkeley.edu
+          user: github
+          key: ${{ secrets.KEY }}
+  prod:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/main'
+    steps:
+      - name: Pushing build to NYC
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd prod/GamesmanUni
             echo "Pulling from GitHub ---------------------------------------------------"
             git pull
             echo "Checking and installing new dependencies ------------------------------"
