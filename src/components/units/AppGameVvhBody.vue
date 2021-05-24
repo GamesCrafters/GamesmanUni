@@ -1,10 +1,10 @@
 <template>
     <div id="app-game-vvh-body">
         <p id="color-guides" v-if="showVvhGuides">
-            <span class="uni-win color">win</span>
-            <span class="uni-draw color">draw</span>
-            <span class="uni-tie color">tie</span>
-            <span class="uni-lose color">lose</span>
+            <mark class="uni-win color">win</mark>
+            <mark class="uni-draw color">draw</mark>
+            <mark class="uni-tie color">tie</mark>
+            <mark class="uni-lose color">lose</mark>
         </p>
         <p class="top x-axis-label" v-if="showVvhGuides">
             <b>Remoteness</b>
@@ -297,7 +297,7 @@
             > .color {
                 border-radius: 1rem;
                 margin: 1rem;
-                padding: 0 0.5rem;
+                padding: 0.25rem 0.5rem;
             }
         }
         > .x-axis-label {
