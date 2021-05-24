@@ -160,7 +160,6 @@ export const exitMatch = (app: Types.App) => {
     if (isEndOfMatch(app)) app.currentMatch.ended = new Date().getTime();
     for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
     app.currentMatch = { ...Defaults.defaultMatch };
-    console.dir(app.currentMatch);
     return app;
 };
 
@@ -185,11 +184,7 @@ export const restartMatch = (app: Types.App) => {
 export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.move = payload.move;
     app.currentMatch.round.moveValue = app.currentMatch.round.position.availableMoves[payload.move].moveValue;
-    const newRounds: Types.Rounds = {};
-    for (let roundId = 1; roundId < app.currentMatch.round.id; roundId++) {
-        newRounds[roundId] = { ...app.currentMatch.rounds[roundId] };
-    }
-    app.currentMatch.rounds = { ...newRounds };
+    for (let roundId = app.currentMatch.round.id; roundId <= Math.max(...Object.keys(app.currentMatch.rounds).map((roundId) => parseInt(roundId))); roundId++) delete app.currentMatch.rounds[roundId];
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     const updatedApp = await loadPosition(app, { gameType: app.currentMatch.gameType, gameId: app.currentMatch.gameId, variantId: app.currentMatch.variantId, position: app.currentMatch.round.position.availableMoves[payload.move].position });
     if (!updatedApp) return undefined;
