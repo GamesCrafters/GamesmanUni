@@ -124,7 +124,6 @@ export const defaultMatch: Types.Match = {
     startingPlayerId: "",
     rounds: { ...defaultRounds },
     round: { ...defaultRound },
-    turn: 0,
     created: 0,
     lastPlayed: 0,
     ended: 0,
