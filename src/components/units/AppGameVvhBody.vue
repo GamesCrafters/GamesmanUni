@@ -259,29 +259,29 @@
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
-    const winningDirectionHeight = ref(3);
-    const xCoordinateHeight = ref(3);
-    const rowHeight = ref(6);
+    const winningDirectionHeight = ref(2);
+    const xCoordinateHeight = ref(2);
+    const rowHeight = ref(2);
     const rowCount = computed(() => (isEndOfMatch.value ? currentRoundId.value : currentRoundId.value + 1));
     const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
     const gridHeight = computed(() => rowHeight.value * rowCount.value);
     const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
     const gridBottom = computed(() => chartHeight.value - gridTop.value);
 
-    const yCoordinateWidth = ref(6);
-    const chartWidth = ref(100);
+    const yCoordinateWidth = ref(5);
+    const chartWidth = ref(50);
     const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumRemoteness.value) + 1));
     const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
     const gridLeft = computed(() => yCoordinateWidth.value);
     const gridRight = computed(() => chartWidth.value - gridLeft.value);
 
-    const positionValueSize = ref(0.4);
-    const nextMovePositionValueSize = ref(0.2);
-    const xInterval = ref(2);
-    const linkWidth = ref(0.3);
-    const xBarWidth = ref(0.2);
-    const xIntervalBarWidth = ref(0.4);
+    const positionValueSize = ref(0.2);
+    const nextMovePositionValueSize = ref(0.1);
+    const xInterval = ref(5);
+    const linkWidth = ref(0.2);
+    const xBarWidth = ref(0.1);
+    const xIntervalBarWidth = ref(0.2);
 </script>
 
 <style lang="scss" scoped>
@@ -320,31 +320,31 @@
                 > .left-player-winning-direction,
                 > .right-player-winning-direction {
                     fill: var(--primaryColor);
-                    font-size: 0.1rem;
+                    font-size: 0.07rem;
                     font-weight: 400;
                     > #player,
                     > #player-1 {
                         fill: var(--turn1Color);
-                        font-size: 0.1rem;
+                        font-size: 0.07rem;
                         font-weight: 400;
                     }
                     > #player-2 {
                         fill: var(--turn2Color);
-                        font-size: 0.1rem;
+                        font-size: 0.07rem;
                         font-weight: 400;
                     }
                 }
                 > .draw-symbol {
                     fill: var(--primaryColor);
-                    font-size: 0.1rem;
+                    font-size: 0.07rem;
                 }
                 > .remoteness-coordinate {
                     fill: var(--primaryColor);
-                    font-size: 0.1rem;
+                    font-size: 0.07rem;
                 }
                 > .move-coordinate {
                     fill: var(--primaryColor);
-                    font-size: 0.1rem;
+                    font-size: 0.07rem;
                 }
                 > #grid-base {
                     fill: white;
