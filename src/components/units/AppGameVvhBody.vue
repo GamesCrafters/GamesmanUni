@@ -95,8 +95,8 @@
 
                 <!-- Remoteness Bars -->
                 <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 2" :key="remoteness">
-                    <line v-if="!isPuzzleGame" :class="remoteness % xInterval !== 0 ? 'remoteness-bar' : 'remoteness-interval-bar'" :x1="gridLeft + remoteness * columnWidth" :y1="gridTop" :x2="gridLeft + remoteness * columnWidth" :y2="gridBottom" :stroke-width="remoteness % xInterval !== 0 ? xBarWidth : xIntervalBarWidth" />
-                    <line :class="remoteness % xInterval !== 0 ? 'remoteness-bar' : 'remoteness-interval-bar'" :x1="gridRight - remoteness * columnWidth" :y1="gridTop" :x2="gridRight - remoteness * columnWidth" :y2="gridBottom" :stroke-width="remoteness % xInterval !== 0 ? xBarWidth : xIntervalBarWidth" />
+                    <line v-if="!isPuzzleGame" :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ? 'remoteness-bar' : 'remoteness-interval-bar'" :x1="gridLeft + remoteness * columnWidth" :y1="gridTop" :x2="gridLeft + remoteness * columnWidth" :y2="gridBottom" :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ? xBarWidth : xIntervalBarWidth" />
+                    <line :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ? 'remoteness-bar' : 'remoteness-interval-bar'" :x1="gridRight - remoteness * columnWidth" :y1="gridTop" :x2="gridRight - remoteness * columnWidth" :y2="gridBottom" :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ? xBarWidth : xIntervalBarWidth" />
                 </template>
 
                 <!-- Next Moves' Position Values -->
