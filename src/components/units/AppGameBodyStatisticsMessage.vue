@@ -2,24 +2,24 @@
     <div id="app-game-body-statistics-message" v-if="showNextMoveHints">
         <template v-if="currentRemoteness">
             <p v-if="currentPositionValue === 'draw'">
-                <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a <span :class="`uni-${currentPositionValue}`">draw</span>!
+                <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a <mark :class="`uni-${currentPositionValue}`">draw</mark>!
             </p>
             <p v-else>
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
             </p>
         </template>
         <template v-else>
             <p v-if="currentPositionValue === 'win'">
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <span :class="`uni-${currentPositionValue}`">won</span> the game!
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">won</mark> the game!
             </p>
             <p v-else-if="currentPositionValue === 'tie'">
-                <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> have <span :class="`uni-${currentPositionValue}`">tied</span> the game!
+                <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> have <mark :class="`uni-${currentPositionValue}`">tied</mark> the game!
             </p>
             <p v-else-if="currentPositionValue === 'lose'">
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <span :class="`uni-${currentPositionValue}`">lost</span> the game!
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">lost</mark> the game!
             </p>
             <p v-else>
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
             </p>
         </template>
     </div>
@@ -47,9 +47,9 @@
         > p {
             padding: 1rem;
             text-align: center;
-            > b,
-            span {
+            > mark {
                 border-radius: 1rem;
+                padding: 0.25rem 0.5rem;
             }
         }
     }
