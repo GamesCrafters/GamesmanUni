@@ -5,7 +5,7 @@
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a <span :class="`uni-${currentPositionValue}`">draw</span>!
             </p>
             <p v-else>
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game.
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
             </p>
         </template>
         <template v-else>
@@ -19,7 +19,7 @@
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <span :class="`uni-${currentPositionValue}`">lost</span> the game!
             </p>
             <p v-else>
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game.
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <span :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</span> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
             </p>
         </template>
     </div>
@@ -50,7 +50,6 @@
             > b,
             span {
                 border-radius: 1rem;
-                padding: 0 0.5rem;
             }
         }
     }
