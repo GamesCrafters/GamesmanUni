@@ -2,12 +2,12 @@
     <div id="app-updates">
         <h2 id="title">What's new!?</h2>
         <div class="row">
-            <p id="description">
+            <a id="description" href="javascript:wlocation.reload()">
                 If latest version listed here does not match <code>GamesmanUni</code> version in footer, new content is available.<br />
                 Please try refreshing the page <code>ctrl/command + r</code> to get latest patches and updates.
                 <!-- <br /><br /> -->
                 <!-- All dates and times are in local timezone. -->
-            </p>
+            </a>
         </div>
         <template v-if="Object.keys(latestCommits).length">
             <a class="commit row" v-for="commit in latestCommits.commits" :key="commit.sha" :href="commit.url" target="_blank" rel="noreferrer">
