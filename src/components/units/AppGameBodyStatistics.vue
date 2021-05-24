@@ -1,8 +1,8 @@
 <template>
     <div id="app-game-body-statistics">
         <div id="first-row">
-            <AppGameBodyStatisticsMoves />
             <AppGameBodyStatisticsData />
+            <AppGameBodyStatisticsMoves />
         </div>
         <AppGameBodyStatisticsMessage />
     </div>
@@ -27,7 +27,7 @@
             align-items: stretch;
             display: flex;
             flex-direction: row;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             justify-content: space-between;
             > * {
                 flex: 1 1 auto;
