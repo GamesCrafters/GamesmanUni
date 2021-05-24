@@ -124,13 +124,12 @@ export type Match = {
     startingPlayerId: string;
     rounds: Rounds;
     round: Round;
-    turn: number;
     created: number;
     lastPlayed: number;
     ended: number;
 };
 
-export type Rounds = Record<string, Round>;
+export type Rounds = Record<number, Round>;
 
 export type Round = {
     id: number;

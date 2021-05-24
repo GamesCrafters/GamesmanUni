@@ -31,7 +31,6 @@ type Getters = {
     currentRound(state: State): (roundId?: number) => GMUTypes.Round;
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
-    currentTurn(state: State): number;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
     fallbackLocale(state: State): string;
@@ -87,7 +86,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     currentRound: (state: State) => (roundId?: number) => roundId ? state.app.currentMatch.rounds[roundId] : state.app.currentMatch.round,
     currentRoundId: (state: State) => state.app.currentMatch.round.id,
     currentRounds: (state: State) => state.app.currentMatch.rounds,
-    currentTurn: (state: State) => state.app.currentMatch.turn,
     currentVariantId: (state: State) => state.app.currentMatch.variantId,
     dataSources: (state: State) => state.app.dataSources,
     fallbackLocale: (state: State) => state.app.preferences.fallbackLocale,
