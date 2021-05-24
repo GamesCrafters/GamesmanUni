@@ -141,7 +141,15 @@ export const initiateMatch = async (
     return app;
 };
 
-export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => Math.max(...Object.values(app.currentMatch.rounds).map((round) => (round.id >= payload.from && round.id <= payload.to && round.position.positionValue !== "draw" ? round.position.remoteness : 0)));
+export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
+    const remotenesses = new Set<number>();
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        if (round.position.positionValue !== "draw") remotenesses.add(round.position.remoteness);
+        if (app.users[app.currentMatch.rounds[payload.to].playerId].options.showNextMoves) for (const availableMove in round.position.availableMoves) remotenesses.add(round.position.availableMoves[availableMove].remoteness);
+    }
+    return Math.max(...remotenesses);
+};
 
 export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw";
 
