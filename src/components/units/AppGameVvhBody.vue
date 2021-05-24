@@ -87,11 +87,11 @@
 
                 <!-- Round Rows -->
                 <template v-if="currentRoundId >= 1">
-                    <template v-for="roundNumber in isEndOfMatch ? currentRoundId - 1 : currentRoundId" :key="roundNumber">
+                    <template v-for="roundNumber in currentRoundId" :key="roundNumber">
                         <rect :class="`turn-${turn(currentRounds[roundNumber].playerId)}`" class="round-row" :x="gridLeft" :y="gridTop + (roundNumber - 1) * rowHeight" :width="gridWidth" :height="rowHeight" />
                     </template>
                 </template>
-                <rect :class="`turn-${isEndOfMatch ? 0 : isPuzzleGame ? 1 : turn(currentRounds[currentRoundId].playerId) === 1 ? 2 : 1}`" class="round-row" :x="gridLeft" :y="gridBottom - rowHeight" :width="gridWidth" :height="rowHeight" />
+                <rect v-if="!isEndOfMatch" :class="`turn-${isPuzzleGame ? 1 : turn(currentRounds[currentRoundId].playerId) === 1 ? 2 : 1}`" class="round-row" :x="gridLeft" :y="gridBottom - rowHeight" :width="gridWidth" :height="rowHeight" />
 
                 <!-- Remoteness Bars -->
                 <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 2" :key="remoteness">
