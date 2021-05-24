@@ -21,7 +21,7 @@
             <use v-else-if="board[cell].token === 'o'" href="#o-token" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
             <g v-else>
                 <use v-if="showNextMoves && board[cell].hint" :class="getHintClass(board[cell].hint)" :style="{ opacity: showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1 }" href="#hint" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
-                <use :class="currentRemoteness && 'available-move-pointer'" @click="currentRemoteness && store.dispatch(actionTypes.runMove, board[cell].move)" href="#available-move-cell" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
+                <use :class="currentRemoteness && 'available-move-pointer'" @click="currentRemoteness && store.dispatch(actionTypes.runMove, { move: board[cell].move })" href="#available-move-cell" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
             </g>
         </g>
     </svg>

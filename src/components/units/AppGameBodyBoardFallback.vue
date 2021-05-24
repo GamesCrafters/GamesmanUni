@@ -7,7 +7,7 @@
         <div id="available-moves" v-if="showNextMoves">
             <h3>Available Move(s)</h3>
             <template v-if="Object.keys(currentAvailableMoves).length">
-                <button v-for="availableMove in currentAvailableMoves" :key="availableMove.move" :class="showNextMoveHints ? `uni-${availableMove.moveValue}` : ''" :style="{ opacity: showNextMoveDeltaRemotenesses ? availableMove.moveValueOpacity : 1 }" @click="store.dispatch(actionTypes.runMove, availableMove.move)">{{ availableMove.move }}</button>
+                <button v-for="availableMove in currentAvailableMoves" :key="availableMove.move" :class="showNextMoveHints ? `uni-${availableMove.moveValue}` : ''" :style="{ opacity: showNextMoveDeltaRemotenesses ? availableMove.moveValueOpacity : 1 }" @click="store.dispatch(actionTypes.runMove, { move: availableMove.move })">{{ availableMove.move }}</button>
             </template>
             <p v-else>No more available Move!</p>
         </div>

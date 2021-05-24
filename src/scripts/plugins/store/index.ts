@@ -191,9 +191,9 @@ type Actions = {
     [actionTypes.initiateMatch](context: ActionContext, payload: { gameType: string; gameId: string; variantId: string; matchType: string; startingPlayerId: string }): Promise<void>;
     [actionTypes.exitMatch](context: ActionContext): void;
     [actionTypes.restartMatch](context: ActionContext): void;
-    [actionTypes.runMove](context: ActionContext, move: string): Promise<void>;
-    [actionTypes.redoMove](context: ActionContext): void;
-    [actionTypes.undoMove](context: ActionContext): void;
+    [actionTypes.runMove](context: ActionContext, payload: { move: string }): Promise<void>;
+    [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): void;
+    [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): void;
     [actionTypes.preFetchNextPositions](context: ActionContext): void;
     [actionTypes.loadLatestCommits](context: ActionContext): Promise<void>;
 };
@@ -216,8 +216,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     },
     exitMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.exitMatch(context.state.app)),
     restartMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.restartMatch(context.state.app)),
-    runMove: async (context: ActionContext, move: string) => {
-        const updatedApp = await GMU.runMove(context.state.app, { move });
+    runMove: async (context: ActionContext, payload: { move: string }) => {
+        const updatedApp = await GMU.runMove(context.state.app, payload);
         if (updatedApp) {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
