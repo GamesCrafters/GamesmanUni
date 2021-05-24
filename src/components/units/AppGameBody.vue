@@ -21,5 +21,6 @@
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
+        max-width: min(100vw, 60vh);
     }
 </style>
