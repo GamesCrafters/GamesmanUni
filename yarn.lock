@@ -12,6 +12,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.14.3.tgz#9b530eecb071fd0c93519df25c5ff9f14759f298"
   integrity sha512-7MpZDIfI7sUC5zWo2+foJ50CSI5lcqDehZ0lVgIhSi4bFEk94fLAKlF3Q0nzSQQ+ca0lm+O6G9ztKVBeu8PMRQ==
 
+"@babel/standalone@^7.13.12":
+  version "7.14.3"
+  resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.14.3.tgz#0b65ed93c6b5a911d1e62dc10e7ea73d201d6783"
+  integrity sha512-nv9eIzaXjrPwfytt5SfKAbM5DJWfpJ6EiGhRar+p95k8r6ZNydF8svvjQVpbqqPIubR+tz1WyRlMJ3AUfXg4Pg==
+
 "@babel/types@^7.12.0", "@babel/types@^7.13.0", "@babel/types@^7.6.1", "@babel/types@^7.9.6":
   version "7.14.2"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.14.2.tgz#4208ae003107ef8a057ea8333e56eb64d2f6a2c3"
@@ -414,6 +419,17 @@
     "@types/node" "*"
     "@types/unist" "*"
     "@types/vfile-message" "*"
+
+"@vitejs/plugin-legacy@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-legacy/-/plugin-legacy-1.4.0.tgz#1cf30419d75e841d3fe31384b84179d69b5b8a3c"
+  integrity sha512-QcAdw/NkMBjESgyhzOoErQ7O6vAlb81Ij+gsWQqPdf0uwWCWxXgn1eHDGq03bBxl6ZBzfo7hYKYH5hgG6boZrw==
+  dependencies:
+    "@babel/standalone" "^7.13.12"
+    core-js "^3.8.2"
+    magic-string "^0.25.7"
+    regenerator-runtime "^0.13.7"
+    systemjs "^6.8.3"
 
 "@vitejs/plugin-vue@1.2.2":
   version "1.2.2"
@@ -969,7 +985,7 @@ constantinople@^4.0.1:
     "@babel/parser" "^7.6.0"
     "@babel/types" "^7.6.1"
 
-core-js@^3.6.5:
+core-js@^3.6.5, core-js@^3.8.2:
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.13.0.tgz#58ca436bf01d6903aee3d364089868d0d89fe58d"
   integrity sha512-iWDbiyha1M5vFwPFmQnvRv+tJzGbFAm6XimJUT0NgHYW3xZEs1SkCAcasWSVFxpI2Xb/V1DDJckq3v90+bQnog==
@@ -2498,6 +2514,11 @@ redent@^2.0.0:
     indent-string "^3.0.0"
     strip-indent "^2.0.0"
 
+regenerator-runtime@^0.13.7:
+  version "0.13.7"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz#cac2dacc8a1ea675feaabaeb8ae833898ae46f55"
+  integrity sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew==
+
 registry-auth-token@^4.0.0:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/registry-auth-token/-/registry-auth-token-4.2.1.tgz#6d7b4006441918972ccd5fedcd41dc322c79b250"
@@ -2795,6 +2816,11 @@ supports-color@^7.1.0:
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   dependencies:
     has-flag "^4.0.0"
+
+systemjs@^6.8.3:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/systemjs/-/systemjs-6.9.0.tgz#f01a0093d4d70332fff59f2e5ff385de28284ff5"
+  integrity sha512-THLzcb7WzoW0I+tHB4PQge0BqqN+CAUQJ9gPc1MieqD1gnhxNUKYrhRlN5ov94saOYVVR5NZFQqQhnxi9/WEGg==
 
 term-size@^1.2.0:
   version "1.2.0"

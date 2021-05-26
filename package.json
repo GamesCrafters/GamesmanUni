@@ -17,6 +17,7 @@
         "@intlify/vite-plugin-vue-i18n": "2.1.2",
         "@octokit/types": "6.16.0",
         "@types/markdown-it-link-attributes": "3.0.1",
+        "@vitejs/plugin-legacy": "1.4.0",
         "@vitejs/plugin-vue": "1.2.2",
         "@vue/compiler-sfc": "3.1.0-beta.5",
         "pre-commit": "1.2.2",
@@ -37,5 +38,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.83"
+    "version": "5.0.0-alpha.84"
 }
