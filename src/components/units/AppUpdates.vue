@@ -3,7 +3,7 @@
         <h2 id="title">What's new!?</h2>
         <div id="body">
             <template v-if="Object.keys(latestCommits).length">
-                <a id="description" href="javascript:wlocation.reload()">
+                <a id="description" href="javascript:document.location.reload(true)">
                     If latest version listed here does not match <code>GamesmanUni</code> version in footer, new content is available.<br />
                     Please try refreshing the page <code>ctrl/command + r</code> to get latest patches and updates. <br />
                     All dates and times are in local timezone.
