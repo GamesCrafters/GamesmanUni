@@ -32,7 +32,7 @@ export const defaultAvailableMoves: Types.Moves = {};
 
 export const defaultPosition: Types.Position = {
     ...defaultUpdate,
-    availableMoves: { ...defaultAvailableMoves },
+    availableMoves: {},
     position: "",
     positionValue: "",
     remoteness: 0,
@@ -44,7 +44,7 @@ export const defaultVariant: Types.Variant = {
     id: "",
     description: "",
     startPosition: "",
-    positions: { ...defaultPositions },
+    positions: {},
     status: "",
 };
 
@@ -61,7 +61,7 @@ export const defaultGame: Types.Game = {
     dateCreated: "",
     instructions: "",
     type: "",
-    variants: { ...defaultVariants },
+    variants: { ...defaultVariants, variants: {} },
     status: "",
 };
 
@@ -71,8 +71,8 @@ export const defaultGames: Types.Games = {
 };
 
 export const defaultGameTypes: Types.GameTypes = {
-    puzzles: { ...defaultUpdate, games: {} },
-    games: { ...defaultUpdate, games: {} },
+    puzzles: { ...defaultGames, games: {} },
+    games: { ...defaultGames, games: {} },
 };
 
 export const defaultCommit: Types.Commit = {
@@ -111,7 +111,7 @@ export const defaultRound: Types.Round = {
     playerId: "",
     move: "",
     moveValue: "",
-    position: { ...defaultPosition },
+    position: { ...defaultPosition, availableMoves: {} },
 };
 
 export const defaultMatch: Types.Match = {
@@ -122,8 +122,8 @@ export const defaultMatch: Types.Match = {
     type: "",
     players: [],
     startingPlayerId: "",
-    rounds: { ...defaultRounds },
-    round: { ...defaultRound },
+    rounds: {},
+    round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
     lastPlayed: 0,
     ended: 0,
@@ -133,7 +133,7 @@ export const defaultUser: Types.User = {
     id: "string",
     name: "string",
     options: { ...defaultOptions },
-    matches: { ...defaultMatches },
+    matches: {},
 };
 
 export const defaultUsers: Types.Users = {
@@ -141,25 +141,25 @@ export const defaultUsers: Types.Users = {
         id: "p1",
         name: "Player 1",
         options: { ...defaultOptions },
-        matches: { ...defaultMatches },
+        matches: {},
     },
     p2: {
         id: "p2",
         name: "Player 2",
         options: { ...defaultOptions },
-        matches: { ...defaultMatches },
+        matches: {},
     },
     c1: {
         id: "c1",
         name: "Computer 1",
         options: { ...defaultOptions },
-        matches: { ...defaultMatches },
+        matches: {},
     },
     c2: {
         id: "c2",
         name: "Computer 2",
         options: { ...defaultOptions },
-        matches: { ...defaultMatches },
+        matches: {},
     },
 };
 
@@ -168,8 +168,13 @@ export const defaultApp: Types.App = {
     version: <string>import.meta.env.PACKAGE_VERSION || "",
     preferences: { ...defaultPreferences },
     dataSources: { ...defaultDataSources },
-    gameTypes: { ...defaultGameTypes },
-    commits: { ...defaultCommits },
-    users: { ...defaultUsers },
-    currentMatch: { ...defaultMatch },
+    gameTypes: { puzzles: { ...defaultGames, games: {} }, games: { ...defaultGames, games: {} } },
+    commits: { ...defaultUpdate, commits: {} },
+    users: {
+        p1: { id: "p1", name: "Player 1", options: { ...defaultOptions }, matches: {} },
+        p2: { id: "p2", name: "Player 2", options: { ...defaultOptions }, matches: {} },
+        c1: { id: "c1", name: "Computer 1", options: { ...defaultOptions }, matches: {} },
+        c2: { id: "c2", name: "Computer 2", options: { ...defaultOptions }, matches: {} },
+    },
+    currentMatch: { id: 0, gameType: "", gameId: "", variantId: "", type: "", players: [], startingPlayerId: "", rounds: {}, round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } }, created: 0, lastPlayed: 0, ended: 0 },
 };
