@@ -2880,10 +2880,10 @@ typescript-vscode-sh-plugin@^0.6.14:
   resolved "https://registry.yarnpkg.com/typescript-vscode-sh-plugin/-/typescript-vscode-sh-plugin-0.6.14.tgz#a81031b502f6346a26ea49ce082438c3e353bb38"
   integrity sha512-AkNlRBbI6K7gk29O92qthNSvc6jjmNQ6isVXoYxkFwPa8D04tIv2SOPd+sd+mNpso4tNdL2gy7nVtrd5yFqvlA==
 
-typescript@4.4.0-dev.20210526:
-  version "4.4.0-dev.20210526"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.0-dev.20210526.tgz#09ea2a55bc1a6b7d5bf14a5a75d8dcc8fd40c3ee"
-  integrity sha512-4LSewuhFndF8rOywqwKcoljqNTyb5L0VjPxABuFfPGIZ+RlVmQjUml/RcMi1iPb/aMJ1bRMsqJ7Rf9yz5ozO9w==
+typescript@4.4.0-dev.20210527:
+  version "4.4.0-dev.20210527"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.0-dev.20210527.tgz#291aa7fd8b7b948253fb1daf02deac772115403f"
+  integrity sha512-bwwoVc4OKe6FMngqW3A35QDqGjVpYbrqWbPt63W6HmU2h1uBi97u/ACJ3tEjDQgTsQD2RrfxeKOVijxqsKogng==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
