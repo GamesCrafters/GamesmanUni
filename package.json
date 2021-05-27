@@ -2,8 +2,6 @@
     "dependencies": {
         "axios": "0.21.1",
         "markdown-it-link-attributes": "3.0.0",
-        "moment": "2.29.1",
-        "moment-timezone": "0.5.33",
         "vue": "3.1.0-beta.5",
         "vue-axios": "3.2.4",
         "vue-i18n": "9.2.0-alpha.1",
@@ -38,5 +36,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.84"
+    "version": "5.0.0-alpha.85"
 }

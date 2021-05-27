@@ -2047,18 +2047,6 @@ minimist@^1.2.0:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
-moment-timezone@0.5.33:
-  version "0.5.33"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
-  integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
-  dependencies:
-    moment ">= 2.9.0"
-
-moment@2.29.1, "moment@>= 2.9.0":
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
-
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -2583,9 +2571,9 @@ reusify@^1.0.4:
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
 rollup@^2.38.5:
-  version "2.50.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.50.0.tgz#e5a77820c2230c66ef9ea26cbc9d7a3c1a18a439"
-  integrity sha512-wO+F2MqWPGUCZx0549oqY8dsQqHVjuSxoyBWWnxKoQE+1UGcDKjtL7wHq/8jnnLJEeoGDQLf3ztrpgRwlbGJ0A==
+  version "2.50.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.50.1.tgz#5d52d5c65ade19164d56efec98f16a461c6df38e"
+  integrity sha512-3MQhSdGpms4xjYrtR3WNHMT+VrWWM4oqUxUC770MmLo1FWFR2pr/OL81HSPC/ifmiu0uMFk0qPGLmjkSMRIESw==
   optionalDependencies:
     fsevents "~2.3.1"
 
@@ -3261,9 +3249,9 @@ vscode-pug-languageservice@^0.25.4:
     vscode-languageserver "^7.1.0-next.4"
 
 vscode-typescript-languageservice@^0.25.12:
-  version "0.25.12"
-  resolved "https://registry.yarnpkg.com/vscode-typescript-languageservice/-/vscode-typescript-languageservice-0.25.12.tgz#ac1a65bc6c1fcc686222e04c7a996458dac7720b"
-  integrity sha512-e7zSRVESV+BI6K2qrUVBFEFJx+HN0KN2EE1ZK9R/8qjk3FZmYbcPork8jHBMfEJ8ZPDMv6FahnAfWWxes5SZ/w==
+  version "0.25.13"
+  resolved "https://registry.yarnpkg.com/vscode-typescript-languageservice/-/vscode-typescript-languageservice-0.25.13.tgz#fc90ea4eef27afc28522b0d266aa428b00818dc3"
+  integrity sha512-17tNmXwVFbCDWYmk+Nz25Dq2Qe0JXl4q2xcDR7O+WpCuBiN95s+c/wj25iQrZ9ti/SwW3eb0eadvQ0Kizk0meQ==
   dependencies:
     "@volar/shared" "^0.25.4"
     typescript-vscode-sh-plugin "^0.6.14"
