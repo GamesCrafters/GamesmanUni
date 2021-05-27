@@ -36,5 +36,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.87"
+    "version": "5.0.0-alpha.88"
 }
