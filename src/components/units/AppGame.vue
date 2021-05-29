@@ -17,9 +17,7 @@
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
     const variantId = computed(() => route.params.variantId as string);
-    const matchType = "pvp";
-    const startingPlayerId = "p1";
-    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value, matchType, startingPlayerId });
+    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value });
 </script>
 
 <style lang="scss" scoped>
