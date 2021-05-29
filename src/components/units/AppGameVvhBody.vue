@@ -162,7 +162,7 @@
                 </template>
 
                 <!-- Link from Current Position Value to Next Moves' Position Value -->
-                <template v-if="showNextMoves">
+                <template v-if="showNextMoves && currentRounds[currentRoundId]">
                     <template v-for="nextMove in currentRounds[currentRoundId].position.availableMoves">
                         <template v-if="currentRounds[currentRoundId].position.positionValue === 'draw'">
                             <template v-if="nextMove.moveValue === 'draw'">
