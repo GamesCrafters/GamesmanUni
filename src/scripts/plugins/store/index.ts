@@ -190,11 +190,11 @@ type Actions = {
     [actionTypes.loadVariants](context: ActionContext, payload: { type: string; gameId: string }): Promise<void>;
     [actionTypes.initiateMatch](context: ActionContext, payload: { gameType: string; gameId: string; variantId: string; matchType?: string }): Promise<void>;
     [actionTypes.exitMatch](context: ActionContext): void;
-    [actionTypes.restartMatch](context: ActionContext): void;
+    [actionTypes.restartMatch](context: ActionContext, payload?: { matchType?: string }): Promise<void>;
     [actionTypes.runMove](context: ActionContext, payload: { move: string }): Promise<void>;
-    [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): void;
-    [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): void;
-    [actionTypes.preFetchNextPositions](context: ActionContext): void;
+    [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
+    [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
+    [actionTypes.preFetchNextPositions](context: ActionContext): Promise<void>;
     [actionTypes.loadLatestCommits](context: ActionContext): Promise<void>;
 };
 
@@ -213,21 +213,34 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
+        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
     },
     exitMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.exitMatch(context.state.app)),
-    restartMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.restartMatch(context.state.app)),
+    restartMatch: async (context: ActionContext, payload?: { matchType?: string }) => {
+        if (payload && payload.matchType !== undefined) {
+            context.dispatch(actionTypes.exitMatch);
+            context.dispatch(actionTypes.initiateMatch, { gameType: context.getters.currentGameType, gameId: context.getters.currentGameId, variantId: context.getters.currentVariantId, matchType: payload.matchType });
+        } else {
+            context.commit(mutationTypes.setApp, await GMU.restartMatch(context.state.app));
+        }
+    },
     runMove: async (context: ActionContext, payload: { move: string }) => {
         const updatedApp = await GMU.runMove(context.state.app, payload);
         if (updatedApp) {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
+        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
     },
     redoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, await GMU.redoMove(context.state.app, payload));
         if (!context.state.app.currentMatch.rounds[context.state.app.currentMatch.round.id + 1]) context.dispatch(actionTypes.preFetchNextPositions);
+        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
     },
-    undoMove: async (context: ActionContext, payload?: { count?: number }) => context.commit(mutationTypes.setApp, await GMU.undoMove(context.state.app, payload)),
+    undoMove: async (context: ActionContext, payload?: { count?: number }) => {
+        context.commit(mutationTypes.setApp, await GMU.undoMove(context.state.app, payload));
+        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+    },
     preFetchNextPositions: async (context: ActionContext) => context.commit(mutationTypes.setApp, await GMU.preFetchNextPositions(context.state.app, { gameType: context.state.app.currentMatch.gameType, gameId: context.state.app.currentMatch.gameId, variantId: context.state.app.currentMatch.variantId, position: context.state.app.currentMatch.round.position.position })),
     loadLatestCommits: async (context: ActionContext) => {
         const updatedApp = await GMU.loadCommits(context.state.app);

@@ -112,13 +112,14 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
     app.currentMatch.gameType = payload.gameType;
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
-    app.currentMatch.type = payload.matchType ? payload.matchType : game.positions[game.startPosition].positionValue === "lose" ? "cvp" : "pvc";
-    app.currentMatch.players = app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
+    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : game.positions[game.startPosition].positionValue === "lose" ? "cvp" : "pvc";
+    app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
     app.currentMatch.startingPlayerId = app.currentMatch.players[0];
     app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, move: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
     app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+    if (app.currentMatch.round.playerId[0] === "c" && !isEndOfMatch(app)) await runMove(app, { move: generateComputerMove(app.currentMatch.round) });
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
@@ -133,7 +134,7 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
     return Math.max(...remotenesses);
 };
 
-export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw";
+export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
     if (Object.entries(app.currentMatch.rounds).length <= 1) return app;
@@ -146,7 +147,7 @@ export const exitMatch = (app: Types.App) => {
     return app;
 };
 
-export const restartMatch = (app: Types.App) => {
+export const restartMatch = async (app: Types.App) => {
     const oldMatch = { ...app.currentMatch };
     app = exitMatch(app);
     app.currentMatch = { ...oldMatch };
@@ -164,7 +165,7 @@ export const restartMatch = (app: Types.App) => {
     return app;
 };
 
-const generateComputerMove = (round: Types.Round) => {
+export const generateComputerMove = (round: Types.Round) => {
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
@@ -197,7 +198,6 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.round.moveValue = "";
         app.currentMatch.round.position = updatedPosition;
         app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-        if (app.currentMatch.round.playerId[0] === "c") await runMove(app, { move: generateComputerMove(app.currentMatch.round) });
         app.currentMatch.lastPlayed = new Date().getTime();
     }
     return app;
@@ -209,7 +209,6 @@ export const undoMove = async (app: Types.App, payload?: { count?: number }) => 
     app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    if (app.currentMatch.round.playerId[0] === "c") await runMove(app, { move: generateComputerMove(app.currentMatch.round) });
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
@@ -220,7 +219,6 @@ export const redoMove = async (app: Types.App, payload?: { count?: number }) => 
     app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    if (app.currentMatch.round.playerId[0] === "c") await runMove(app, { move: generateComputerMove(app.currentMatch.round) });
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
