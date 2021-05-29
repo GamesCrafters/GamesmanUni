@@ -4,6 +4,33 @@
         <UniPopupWindow v-if="(options && options.showOptions) || false" @close="updateOptions()">
             <div id="popup">
                 <h2 id="title">{{ gameName }} ({{ variantDescription }})</h2>
+                <div id="match-types">
+                    <h3 id="title">Match Types</h3>
+                    <div id="types" v-if="isPuzzleGame">
+                        <div class="type">
+                            <input type="radio" aria-label="radio" value="c" v-model="updatedMatchType" />
+                            <label>Computer</label>
+                        </div>
+                        <div class="type">
+                            <input type="radio" aria-label="radio" value="p" v-model="updatedMatchType" />
+                            <label>Player</label>
+                        </div>
+                    </div>
+                    <div id="types" v-else>
+                        <div class="type">
+                            <input type="radio" aria-label="radio" value="pvp" v-model="updatedMatchType" />
+                            <label>Player vs. Player</label>
+                        </div>
+                        <div class="type">
+                            <input type="radio" aria-label="radio" :value="'pvc' || 'cvp'" v-model="updatedMatchType" />
+                            <label>Player vs. Computer</label>
+                        </div>
+                        <div class="type">
+                            <input type="radio" aria-label="radio" value="cvc" v-model="updatedMatchType" />
+                            <label>Computer vs. Computer</label>
+                        </div>
+                    </div>
+                </div>
                 <div id="player-names">
                     <h3 id="title">Player Names</h3>
                     <div id="names">
@@ -51,14 +78,17 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed, ref, watch } from "vue";
     import { useRoute } from "vue-router";
-    import { mutationTypes, useStore } from "../../scripts/plugins/store";
+    import { actionTypes, mutationTypes, useStore } from "../../scripts/plugins/store";
     import UniPopupWindow from "../templates/UniPopupWindow.vue";
 
     const route = useRoute();
     const store = useStore();
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
+    const currentGameType = computed(() => store.getters.currentGameType);
+    const currentMatchType = computed(() => store.getters.currentMatchType);
+    const updatedMatchType = ref("");
     const currentLeftPlayerName = computed(() => (store.getters.currentLeftPlayer ? store.getters.currentLeftPlayer.name : ""));
     const currentRightPlayerName = computed(() => (store.getters.currentRightPlayer ? store.getters.currentRightPlayer.name : ""));
     const updatedLeftPlayerName = ref("");
@@ -73,8 +103,16 @@
         store.commit(mutationTypes.showOptions, false);
         store.commit(mutationTypes.setCurrentLeftPlayerName, updatedLeftPlayerName.value ? updatedLeftPlayerName.value : currentLeftPlayerName.value);
         if (!isPuzzleGame.value) store.commit(mutationTypes.setCurrentRightPlayerName, updatedRightPlayerName.value ? updatedRightPlayerName.value : currentRightPlayerName.value);
+        if (!(currentGameType.value === "puzzles" || updatedMatchType.value === "pvp" || updatedMatchType.value === "cvc")) updatedMatchType.value = "";
+        if (updatedMatchType.value !== currentMatchType.value) store.dispatch(actionTypes.restartMatch, { matchType: updatedMatchType.value });
         options.value && store.commit(mutationTypes.setOptions, options.value);
     };
+    watch(
+        () => options.value && options.value.showOptions,
+        () => {
+            updatedMatchType.value = currentMatchType.value;
+        }
+    );
 </script>
 
 <style lang="scss" scoped>
@@ -96,6 +134,32 @@
             min-height: 100%;
             > #title {
                 margin: 1rem;
+            }
+            > #match-types {
+                padding: 1rem 10%;
+                > #title {
+                    margin: 1rem;
+                }
+                > #types {
+                    align-content: center;
+                    align-items: center;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    > .type {
+                        border: 0.1rem solid var(--neutralColor);
+                        border-radius: 1rem;
+                        margin: 1rem;
+                        padding: 1rem;
+                        align-content: center;
+                        align-items: center;
+                        display: flex;
+                        flex-direction: column;
+                        flex-wrap: nowrap;
+                        justify-content: center;
+                    }
+                }
             }
             > #player-names {
                 padding: 1rem 10%;
