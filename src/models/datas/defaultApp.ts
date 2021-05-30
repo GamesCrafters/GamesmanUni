@@ -110,6 +110,7 @@ export const defaultRounds: Types.Rounds = {};
 export const defaultRound: Types.Round = {
     id: 0,
     playerId: "",
+    players: [],
     move: "",
     moveValue: "",
     position: { ...defaultPosition, availableMoves: {} },

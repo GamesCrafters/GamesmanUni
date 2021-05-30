@@ -116,6 +116,7 @@ export enum mutationTypes {
     setApp = "setApp",
     setCurrentLeftPlayerName = "setCurrentLeftPlayerName",
     setCurrentRightPlayerName = "setCurrentRightPlayerName",
+    setCurrentPlayerName = "setCurrentPlayerName",
     setLocale = "setLocale",
     setOptions = "setOptions",
     setRootFontSize = "setRootFontSize",
@@ -130,6 +131,7 @@ type Mutations = {
     [mutationTypes.setApp](state: State, app: GMUTypes.App): void;
     [mutationTypes.setCurrentLeftPlayerName](state: State, leftPlayerName: string): void;
     [mutationTypes.setCurrentRightPlayerName](state: State, rightPlayerName: string): void;
+    [mutationTypes.setCurrentPlayerName](state: State, playerName: string): void;
     [mutationTypes.setLocale](state: State, locale: string): void;
     [mutationTypes.setOptions](state: State, options: GMUTypes.Options): void;
     [mutationTypes.setRootFontSize](state: State, rootFontSize: string): void;
@@ -143,11 +145,8 @@ type Mutations = {
 const mutations: Vuex.MutationTree<State> & Mutations = {
     setApp: (state: State, app: GMUTypes.App) => (state.app = app),
     setCurrentLeftPlayerName: (state: State, leftPlayerName: string) => (state.app.users[state.app.currentMatch.players[0]].name = leftPlayerName),
-    setCurrentRightPlayerName: (state: State, rightPlayerName: string) => {
-        state.app.users[state.app.currentMatch.players[1]].name;
-        state.app.users[state.app.currentMatch.players[1]].name = rightPlayerName;
-        state.app.users[state.app.currentMatch.players[1]].name;
-    },
+    setCurrentRightPlayerName: (state: State, rightPlayerName: string) => (state.app.users[state.app.currentMatch.players[1]].name = rightPlayerName),
+    setCurrentPlayerName: (state: State, playerName: string) => (state.app.users[state.app.currentMatch.players[0]].name = playerName),
     setLocale: (state: State, locale: string) => (state.app.preferences.locale = locale ? locale : state.app.preferences.locale),
     setOptions: (state: State, options: GMUTypes.Options) => {
         for (const player of state.app.currentMatch.players) state.app.users[player].options = options;
@@ -179,8 +178,10 @@ export enum actionTypes {
     exitMatch = "exitMatch",
     restartMatch = "restartMatch",
     runMove = "runMove",
+    runComputerMove = "runComputerMove",
     redoMove = "redoMove",
     undoMove = "undoMove",
+    updateMatchType = "updateMatchType",
     preFetchNextPositions = "preFetchNextPositions",
     loadLatestCommits = "loadLatestCommits",
 }
@@ -192,8 +193,10 @@ type Actions = {
     [actionTypes.exitMatch](context: ActionContext): void;
     [actionTypes.restartMatch](context: ActionContext, payload?: { matchType?: string }): Promise<void>;
     [actionTypes.runMove](context: ActionContext, payload: { move: string }): Promise<void>;
+    [actionTypes.runComputerMove](context: ActionContext): Promise<void>;
     [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
+    [actionTypes.updateMatchType](context: ActionContext, payload: { matchType: string; players: Array<string> }): void;
     [actionTypes.preFetchNextPositions](context: ActionContext): Promise<void>;
     [actionTypes.loadLatestCommits](context: ActionContext): Promise<void>;
 };
@@ -213,18 +216,15 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
-        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
-            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
-            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
-        }
+        store.dispatch(actionTypes.runComputerMove);
     },
     exitMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.exitMatch(context.state.app)),
     restartMatch: async (context: ActionContext, payload?: { matchType?: string }) => {
+        context.dispatch(actionTypes.exitMatch);
         if (payload && payload.matchType !== undefined) {
-            context.dispatch(actionTypes.exitMatch);
             context.dispatch(actionTypes.initiateMatch, { gameType: context.getters.currentGameType, gameId: context.getters.currentGameId, variantId: context.getters.currentVariantId, matchType: payload.matchType });
         } else {
-            context.commit(mutationTypes.setApp, await GMU.restartMatch(context.state.app));
+            context.dispatch(actionTypes.initiateMatch, { gameType: context.getters.currentGameType, gameId: context.getters.currentGameId, variantId: context.getters.currentVariantId, matchType: context.getters.currentMatchType });
         }
     },
     runMove: async (context: ActionContext, payload: { move: string }) => {
@@ -233,6 +233,9 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
+        store.dispatch(actionTypes.runComputerMove);
+    },
+    runComputerMove: async (context: ActionContext) => {
         while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
             await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
@@ -241,17 +244,15 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     redoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, await GMU.redoMove(context.state.app, payload));
         if (!context.state.app.currentMatch.rounds[context.state.app.currentMatch.round.id + 1]) context.dispatch(actionTypes.preFetchNextPositions);
-        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
-            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
-            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
-        }
+        store.dispatch(actionTypes.runComputerMove);
     },
     undoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, await GMU.undoMove(context.state.app, payload));
-        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
-            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
-            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
-        }
+        store.dispatch(actionTypes.runComputerMove);
+    },
+    updateMatchType: (context: ActionContext, payload: { matchType: string; players: Array<string> }) => {
+        const updatedApp = GMU.updateMatchType(context.state.app, payload);
+        context.commit(mutationTypes.setApp, updatedApp);
     },
     preFetchNextPositions: async (context: ActionContext) => context.commit(mutationTypes.setApp, await GMU.preFetchNextPositions(context.state.app, { gameType: context.state.app.currentMatch.gameType, gameId: context.state.app.currentMatch.gameId, variantId: context.state.app.currentMatch.variantId, position: context.state.app.currentMatch.round.position.position })),
     loadLatestCommits: async (context: ActionContext) => {

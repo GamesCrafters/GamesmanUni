@@ -135,6 +135,7 @@ export type Rounds = Record<number, Round>;
 export type Round = {
     id: number;
     playerId: string;
+    players: Array<string>;
     move: string;
     moveValue: string;
     position: Position;
