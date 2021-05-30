@@ -169,7 +169,7 @@ export const generateComputerMove = (round: Types.Round) => {
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
-    if (currentPositionValue === "win") {
+    if (currentPositionValue === "win" || "tie") {
         const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
     } else if (currentPositionValue === "lose") {
