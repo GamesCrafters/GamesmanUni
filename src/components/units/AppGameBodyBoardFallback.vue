@@ -5,12 +5,14 @@
             <pre>{{ currentPosition }}</pre>
         </div>
         <div id="available-moves" v-if="showNextMoves">
-            <h3>Available Move(s)</h3>
-            <template v-if="Object.keys(currentAvailableMoves).length">
-                <button v-for="availableMove in currentAvailableMoves" :key="availableMove.move" :class="showNextMoveHints ? `uni-${availableMove.moveValue}` : ''" :style="{ opacity: showNextMoveDeltaRemotenesses ? availableMove.moveValueOpacity : 1 }" @click="store.dispatch(actionTypes.runMove, { move: availableMove.move })">{{ availableMove.move }}</button>
-            </template>
-            <p v-else>No more available Move!</p>
+            <h3 id="title">Available Move(s)</h3>
+            <div id="moves">
+                <template v-if="Object.keys(currentAvailableMoves).length">
+                    <div class="move" v-for="availableMove in currentAvailableMoves" :key="availableMove.move" :class="[showNextMoveHints ? `uni-${availableMove.moveValue}` : '', !isComputerTurn ? 'moveIndicator' : '']" :style="{ opacity: showNextMoveDeltaRemotenesses ? availableMove.moveValueOpacity : 1 }" @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: availableMove.move })">{{ availableMove.move }}</div>
+                </template>
+            </div>
         </div>
+        <p id="no-more-move" v-else>No more available Move!</p>
     </div>
 </template>
 
@@ -25,6 +27,7 @@
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition.replace(/^;/, "").replace(/;$/, "").replace(/;/g, "\n").replace(/=/g, " = "));
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
+    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
 </script>
 
 <style lang="scss" scoped>
@@ -43,13 +46,29 @@
         }
         > #available-moves {
             padding: 1rem;
-            > button {
-                margin: 0.5rem;
-                padding: 0 0.5rem;
+            > #title {
+                margin: 1rem;
             }
-            > p {
-                text-align: center;
+            > #moves {
+                align-content: center;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                > .move {
+                    border: 0.1rem solid var(--neutralColor);
+                    border-radius: 1rem;
+                    margin: 1rem;
+                    padding: 1rem;
+                    &.moveIndicator:hover {
+                        cursor: pointer;
+                    }
+                }
             }
+        }
+        > #no-more-move {
+            text-align: center;
         }
     }
 </style>

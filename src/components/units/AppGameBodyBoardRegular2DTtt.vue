@@ -21,7 +21,7 @@
             <use v-else-if="board[cell].token === 'o'" href="#o-token" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
             <g v-else>
                 <use v-if="showNextMoves && board[cell].hint" :class="getHintClass(board[cell].hint)" :style="{ opacity: showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1 }" href="#hint" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
-                <use :class="currentRemoteness && 'available-move-pointer'" @click="currentRemoteness && store.dispatch(actionTypes.runMove, { move: board[cell].move })" href="#available-move-cell" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
+                <use :class="currentRemoteness && !isComputerTurn && 'available-move-pointer'" @click="!isComputerTurn && currentRemoteness && store.dispatch(actionTypes.runMove, { move: board[cell].move })" href="#available-move-cell" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
             </g>
         </g>
     </svg>
@@ -40,6 +40,7 @@
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
+    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const cellCount = 9;
     const board = computed(() => {
