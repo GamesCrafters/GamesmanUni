@@ -21,7 +21,7 @@
         "pre-commit": "1.2.2",
         "prettier": "2.3.0",
         "sass": "1.34.0",
-        "typescript": "4.4.0-dev.20210528",
+        "typescript": "4.4.0-dev.20210530",
         "vite": "2.3.4",
         "vite-plugin-package-version": "1.0.2",
         "vue-tsc": "0.1.6"
@@ -36,5 +36,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.98"
+    "version": "5.0.0-alpha.99"
 }
