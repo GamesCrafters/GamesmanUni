@@ -238,7 +238,11 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     runComputerMove: async (context: ActionContext) => {
         while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
-            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+            const updatedApp = await GMU.runMove(context.state.app, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+            if (updatedApp) {
+                context.commit(mutationTypes.setApp, updatedApp);
+                context.dispatch(actionTypes.preFetchNextPositions);
+            }
         }
     },
     redoMove: async (context: ActionContext, payload?: { count?: number }) => {
