@@ -119,7 +119,6 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
     app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, players: [...app.currentMatch.players], move: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
     app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-    if (app.currentMatch.round.playerId[0] === "c" && !isEndOfMatch(app)) await runMove(app, { move: generateComputerMove(app.currentMatch.round) });
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
