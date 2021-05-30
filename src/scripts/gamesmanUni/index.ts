@@ -98,16 +98,7 @@ const generateMatchId = (app: Types.App) => {
     return newId;
 };
 
-export const initiateMatch = async (
-    app: Types.App,
-    payload: {
-        gameType: string;
-        gameId: string;
-        variantId: string;
-        matchType: string;
-        startingPlayerId: string;
-    }
-) => {
+export const initiateMatch = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; matchType?: string }) => {
     if (!Object.keys(app.gameTypes[payload.gameType].games).length || !Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length) {
         const updatedApp = await loadVariants(app, payload);
         if (updatedApp) app = updatedApp;
@@ -116,28 +107,19 @@ export const initiateMatch = async (
     const game = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId];
     const updatedApp = await loadPosition(app, { ...payload, position: game.startPosition });
     if (!updatedApp) return undefined;
-    app.currentMatch = {
-        id: 0,
-        gameType: payload.gameType,
-        gameId: payload.gameId,
-        variantId: payload.variantId,
-        type: payload.matchType,
-        players: payload.matchType === "pvp" ? ["p1", "p2"] : [],
-        startingPlayerId: payload.startingPlayerId,
-        rounds: {},
-        round: {
-            id: 1,
-            playerId: payload.startingPlayerId,
-            move: "",
-            moveValue: "",
-            position: { ...game.positions[game.startPosition] },
-        },
-        created: new Date().getTime(),
-        lastPlayed: new Date().getTime(),
-        ended: 0,
-    };
+    app.currentMatch = Defaults.defaultMatch;
+    app.currentMatch.created = new Date().getTime();
+    app.currentMatch.gameType = payload.gameType;
+    app.currentMatch.gameId = payload.gameId;
+    app.currentMatch.variantId = payload.variantId;
+    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : game.positions[game.startPosition].positionValue === "lose" ? "cvp" : "pvc";
+    app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
+    app.currentMatch.startingPlayerId = app.currentMatch.players[0];
+    app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, players: [...app.currentMatch.players], move: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
+    app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+    app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
@@ -151,34 +133,31 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
     return Math.max(...remotenesses);
 };
 
-export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw";
+export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
     if (Object.entries(app.currentMatch.rounds).length <= 1) return app;
-    app.currentMatch.rounds[app.currentMatch.round.id] = app.currentMatch.round;
-    app.currentMatch.lastPlayed = new Date().getTime();
-    if (isEndOfMatch(app)) app.currentMatch.ended = new Date().getTime();
-    for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
+    if (!isEndOfMatch(app)) {
+        app.currentMatch.lastPlayed = new Date().getTime();
+        app.currentMatch.rounds[app.currentMatch.round.id] = app.currentMatch.round;
+        for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
+    }
     app.currentMatch = { ...Defaults.defaultMatch };
     return app;
 };
 
-export const restartMatch = (app: Types.App) => {
-    const oldMatch = { ...app.currentMatch };
-    app = exitMatch(app);
-    app.currentMatch = { ...oldMatch };
-    app.currentMatch.id = generateMatchId(app);
-    app.currentMatch.round = {
-        ...app.currentMatch.rounds[1],
-        move: "",
-        moveValue: "",
-    };
-    app.currentMatch.rounds = {};
-    app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-    app.currentMatch.created = new Date().getTime();
-    app.currentMatch.lastPlayed = new Date().getTime();
-    app.currentMatch.ended = 0;
-    return app;
+export const generateComputerMove = (round: Types.Round) => {
+    const availableMoves = Object.values(round.position.availableMoves);
+    const currentPositionValue = round.position.positionValue;
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
+    if (currentPositionValue === "win" || "tie") {
+        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+    } else if (currentPositionValue === "lose") {
+        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = availableMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    }
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };
 
 export const runMove = async (app: Types.App, payload: { move: string }) => {
@@ -186,20 +165,37 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.moveValue = app.currentMatch.round.position.availableMoves[payload.move].moveValue;
     for (let roundId = app.currentMatch.round.id; roundId <= Math.max(...Object.keys(app.currentMatch.rounds).map((roundId) => parseInt(roundId))); roundId++) delete app.currentMatch.rounds[roundId];
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-    const updatedApp = await loadPosition(app, { gameType: app.currentMatch.gameType, gameId: app.currentMatch.gameId, variantId: app.currentMatch.variantId, position: app.currentMatch.round.position.availableMoves[payload.move].position });
-    if (!updatedApp) return undefined;
-    const updatedPosition = updatedApp.gameTypes[app.currentMatch.gameType].games[app.currentMatch.gameId].variants.variants[app.currentMatch.variantId].positions[app.currentMatch.round.position.availableMoves[payload.move].position];
-    app.currentMatch.round.id += 1;
-    app.currentMatch.round.playerId = app.currentMatch.gameType === "puzzles" ? app.currentMatch.round.playerId : app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
+    if (isEndOfMatch(app)) {
+        app.currentMatch.lastPlayed = new Date().getTime();
+        app.currentMatch.ended = new Date().getTime();
+        for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
+    } else {
+        const updatedApp = await loadPosition(app, { gameType: app.currentMatch.gameType, gameId: app.currentMatch.gameId, variantId: app.currentMatch.variantId, position: app.currentMatch.round.position.availableMoves[payload.move].position });
+        if (!updatedApp) return undefined;
+        const updatedPosition = updatedApp.gameTypes[app.currentMatch.gameType].games[app.currentMatch.gameId].variants.variants[app.currentMatch.variantId].positions[app.currentMatch.round.position.availableMoves[payload.move].position];
+        app.currentMatch.round.id += 1;
+        app.currentMatch.round.players = [...app.currentMatch.round.players];
+        app.currentMatch.round.playerId = app.currentMatch.gameType === "puzzles" ? app.currentMatch.round.playerId : app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
+        app.currentMatch.round.move = "";
+        app.currentMatch.round.moveValue = "";
+        app.currentMatch.round.position = updatedPosition;
+        app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+        app.currentMatch.lastPlayed = new Date().getTime();
+    }
+    return app;
+};
+
+export const redoMove = async (app: Types.App, payload?: { count?: number }) => {
+    const count = payload && payload.count ? payload.count : 1;
+    const newRoundId = Math.min(Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id)), app.currentMatch.round.id + count);
+    app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    app.currentMatch.round.position = updatedPosition;
-    app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
-export const undoMove = (app: Types.App, payload?: { count?: number }) => {
+export const undoMove = async (app: Types.App, payload?: { count?: number }) => {
     const count = payload && payload.count ? payload.count : 1;
     const newRoundId = Math.max(1, app.currentMatch.round.id - count);
     app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
@@ -209,15 +205,14 @@ export const undoMove = (app: Types.App, payload?: { count?: number }) => {
     return app;
 };
 
-export const redoMove = (app: Types.App, payload?: { count?: number }) => {
-    const count = payload && payload.count ? payload.count : 1;
-    const newRoundId = Math.min(Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id)), app.currentMatch.round.id + count);
-    app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
-    app.currentMatch.round.move = "";
-    app.currentMatch.round.moveValue = "";
-    app.currentMatch.lastPlayed = new Date().getTime();
+export const updateMatchType = (app: Types.App, payload: { matchType: string, players: Array<string> }) => {
+    app.currentMatch.type = payload.matchType;
+    const currentTurnIndex = app.currentMatch.players.indexOf(app.currentMatch.round.playerId);
+    app.currentMatch.players = [...payload.players];
+    app.currentMatch.round.players = [...payload.players];
+    app.currentMatch.round.playerId = app.currentMatch.players[currentTurnIndex];
     return app;
-};
+}
 
 export const loadCommits = async (app: Types.App, payload?: { force?: boolean }) => {
     if (!(payload && payload.force) && Object.keys(app.commits.commits).length && (new Date().getTime() - app.commits.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;

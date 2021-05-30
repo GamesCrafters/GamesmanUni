@@ -1,5 +1,5 @@
 <template>
-    <button id="app-game-vvh-header-meters" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)">⌀</button>
+    <button id="app-game-vvh-header-meters" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)">⚙</button>
 </template>
 
 <script lang="ts" setup>

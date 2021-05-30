@@ -92,6 +92,7 @@ export const defaultCommits: Types.Commits = {
 };
 
 export const defaultOptions: Types.Options = {
+    computerMoveDuration: 1000,
     showInstructions: false,
     showNextMoveDeltaRemotenesses: true,
     showNextMoveHints: true,
@@ -109,6 +110,7 @@ export const defaultRounds: Types.Rounds = {};
 export const defaultRound: Types.Round = {
     id: 0,
     playerId: "",
+    players: [],
     move: "",
     moveValue: "",
     position: { ...defaultPosition, availableMoves: {} },

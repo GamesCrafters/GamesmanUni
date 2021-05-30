@@ -102,6 +102,7 @@ export type User = {
 };
 
 export type Options = {
+    computerMoveDuration: number;
     showInstructions: boolean;
     showNextMoveDeltaRemotenesses: boolean;
     showNextMoveHints: boolean;
@@ -134,6 +135,7 @@ export type Rounds = Record<number, Round>;
 export type Round = {
     id: number;
     playerId: string;
+    players: Array<string>;
     move: string;
     moveValue: string;
     position: Position;

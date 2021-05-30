@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { useRoute } from "vue-router";
+    import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameBody from "./AppGameBody.vue";
     import AppGameVvh from "./AppGameVvh.vue";
@@ -17,9 +17,8 @@
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
     const variantId = computed(() => route.params.variantId as string);
-    const matchType = "pvp";
-    const startingPlayerId = "p1";
-    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value, matchType, startingPlayerId });
+    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value });
+    onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));
 </script>
 
 <style lang="scss" scoped>
