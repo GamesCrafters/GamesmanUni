@@ -102,6 +102,7 @@ export type User = {
 };
 
 export type Options = {
+    computerMoveDuration: number;
     showInstructions: boolean;
     showNextMoveDeltaRemotenesses: boolean;
     showNextMoveHints: boolean;

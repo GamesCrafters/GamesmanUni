@@ -31,6 +31,11 @@
                         </div>
                     </div>
                 </div>
+                <div id="computer-move-duration" v-if="updatedMatchType.includes('c')">
+                    <h3 class="title">Computer Move Duration (milliseconds)</h3>
+                    <VueSlider id="slider" v-model="options.computerMoveDuration" :min="0" :max="10000" interval="10" :tooltip="'active'" />
+                    <i>(Note: The actual duration will be either the ideal duration above or server data load time if there is any server data load action, whichever is greater.)</i>
+                </div>
                 <div id="player-names">
                     <h3 id="title">Player Names</h3>
                     <div id="names">
@@ -81,6 +86,7 @@
     import { computed, ref, watch } from "vue";
     import { useRoute } from "vue-router";
     import { actionTypes, mutationTypes, useStore } from "../../scripts/plugins/store";
+    import VueSlider from "vue-slider-component";
     import UniPopupWindow from "../templates/UniPopupWindow.vue";
 
     const route = useRoute();
@@ -134,6 +140,12 @@
             min-height: 100%;
             > #title {
                 margin: 1rem;
+            }
+            > #computer-move-duration {
+                padding: 1rem 10%;
+                > #title {
+                    margin: 1rem;
+                }
             }
             > #match-types {
                 padding: 1rem 10%;
