@@ -92,6 +92,7 @@ export const defaultCommits: Types.Commits = {
 };
 
 export const defaultOptions: Types.Options = {
+    computerMoveDuration: 1000,
     showInstructions: false,
     showNextMoveDeltaRemotenesses: true,
     showNextMoveHints: true,

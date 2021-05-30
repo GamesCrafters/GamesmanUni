@@ -213,7 +213,10 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
-        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
+            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
+            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        }
     },
     exitMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.exitMatch(context.state.app)),
     restartMatch: async (context: ActionContext, payload?: { matchType?: string }) => {
@@ -230,16 +233,25 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             context.dispatch(actionTypes.preFetchNextPositions);
         }
-        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
+            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
+            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        }
     },
     redoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, await GMU.redoMove(context.state.app, payload));
         if (!context.state.app.currentMatch.rounds[context.state.app.currentMatch.round.id + 1]) context.dispatch(actionTypes.preFetchNextPositions);
-        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
+            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
+            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        }
     },
     undoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, await GMU.undoMove(context.state.app, payload));
-        if (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
+            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
+            await context.dispatch(actionTypes.runMove, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
+        }
     },
     preFetchNextPositions: async (context: ActionContext) => context.commit(mutationTypes.setApp, await GMU.preFetchNextPositions(context.state.app, { gameType: context.state.app.currentMatch.gameType, gameId: context.state.app.currentMatch.gameId, variantId: context.state.app.currentMatch.variantId, position: context.state.app.currentMatch.round.position.position })),
     loadLatestCommits: async (context: ActionContext) => {
