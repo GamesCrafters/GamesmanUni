@@ -1,11 +1,11 @@
   
 name: test
-on: push
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   dev:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/head/dev'
+    if: github.ref == 'refs/heads/dev'
     steps:
       - name: Pushing build to NYC
         uses: fifsky/ssh-action@master
@@ -25,7 +25,7 @@ jobs:
           key: ${{ secrets.KEY }}
   prod:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/head/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Pushing build to NYC
         uses: fifsky/ssh-action@master
