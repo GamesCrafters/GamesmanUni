@@ -1,45 +1,44 @@
-  
 name: test
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  dev:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    steps:
-      - name: Pushing build to NYC
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd dev/GamesmanUni
-            echo "Pulling from GitHub ---------------------------------------------------"
-            git pull
-            echo "Checking and installing new dependencies ------------------------------"
-            yarn install
-            echo "Building prod ---------------------------------------------------------"
-            yarn build
-            echo "Pushing to prod -------------------------------------------------------"
-            sudo rsync -au dist/ /var/www/html/dev/uni/
-          host: nyc.cs.berkeley.edu
-          user: github
-          key: ${{ secrets.KEY }}
-  prod:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Pushing build to NYC
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            cd prod/GamesmanUni
-            echo "Pulling from GitHub ---------------------------------------------------"
-            git pull
-            echo "Checking and installing new dependencies ------------------------------"
-            yarn install
-            echo "Building prod ---------------------------------------------------------"
-            yarn build
-            echo "Pushing to prod -------------------------------------------------------"
-            sudo rsync -au dist/ /var/www/html/uni/
-          host: nyc.cs.berkeley.edu
-          user: github
-          key: ${{ secrets.KEY }}
+    dev:
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/dev'
+        steps:
+            - name: Pushing build to NYC
+              uses: fifsky/ssh-action@master
+              with:
+                  command: |
+                      cd dev/GamesmanUni
+                      echo "Pulling from GitHub ---------------------------------------------------"
+                      git pull
+                      echo "Checking and installing new dependencies ------------------------------"
+                      yarn install
+                      echo "Building prod ---------------------------------------------------------"
+                      yarn build
+                      echo "Pushing to prod -------------------------------------------------------"
+                      sudo rsync -au dist/ /var/www/html/dev/uni/
+                  host: nyc.cs.berkeley.edu
+                  user: github
+                  key: ${{ secrets.KEY }}
+    prod:
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main'
+        steps:
+            - name: Pushing build to NYC
+              uses: fifsky/ssh-action@master
+              with:
+                  command: |
+                      cd prod/GamesmanUni
+                      echo "Pulling from GitHub ---------------------------------------------------"
+                      git pull
+                      echo "Checking and installing new dependencies ------------------------------"
+                      yarn install
+                      echo "Building prod ---------------------------------------------------------"
+                      yarn build
+                      echo "Pushing to prod -------------------------------------------------------"
+                      sudo rsync -au dist/ /var/www/html/uni/
+                  host: nyc.cs.berkeley.edu
+                  user: github
+                  key: ${{ secrets.KEY }}
