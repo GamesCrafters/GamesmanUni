@@ -4,6 +4,7 @@
         "markdown-it-link-attributes": "3.0.0",
         "vue": "3.1.0-beta.7",
         "vue-axios": "3.2.4",
+        "vue-class-component": "8.0.0-rc.1",
         "vue-i18n": "9.2.0-alpha.3",
         "vue-meta": "3.0.0-alpha.7",
         "vue-router": "4.0.8",
@@ -15,6 +16,7 @@
         "@intlify/vite-plugin-vue-i18n": "2.1.2",
         "@octokit/types": "6.16.2",
         "@types/markdown-it-link-attributes": "3.0.1",
+        "@types/punycode": "^2.1.0",
         "@vitejs/plugin-legacy": "1.4.1",
         "@vitejs/plugin-vue": "1.2.3",
         "@vue/compiler-sfc": "3.1.0-beta.7",
@@ -36,5 +38,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; yarn vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.106"
+    "version": "5.0.0-alpha.107"
 }
