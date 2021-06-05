@@ -106,7 +106,7 @@
     </a>
     <!-- Repository License -->
     <a href="https://github.com/GamesCrafters/GamesmanUni/blob/main/LICENSE" rel="noreferrer" target="_blank">
-        <img alt="Repository License" src="https://img.shields.io/badge/License-AGPLv3-blue.svg">
+        <img alt="Repository License" src="https://img.shields.io/github/license/GamesCrafters/GamesmanUni?color=brightgreen">
     </a>
 </p>
 
