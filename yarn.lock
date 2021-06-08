@@ -519,29 +519,7 @@
     "@vue/compiler-core" "3.1.1"
     "@vue/shared" "3.1.1"
 
-"@vue/compiler-sfc@3.1.0-beta.7":
-  version "3.1.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.1.0-beta.7.tgz#dbecba7ffd9ec83df7b8e01eb10819fd8ba7a143"
-  integrity sha512-mXmhMZXMs3+/ONgiQ0lIShOFpkCO1B7p+ul6YFfwUkVLurCbCLO1qTT8ZFUyvelFUbEjdaM0jcaB/oSCmTMcuw==
-  dependencies:
-    "@babel/parser" "^7.13.9"
-    "@babel/types" "^7.13.0"
-    "@vue/compiler-core" "3.1.0-beta.7"
-    "@vue/compiler-dom" "3.1.0-beta.7"
-    "@vue/compiler-ssr" "3.1.0-beta.7"
-    "@vue/shared" "3.1.0-beta.7"
-    consolidate "^0.16.0"
-    estree-walker "^2.0.1"
-    hash-sum "^2.0.0"
-    lru-cache "^5.1.1"
-    magic-string "^0.25.7"
-    merge-source-map "^1.1.0"
-    postcss "^8.1.10"
-    postcss-modules "^4.0.0"
-    postcss-selector-parser "^6.0.4"
-    source-map "^0.6.1"
-
-"@vue/compiler-sfc@^3.0.11":
+"@vue/compiler-sfc@3.1.1", "@vue/compiler-sfc@^3.0.11":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.1.1.tgz#d4e4507c013d0b219f0b106b317ec5bb1cde3398"
   integrity sha512-lSgMsZaYHF+bAgryq5aUqpvyfhu52GJI2/4LoiJCE5uaxc6FCZfxfgqgw/d9ltiZghv+HiISFtmQVAVvlsk+/w==
@@ -562,14 +540,6 @@
     postcss-modules "^4.0.0"
     postcss-selector-parser "^6.0.4"
     source-map "^0.6.1"
-
-"@vue/compiler-ssr@3.1.0-beta.7":
-  version "3.1.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@vue/compiler-ssr/-/compiler-ssr-3.1.0-beta.7.tgz#89dbc1c7b40ab0771ed731d00932a7753ea1fe19"
-  integrity sha512-S3UPiGC9OaGfnz/Qy48ZI5xq3wgP942mEpsS80Ne4zUIi3ov5kAkE0HagoK/FIzdk4e4mTxIEOLoKii1+M1ooA==
-  dependencies:
-    "@vue/compiler-dom" "3.1.0-beta.7"
-    "@vue/shared" "3.1.0-beta.7"
 
 "@vue/compiler-ssr@3.1.1":
   version "3.1.1"
