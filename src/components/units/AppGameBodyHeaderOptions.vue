@@ -246,7 +246,7 @@
                 }
             } else {
                 if (isPuzzleGame.value) {
-                    updatedPlayerId.value = "";
+                    updatedPlayerId.value = currentPlayerId.value[0] === "p" ? "c1" : "p1";
                 } else {
                     updatedLeftPlayerId.value = "";
                     updatedRightPlayerId.value = "";
