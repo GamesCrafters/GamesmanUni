@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "axios": "0.21.1",
+        "lodash": "4.17.21",
         "markdown-it-link-attributes": "3.0.0",
         "vue": "3.2.10",
         "vue-axios": "3.3.6",
@@ -39,5 +40,5 @@
         "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; rm -rf dist; yarn; vue-tsc --noEmit",
         "serve": "vite preview"
     },
-    "version": "5.0.0-alpha.127"
+    "version": "5.0.0-alpha.128"
 }
