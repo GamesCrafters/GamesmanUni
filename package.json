@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "lodash": "4.17.21",
     "markdown-it-link-attributes": "3.0.0",
     "vue": "3.2.11",
