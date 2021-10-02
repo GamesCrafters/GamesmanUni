@@ -10,8 +10,13 @@
                 </a>
                 <div id="commits">
                     <a class="commit" v-for="commit in latestCommits.commits" :key="commit.sha" :href="commit.url" target="_blank" rel="noreferrer">
-                        <h3 class="commit-version">{{ commit.message.split(/:(.+)/)[0] }}</h3>
-                        <i class="message">{{ commit.message.split(/:(.+)/)[1].split(/\n(.+)/)[0] }}</i>
+                        <template v-if="commit.message.startsWith('v')">
+                            <h3 class="commit-version">{{ commit.message.split(/:(.+)/)[0] }}</h3>
+                            <i class="message">{{ commit.message.split(/:(.+)/)[1].split(/\n(.+)/)[0] }}</i>
+                        </template>
+                        <template v-else>
+                            <i class="message">{{ commit.message }}</i>
+                        </template>
                         <span class="author">
                             <img class="avatar" :alt="commit.authorName + `'s Avatar`" :title="commit.authorName" :src="getAuthorAvatarSource(commit.authorAvatarUrl)" style="width: 3rem" />
                             <b class="name">{{ commit.authorName }}</b>
@@ -27,12 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-    import VueMarkdownIt from "vue3-markdown-it";
-    import MarkdownItLinkAttributes from "markdown-it-link-attributes";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
-    const plugins = [{ plugin: MarkdownItLinkAttributes, options: { attrs: { target: "_blank", rel: "noopener noreferrer nofollow" } } }];
     const latestCommits = store.getters.commits;
     const getAuthorAvatarSource = (url?: string) => {
         if (url) return url;
