@@ -138,7 +138,11 @@
             if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))) {
                 // Add a piece to the board
                 const to = parseInt(matches[2]);
-                board[to].token = matches[1].replaceAll("x", "\u00D7").replaceAll("o", "\u25CB").replaceAll("B", "\u25cf").replaceAll("W", "\u25CB");
+                board[to].token = matches[1]
+                  .replaceAll("x", "\u00D7")
+                  .replaceAll("o", "\u25CB")
+                  .replaceAll("B", "\u2B24")
+                  .replaceAll("W", "\u25EF");
                 board[to].move = move;
             } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)$/))) {
                 // Move a piece
