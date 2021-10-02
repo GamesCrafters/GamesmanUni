@@ -123,8 +123,8 @@
         const board: GDefaultRegular2DBoardCell[] = matches[4]
             .replaceAll("x", "\u00D7")
             .replaceAll("o", "\u25CB")
-            .replaceAll("B", "\u25cf")
-            .replaceAll("W", "\u25CB")
+            .replaceAll("B", "\u2B24")
+            .replaceAll("W", "\u25EF")
             .split("")
             .map((token) => ({ token }));
         let arrows: GDefaultRegular2DBoardArrow[] = [];
