@@ -120,27 +120,39 @@
 
 ## Getting Started
 
-### Install Web App Locally
+### 1a) Install `yarn` on Windows
 
 ```zsh
 npm install -g yarn
+```
+
+### 1b) Install `yarn` on MacOS
+
+```zsh
+brew install yarn
+brew install vite
+```
+
+### 2) Install Web App Locally
+
+```zsh
 git clone git@github.com:GamesCrafters/GamesmanUni.git
 cd GamesmanUni
 ```
 
-### Launch Development Hot Module Replacement (HMR) Server
+### 3a) Launch Development Hot Module Replacement (HMR) Server
 
 ```zsh
 yarn dev
 ```
 
-### Build Production Web App
+### 3b) Build Production Web App
 
 ```zsh
 yarn build
 ```
 
-### Preview Production Web App
+### 3c) Preview Production Web App
 
 ```zsh
 yarn serve
