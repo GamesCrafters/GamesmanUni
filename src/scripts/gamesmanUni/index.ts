@@ -175,7 +175,14 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         const updatedPosition = updatedApp.gameTypes[app.currentMatch.gameType].games[app.currentMatch.gameId].variants.variants[app.currentMatch.variantId].positions[app.currentMatch.round.position.availableMoves[payload.move].position];
         app.currentMatch.round.id += 1;
         app.currentMatch.round.players = [...app.currentMatch.round.players];
-        app.currentMatch.round.playerId = app.currentMatch.gameType === "puzzles" ? app.currentMatch.round.playerId : app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
+        if (app.currentMatch.gameType != "puzzles") {
+          let posArr = updatedPosition.position.split('_');
+          if (posArr.length === 5 && posArr[0] === 'R') {
+            app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
+          } else {
+            app.currentMatch.round.playerId = app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
+          }
+        }
         app.currentMatch.round.move = "";
         app.currentMatch.round.moveValue = "";
         app.currentMatch.round.position = updatedPosition;
