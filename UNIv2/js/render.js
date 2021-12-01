@@ -91,6 +91,7 @@ function drawLineWithArrows(ctx,x0,y0,x1,y1,value,lWidth,aWidth,aLength,arrowSta
 }
 
 function drawCenteredCircle(ctx,x,y,r,value){
+    ctx.beginPath();
     ctx.arc(x,y,r,0,2*Math.PI);
     ctx.fillStyle = valToColor[value];
     ctx.fill();
@@ -129,6 +130,7 @@ function drawAllMoves(imgs, canvas, ctx, theme, bggeom, moves) {
         i = +moveA[2];
         x = (canvas.width  * theme.centers[i][0] / bggeom[0]);
         y = (canvas.height * theme.centers[i][1] / bggeom[1]);
+        //console.log(e.moveValue, moveA[2])
         drawCenteredCircle(ctx,x,y,canvas.width/30,e.moveValue);
       }
     });
