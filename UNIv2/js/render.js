@@ -1,5 +1,8 @@
-const GAME    = "369mm";
-const VARIANT = "regular"; 
+const GAME    = "tootnottopy";
+const VARIANT = "6"; 
+
+// const GAME    = "369mm";
+// const VARIANT = "regular"; 
 
 // const GAME    = "minitoadspy";
 // const VARIANT = "easy"; // "misere" or "easy" 
@@ -131,7 +134,7 @@ function drawAllMoves(imgs, canvas, ctx, theme, bggeom, moves) {
         x = (canvas.width  * theme.centers[i][0] / bggeom[0]);
         y = (canvas.height * theme.centers[i][1] / bggeom[1]);
         //console.log(e.moveValue, moveA[2])
-        drawCenteredCircle(ctx,x,y,canvas.width/30,e.moveValue);
+        drawCenteredCircle(ctx,x,y,canvas.width/120,e.moveValue);
       }
     });
 
@@ -356,6 +359,142 @@ setup_JSON_text["369mm"] = `{
                 "O": {
                   "image": "svg/369mm/O.svg",
                   "scale": 130.0
+                },
+                "-": {
+                  "image": "svg/369mm/-.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["tootnottopy"] = `{
+  "response": {
+    "gameId": "tootnottopy",
+    "instructions": null,
+    "name": "Toot-N-Otto",
+    "variants": [
+      {
+        "description": "6x4",
+        "startPosition": "R_A_7_12_---TTTTTT---TO-OOOOOO-OTTO-vvvvvv-OTTO--------OTTO--------OTTO--------OTTO--------OT_------------------------x6666", 
+        "status": "dev",
+        "variantId": "6",
+        "themes": {
+          "defaultTheme": "dan",
+          "backgroundGeometry": [ 120, 70 ],
+          "assets": {
+            "dan": {
+              "backgroundImage": "svg/tootnotto/board.svg",
+              "centers": [
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [35, 5],
+                [45, 5],
+                [55, 5],
+                [65, 5],
+                [75, 5],
+                [85, 5],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+
+                [5, 15],
+                [15, 15],
+                [99, 99],
+                [35, 15],
+                [45, 15],
+                [55, 15],
+                [65, 15],
+                [75, 15],
+                [85, 15],
+                [99, 99],
+                [105, 15],
+                [115, 15],
+
+                [5, 25],
+                [15, 25],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [99, 99],
+                [105, 25],
+                [115, 25],
+
+                [5, 35],
+                [15, 35],
+                [99, 99],
+                [35, 35],
+                [45, 35],
+                [55, 35],
+                [65, 35],
+                [75, 35],
+                [85, 35],
+                [99, 99],
+                [105, 35],
+                [115, 35],
+
+                [5, 45],
+                [15, 45],
+                [99, 99],
+                [35, 45],
+                [45, 45],
+                [55, 45],
+                [65, 45],
+                [75, 45],
+                [85, 45],
+                [99, 99],
+                [105, 45],
+                [115, 45],
+
+                [5, 55],
+                [15, 55],
+                [99, 99],
+                [35, 55],
+                [45, 55],
+                [55, 55],
+                [65, 55],
+                [75, 55],
+                [85, 55],
+                [99, 99],
+                [105, 55],
+                [115, 55],
+
+                [5, 65],
+                [15, 65],
+                [99, 99],
+                [35, 65],
+                [45, 65],
+                [55, 65],
+                [65, 65],
+                [75, 65],
+                [85, 65],
+                [99, 99],
+                [105, 65],
+                [115, 65]
+              ],
+              "pieces": {
+                "v": {
+                  "image": "svg/tootnotto/v.svg",
+                  "scale": 100.0
+                },
+                "T": {
+                  "image": "svg/tootnotto/T.svg",
+                  "scale": 10.0
+                },
+                "O": {
+                  "image": "svg/tootnotto/O.svg",
+                  "scale": 10.0
                 },
                 "-": {
                   "image": "svg/369mm/-.svg",
