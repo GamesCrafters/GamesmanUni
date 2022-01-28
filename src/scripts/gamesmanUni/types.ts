@@ -42,6 +42,7 @@ export type Game = {
     type: string;
     variants: Variants;
     status: string;
+    custom: boolean;
 };
 
 export type Variants = Update & {

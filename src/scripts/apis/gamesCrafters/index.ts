@@ -23,4 +23,6 @@ export const loadGames = async (dataSource: string, payload: { gameType: string 
 
 export const loadVariants = async (dataSource: string, payload: { gameType: string }): Promise<Types.OnePlayerGameVariants | Types.TwoPlayerGameVariants | undefined> => (payload.gameType === "puzzles" ? await loadData<Types.OnePlayerGameVariants>(dataSource) : await loadData<Types.TwoPlayerGameVariants>(dataSource));
 
+export const loadVariant = async (dataSource: string, payload: { gameType: string }): Promise<Types.GameVariant | undefined> => await loadData<Types.GameVariant>(dataSource);
+
 export const loadPosition = async (dataSource: string) => await loadData<Types.Position>(dataSource);

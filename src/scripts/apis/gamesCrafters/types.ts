@@ -30,6 +30,7 @@ export type OnePlayerGameVariants = Status & {
                 variantId: string;
             }
         >;
+        custom: string;
     };
 };
 
@@ -54,8 +55,21 @@ export type TwoPlayerGameVariants = Status & {
                 variantId: string;
             }
         >;
+        custom: string;
     };
 };
+
+export type GameVariant = Status & {
+    response: {
+        variant: Array<
+        {
+            description: string;
+            startPosition: string;
+            variantId: string;
+        }
+        >;
+    }
+}
 
 export type Position = Status & {
     response: {

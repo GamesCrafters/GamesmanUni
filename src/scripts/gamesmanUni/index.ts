@@ -39,6 +39,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     app.gameTypes[payload.gameType].games[payload.gameId].dateCreated = (<GCTAPITypes.OnePlayerGameVariants>variants).response.dateCreated;
     app.gameTypes[payload.gameType].games[payload.gameId].description = (<GCTAPITypes.OnePlayerGameVariants>variants).response.description;
     app.gameTypes[payload.gameType].games[payload.gameId].instructions = variants.response.instructions;
+    app.gameTypes[payload.gameType].games[payload.gameId].custom = variants.response.custom === "true";
     app.gameTypes[payload.gameType].games[payload.gameId].variants.variants = {};
     for (const variant of variants.response.variants)
         app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[variant.variantId] = {
@@ -104,7 +105,14 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
         if (updatedApp) app = updatedApp;
         else return undefined;
     }
-    const game = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId];
+
+    const has_custom = app.gameTypes[payload.gameType].games[payload.gameId].custom;
+    let game = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId];
+    if (!game && has_custom) {
+        game = await loadVariant(app, payload);
+        app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId] = game;
+    }
+
     const updatedApp = await loadPosition(app, { ...payload, position: game.startPosition });
     if (!updatedApp) return undefined;
     app.currentMatch = Defaults.defaultMatch;
@@ -121,6 +129,27 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
+};
+
+const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; force?: boolean }) => {
+    const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
+    const variant_response = await GCTAPI.loadVariant(baseDataSource + `/${payload.gameId}/variants/${payload.variantId}`, payload);
+    if (!variant_response) return {
+        id: "",
+        description: "",
+        startPosition: "",
+        positions: {},
+        status: ""
+    };
+
+    const variant: Types.Variant = {
+        id: payload.variantId,
+        description: payload.variantId,
+        startPosition: variant_response.response.variant[0].startPosition,
+        positions: { ...Defaults.defaultPositions },
+        status: variant_response.status,
+    }
+    return variant;
 };
 
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {

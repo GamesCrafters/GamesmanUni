@@ -63,6 +63,7 @@ export const defaultGame: Types.Game = {
     type: "",
     variants: { ...defaultVariants, variants: {} },
     status: "",
+    custom: false,
 };
 
 export const defaultGames: Types.Games = {
