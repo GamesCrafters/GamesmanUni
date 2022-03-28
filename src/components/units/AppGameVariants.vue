@@ -8,6 +8,11 @@
                 <p>{{ variant.description }}</p>
                 <i>Data Status: {{ variant.status }}</i>
             </router-link>
+            <div v-if="gameCustom" v-on:click="customBoardRoute">
+                <img :src="getLogoSource('custom')" :alt="game.name + ' ' + 'Custom Logo'" style="width: 8rem" />
+                <p>Custom</p>
+                <i>Data Status: N/A</i>
+            </div>
         </div>
     </div>
 </template>
@@ -15,6 +20,7 @@
 <script lang="ts" setup>
     import { computed } from "vue";
     import { useRoute } from "vue-router";
+    import { router } from "../../scripts/plugins/router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const route = useRoute();
@@ -22,6 +28,7 @@
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
+    const gameCustom = computed(() => (game.value ? game.value.custom : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const gameVariants = computed(() => game.value.variants.variants);
     const getLogoSource = (variantId: string) => {
@@ -41,6 +48,12 @@
         }
         return images[appLogoFilePath].default;
     };
+    const customBoardRoute = () => {
+        let boardStr = window.prompt('Enter a valid board string:');
+        if (boardStr !== null) {
+            router.push({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: boardStr } })
+        }
+    }
     store.dispatch(actionTypes.loadVariants, { type: gameType.value, gameId: gameId.value });
 </script>
 
@@ -54,7 +67,7 @@
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
-            > a {
+            > a, div {
                 border: 0.1rem solid var(--neutralColor);
                 border-radius: 1rem;
                 margin: 1rem;
@@ -62,6 +75,11 @@
                 > * {
                     text-align: center;
                 }
+            }
+
+            > div {
+                cursor: pointer;
+                text-decoration: underline;
             }
         }
     }
