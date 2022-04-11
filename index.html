@@ -1,20 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
     <head>
-        <meta charset="UTF-8" />
-        <meta content="width=device-width,initial-scale=1.0" name="viewport" />
-        <link href="/favicon.ico" rel="icon" />
         <!-- [TBS] Separate import of each font. -->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Long+Cang%7CNoto+Serif+SC%7CNova+Mono%7COpen+Sans%7CRoboto%7CRoboto+Mono%7CSchoolbell%7CSpace+Mono%7CVT323&display=swap&subset=chinese-simplified,cyrillic,cyrillic-ext,greek,greek-ext,latin-ext" rel="stylesheet" />
+        <link href="https://fonts.gstatic.com" rel="preconnect" />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap" rel="preload" as="style" onload="this.onload = null; this.rel = 'stylesheet'" />
+        <link href="https://fonts.googleapis.com/css?family=Long+Cang%7CNoto+Serif+SC%7CNova+Mono%7COpen+Sans%7CRoboto%7CRoboto+Mono%7CSchoolbell%7CSpace+Mono%7CVT323&display=swap&subset=chinese-simplified,cyrillic,cyrillic-ext,greek,greek-ext,latin-ext" rel="preload" as="style" onload="this.onload = null; this.rel = 'stylesheet'" />
+
+        <link rel="alternate icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+        <link rel="alternate icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+        <link rel="icon" href="/assets/favicon.ico" />
+        <link rel="manifest" href="/assets/site.webmanifest" />
+        <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#2b5797" />
+
+        <meta charset="UTF-8" />
+        <meta name="description" content="GamesmanUni is a web implementation of Gamesman, a finite, two-person, perfect-information game generator by Professor Dan Garcia." />
+        <meta name="msapplication-TileColor" content="#2b5797" />
+        <meta name="theme-color" content="#2b5797" />
+        <meta name="title" content="GamesmanUni" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="GamesCrafters" />
+        <meta name="twitter:description" content="GamesmanUni is a web implementation of Gamesman, a finite, two-person, perfect-information game generator by Professor Dan Garcia." />
+        <meta name="twitter:image" content="/assets/logo-gamescrafters.png" />
+        <meta name="twitter:title" content="GamesmanUni" />
+        <meta name="twitter:url" content="https://nyc.cs.berkeley.edu/uni/" />
+        <meta name="viewport" content="initial-scale=1.0,width=device-width" />
+        <meta property="og:description" content="GamesmanUni is a web implementation of Gamesman, a finite, two-person, perfect-information game generator by Professor Dan Garcia." />
+        <meta property="og:image" itemprop="image" content="/assets/logo-gamescrafters.png" />
+        <meta property="og:title" content="GamesmanUni" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://nyc.cs.berkeley.edu/uni/" />
         <title>GamesmanUni</title>
     </head>
     <body>
-        <noscript>
-            <strong> We're sorry but GamesmanUni doesn't work properly without JavaScript enabled. Please enable it to continue. </strong>
-        </noscript>
         <div id="app"></div>
         <script src="/src/main.ts" type="module"></script>
+        <noscript>
+            <strong>We're sorry but GamesmanUni doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        </noscript>
     </body>
 </html>

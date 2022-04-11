@@ -3,14 +3,14 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "preserve",
-        "lib": ["esnext", "dom"],
-        "module": "esnext",
-        "moduleResolution": "node",
+        "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+        "module": "ESNext",
+        "moduleResolution": "Node",
         "resolveJsonModule": true,
         "sourceMap": true,
         "strict": true,
-        "target": "esnext",
+        "target": "ESNext",
         "types": ["vite/client", "@intlify/vite-plugin-vue-i18n/client"]
     },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"]
 }
