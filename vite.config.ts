@@ -28,10 +28,8 @@ export default defineConfig({
         VitePWA({
             includeAssets: ["robot.txt", "assets/favicon.ico", "assets/safari-pinned-tab.svg", "assets/apple-touch-icon.png"],
             manifest: {
-                name: "GamesmanUni",
-                short_name: "GamesmanUni",
                 description: "GamesmanUni",
-                theme_color: "#2b5797",
+                display: "standalone",
                 icons: [
                     {
                         src: "assets/android-chrome-192x192.png",
@@ -50,6 +48,9 @@ export default defineConfig({
                         purpose: "any maskable",
                     },
                 ],
+                name: "GamesmanUni",
+                short_name: "GamesmanUni",
+                theme_color: "#2b5797",
             },
             registerType: "autoUpdate",
             workbox: {
