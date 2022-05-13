@@ -42,10 +42,10 @@
     "repository": "git@github.com:GamesCrafters/GamesmanUni.git",
     "scripts": {
         "build": "rm -rf dist; yarn; vite build",
-        "dev": "yarn cache clean; rm -rf node_modules; rm yarn.lock; yarn; vue-tsc --noEmit; vite --debug",
-        "reinstall": "yarn cache clean; rm -rf node_modules; rm yarn.lock; rm -rf dist; yarn; vue-tsc --noEmit",
+        "dev": "yarn; vue-tsc --noEmit; vite --debug",
+        "reinstall": "rm -rf node_modules; rm yarn.lock; rm -rf dist; yarn; vue-tsc --noEmit",
         "serve": "vite preview",
         "serve:https": "serve dist"
     },
-    "version": "5.0.0-alpha.149"
+    "version": "5.0.0-alpha.150"
 }
