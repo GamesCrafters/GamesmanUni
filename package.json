@@ -47,5 +47,5 @@
         "serve": "vite preview",
         "serve:https": "serve dist"
     },
-    "version": "5.0.0-alpha.150"
+    "version": "5.0.0-alpha.151"
 }
