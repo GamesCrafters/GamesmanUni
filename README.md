@@ -120,50 +120,56 @@
 
 ## Getting Started
 
-### 1a) Install `yarn` on Windows
+1. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you have not already though it should come with most OS.
 
-```zsh
-npm install -g yarn
-```
+2. Install latest current version of Node.
 
-### 1b) Install `yarn` on MacOS
+    You can get it from [Node JS Official Website](https://nodejs.org/en/download/), or via [Homebrew Formula](https://formulae.brew.sh/formula/node) on MacOS.
 
-```zsh
-brew install yarn
-brew install vite
-```
+    I suggest you use [Node Version Manager](https://github.com/nvm-sh/nvm) to easily switch between different Node JS versions for different projects on your system.
 
-### 2) Install Web App Locally
+3. Enable `corepack` binary.
 
-```zsh
-git clone git@github.com:GamesCrafters/GamesmanUni.git
-cd GamesmanUni
-```
+    ```zsh
+    corepack enable
+    ```
 
-### 3a) Launch Development Hot Module Replacement (HMR) Server
+    Corepack is the binary included by default with Node JS version 16.10 and later, enabling developers to use different supported package manager versions across multiple projects.
 
-```zsh
-yarn dev
-```
+    This allows us to skip the installation of package manager, [Yarn](https://yarnpkg.com) in our case.
 
-### 3b) Build Production Web App
+4. Clone GamesmanUni repository locally, and navigate into the root directory.
 
-```zsh
-yarn build
-```
+    ```zsh
+    git clone git@github.com:GamesCrafters/GamesmanUni.git
+    cd GamesmanUni
+    ```
 
-### 3c) Preview Production Web App
+5. Install external dependencies.
 
-```zsh
-yarn serve
-```
+    ```zsh
+    yarn
+    ```
 
-<!-- ####################################################################### -->
-<!-- RFC -->
+6. Launch Development Hot Module Replacement (HMR) server.
 
-### Request for Comment (RFC)
+    ```zsh
+    yarn dev
+    ```
 
-[GamesmanUni 5 RFC](https://nyc.cs.berkeley.edu/wiki/GamesmanUni_5).
+7. Build GamesmanUni for production.
+
+    ```zsh
+    yarn build
+    ```
+
+    The site should be available in `./dist` once the build is done.
+
+8. Preview the production built of GamesmanUni locally.
+
+    ```zsh
+    yarn serve
+    ```
 
 <!-- ####################################################################### -->
 <!-- License -->
