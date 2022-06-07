@@ -1,11 +1,26 @@
-const GAME    = "tootnottopy";
-const VARIANT = "6"; 
+//const GAME    = "tootnottopy";
+//const VARIANT = "6"; 
 
 // const GAME    = "369mm";
 // const VARIANT = "regular"; 
 
 // const GAME    = "minitoadspy";
 // const VARIANT = "easy"; // "misere" or "easy" 
+
+//const GAME    = "3spot";
+//const VARIANT = "regular";
+
+//const GAME    = "ctoi";
+//const VARIANT = "regular";
+
+//const GAME    = "tttwo";
+//const VARIANT = "regular";
+
+//const GAME    = "Lgame";
+//const VARIANT = "regular";
+
+const GAME    = "baghchal";
+const VARIANT = "regular";
 
 const FULLSCREEN = true;
 var   POSITION = "";
@@ -128,7 +143,7 @@ function drawAllMoves(imgs, canvas, ctx, theme, bggeom, moves) {
         fry = (canvas.height * theme.centers[fri][1] / bggeom[1]);
         tox = (canvas.width  * theme.centers[toi][0] / bggeom[0]);
         toy = (canvas.height * theme.centers[toi][1] / bggeom[1]);
-        drawLineWithArrows(ctx,frx,fry,tox,toy,e.moveValue,canvas.width/60,canvas.width/60,canvas.width/40,false,true);
+        drawLineWithArrows(ctx,frx,fry,tox,toy,e.moveValue,canvas.width/150,canvas.width/150,canvas.width/100,false,true);
       } else {
         i = +moveA[2];
         x = (canvas.width  * theme.centers[i][0] / bggeom[0]);
@@ -510,6 +525,807 @@ setup_JSON_text["tootnottopy"] = `{
   "status": "ok"
 }`;
 
+setup_JSON_text["3spot"] = `{
+  "response": {
+    "gameId": "3spot",
+    "instructions": null,
+    "name": "3spot",
+    "variants": [
+      {
+        "description": "6x5",
+        "startPosition": "R_A_6_5_----------R-W-B-----R-W-B00-00", 
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 10, 10 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/3spot/grid.svg",
+              "centers": [
+                [3.5,2.5],
+                [4,2.5],
+                [4.5,2.5],
+                [5,2.5],
+                [5.5,2.5],
+
+                [3.5,3],
+                [0,0],
+                [4.5,3],
+                [0,0],
+                [5.5,3],
+
+                [3.5,3.5],
+                [4,3.5],
+                [4.5,3.5],
+                [5,3.5],
+                [5.5,3.5],
+
+                [3.5,4],
+                [0,0],
+                [4.5,4],
+                [0,0],
+                [5.5,4],
+
+                [3.5,4.5],
+                [4,4.5],
+                [4.5,4.5],
+                [5,4.5],
+                [5.5,4.5],
+
+                [3.3,5.5],
+                [3.6,5.5],
+                [0,0],
+                [5.3,5.5],
+                [5.6,5.5]
+              ],
+              "pieces": {
+                "R": {
+                  "image": "svg/3spot/R.svg",
+                  "scale": 1.0
+                },
+                "W": {
+                  "image": "svg/3spot/W.svg",
+                  "scale": 1.0
+                },
+                "B": {
+                  "image": "svg/3spot/B.svg",
+                  "scale": 1.0
+                },
+                "-": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "0": {
+                  "image": "svg/3spot/0.svg",
+                  "scale": 1.0
+                },
+                "1": {
+                  "image": "svg/3spot/1.svg",
+                  "scale": 1.0
+                },
+                "2": {
+                  "image": "svg/3spot/2.svg",
+                  "scale": 1.0
+                },
+                "3": {
+                  "image": "svg/3spot/3.svg",
+                  "scale": 1.0
+                },
+                "4": {
+                  "image": "svg/3spot/4.svg",
+                  "scale": 1.0
+                },
+                "5": {
+                  "image": "svg/3spot/5.svg",
+                  "scale": 1.0
+                },
+                "6": {
+                  "image": "svg/3spot/6.svg",
+                  "scale": 1.0
+                },
+                "7": {
+                  "image": "svg/3spot/7.svg",
+                  "scale": 1.0
+                },
+                "8": {
+                  "image": "svg/3spot/8.svg",
+                  "scale": 1.0
+                },
+                "9": {
+                  "image": "svg/3spot/9.svg",
+                  "scale": 1.0
+                },
+                "o": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "a": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "b": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "c": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "d": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "e": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "f": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "g": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "h": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "i": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "j": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "k": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "l": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "m": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "n": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                },
+                "p": {
+                  "image": "svg/3spot/null.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["ctoi"] = `{
+  "response": {
+    "gameId": "ctoi",
+    "instructions": null,
+    "name": "ctoi",
+    "variants": [
+      {
+        "description": "6x3",
+        "startPosition": "R_A_6_3_------------------", 
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 10, 10 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/ctoi/grid.svg",
+              "centers": [
+                [3.5,2.5],
+                [4.5,2.5],
+                [5.5,2.5],
+
+                [3.5,3.5],
+                [4.5,3.5],
+                [5.5,3.5],
+
+                [3.5,4.5],
+                [4.5,4.5],
+                [5.5,4.5],
+
+                [0,0],
+                [0,0],
+                [0,0],
+
+                [3.8,6],
+                [5.2,6],
+                [0,0],
+
+                [3.8,6.6],
+                [5.2,6.6],
+                [0,0]
+              ],
+              "pieces": {
+                "R": {
+                  "image": "svg/ctoi/R.svg",
+                  "scale": 1.0
+                },
+                "W": {
+                  "image": "svg/ctoi/W.svg",
+                  "scale": 1.0
+                },
+                "T": {
+                  "image": "svg/ctoi/T.svg",
+                  "scale": 1.0
+                },
+                "X": {
+                  "image": "svg/ctoi/X.svg",
+                  "scale": 1.0
+                },
+                "t": {
+                  "image": "svg/ctoi/tt.svg",
+                  "scale": 1.0
+                },
+                "x": {
+                  "image": "svg/ctoi/xx.svg",
+                  "scale": 1.0
+                },
+                "-": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "0": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "1": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "2": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "3": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "4": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "5": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "6": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "7": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "8": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                },
+                "9": {
+                  "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["tttwo"] = `{
+  "response": {
+    "gameId": "tttwo",
+    "instructions": null,
+    "name": "tttwo",
+    "variants": [
+      {
+        "description": "6x5",
+        "startPosition": "R_A_6_5_------------s------------44---", 
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 11, 11 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/tttwo/grid.svg",
+              "centers": [
+                [3.4,1.4],
+                [4.4,1.4],
+                [5.4,1.4],
+                [6.4,1.4],
+                [7.4,1.4],
+
+                [3.4,2.4],
+                [4.4,2.4],
+                [5.4,2.4],
+                [6.4,2.4],
+                [7.4,2.4],
+
+                [3.4,3.4],
+                [4.4,3.4],
+                [5.4,3.4],
+                [6.4,3.4],
+                [7.4,3.4],
+
+                [3.4,4.4],
+                [4.4,4.4],
+                [5.4,4.4],
+                [6.4,4.4],
+                [7.4,4.4],
+
+                [3.4,5.4],
+                [4.4,5.4],
+                [5.4,5.4],
+                [6.4,5.4],
+                [7.4,5.4],
+
+                [3.4,6.4],
+                [7.4,6.4],
+                [99,99],
+                [99,99],
+                [5.4,6.4]
+              ],
+              "pieces": {
+                "a": {
+                  "image": "svg/tttwo/a.svg",
+                  "scale": 3.0
+                },
+                "b": {
+                  "image": "svg/tttwo/b.svg",
+                  "scale": 3.0
+                },
+                "s": {
+                  "image": "svg/tttwo/s.svg",
+                  "scale": 3.0
+                },
+                "X": {
+                  "image": "svg/tttwo/X.svg",
+                  "scale": 3.0
+                },
+                "O": {
+                  "image": "svg/tttwo/O.svg",
+                  "scale": 3.0
+                },
+                "-": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                },
+                "G": {
+                  "image": "svg/tttwo/s.svg",
+                  "scale": 1.0
+                },
+                "0": {
+                  "image": "svg/tttwo/0.svg",
+                  "scale": 1.0
+                },
+                "1": {
+                  "image": "svg/tttwo/1.svg",
+                  "scale": 1.0
+                },
+                "2": {
+                  "image": "svg/tttwo/2.svg",
+                  "scale": 1.0
+                },
+                "3": {
+                  "image": "svg/tttwo/3.svg",
+                  "scale": 1.0
+                },
+                "4": {
+                  "image": "svg/tttwo/4.svg",
+                  "scale": 1.0
+                },
+                "5": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                },
+                "6": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                },
+                "7": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                },
+                "8": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                },
+                "9": {
+                  "image": "svg/tttwo/null.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["Lgame"] = `{
+  "response": {
+    "gameId": "Lgame",
+    "instructions": null,
+    "name": "Lgame",
+    "variants": [
+      {
+        "description": "6x5",
+        "startPosition": "R_A_8_12_----WRR----------BR----------BR-----aa---BBG-aaa--1-----2---3--------------5-----6--------------", 
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 10, 10 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/Lgame/grid.svg",
+              "centers": [
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [3.5,1.5],
+                [4.5,1.5],
+                [5.5,1.5],
+                [6.5,1.5],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [3.5,2.5],
+                [4.5,2.5],
+                [5.5,2.5],
+                [6.5,2.5],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [3.5,3.5],
+                [4.5,3.5],
+                [5.5,3.5],
+                [6.5,3.5],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [3.5,4.5],
+                [4.5,4.5],
+                [5.5,4.5],
+                [6.5,4.5],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [3.2,1.2],
+                [4.2,1.2],
+                [5.2,1.2],
+                [3.2,2.2],
+                [4.2,2.2],
+                [5.2,2.2],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99]
+              ],
+              "pieces": {
+                "B": {
+                  "image": "svg/Lgame/B.svg",
+                  "scale": 1.0
+                },
+                "R": {
+                  "image": "svg/Lgame/R.svg",
+                  "scale": 1.0
+                },
+                "W": {
+                  "image": "svg/Lgame/S1.svg",
+                  "scale": 1.0
+                },
+                "G": {
+                  "image": "svg/Lgame/S2.svg",
+                  "scale": 1.0
+                },
+                "-": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "1": {
+                  "image": "svg/Lgame/L1.svg",
+                  "scale": 0.6
+                },
+                "2": {
+                  "image": "svg/Lgame/L2.svg",
+                  "scale": 1.0
+                },
+                "3": {
+                  "image": "svg/Lgame/L3.svg",
+                  "scale": 1.0
+                },
+                "4": {
+                  "image": "svg/Lgame/L4.svg",
+                  "scale": 1.0
+                },
+                "5": {
+                  "image": "svg/Lgame/L5.svg",
+                  "scale": 1.0
+                },
+                "6": {
+                  "image": "svg/Lgame/L6.svg",
+                  "scale": 1.0
+                },
+                "7": {
+                  "image": "svg/Lgame/L7.svg",
+                  "scale": 1.0
+                },
+                "8": {
+                  "image": "svg/Lgame/L8.svg",
+                  "scale": 1.0
+                },
+                "a": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "b": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "c": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "d": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "e": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "f": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "g": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "h": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "i": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "j": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "k": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "l": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "m": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "n": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                },
+                "p": {
+                  "image": "svg/Lgame/null.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["baghchal"] = `{
+  "response": {
+    "gameId": "baghchal",
+    "instructions": null,
+    "name": "baghchal",
+    "variants": [
+      {
+        "description": "baghchal",
+        "startPosition": "R_A_6_5_T---T---------------T---T20-00",
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 10, 10 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/baghchal/grid5Diag.svg",
+              "centers": [
+                [3,1],
+                [4,1],
+                [5,1],
+                [6,1],
+                [7,1],
+
+                [3,2],
+                [4,2],
+                [5,2],
+                [6,2],
+                [7,2],
+
+                [3,3],
+                [4,3],
+                [5,3],
+                [6,3],
+                [7,3],
+
+                [3,4],
+                [4,4],
+                [5,4],
+                [6,4],
+                [7,4],
+
+                [3,5],
+                [4,5],
+                [5,5],
+                [6,5],
+                [7,5],
+
+                [5.3,5.6],
+                [5.5,5.6],
+                [99,99],
+                [5.35,6],
+                [5.55,6]
+              ],
+              "pieces": {
+                "G": {
+                  "image": "svg/baghchal/G.png",
+                  "scale": 0.75
+                },
+                "T": {
+                  "image": "svg/baghchal/T.png",
+                  "scale": 0.75
+                },
+                "-": {
+                  "image": "svg/baghchal/-.svg",
+                  "scale": 3.0
+                },
+                "0": {
+                  "image": "svg/baghchal/0.svg",
+                  "scale": 1.3
+                },
+                "1": {
+                  "image": "svg/baghchal/1.svg",
+                  "scale": 1.3
+                },
+                "2": {
+                  "image": "svg/baghchal/2.svg",
+                  "scale": 1.3
+                },
+                "3": {
+                  "image": "svg/baghchal/3.svg",
+                  "scale": 1.3
+                },
+                "4": {
+                  "image": "svg/baghchal/4.svg",
+                  "scale": 1.3
+                },
+                "5": {
+                  "image": "svg/baghchal/5.svg",
+                  "scale": 1.3
+                },
+                "6": {
+                  "image": "svg/baghchal/6.svg",
+                  "scale": 1.3
+                },
+                "7": {
+                  "image": "svg/baghchal/7.svg",
+                  "scale": 1.3
+                },
+                "8": {
+                  "image": "svg/baghchal/8.svg",
+                  "scale": 1.3
+                },
+                "9": {
+                  "image": "svg/baghchal/9.svg",
+                  "scale": 1.3
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
 function renderAll(imgs, lastCallback) {
   // Usage: 
   // renderAll(imgs, lastCallback);
@@ -571,7 +1387,8 @@ function drawPosition(UWAPIpos) {
     // ...then queue up the pieces...
     queueAllPieces(imgs, canvas, ctx, theme, bggeom, position);
 
-    const json = BlockingGet("https://nyc.cs.berkeley.edu/universal/v1/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
+    //const json = BlockingGet("https://nyc.cs.berkeley.edu/universal/v1/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
+    const json = BlockingGet("http://localhost:8082/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
     // ...then the moves, the last to draw on the screen...
     var lastToDraw = () => {drawAllMoves(imgs, canvas, ctx, theme, bggeom, json.response.moves);};
     renderAll(imgs,lastToDraw);
