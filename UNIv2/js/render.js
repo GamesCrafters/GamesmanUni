@@ -1,7 +1,7 @@
 //const GAME    = "tootnottopy";
-//const VARIANT = "6"; 
+//const VARIANT = "6";
 
-// const GAME    = "369mm";
+//const GAME    = "369mm";
 // const VARIANT = "regular"; 
 
 // const GAME    = "minitoadspy";
@@ -19,7 +19,10 @@
 //const GAME    = "Lgame";
 //const VARIANT = "regular";
 
-const GAME    = "baghchal";
+//const GAME    = "baghchal";
+//const VARIANT = "regular";
+
+const GAME    = "topitop";
 const VARIANT = "regular";
 
 const FULLSCREEN = true;
@@ -728,6 +731,10 @@ setup_JSON_text["ctoi"] = `{
             "regular": {
               "backgroundImage": "svg/ctoi/grid.svg",
               "centers": [
+                [3.5,1.5],
+                [4.5,1.5],
+                [5.5,1.5],
+
                 [3.5,2.5],
                 [4.5,2.5],
                 [5.5,2.5],
@@ -736,21 +743,17 @@ setup_JSON_text["ctoi"] = `{
                 [4.5,3.5],
                 [5.5,3.5],
 
-                [3.5,4.5],
-                [4.5,4.5],
-                [5.5,4.5],
+                [99,99],
+                [99,99],
+                [99,99],
 
-                [0,0],
-                [0,0],
-                [0,0],
-
-                [3.8,6],
-                [5.2,6],
+                [3.8,5],
+                [5.2,5],
                 [0,0],
 
-                [3.8,6.6],
-                [5.2,6.6],
-                [0,0]
+                [3.8,5.6],
+                [5.2,5.6],
+                [99,99]
               ],
               "pieces": {
                 "R": {
@@ -819,6 +822,163 @@ setup_JSON_text["ctoi"] = `{
                 },
                 "9": {
                   "image": "svg/ctoi/null.svg",
+                  "scale": 1.0
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "status": "ok"
+}`;
+
+setup_JSON_text["topitop"] = `{
+  "response": {
+    "gameId": "topitop",
+    "instructions": null,
+    "name": "topitop",
+    "variants": [
+      {
+        "description": "topitop",
+        "startPosition": "R_A_8_5_-------------------------B2-R2S4-L4---B-",
+        "status": "dev",
+        "variantId": "regular",
+        "themes": {
+          "defaultTheme": "regular",
+          "backgroundGeometry": [ 10, 10 ],
+          "assets": {
+            "regular": {
+              "backgroundImage": "svg/topitop/grid.svg",
+              "centers": [
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+
+                [99,99],
+                [3.5,1.5],
+                [4.5,1.5],
+                [5.5,1.5],
+                [99,99],
+
+                [99,99],
+                [3.5,2.5],
+                [4.5,2.5],
+                [5.5,2.5],
+                [99,99],
+
+                [99,99],
+                [3.5,3.5],
+                [4.5,3.5],
+                [5.5,3.5],
+                [99,99],
+
+                [99,99],
+                [99,99],
+                [7,4.5],
+                [99,99],
+                [99,99],
+
+                [3,4.5],
+                [3,5.2],
+                [99,99],
+                [4,4.5],
+                [4,5.2],
+
+                [5,4.5],
+                [5,5.2],
+                [99,99],
+                [6,4.5],
+                [6,5.2],
+
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99],
+                [99,99]
+              ],
+              "pieces": {
+                "-": {
+                  "image": "svg/topitop/-.svg",
+                  "scale": 1.0
+                },
+                "0": {
+                  "image": "svg/topitop/0.svg",
+                  "scale": 1.0
+                },
+                "1": {
+                  "image": "svg/topitop/1.svg",
+                  "scale": 1.0
+                },
+                "2": {
+                  "image": "svg/topitop/2.svg",
+                  "scale": 1.0
+                },
+                "3": {
+                  "image": "svg/topitop/3.svg",
+                  "scale": 1.0
+                },
+                "4": {
+                  "image": "svg/topitop/4.svg",
+                  "scale": 1.0
+                },
+                "5": {
+                  "image": "svg/topitop/5.svg",
+                  "scale": 1.0
+                },
+                "6": {
+                  "image": "svg/topitop/6.svg",
+                  "scale": 1.0
+                },
+                "7": {
+                  "image": "svg/topitop/7.svg",
+                  "scale": 1.0
+                },
+                "8": {
+                  "image": "svg/topitop/8.svg",
+                  "scale": 1.0
+                },
+                "9": {
+                  "image": "svg/topitop/9.svg",
+                  "scale": 1.0
+                },
+                "B": {
+                  "image": "svg/topitop/B.svg",
+                  "scale": 1.0
+                },
+                "R": {
+                  "image": "svg/topitop/R.svg",
+                  "scale": 1.0
+                },
+                "S": {
+                  "image": "svg/topitop/S.svg",
+                  "scale": 1.0
+                },
+                "L": {
+                  "image": "svg/topitop/L.svg",
+                  "scale": 1.0
+                },
+                "X": {
+                  "image": "svg/topitop/X.svg",
+                  "scale": 1.0
+                },
+                "O": {
+                  "image": "svg/topitop/O.svg",
+                  "scale": 1.0
+                },
+                "C": {
+                  "image": "svg/topitop/C.svg",
+                  "scale": 1.0
+                },
+                "P": {
+                  "image": "svg/topitop/P.svg",
+                  "scale": 1.0
+                },
+                "Q": {
+                  "image": "svg/topitop/Q.svg",
                   "scale": 1.0
                 }
               }
