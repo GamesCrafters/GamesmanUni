@@ -2,10 +2,10 @@
 //const VARIANT = "6";
 
 //const GAME    = "369mm";
-// const VARIANT = "regular"; 
+//const VARIANT = "regular";
 
-// const GAME    = "minitoadspy";
-// const VARIANT = "easy"; // "misere" or "easy" 
+//const GAME    = "minitoadspy";
+//const VARIANT = "easy"; // "misere" or "easy"
 
 //const GAME    = "3spot";
 //const VARIANT = "regular";
@@ -16,28 +16,32 @@
 //const GAME    = "tttwo";
 //const VARIANT = "regular";
 
-//const GAME    = "Lgame";
-//const VARIANT = "regular";
+const GAME    = "Lgame";
+const VARIANT = "regular";
 
 //const GAME    = "baghchal";
 //const VARIANT = "regular";
 
-const GAME    = "topitop";
-const VARIANT = "regular";
+//const GAME    = "topitop";
+//const VARIANT = "regular";
 
 const FULLSCREEN = true;
 var   POSITION = "";
 
-const valToColor = {"win":"#008000","lose":"#800000","tie":"#FFFF00"}
+const HIDE_SPOILERS = false;
+if (HIDE_SPOILERS) {
+    alert("Spoiler protection is ON. To disable, turn off HIDE_SPOILERS.")
+}
+const valToColor = (HIDE_SPOILERS ? {"win":"#6A0DAD","lose":"#6A0DAD","tie":"#6A0DAD"} : {"win":"#008000","lose":"#800000","tie":"#FFFF00"});
 
-function BlockingGet(yourUrl){ // credit to https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-an-url/2499647#2499647
+function BlockingGet(yourUrl) { // credit to https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-an-url/2499647#2499647
   const request = new XMLHttpRequest(); // a new request
   request.open("GET",yourUrl,false);
   request.send(); 
   return JSON.parse(request.responseText);
 }
 
-function BrokenAsyncGet(yourUrl){ // credit to https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-an-url/2499647#2499647
+function BrokenAsyncGet(yourUrl) { // credit to https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-an-url/2499647#2499647
   const getTodos = (callback) => {
 
     const request = new XMLHttpRequest(); // a new request
@@ -68,7 +72,7 @@ function BrokenAsyncGet(yourUrl){ // credit to https://stackoverflow.com/questio
   });
 }
 
-function drawLineWithArrows(ctx,x0,y0,x1,y1,value,lWidth,aWidth,aLength,arrowStart,arrowEnd){
+function drawLineWithArrows(ctx,x0,y0,x1,y1,value,lWidth,aWidth,aLength,arrowStart,arrowEnd) {
   // Thanks to: https://riptutorial.com/html5-canvas/example/18136/line-with-arrowheads
   // Usage: 
   // drawLineWithArrows(ctx,50,50,150,50,5,8,true,true);
@@ -121,7 +125,9 @@ function drawCenteredCircle(ctx,x,y,r,value){
 
 function queueAllPieces(imgs, canvas, ctx, theme, bggeom, position) {
   // Then queue all the pieces for drawing by adding them to imgs array
-  position.split("").forEach((e,i) => {
+  position.split("")
+  .forEach((e,i) => {
+    if (!(e in theme.pieces)) { return; } // Skip every piece with undefined image
     filename = theme.pieces[e].image;
     scale = theme.pieces[e].scale;
     w = (canvas.width / bggeom[0]) * scale;
@@ -184,7 +190,7 @@ setup_JSON_text["minitoadspy"] = `{
               "backgroundImage": "svg/minitoadspy/board3x2.svg",
               "centers": [
                 [0.5, 0.5],
-                [1.5, 1.5], 
+                [1.5, 1.5],
                 [2.5, 0.5]
               ],
               "pieces": {
@@ -214,13 +220,13 @@ setup_JSON_text["minitoadspy"] = `{
 
         "themes": {
           "defaultTheme": "glass",
-          "backgroundGeometry": [3, 1], 
+          "backgroundGeometry": [3, 1],
           "assets": {
             "glass": {
               "backgroundImage": "svg/minitoadspy/board.svg",
               "centers": [
                 [0.5, 0.5],
-                [1.5, 0.5], 
+                [1.5, 0.5],
                 [2.5, 0.5]
               ],
               "pieces": {
@@ -254,7 +260,7 @@ setup_JSON_text["369mm"] = `{
     "variants": [
       {
         "description": "Standard 9 Men's Morris rules.",
-        "startPosition": "R_A_8_7_9-----9s--s--s-s-s-s---sss--sss-sss--sss---s-s-s-s--s--s", 
+        "startPosition": "R_A_8_7_9-----9-------------------------------------------------",
         "status": "dev",
         "variantId": "regular",
         "themes": {
@@ -322,14 +328,6 @@ setup_JSON_text["369mm"] = `{
                 [280, 260]
               ],
               "pieces": {
-                "s": {
-                  "image": "svg/369mm/s.svg",
-                  "scale": 1.0
-                },
-                "R": {
-                  "image": "svg/369mm/R.svg",
-                  "scale": 1.0
-                },
                 "0": {
                   "image": "svg/369mm/0.svg",
                   "scale": 100.0
@@ -370,11 +368,11 @@ setup_JSON_text["369mm"] = `{
                   "image": "svg/369mm/9.svg",
                   "scale": 100.0
                 },
-                "X": {
+                "B": {
                   "image": "svg/369mm/X.svg",
                   "scale": 130.0
                 },
-                "O": {
+                "W": {
                   "image": "svg/369mm/O.svg",
                   "scale": 130.0
                 },
@@ -638,70 +636,6 @@ setup_JSON_text["3spot"] = `{
                 "9": {
                   "image": "svg/3spot/9.svg",
                   "scale": 1.0
-                },
-                "o": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "a": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "b": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "c": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "d": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "e": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "f": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "g": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "h": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "i": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "j": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "k": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "l": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "m": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "n": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
-                },
-                "p": {
-                  "image": "svg/3spot/null.svg",
-                  "scale": 1.0
                 }
               }
             }
@@ -781,46 +715,6 @@ setup_JSON_text["ctoi"] = `{
                   "scale": 1.0
                 },
                 "-": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "0": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "1": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "2": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "3": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "4": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "5": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "6": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "7": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "8": {
-                  "image": "svg/ctoi/null.svg",
-                  "scale": 1.0
-                },
-                "9": {
                   "image": "svg/ctoi/null.svg",
                   "scale": 1.0
                 }
@@ -925,26 +819,6 @@ setup_JSON_text["topitop"] = `{
                   "image": "svg/topitop/4.svg",
                   "scale": 1.0
                 },
-                "5": {
-                  "image": "svg/topitop/5.svg",
-                  "scale": 1.0
-                },
-                "6": {
-                  "image": "svg/topitop/6.svg",
-                  "scale": 1.0
-                },
-                "7": {
-                  "image": "svg/topitop/7.svg",
-                  "scale": 1.0
-                },
-                "8": {
-                  "image": "svg/topitop/8.svg",
-                  "scale": 1.0
-                },
-                "9": {
-                  "image": "svg/topitop/9.svg",
-                  "scale": 1.0
-                },
                 "B": {
                   "image": "svg/topitop/B.svg",
                   "scale": 1.0
@@ -980,6 +854,22 @@ setup_JSON_text["topitop"] = `{
                 "Q": {
                   "image": "svg/topitop/Q.svg",
                   "scale": 1.0
+                },
+                "b": {
+                  "image": "svg/topitop/bb.svg",
+                  "scale": 1.0
+                },
+                "r": {
+                  "image": "svg/topitop/rr.svg",
+                  "scale": 1.0
+                },
+                "s": {
+                  "image": "svg/topitop/ss.svg",
+                  "scale": 1.0
+                },
+                "l": {
+                  "image": "svg/topitop/ll.svg",
+                  "scale": 1.0
                 }
               }
             }
@@ -999,7 +889,7 @@ setup_JSON_text["tttwo"] = `{
     "variants": [
       {
         "description": "6x5",
-        "startPosition": "R_A_6_5_------------s------------44---", 
+        "startPosition": "R_A_6_5_------------s------------44---",
         "status": "dev",
         "variantId": "regular",
         "themes": {
@@ -1046,11 +936,11 @@ setup_JSON_text["tttwo"] = `{
                 [5.4,6.4]
               ],
               "pieces": {
-                "a": {
+                "x": {
                   "image": "svg/tttwo/a.svg",
                   "scale": 3.0
                 },
-                "b": {
+                "o": {
                   "image": "svg/tttwo/b.svg",
                   "scale": 3.0
                 },
@@ -1093,26 +983,6 @@ setup_JSON_text["tttwo"] = `{
                 "4": {
                   "image": "svg/tttwo/4.svg",
                   "scale": 1.0
-                },
-                "5": {
-                  "image": "svg/tttwo/null.svg",
-                  "scale": 1.0
-                },
-                "6": {
-                  "image": "svg/tttwo/null.svg",
-                  "scale": 1.0
-                },
-                "7": {
-                  "image": "svg/tttwo/null.svg",
-                  "scale": 1.0
-                },
-                "8": {
-                  "image": "svg/tttwo/null.svg",
-                  "scale": 1.0
-                },
-                "9": {
-                  "image": "svg/tttwo/null.svg",
-                  "scale": 1.0
                 }
               }
             }
@@ -1124,6 +994,8 @@ setup_JSON_text["tttwo"] = `{
   "status": "ok"
 }`;
 
+// R_A_8_12_----WRR----------BR----------BR-----aa---BBG-aaa--1-----2---3--------------5-----6--------------
+// R_A_8_12_----WRR----------BR----------BR-----aa---BBG-aaa111111222222333333444444555555666666777777888888
 setup_JSON_text["Lgame"] = `{
   "response": {
     "gameId": "Lgame",
@@ -1132,7 +1004,7 @@ setup_JSON_text["Lgame"] = `{
     "variants": [
       {
         "description": "6x5",
-        "startPosition": "R_A_8_12_----WRR----------BR----------BR-----aa---BBG-aaa--1-----2---3--------------5-----6--------------", 
+        "startPosition": "R_A_8_12_----WRR----------BR----------BR-----aa---BBG-aaa--1-----2---3--------------5-----6--------------",
         "status": "dev",
         "variantId": "regular",
         "themes": {
@@ -1194,57 +1066,57 @@ setup_JSON_text["Lgame"] = `{
                 [99,99],
                 [99,99],
 
-                [3.2,1.2],
-                [4.2,1.2],
-                [5.2,1.2],
-                [3.2,2.2],
-                [4.2,2.2],
-                [5.2,2.2],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
+                [3.15,1.15],
+                [4.15,1.15],
+                [5.15,1.15],
+                [3.15,2.15],
+                [4.15,2.15],
+                [5.15,2.15],
+                [4.85,1.15],
+                [5.85,1.15],
+                [6.85,1.15],
+                [4.85,2.15],
+                [5.85,2.15],
+                [6.85,2.15],
 
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
+                [6.85,1.75],
+                [6.85,2.75],
+                [6.85,3.15],
+                [5.85,1.75],
+                [5.85,2.75],
+                [5.85,3.15],
+                [6.375,2.85],
+                [6.375,3.85],
+                [6.375,4.85],
+                [5.375,2.85],
+                [5.375,3.25],
+                [5.85,4.25],
 
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
+                [6.85,4.85],
+                [5.85,4.85],
+                [4.85,4.85],
+                [6.85,3.85],
+                [5.85,3.85],
+                [4.85,3.85],
+                [5.15,4.85],
+                [4.15,4.85],
+                [3.15,4.85],
+                [5.15,3.85],
+                [4.15,3.85],
+                [3.15,3.85],
 
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99],
-                [99,99]
+                [3.625,4.85],
+                [3.625,3.85],
+                [3.625,2.85],
+                [4.15,4.25],
+                [4.625,3.25],
+                [4.625,2.85],
+                [3.15,3.15],
+                [3.15,2.75],
+                [3.15,1.75],
+                [4.15,3.15],
+                [4.15,2.75],
+                [4.15,1.75]
               ],
               "pieces": {
                 "B": {
@@ -1273,31 +1145,31 @@ setup_JSON_text["Lgame"] = `{
                 },
                 "2": {
                   "image": "svg/Lgame/L2.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "3": {
                   "image": "svg/Lgame/L3.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "4": {
                   "image": "svg/Lgame/L4.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "5": {
                   "image": "svg/Lgame/L5.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "6": {
                   "image": "svg/Lgame/L6.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "7": {
                   "image": "svg/Lgame/L7.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "8": {
                   "image": "svg/Lgame/L8.svg",
-                  "scale": 1.0
+                  "scale": 0.6
                 },
                 "a": {
                   "image": "svg/Lgame/null.svg",
@@ -1369,6 +1241,9 @@ setup_JSON_text["Lgame"] = `{
   "status": "ok"
 }`;
 
+// Goat and Tiger pngs from
+// https://www.misskatecuttables.com/products/zoo-wild-animals/freebie-of-the-day-baby-tiger
+// https://www.misskatecuttables.com/products/product/baby-goat
 setup_JSON_text["baghchal"] = `{
   "response": {
     "gameId": "baghchal",
