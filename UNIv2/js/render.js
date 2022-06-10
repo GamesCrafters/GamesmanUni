@@ -1422,8 +1422,8 @@ function drawPosition(UWAPIpos) {
     // ...then queue up the pieces...
     queueAllPieces(imgs, canvas, ctx, theme, bggeom, position);
 
-    //const json = BlockingGet("https://nyc.cs.berkeley.edu/universal/v1/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
-    const json = BlockingGet("http://localhost:8082/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
+    const json = BlockingGet("https://nyc.cs.berkeley.edu/universal/v1/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
+    //const json = BlockingGet("http://localhost:8082/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
     // ...then the moves, the last to draw on the screen...
     var lastToDraw = () => {drawAllMoves(imgs, canvas, ctx, theme, bggeom, json.response.moves);};
     renderAll(imgs,lastToDraw);

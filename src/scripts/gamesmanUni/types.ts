@@ -71,6 +71,7 @@ export type Moves = Record<string, Move>;
 export type Move = {
     deltaRemoteness: number;
     move: string;
+    moveName: string;
     moveValue: string;
     moveValueOpacity: number;
     position: string;
@@ -138,6 +139,7 @@ export type Round = {
     playerId: string;
     players: Array<string>;
     move: string;
+    moveName: string;
     moveValue: string;
     position: Position;
 };
