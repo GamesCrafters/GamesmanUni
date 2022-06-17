@@ -76,6 +76,7 @@ export type Position = Status & {
         moves: Array<{
             deltaRemoteness: number;
             move: string;
+            moveName: string;
             moveValue: string;
             position: string;
             positionValue: string;

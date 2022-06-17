@@ -52,7 +52,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     return app;
 };
 
-const formatMoves = (source: Array<{ deltaRemoteness: number; move: string; moveValue: string; position: string; positionValue: string; remoteness: number }>) => {
+const formatMoves = (source: Array<{ deltaRemoteness: number; move: string; moveName: string; moveValue: string; position: string; positionValue: string; remoteness: number }>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
     if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
     for (let i = 1; i < source.length; i++) {
@@ -179,7 +179,7 @@ export const generateComputerMove = (round: Types.Round) => {
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
-    if (currentPositionValue === "win" || "tie") {
+    if (currentPositionValue === "win" || currentPositionValue === "tie") {
         const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
     } else if (currentPositionValue === "lose") {
@@ -192,6 +192,11 @@ export const generateComputerMove = (round: Types.Round) => {
 export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.move = payload.move;
     app.currentMatch.round.moveValue = app.currentMatch.round.position.availableMoves[payload.move].moveValue;
+    if (app.currentMatch.round.position.availableMoves[payload.move].hasOwnProperty('moveName')) {
+        app.currentMatch.round.moveName = app.currentMatch.round.position.availableMoves[payload.move].moveName;
+    } else {
+        app.currentMatch.round.moveName = app.currentMatch.round.position.availableMoves[payload.move].move;
+    }
     for (let roundId = app.currentMatch.round.id; roundId <= Math.max(...Object.keys(app.currentMatch.rounds).map((roundId) => parseInt(roundId))); roundId++) delete app.currentMatch.rounds[roundId];
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     if (isEndOfMatch(app)) {

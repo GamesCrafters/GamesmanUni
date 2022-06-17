@@ -64,8 +64,8 @@
                 <!-- Move Coordinates -->
                 <template v-if="currentRoundId >= 2">
                     <template v-for="roundNumber in currentRoundId - 1" :key="roundNumber">
-                        <text class="move-coordinate" v-if="!isPuzzleGame && currentRounds[roundNumber].playerId === currentLeftPlayerId" :x="yCoordinateWidth / 2" :y="gridTop + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].move }}</text>
-                        <text class="move-coordinate" v-else :x="gridRight + yCoordinateWidth / 2" :y="gridTop + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].move }}</text>
+                        <text class="move-coordinate" v-if="!isPuzzleGame && currentRounds[roundNumber].playerId === currentLeftPlayerId" :x="yCoordinateWidth / 2" :y="gridTop + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].moveName }}</text>
+                        <text class="move-coordinate" v-else :x="gridRight + yCoordinateWidth / 2" :y="gridTop + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle" text-anchor="middle">{{ currentRounds[roundNumber].moveName }}</text>
                     </template>
                     <template v-if="isEndOfMatch">
                         <template v-if="isPuzzleGame">
