@@ -21,6 +21,7 @@ export const defaultDataSources: Types.DataSources = {
 export const defaultAvailableMove: Types.Move = {
     deltaRemoteness: 0,
     move: "",
+    moveName: "",
     moveValue: "",
     moveValueOpacity: 1,
     position: "",
@@ -113,6 +114,7 @@ export const defaultRound: Types.Round = {
     playerId: "",
     players: [],
     move: "",
+    moveName: "",
     moveValue: "",
     position: { ...defaultPosition, availableMoves: {} },
 };

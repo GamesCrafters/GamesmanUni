@@ -124,7 +124,7 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
     app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
     app.currentMatch.startingPlayerId = app.currentMatch.players[0];
-    app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, players: [...app.currentMatch.players], move: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
+    app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, players: [...app.currentMatch.players], move: "", moveName: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
     app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     app.currentMatch.lastPlayed = new Date().getTime();
