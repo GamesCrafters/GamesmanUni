@@ -36,7 +36,7 @@
     },
     "license": "AGPL-3.0-or-later",
     "name": "gamesmanuni",
-    "packageManager": "yarn@3.2.0",
+    "packageManager": "yarn@3.2.1",
     "pre-commit": [],
     "private": true,
     "repository": "git@github.com:GamesCrafters/GamesmanUni.git",
@@ -47,5 +47,5 @@
         "preview:https": "serve dist",
         "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
     },
-    "version": "5.0.0-alpha.156"
+    "version": "5.0.0-alpha.157"
 }
