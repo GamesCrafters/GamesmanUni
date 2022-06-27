@@ -1,16 +1,23 @@
 {
     "compilerOptions": {
+        "declaration": true,
+        "emitDecoratorMetadata": true,
         "esModuleInterop": true,
+        "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
         "jsx": "preserve",
         "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
         "module": "ESNext",
         "moduleResolution": "Node",
         "resolveJsonModule": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
         "target": "ESNext",
         "types": ["vite/client", "@intlify/vite-plugin-vue-i18n/client"]
     },
+    "exclude": ["node_modules"],
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"]
 }
