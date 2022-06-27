@@ -168,7 +168,13 @@
 8. Preview the production built of GamesmanUni locally.
 
     ```zsh
-    yarn serve
+    yarn preview
+    ```
+
+9. Preview the production built of GamesmanUni served with https locally to test PWA features.
+
+    ```zsh
+    yarn preview:https
     ```
 
 <!-- ####################################################################### -->
