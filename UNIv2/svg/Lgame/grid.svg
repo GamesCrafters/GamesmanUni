@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
      y="0px"
-     viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
-    <rect x="30" y="10" width="40" height="40" stroke="black" stroke-width="1" fill="#BBBBBB"/>
+     viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+    <rect x="0" y="0" width="40" height="40" stroke="black" stroke-width="1" fill="#BBBBBB"/>
 
-    <line x1="30" y1="20" x2="70" y2="20" stroke="black" stroke-width="1"/>
-    <line x1="30" y1="30" x2="70" y2="30" stroke="black" stroke-width="1"/>
-    <line x1="30" y1="40" x2="70" y2="40" stroke="black" stroke-width="1"/>
+    <line x1="0" y1="10" x2="40" y2="10" stroke="black" stroke-width="1"/>
+    <line x1="0" y1="20" x2="40" y2="20" stroke="black" stroke-width="1"/>
+    <line x1="0" y1="30" x2="40" y2="30" stroke="black" stroke-width="1"/>
 
-    <line x1="40" y1="10" x2="40" y2="50" stroke="black" stroke-width="1"/>
-    <line x1="50" y1="10" x2="50" y2="50" stroke="black" stroke-width="1"/>
-    <line x1="60" y1="10" x2="60" y2="50" stroke="black" stroke-width="1"/>
+    <line x1="10" y1="0" x2="10" y2="40" stroke="black" stroke-width="1"/>
+    <line x1="20" y1="0" x2="20" y2="40" stroke="black" stroke-width="1"/>
+    <line x1="30" y1="0" x2="30" y2="40" stroke="black" stroke-width="1"/>
 </svg>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+	 viewBox="0 0 56 56" style="enable-background:new 0 0 56 56;" xml:space="preserve">
 
-    <line x1="20" y1="1.5" x2="20" y2="58.5" stroke="blue" stroke-width="3" />
-    <line x1="40" y1="1.5" x2="40" y2="58.5" stroke="blue" stroke-width="3" />
-    <line x1="1.5" y1="20" x2="58.5" y2="20" stroke="blue" stroke-width="3" />
-    <line x1="1.5" y1="40" x2="58.5" y2="40" stroke="blue" stroke-width="3" />
+    <rect x="16" y="0" width="4" height="56" fill="#0000FF"/>
+    <rect x="36" y="0" width="4" height="56" fill="#0000FF"/>
+
+    <rect x="0" y="16" width="56" height="4" fill="#0000FF"/>
+    <rect x="0" y="36" width="56" height="4" fill="#0000FF"/>
 </svg>
