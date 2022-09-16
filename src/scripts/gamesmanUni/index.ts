@@ -47,6 +47,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             description: variant.description,
             startPosition: variant.startPosition,
             positions: { ...Defaults.defaultPositions },
+            autogui_v2_data: variant.autogui_v2_data,
             status: variant.status,
         };
     return app;
@@ -139,6 +140,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: "",
         startPosition: "",
         positions: {},
+        autogui_v2_data: {},
         status: ""
     };
 
@@ -147,6 +149,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: payload.variantId,
         startPosition: variant_response.response.variant[0].startPosition,
         positions: { ...Defaults.defaultPositions },
+        autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
         status: variant_response.status,
     }
     return variant;

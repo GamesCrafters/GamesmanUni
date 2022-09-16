@@ -1,12 +1,12 @@
 <template>
     <component v-if="customGameBoardExists" :is="regular2DGameBoards[gameBoard]" />
-    <component v-else :is="AppGameBodyBoardFallback" />
+    <component v-else :is="AppGameBodyBoardFallbackV2" />
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-    import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue";
+    import AppGameBodyBoardFallbackV2 from "./AppGameBodyBoardFallbackV2.vue";
     import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";
 
     const store = useStore();

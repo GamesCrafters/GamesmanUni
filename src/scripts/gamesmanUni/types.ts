@@ -54,6 +54,7 @@ export type Variant = {
     description: string;
     startPosition: string;
     positions: Positions;
+    autogui_v2_data: object;
     status: string;
 };
 

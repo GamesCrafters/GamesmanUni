@@ -7,8 +7,8 @@
 //const GAME    = "minitoadspy";
 //const VARIANT = "easy"; // "misere" or "easy"
 
-//const GAME    = "3spot";
-//const VARIANT = "regular";
+const GAME    = "3spot";
+const VARIANT = "regular";
 
 //const GAME    = "ctoi";
 //const VARIANT = "regular";
@@ -16,8 +16,8 @@
 //const GAME    = "tttwo";
 //const VARIANT = "regular";
 
-const GAME    = "Lgame";
-const VARIANT = "regular";
+//const GAME    = "Lgame";
+//const VARIANT = "regular";
 
 //const GAME    = "baghchal";
 //const VARIANT = "regular";
@@ -539,46 +539,46 @@ setup_JSON_text["3spot"] = `{
         "variantId": "regular",
         "themes": {
           "defaultTheme": "regular",
-          "backgroundGeometry": [ 10, 10 ],
+          "backgroundGeometry": [ 3, 4 ],
           "assets": {
             "regular": {
               "backgroundImage": "svg/3spot/grid.svg",
               "centers": [
-                [3.5,2.5],
-                [4,2.5],
-                [4.5,2.5],
-                [5,2.5],
-                [5.5,2.5],
+                [0.5,0.5],
+                [1,0.5],
+                [1.5,0.5],
+                [2,0.5],
+                [2.5,0.5],
 
-                [3.5,3],
-                [0,0],
-                [4.5,3],
-                [0,0],
-                [5.5,3],
+                [0.5,1],
+                [1,1],
+                [1.5,1],
+                [2,1],
+                [2.5,1],
 
-                [3.5,3.5],
-                [4,3.5],
-                [4.5,3.5],
-                [5,3.5],
-                [5.5,3.5],
+                [0.5,1.5],
+                [1,1.5],
+                [1.5,1.5],
+                [2,1.5],
+                [2.5,1.5],
 
-                [3.5,4],
-                [0,0],
-                [4.5,4],
-                [0,0],
-                [5.5,4],
+                [0.5,2.0],
+                [1,2.0],
+                [1.5,2.0],
+                [2,2.0],
+                [2.5,2.0],
 
-                [3.5,4.5],
-                [4,4.5],
-                [4.5,4.5],
-                [5,4.5],
-                [5.5,4.5],
+                [0.5,2.5],
+                [1,2.5],
+                [1.5,2.5],
+                [2,2.5],
+                [2.5,2.5],
 
-                [3.3,5.5],
-                [3.6,5.5],
-                [0,0],
-                [5.3,5.5],
-                [5.6,5.5]
+                [0.3,3.5],
+                [0.7,3.5],
+                [-1,-1],
+                [2.3,3.5],
+                [2.7,3.5]
               ],
               "pieces": {
                 "R": {
@@ -599,43 +599,43 @@ setup_JSON_text["3spot"] = `{
                 },
                 "0": {
                   "image": "svg/3spot/0.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "1": {
                   "image": "svg/3spot/1.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "2": {
                   "image": "svg/3spot/2.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "3": {
                   "image": "svg/3spot/3.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "4": {
                   "image": "svg/3spot/4.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "5": {
                   "image": "svg/3spot/5.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "6": {
                   "image": "svg/3spot/6.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "7": {
                   "image": "svg/3spot/7.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "8": {
                   "image": "svg/3spot/8.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 },
                 "9": {
                   "image": "svg/3spot/9.svg",
-                  "scale": 1.0
+                  "scale": 2.0
                 }
               }
             }
@@ -1257,46 +1257,46 @@ setup_JSON_text["baghchal"] = `{
         "variantId": "regular",
         "themes": {
           "defaultTheme": "regular",
-          "backgroundGeometry": [ 10, 10 ],
+          "backgroundGeometry": [ 6, 7],
           "assets": {
             "regular": {
               "backgroundImage": "svg/baghchal/grid5Diag.svg",
               "centers": [
+                [1,1],
+                [2,1],
                 [3,1],
                 [4,1],
                 [5,1],
-                [6,1],
-                [7,1],
-
+                
+                [1,2],
+                [2,2],
                 [3,2],
                 [4,2],
                 [5,2],
-                [6,2],
-                [7,2],
 
+                [1,3],
+                [2,3],
                 [3,3],
                 [4,3],
                 [5,3],
-                [6,3],
-                [7,3],
-
+                
+                [1,4],
+                [2,4],
                 [3,4],
                 [4,4],
                 [5,4],
-                [6,4],
-                [7,4],
-
+                    
+                [1,5],
+                [2,5],
                 [3,5],
                 [4,5],
                 [5,5],
-                [6,5],
-                [7,5],
-
-                [5.3,5.6],
-                [5.5,5.6],
+                
+                [3.3,5.7],
+                [3.5,5.7],
                 [99,99],
-                [5.35,6],
-                [5.55,6]
+                [3.4,6.1],
+                [3.6,6.1]
               ],
               "pieces": {
                 "G": {
@@ -1424,6 +1424,7 @@ function drawPosition(UWAPIpos) {
 
     const json = BlockingGet("https://nyc.cs.berkeley.edu/universal/v1/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
     //const json = BlockingGet("http://localhost:8082/games/"+GAME+"/variants/"+VARIANT+"/positions/"+UWAPIpos);
+    // ...then the moves, the last to draw on the screen...
     // ...then the moves, the last to draw on the screen...
     var lastToDraw = () => {drawAllMoves(imgs, canvas, ctx, theme, bggeom, json.response.moves);};
     renderAll(imgs,lastToDraw);
