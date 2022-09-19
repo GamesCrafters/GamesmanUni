@@ -3,5 +3,6 @@
      y="0px"
      viewBox="0 0 25 25" style="enable-background:new 0 0 25 25;" xml:space="preserve">
 
-    <rect x="0" y="0" width="25" height="25" stroke="black" stroke-width="2" fill="red"/>
+    <rect x="0" y="0" width="25" height="25" fill="#DD0000"/>
+    <rect x="0.5" y="0.5" width="24" height="24" fill="red"/>
 </svg>
