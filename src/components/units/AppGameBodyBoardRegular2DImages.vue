@@ -1,9 +1,9 @@
 <template>
   <!--Render board only if the boardstring is valid i.e. is a "validRichPosition". -->
   <svg
-    v-if="richPositionData.validRichPosition" 
+    v-if="richPositionData.validRichPosition" id="app-game-body-board-regular-2d-images"
     xmlns="http://www.w3.org/2000/svg"
-    :viewBox="'-2 -2 104 ' + (theHeight + 4)" 
+    :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
     :data-turn="richPositionData.turn">
 
     <defs>
@@ -22,57 +22,59 @@
     </defs>
 
     <!-- Draw Background Image -->
-    <svg 
-      :width="100" 
-      :height="(theHeight)">
-      <image 
-        :width="100"
-        :height="(theHeight)"
-        :href=pathPrefix+backgroundImagePath />
-    </svg>
+    <image v-if="backgroundImagePath != ''"
+        :width="scaledWidth"
+        :height="scaledHeight"
+        :href=imagePathPrefix+backgroundImagePath />
 
     <!-- Draw Pieces on Board. -->
     <g v-for="(cell, i) in richPositionData.board"
       :key="'cell' + i"
-      :set="(coords = calcRegular2DBoardTopLeftCoords(i))">
+      :set="(coords = getRegular2DBoardCenterCoords(i))">
       <image
             v-if="cell.piece != '-' && cell.piece != '*' && Object.keys(pieces).includes(cell.piece)"
-            :x="(coords[0] - 0.5 * pieces[cell.piece].scale) * 100 / backgroundGeometry[0]"
-            :y="(coords[1] - 0.5 * pieces[cell.piece].scale) * 100 / backgroundGeometry[0]"
-            :width="(pieces[cell.piece].scale) * 100 / backgroundGeometry[0]"
-            :height="(pieces[cell.piece].scale) * 100 / backgroundGeometry[0]"
-            :href=pathPrefix+pieces[cell.piece].image />
+            :id="'piece' + i"
+            :x="(coords[0] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
+            :y="(coords[1] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
+            :width="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
+            :height="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
+            :href=imagePathPrefix+pieces[cell.piece].image />
     </g>
+ 
+    <!-- Draw Foreground Image -->
+    <image v-if="foregroundImagePath != ''"
+      :width="scaledWidth"
+      :height="scaledHeight"
+      :href=imagePathPrefix+foregroundImagePath />
 
     <!-- Draw A-type Moves. -->
     <g v-for="(cell, i) in richPositionData.board" 
       :key="'cell' + i"
-      :set="(coords = calcRegular2DBoardTopLeftCoords(i))">
+      :set="(coords = getRegular2DBoardCenterCoords(i))">
       <g v-if="cell.move">
 
         <!-- If no move token specified, use default move token (a circle). -->
         <circle
           v-if="cell.token == '-'"
-            :cx="coords[0] * 100 / backgroundGeometry[0]"
-            :cy="coords[1] * 100 / backgroundGeometry[0]"
+            :cx="coords[0] * scaledWidth / backgroundGeometry[0]"
+            :cy="coords[1] * scaledWidth / backgroundGeometry[0]"
             :r="2"
             :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            @click="!isComputerTurn && cell.move && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
             :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1 }">
               {{ cell.token }}
         </circle>
         
         <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-        
         <image
           v-else-if="Object.keys(pieces).includes(cell.token)"
-            :x="(coords[0] - 0.5 * pieces[cell.token].scale) * 100 / backgroundGeometry[0]"
-            :y="(coords[1] - 0.5 * pieces[cell.token].scale) * 100 / backgroundGeometry[0]"
-            :width="(pieces[cell.token].scale) * 100 / backgroundGeometry[0]"
-            :height="(pieces[cell.token].scale) * 100 / backgroundGeometry[0]"
-            :href=pathPrefix+pieces[cell.token].image
+            :x="(coords[0] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
+            :y="(coords[1] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
+            :width="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
+            :height="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
+            :href=imagePathPrefix+pieces[cell.token].image
             :class="'app-game-board-image-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            @click="!isComputerTurn && cell.move && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
             :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1 }">
               {{ cell.token }}
         </image>
@@ -80,9 +82,10 @@
     </g>
 
     <!-- Draw M-type (arrow) moves. -->
-    <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
+    <g v-for="(arrow, i) in richPositionData.arrows"
+      :key="'arrow' + i">
       <polyline
-        :points="formatArrowPolylinePoints(arrow, 100 / backgroundGeometry[0])"
+        :points="formatArrowPolylinePoints(arrow, scaledWidth / backgroundGeometry[0])"
         :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
         :style="{
@@ -134,12 +137,14 @@
   const gameId = computed(() => store.getters.currentGameId);
   const variantId = computed(() => store.getters.currentVariantId);
   const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data).value;
-  const backgroundGeometry = autoguiV2Data.backgroundGeometry;
   const defaultTheme = autoguiV2Data.defaultTheme;
-  const theHeight = backgroundGeometry[1] * 100 / backgroundGeometry[0];
-  const pathPrefix = "../../../UNIv2/";
   const theTheme = autoguiV2Data.themes[defaultTheme];
-  const backgroundImagePath = theTheme.backgroundImage;
+  const scaledWidth = 100;
+  const backgroundGeometry = theTheme.backgroundGeometry;
+  const scaledHeight = backgroundGeometry[1] * scaledWidth / backgroundGeometry[0];
+  const imagePathPrefix = "../../../src/models/images/svg/";
+  const backgroundImagePath = theTheme.backgroundImage || "";
+  const foregroundImagePath = theTheme.foregroundImage || "";
   const centers = theTheme.centers;
   const pieces = theTheme.pieces;
   /* End Code Cleanup Required Here */
@@ -152,18 +157,19 @@
       const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
       const board: GDefaultRegular2DBoardCell[] = matches[4].split("").map((piece) => ({ piece }));
       let arrows: GDefaultRegular2DBoardArrow[] = [];
-      for (let nextMoveData of Object.values(currentAvailableMoves.value)) {
+      for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
         const move = {
           str: nextMoveData.move,
           hint: nextMoveData.moveValue,
           hintOpacity: nextMoveData.moveValueOpacity,
         };
+
         let matches;
-        if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))) {
+        if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
           const to = parseInt(matches[2]);
           board[to].token = matches[1];
           board[to].move = move;
-        } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)$/))) {
+        } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({
             from: parseInt(matches[1]),
             to: parseInt(matches[2]),
@@ -174,7 +180,7 @@
         }
       }
       
-      const calcRegular2DBoardTopLeftCoords = (i: number): [number, number] => {
+      const getRegular2DBoardCenterCoords = (i: number): [number, number] => {
         return centers[i];
       };
       
@@ -183,10 +189,10 @@
       };
 
       const compareArrowSquaredLength = (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
-        const aFromCoords = calcRegular2DBoardTopLeftCoords(a.from);
-        const aToCoords = calcRegular2DBoardTopLeftCoords(a.to);
-        const bFromCoords = calcRegular2DBoardTopLeftCoords(b.from);
-        const bToCoords = calcRegular2DBoardTopLeftCoords(b.to);
+        const aFromCoords = getRegular2DBoardCenterCoords(a.from);
+        const aToCoords = getRegular2DBoardCenterCoords(a.to);
+        const bFromCoords = getRegular2DBoardCenterCoords(b.from);
+        const bToCoords = getRegular2DBoardCenterCoords(b.to);
         return computeSquaredLength(bFromCoords[0], bFromCoords[1], bToCoords[0], bToCoords[1]) - computeSquaredLength(aFromCoords[0], aFromCoords[1], aToCoords[0], aToCoords[1]);
       };
 
@@ -205,13 +211,13 @@
     }
   });
 
-  const calcRegular2DBoardTopLeftCoords = (i: number): [number, number] => {
+  const getRegular2DBoardCenterCoords = (i: number): [number, number] => {
     return centers[i];
   };
 
   const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, multiplier: number, startOffset: number = 2, endOffset: number = 3): string => {
-    let fromCoords = calcRegular2DBoardTopLeftCoords(arrow.from).map((a: number) => (a) * multiplier);
-    let toCoords = calcRegular2DBoardTopLeftCoords(arrow.to).map((a: number) => (a) * multiplier);
+    let fromCoords = getRegular2DBoardCenterCoords(arrow.from).map((a: number) => (a) * multiplier);
+    let toCoords = getRegular2DBoardCenterCoords(arrow.to).map((a: number) => (a) * multiplier);
     const dir = [toCoords[0] - fromCoords[0], toCoords[1] - fromCoords[1]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
     const startOffsetPct = startOffset / length;
@@ -224,6 +230,7 @@
   };
 
   const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
+  
   const getHintArrowMarker = (move?: GDefaultRegular2DMove): string => {
     if (!move) return "";
     if (options.value.showNextMoveHints) {
@@ -235,6 +242,11 @@
 </script>
 
 <style lang="scss" scoped>
+
+  #app-game-body-board-regular-2d-images {
+    height: 100%;
+    width: 100%;
+  }
 
   @keyframes pulsing-arrow {
     0% {
@@ -251,6 +263,16 @@
     }
     100% {
       r: 3;
+    }
+  }
+
+  // For now, just applies a filter on the image. Want to add pulsing animation later.
+  @keyframes pulsing-image {
+    0% {
+      filter: relative;
+    }
+    100% {
+      filter: var(--hoverFilter);
     }
   }
 
@@ -311,6 +333,14 @@
       &lose {
         filter: var(--loseFilter);
       }
+    }
+
+    &:hover {
+      animation-name: pulsing-image;
+      animation-duration: 0.3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
     }
   }
 
@@ -374,8 +404,8 @@
   }
 
   svg {
-    height: 15em;
-    width: 15em;
+    height: 20em;
+    width: 20em;
     margin: auto;
     vertical-align: middle;
   }

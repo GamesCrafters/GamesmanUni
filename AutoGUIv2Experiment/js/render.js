@@ -1,5 +1,5 @@
-//const GAME    = "tootnottopy";
-//const VARIANT = "6";
+const GAME    = "tootnottopy";
+const VARIANT = "6";
 
 //const GAME    = "369mm";
 //const VARIANT = "regular";
@@ -13,8 +13,8 @@
 //const GAME    = "ctoi";
 //const VARIANT = "regular";
 
-const GAME    = "tttwo";
-const VARIANT = "regular";
+//const GAME    = "tttwo";
+//const VARIANT = "regular";
 
 //const GAME    = "Lgame";
 //const VARIANT = "regular";

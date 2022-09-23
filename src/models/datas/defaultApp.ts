@@ -46,6 +46,7 @@ export const defaultVariant: Types.Variant = {
     description: "",
     startPosition: "",
     positions: {},
+    autogui_v2_data: null as any,
     status: "",
 };
 

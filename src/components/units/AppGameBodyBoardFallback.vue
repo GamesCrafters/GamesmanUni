@@ -113,7 +113,7 @@
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;
-      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)!;
+      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
       const validRichPosition = matches && matches.length >= 5;
 
       if (validRichPosition) {
@@ -121,10 +121,7 @@
         const numRows = parseInt(matches[2]);
         const numColumns = parseInt(matches[3]);
         const board: GDefaultRegular2DBoardCell[] = matches[4]
-            .replaceAll("x", "\u00D7")
-            .replaceAll("o", "\u25CB")
-            .replaceAll("B", "\u2B24")
-            .replaceAll("W", "\u25EF")
+            .slice(0, numRows * numColumns)
             .split("")
             .map((token) => ({ token }));
         let arrows: GDefaultRegular2DBoardArrow[] = [];
@@ -138,11 +135,7 @@
             if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))) {
                 // Add a piece to the board
                 const to = parseInt(matches[2]);
-                board[to].token = matches[1]
-                  .replaceAll("x", "\u00D7")
-                  .replaceAll("o", "\u25CB")
-                  .replaceAll("B", "\u2B24")
-                  .replaceAll("W", "\u25EF");
+                board[to].token = matches[1];
                 board[to].move = move;
             } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)$/))) {
                 // Move a piece
