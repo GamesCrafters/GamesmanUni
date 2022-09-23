@@ -25,7 +25,7 @@
     <image v-if="backgroundImagePath != ''"
         :width="scaledWidth"
         :height="scaledHeight"
-        :href=imagePathPrefix+backgroundImagePath />
+        :href="getLogoSource(backgroundImagePath)" />
 
     <!-- Draw Pieces on Board. -->
     <g v-for="(cell, i) in richPositionData.board"
@@ -38,14 +38,14 @@
             :y="(coords[1] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
             :width="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
             :height="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :href=imagePathPrefix+pieces[cell.piece].image />
+            :href="getLogoSource(pieces[cell.piece].image)" />
     </g>
  
     <!-- Draw Foreground Image -->
     <image v-if="foregroundImagePath != ''"
       :width="scaledWidth"
       :height="scaledHeight"
-      :href=imagePathPrefix+foregroundImagePath />
+      :href="getLogoSource(foregroundImagePath)" />
 
     <!-- Draw A-type Moves. -->
     <g v-for="(cell, i) in richPositionData.board" 
@@ -72,7 +72,7 @@
             :y="(coords[1] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
             :width="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
             :height="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :href=imagePathPrefix+pieces[cell.token].image
+            :href="getLogoSource(pieces[cell.token].image)"
             :class="'app-game-board-image-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
             :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1 }">
@@ -142,11 +142,22 @@
   const scaledWidth = 100;
   const backgroundGeometry = theTheme.backgroundGeometry;
   const scaledHeight = backgroundGeometry[1] * scaledWidth / backgroundGeometry[0];
-  const imagePathPrefix = "../../../src/models/images/svg/";
+  const imagePathPrefix = "../../models/images/svg/";
   const backgroundImagePath = theTheme.backgroundImage || "";
   const foregroundImagePath = theTheme.foregroundImage || "";
   const centers = theTheme.centers;
   const pieces = theTheme.pieces;
+  // Probably don't want ot reimport every time.
+  const gimages = import.meta.globEager("../../models/images/svg/**/*");
+
+  const getLogoSource = (imagePath: string) => {
+    try {
+      return gimages["../../models/images/svg/" + imagePath].default;
+    } catch (errorMessage) {
+      console.warn(`${imagePath} image does not exist yet.`);
+    }
+    return import.meta.globEager("../../models/images/logo-gamescrafters.png")["../../models/images/logo-gamescrafters.png"].default;
+  };
   /* End Code Cleanup Required Here */
 
   const richPositionData = computed(() => {

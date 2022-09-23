@@ -23,7 +23,7 @@
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);
-    const autoguiV2DataExists = false; //(autoguiV2Data != null);
+    const autoguiV2DataExists = (autoguiV2Data != null);
 </script>
 
 <style lang="scss" scoped>
