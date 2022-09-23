@@ -1,24 +1,29 @@
 <template>
     <component v-if="customGameBoardExists" :is="regular2DGameBoards[gameBoard]" />
+    <component v-else-if="autoguiV2DataExists" :is="AppGameBodyBoardRegular2DImages" />
     <component v-else :is="AppGameBodyBoardFallback" />
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-    import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue";
+    import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue"
+    import AppGameBodyBoardRegular2DImages from "./AppGameBodyBoardRegular2DImages.vue";
     import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";
 
     const store = useStore();
     const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
     const gameId = computed(() => (currentMatch.value ? currentMatch.value.gameId : ""));
     const variantId = computed(() => (currentMatch.value ? currentMatch.value.variantId : ""));
+    const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
+    const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data).value;
     const regular2DGameBoards: Record<string, any> = {
         "ttt-misere": AppGameBoardRegular2DTtt,
         "ttt-regular": AppGameBoardRegular2DTtt,
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);
+    const autoguiV2DataExists = (autoguiV2Data != null)
 </script>
 
 <style lang="scss" scoped>

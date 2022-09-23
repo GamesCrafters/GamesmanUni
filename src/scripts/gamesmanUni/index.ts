@@ -47,6 +47,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             description: variant.description,
             startPosition: variant.startPosition,
             positions: { ...Defaults.defaultPositions },
+            autogui_v2_data: variant.autogui_v2_data,
             status: variant.status,
         };
     return app;
@@ -139,6 +140,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: "",
         startPosition: "",
         positions: {},
+        autogui_v2_data: {},
         status: ""
     };
 
@@ -147,6 +149,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: payload.variantId,
         startPosition: variant_response.response.variant[0].startPosition,
         positions: { ...Defaults.defaultPositions },
+        autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
         status: variant_response.status,
     }
     return variant;
@@ -165,8 +168,10 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
 export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
-    if (Object.entries(app.currentMatch.rounds).length <= 1) return app;
-    if (!isEndOfMatch(app)) {
+    if (Object.entries(app.currentMatch.rounds).length <= 1) {
+        return app;
+    }
+    if (!isEndOfMatch(app)) { 
         app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = app.currentMatch.round;
         for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;

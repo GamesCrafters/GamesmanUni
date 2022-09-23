@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+     y="0px"
+     viewBox="-10 10 90 60" style="enable-background:new -10 10 90 60;" xml:space="preserve">
+
+    <path d="M20 30 h-10 c 2,-3 4,-4, 10,-5 h30 c 6,1 8,2, 10,5 h-10 v30 h10 v10 h-50 v-10 h10z
+      M22,35 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M32,35 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M42,35 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M22,45 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M32,45 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M42,45 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M22,55 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M32,55 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0
+      M42,55 a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0" stroke="black" stroke-width="0.25" fill="#5D3FD3" fill-rule="evenodd"/>
+
+</svg>

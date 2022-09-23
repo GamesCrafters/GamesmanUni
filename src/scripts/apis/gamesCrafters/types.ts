@@ -28,6 +28,7 @@ export type OnePlayerGameVariants = Status & {
                 description: string;
                 startPosition: string;
                 variantId: string;
+                autogui_v2_data: object;
             }
         >;
         custom: string;
@@ -53,6 +54,7 @@ export type TwoPlayerGameVariants = Status & {
                 description: string;
                 startPosition: string;
                 variantId: string;
+                autogui_v2_data: object;
             }
         >;
         custom: string;
@@ -66,6 +68,7 @@ export type GameVariant = Status & {
             description: string;
             startPosition: string;
             variantId: string;
+            autogui_v2_data: object;
         }
         >;
     }
