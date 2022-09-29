@@ -25,7 +25,7 @@
     <image v-if="backgroundImagePath != ''"
         :width="scaledWidth"
         :height="scaledHeight"
-        :href="getLogoSource(backgroundImagePath)" />
+        :href="getImageSource(backgroundImagePath)" />
 
     <!-- Draw Pieces on Board. -->
     <g v-for="(cell, i) in richPositionData.board"
@@ -38,14 +38,14 @@
             :y="(coords[1] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
             :width="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
             :height="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :href="getLogoSource(pieces[cell.piece].image)" />
+            :href="getImageSource(pieces[cell.piece].image)" />
     </g>
  
     <!-- Draw Foreground Image -->
     <image v-if="foregroundImagePath != ''"
       :width="scaledWidth"
       :height="scaledHeight"
-      :href="getLogoSource(foregroundImagePath)" />
+      :href="getImageSource(foregroundImagePath)" />
 
     <!-- Draw A-type Moves. -->
     <g v-for="(cell, i) in richPositionData.board" 
@@ -72,13 +72,14 @@
             :y="(coords[1] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
             :width="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
             :height="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :href="getLogoSource(pieces[cell.token].image)"
+            :href="getImageSource(pieces[cell.token].image)"
             :class="'app-game-board-image-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
-            :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1 }">
+            :style="'--xorigin: ' + (coords[0] * scaledWidth / backgroundGeometry[0]) + 'px ' + (coords[1] * scaledWidth / backgroundGeometry[0]) + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1) + ';'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
               {{ cell.token }}
         </image>
       </g>
+      
     </g>
 
     <!-- Draw M-type (arrow) moves. -->
@@ -150,7 +151,7 @@
   // Probably don't want ot reimport every time.
   const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
-  const getLogoSource = (imagePath: string) => {
+  const getImageSource = (imagePath: string) => {
     try {
       return gimages["../../models/images/svg/" + imagePath].default;
     } catch (errorMessage) {
@@ -277,13 +278,12 @@
     }
   }
 
-  // For now, just applies a filter on the image. Want to add pulsing animation later.
   @keyframes pulsing-image {
     0% {
-      filter: relative;
+      transform: scale(1);
     }
     100% {
-      filter: var(--hoverFilter);
+      transform: scale(1.2);
     }
   }
 
@@ -323,6 +323,7 @@
 
   .app-game-board-image-token {
     cursor: default;
+    transform-origin: var(--xorigin);
     
     [data-turn="A"] &.move {
       filter: var(--turn1Filter);

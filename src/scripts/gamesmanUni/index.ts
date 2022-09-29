@@ -168,6 +168,8 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
 export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
+    app.currentMatch.round.position.position = "";
+
     if (Object.entries(app.currentMatch.rounds).length <= 1) {
         return app;
     }
