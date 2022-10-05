@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-variants">
         <h2>{{ gameName }}</h2>
-        <h3>Game Variants</h3>
+        <h3>{{ t("gameVariantsTitle") }}</h3>
         <div id="variants" v-if="game">
             <router-link v-for="variant in gameVariants" :key="variant.id" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
                 <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.description + ' Logo'" style="width: 8rem" />
@@ -22,9 +22,11 @@
     import { useRoute } from "vue-router";
     import { router } from "../../scripts/plugins/router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { useI18n } from "vue-i18n";
 
     const route = useRoute();
     const store = useStore();
+    const { t } = useI18n();
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
@@ -84,3 +86,14 @@
         }
     }
 </style>
+
+<i18n lang="json">
+{
+    "cn": {
+        "gameVariantsTitle": "请选择游戏变体"
+    },
+    "en": {
+        "gameVariantsTitle": "Game Variants"
+    }
+}
+</i18n>

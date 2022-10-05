@@ -1,12 +1,11 @@
 <template>
     <div id="app-updates">
-        <h2 id="title">What's new!?</h2>
+        <h2 id="title"> {{ t("title") }} </h2>
         <div id="body">
             <template v-if="Object.keys(latestCommits).length">
                 <a id="description" href="javascript:document.location.reload(true)">
-                    If latest version listed here does not match <code>GamesmanUni</code> version in footer, new content is available.<br />
-                    Please try refreshing the page <code>ctrl/command + r</code> to get latest patches and updates. <br />
-                    All dates and times are in local timezone.
+                    {{ t("message0") }} <code>GamesmanUni</code> {{ t("message1") }} <br />
+                    <code>ctrl/command + r</code> {{ t("message2") }} <br /> {{ t("message3") }}
                 </a>
                 <div id="commits">
                     <a class="commit" v-for="commit in latestCommits.commits" :key="commit.sha" :href="commit.url" target="_blank" rel="noreferrer">
@@ -25,16 +24,18 @@
                     </a>
                 </div>
             </template>
-            <p id="failure" v-else>Failed to load GitHub commit history to this site.</p>
+            <p id="failure" v-else> {{ t("failureMessage") }} </p>
         </div>
-        <a id="more" href="https://github.com/GamesCrafters/GamesmanUni/commits/main" target="_blank" rel="noreferrer"> Please visit GitHub for complete update history... </a>
+        <a id="more" href="https://github.com/GamesCrafters/GamesmanUni/commits/main" target="_blank" rel="noreferrer"> {{ t("moreMessage") }} </a>
     </div>
 </template>
 
 <script lang="ts" setup>
     import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { useI18n } from "vue-i18n";
 
     const store = useStore();
+    const { t } = useI18n();
     const latestCommits = store.getters.commits;
     const getAuthorAvatarSource = (url?: string) => {
         if (url) return url;
@@ -111,3 +112,26 @@
         }
     }
 </style>
+
+<i18n lang="json">
+{
+    "cn": {
+        "title": "又更新了！？",
+        "message0": "如果页脚显示的版本号落后于此处",
+        "message1": "的最新版本， 请尝试使用",
+        "message2": "或直接点击此处刷新页面以获取更新。",
+        "message3": "本页面的所有时间信息均根据您的所在时区推算得出。",
+        "failureMessage": "获取GitHub提交历史失败。",
+        "moreMessage": "点此访问GitHub以获取完整更新历史……"
+    },
+    "en": {
+        "title": "What's new!?",
+        "message0": "If latest version listed here does not match",
+        "message1": "version in footer, new content is available.",
+        "message2": "Please try refreshing the page to get latest patches and updates.",
+        "message3": "All dates and times are in local timezone.",
+        "failureMessage": "Failed to load GitHub commit history to this site.",
+        "moreMessage": "Please visit GitHub for complete update history..."
+    }
+}
+</i18n>

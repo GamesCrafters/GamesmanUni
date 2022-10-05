@@ -1,7 +1,7 @@
 <template>
     <div id="app-header-preferences">
         <div class="uni-dropdown">
-            <div class="uni-dropdown-selection">{{ t(`appThemes.${appTheme}`) }} Theme ▼</div>
+            <div class="uni-dropdown-selection">{{ t(`appThemes.${appTheme}`) }} {{ t("themeTitle") }} ▼</div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" v-for="themeOption in appThemes" :key="themeOption" :style="setActiveThemeOptionStyle(themeOption)" @click="setAppTheme(themeOption)">
                     {{ t(`appThemes.${themeOption}`) }}
@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="uni-dropdown">
-            <div class="uni-dropdown-selection">{{ t(`appRootFontSizes.${appRootFontSize}`) }} ▼</div>
+            <div class="uni-dropdown-selection">{{ t(`appRootFontSizes.${appRootFontSize}`) }} {{ t("fontSizeUnit") }} ▼</div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" v-for="fontSizeOption in appRootFontSizes" :key="fontSizeOption" :style="setActiveFontSizeOptionStyle(fontSizeOption)" @click="setAppRootFontSize(fontSizeOption)">
                     {{ t(`appRootFontSizes.${fontSizeOption}`) }}
@@ -90,32 +90,36 @@
     "cn": {
         "appLocales": {
             "cn": "🇨🇳 简体中文",
-            "en": "🇺🇸 英文"
-        }
+            "en": "🇺🇸 英文",
+            "es": "🇲🇽 西班牙语",
+            "hi": "🇮🇳 印地语"
+        },
+        "themeTitle": "主题",
+        "fontSizeUnit": "号字"
     },
     "en": {
         "appRootFontSizes": {
-            "05px": "05 px",
-            "06px": "06 px",
-            "07px": "07 px",
-            "08px": "08 px",
-            "09px": "09 px",
-            "10px": "10 px",
-            "11px": "11 px",
-            "12px": "12 px",
-            "13px": "13 px",
-            "14px": "14 px",
-            "15px": "15 px",
-            "16px": "16 px",
-            "17px": "17 px",
-            "18px": "18 px",
-            "19px": "19 px",
-            "20px": "20 px",
-            "21px": "21 px",
-            "22px": "22 px",
-            "23px": "23 px",
-            "24px": "24 px",
-            "25px": "25 px"
+            "05px": "05",
+            "06px": "06",
+            "07px": "07",
+            "08px": "08",
+            "09px": "09",
+            "10px": "10",
+            "11px": "11",
+            "12px": "12",
+            "13px": "13",
+            "14px": "14",
+            "15px": "15",
+            "16px": "16",
+            "17px": "17",
+            "18px": "18",
+            "19px": "19",
+            "20px": "20",
+            "21px": "21",
+            "22px": "22",
+            "23px": "23",
+            "24px": "24",
+            "25px": "25"
         },
         "appLocales": {
             "cn": "🇨🇳 Simplified Chinese",
@@ -134,7 +138,9 @@
             "sepia": "Sepia",
             "space": "Space",
             "terminal": "Terminal"
-        }
+        },
+        "themeTitle": "Theme",
+        "fontSizeUnit": "px"
     },
     "es": {
         "appLocales": {
