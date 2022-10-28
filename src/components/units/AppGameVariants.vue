@@ -32,7 +32,15 @@
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
     const gameCustom = computed(() => (game.value ? game.value.custom : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
-    const gameVariants = computed(() => game.value.variants.variants);
+    const gameVariants = computed(() => {
+    let total = game.value.variants.variants;
+            const asArray = Object.entries(total);
+            if (asArray.length > 1) {
+                return total;
+            } else {
+                window.location.href = window.location + '/' + Object.keys(total);
+            }
+    });
     const getLogoSource = (variantId: string) => {
         const images = import.meta.globEager("../../models/images/*.png");
         const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
