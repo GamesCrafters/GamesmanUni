@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1,22 L65,22" stroke-width="2" stroke="#bcbec0"/>
+    <path d="M1,44 L65,44" stroke-width="2" stroke="#bcbec0"/>
+    <path d="M22,1 L22,65" stroke-width="2" stroke="#bcbec0"/>
+    <path d="M44,1 L44,65" stroke-width="2" stroke="#bcbec0"/>
+</svg>
