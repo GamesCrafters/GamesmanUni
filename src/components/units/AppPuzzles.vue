@@ -35,6 +35,7 @@
     const gameType = computed(() => route.params.type as string);
     const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
     const search = ref("");
+    const games = computed(() => store.getters.games(gameType.value).games);
     const games = computed(() => {
         let unfiltered = store.getters.games(gameType.value).games;
         const asArray = Object.entries(unfiltered);
