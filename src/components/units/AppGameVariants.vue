@@ -33,13 +33,13 @@
     const gameCustom = computed(() => (game.value ? game.value.custom : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const gameVariants = computed(() => {
-    let total = game.value.variants.variants;
-            const asArray = Object.entries(total);
-            if (asArray.length > 1) {
-                return total;
-            } else {
-                window.location.href = window.location + '/' + Object.keys(total);
-            }
+        let total = game.value.variants.variants;
+                const asArray = Object.entries(total);
+                if (asArray.length == 1 && !gameCustom.value) {
+                    window.location.href = window.location + '/' + Object.keys(total);
+                } else {
+                    return total;
+                }
     });
     const getLogoSource = (variantId: string) => {
         const images = import.meta.globEager("../../models/images/*.png");

@@ -57,11 +57,11 @@
         "Updates": "Updates"
     },
     "es": {
-        "Home": "Home",
-        "Puzzles": "Puzzles",
-        "Games": "Games",
-        "About": "About",
-        "Updates": "Updates"
+        "Home": "Inicio",
+        "Puzzles": "Rompecabezas",
+        "Games": "Juegos",
+        "About": "Información",
+        "Updates": "Versiones"
     },
     "hi": {
         "Home": "Home",
