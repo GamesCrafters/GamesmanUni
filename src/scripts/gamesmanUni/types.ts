@@ -124,6 +124,7 @@ export type Match = {
     gameId: string;
     variantId: string;
     type: string;
+    startPosition: string;
     players: Array<string>;
     startingPlayerId: string;
     rounds: Rounds;

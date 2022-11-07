@@ -126,6 +126,7 @@ export const defaultMatch: Types.Match = {
     gameId: "",
     variantId: "",
     type: "",
+    startPosition: "",
     players: [],
     startingPlayerId: "",
     rounds: {},
@@ -182,5 +183,20 @@ export const defaultApp: Types.App = {
         c1: { id: "c1", name: "Computer 1", options: { ...defaultOptions }, matches: {} },
         c2: { id: "c2", name: "Computer 2", options: { ...defaultOptions }, matches: {} },
     },
-    currentMatch: { id: 0, gameType: "", gameId: "", variantId: "", type: "", players: [], startingPlayerId: "", rounds: {}, round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } }, created: 0, lastPlayed: 0, ended: 0 },
+    currentMatch: {
+        id: 0, gameType: "",
+        gameId: "",
+        variantId: "",
+        type: "",
+        startPosition: "",
+        players: [],
+        startingPlayerId: "",
+        rounds: {},
+        round: {
+            ...defaultRound,
+            position: { ...defaultPosition, availableMoves: {} } },
+            created: 0,
+            lastPlayed: 0,
+            ended: 0
+        },
 };

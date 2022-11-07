@@ -26,8 +26,7 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
 export const loadVariants = async (app: Types.App, payload: { gameType: string; gameId: string; force?: boolean }) => {
     if (!Object.keys(app.gameTypes[payload.gameType].games).length) {
         const updatedApp = await loadGames(app, payload);
-        if (updatedApp) app = updatedApp;
-        else return undefined;
+        if (!updatedApp) return undefined;
     }
     if (!payload.force && app.gameTypes[payload.gameType].games[payload.gameId] && Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length && (new Date().getTime() - app.gameTypes[payload.gameType].games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
@@ -41,7 +40,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     app.gameTypes[payload.gameType].games[payload.gameId].instructions = variants.response.instructions;
     app.gameTypes[payload.gameType].games[payload.gameId].custom = variants.response.custom === "true";
     app.gameTypes[payload.gameType].games[payload.gameId].variants.variants = {};
-    for (const variant of variants.response.variants)
+    for (const variant of variants.response.variants) {
         app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[variant.variantId] = {
             id: variant.variantId,
             description: variant.description,
@@ -50,6 +49,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             autogui_v2_data: variant.autogui_v2_data,
             status: variant.status,
         };
+    }
     return app;
 };
 
@@ -107,8 +107,7 @@ const generateMatchId = (app: Types.App) => {
 export const initiateMatch = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; matchType?: string }) => {
     if (!Object.keys(app.gameTypes[payload.gameType].games).length || !Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length) {
         const updatedApp = await loadVariants(app, payload);
-        if (updatedApp) app = updatedApp;
-        else return undefined;
+        if (!updatedApp) return undefined;
     }
 
     const has_custom = app.gameTypes[payload.gameType].games[payload.gameId].custom;
@@ -118,18 +117,31 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
         app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId] = game;
     }
 
-    const updatedApp = await loadPosition(app, { ...payload, position: game.startPosition });
+    let startPosition = app.currentMatch.startPosition;
+    if (!startPosition) {
+        startPosition = game.startPosition;
+    }
+    const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
     app.currentMatch = { ...Defaults.defaultMatch };
+    app.currentMatch.startPosition = startPosition;
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
-    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : game.positions[game.startPosition].positionValue === "lose" ? "cvp" : "pvc";
+    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : game.positions[startPosition].positionValue === "lose" ? "cvp" : "pvc";
     app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
     app.currentMatch.startingPlayerId = app.currentMatch.players[0];
-    app.currentMatch.round = { id: 1, playerId: app.currentMatch.startingPlayerId, players: [...app.currentMatch.players], move: "", moveName: "", moveValue: "", position: { ...game.positions[game.startPosition] } };
+    app.currentMatch.round = {
+        id: 1,
+        playerId: app.currentMatch.startingPlayerId,
+        players: [...app.currentMatch.players],
+        move: "",
+        moveName: "",
+        moveValue: "",
+        position: { ...game.positions[startPosition] }
+    };
     app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
     app.currentMatch.lastPlayed = new Date().getTime();
@@ -170,6 +182,16 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
 };
 
 export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
+
+export const loadCustomPosition = async (app: Types.App, payload: { position: string }) => {
+    const updatedApp = await loadPosition(app, {
+        gameType: app.currentMatch.gameType,
+        gameId: app.currentMatch.gameId,
+        variantId: app.currentMatch.variantId,
+        position: payload.position
+    });
+    return updatedApp;
+}
 
 export const exitMatch = (app: Types.App) => {
     if (Object.entries(app.currentMatch.rounds).length > 1 && !isEndOfMatch(app)) { 
@@ -231,11 +253,11 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.round.players = [...app.currentMatch.round.players];
         if (app.currentMatch.gameType != "puzzles") {
           let posArr = updatedPosition.position.split('_');
-          if (posArr.length === 5 && posArr[0] === 'R') {
-            app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
-          } else {
+        //   if (posArr.length === 5 && posArr[0] === 'R') {
+        //     app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
+        //   } else {
             app.currentMatch.round.playerId = app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
-          }
+        //   }
         }
         app.currentMatch.round.move = "";
         app.currentMatch.round.moveValue = "";
@@ -272,6 +294,11 @@ export const updateMatchType = (app: Types.App, payload: { matchType: string, pl
     app.currentMatch.players = [...payload.players];
     app.currentMatch.round.players = [...payload.players];
     app.currentMatch.round.playerId = app.currentMatch.players[currentTurnIndex];
+    return app;
+}
+
+export const updateMatchStartPosition = (app: Types.App, payload: { position: string }) => {
+    app.currentMatch.startPosition = payload.position;
     return app;
 }
 
