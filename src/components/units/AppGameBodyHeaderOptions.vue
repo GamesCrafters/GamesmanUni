@@ -143,7 +143,7 @@
                 </div>
                 <div id="computer-move-duration" v-if="updatedMatchType.includes('c')">
                     <h3 class="title">Computer Move Duration (milliseconds)</h3>
-                    <VueSlider id="slider" v-model="options.computerMoveDuration" :min="0" :max="10000" interval="10" :tooltip="'active'" />
+                    <VueSlider id="slider" v-model="options.computerMoveDuration" :min="0" :max="10000" :interval="10" :tooltip="'active'" />
                     <i>(Note: The actual duration will be either the ideal duration above or server data load time if there is any server data load action, whichever is greater.)</i>
                 </div>
                 <div id="visibility-options">
