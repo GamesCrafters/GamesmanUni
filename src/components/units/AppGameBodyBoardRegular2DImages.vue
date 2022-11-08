@@ -85,7 +85,7 @@
     <!-- Draw M-type (arrow) moves. -->
     <g v-for="(arrow, i) in richPositionData.arrows"
       :key="'arrow' + i">
-      <polyline
+      <polyline v-if="arrow.move.hint != 'undecided'"
         :points="formatArrowPolylinePoints(arrow, scaledWidth / backgroundGeometry[0])"
         :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
