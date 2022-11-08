@@ -128,6 +128,7 @@ export type Match = {
     players: Array<string>;
     startingPlayerId: string;
     rounds: Rounds;
+    moveHistory: string;
     round: Round;
     created: number;
     lastPlayed: number;

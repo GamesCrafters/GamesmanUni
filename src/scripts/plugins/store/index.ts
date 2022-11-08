@@ -40,6 +40,7 @@ type Getters = {
     isEndOfMatch(state: State): boolean;
     locale(state: State): string;
     maximumRemoteness(state: State): (from: number, to: number) => number;
+    moveHistory(state: State): string;
     onePlayerGameAPI(state: State): string;
     position(state: State): (gameType: string, gameId: string, variantId: string, position: string) => GMUTypes.Position;
     positions(state: State): (gameType: string, gameId: string, variantId: string) => GMUTypes.Positions;
@@ -95,6 +96,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     isEndOfMatch: (state: State) => GMU.isEndOfMatch(state.app),
     locale: (state: State) => state.app.preferences.locale,
     maximumRemoteness: (state: State) => (from: number, to: number) => GMU.getMaximumRemoteness(state.app, { from, to }),
+    moveHistory: (state: State) => state.app.currentMatch.moveHistory,
     onePlayerGameAPI: (state: State) => state.app.dataSources.onePlayerGameAPI,
     position: (state: State) => (gameType: string, gameId: string, variantId: string, position: string) => state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions[position],
     positions: (state: State) => (gameType: string, gameId: string, variantId: string) => state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions,

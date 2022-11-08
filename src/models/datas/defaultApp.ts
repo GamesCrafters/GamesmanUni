@@ -130,6 +130,7 @@ export const defaultMatch: Types.Match = {
     players: [],
     startingPlayerId: "",
     rounds: {},
+    moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
     lastPlayed: 0,
@@ -192,6 +193,7 @@ export const defaultApp: Types.App = {
         players: [],
         startingPlayerId: "",
         rounds: {},
+        moveHistory: "",
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },
