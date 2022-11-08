@@ -19,7 +19,9 @@
         <div id="analyLogic" class="visuals">
              <p> Coming soon! </p>
         </div>
-        <input v-model="text" id="customPosLogic" class="visuals" placeholder="Enter positions of game" />
+        <div id="customPosLogic" class="visuals">
+            <AppGameMenuCustomPosition/>
+        </div>
 
 
     </div>
@@ -30,6 +32,7 @@
     import { computed, ref } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameVvh from "./AppGameVvh.vue";
+    import AppGameMenuCustomPosition from "./AppGameMenuCustomPosition.vue";
     const store = useStore();
 
     const showItem = (ID) => {
@@ -86,13 +89,14 @@
 
 
         #menuItems {
+            margin-top: 2rem;
             border-radius: 1rem;
             border: 0.1rem solid var(--neutralColor);
             padding: 1rem;
             align-items: center;
             align-content: center;
             justify-content: center;
-            padding-left: 20rem;
+            padding-left: 18rem;
             padding-right: 10rem;
             justify-content: space-around;
 
@@ -104,6 +108,7 @@
                 align-border: center;
                 justify-content: space-around;
                 border-spacing: 5rem;
+                margin-right: 1rem;
             }
             #analysis {
                 border-radius: 1rem;
@@ -113,6 +118,7 @@
                 align-border: center;
                 justify-content: space-around;
                 border-spacing: 5rem;
+                margin-right: 1rem;
 
             }
             #customPos {
@@ -128,14 +134,6 @@
         div.visuals {
             display: none;
         }
-        #customPosLogic {
-            border-radius: 1rem;
-            border: 0.1rem solid var(--neutralColor);
-            padding: 1rem;
-            float: left;
-            align-border: center;
-            justify-content: space-around;
-            border-spacing: 5rem;
-        }
+
     }
 </style>
