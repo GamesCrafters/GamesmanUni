@@ -2,8 +2,6 @@
     <div id="app-game">
         <AppGameBody />
         <AppGameMenu />
-
-
     </div>
 </template>
 
@@ -12,7 +10,6 @@
     import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameBody from "./AppGameBody.vue";
-    import AppGameVvh from "./AppGameVvh.vue";
     import AppGameMenu from "./AppGameMenu.vue";
 
     const route = useRoute();

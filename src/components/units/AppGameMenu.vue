@@ -2,15 +2,13 @@
     <div id="menu">
         <h1> Menu </h1>
         <div id="menuItems">
-            <button id="vvh" class="items" onclick="showItem(vvh)">
-                <p> Visual Value History </p>
-            </button>
-            <button id="analysis" class="items" onclick="showItem(analysis)">
+            <button @click="toggleVvh">Visual Value History</button>
+            <!-- <button id="analysis" class="items" onclick="showItem(analysis)">
                 <p> Analysis </p>
             </button>
             <button id="customPos" class="items" onclick="showItem(customPos)">
                 <p> Custom Position </p>
-            </button>
+            </button> -->
         </div>
         <div id="AppGameVvh">
             <AppGameVvh/>
@@ -26,9 +24,9 @@
     import AppGameVvh from "./AppGameVvh.vue";
     const store = useStore();
 
-    function showItem(ID) {
-        var element = document.getElementById("AppGameVvh");
-        if (ID === "vvh"){
+    const toggleVvh = () => {
+        let element = document.getElementById("AppGameVvh");
+        if (element){
             if (element.style.display === "none") {
                 element.style.display = "block"
             } else {
