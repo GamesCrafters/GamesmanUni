@@ -2,17 +2,25 @@
     <div id="menu">
         <h1> Menu </h1>
         <div id="menuItems">
-            <button @click="toggleVvh">Visual Value History</button>
-            <!-- <button id="analysis" class="items" onclick="showItem(analysis)">
+            <button id="vvh" class="items" @click="showItem('vvh')">
+                <p> Visual Value History </p>
+            </button>
+
+            <button id="analysis" class="items" @click="showItem('analysis')">
                 <p> Analysis </p>
             </button>
-            <button id="customPos" class="items" onclick="showItem(customPos)">
+            <button id="customPos" class="items" @click="showItem('customPos')">
                 <p> Custom Position </p>
-            </button> -->
+            </button>
         </div>
-        <div id="AppGameVvh">
+        <div id="AppGameVvh" class="visuals">
             <AppGameVvh/>
         </div>
+        <div id="analyLogic" class="visuals">
+             <p> Coming soon! </p>
+        </div>
+        <input v-model="text" id="customPosLogic" class="visuals" placeholder="Enter positions of game" />
+
 
     </div>
 
@@ -24,14 +32,38 @@
     import AppGameVvh from "./AppGameVvh.vue";
     const store = useStore();
 
-    const toggleVvh = () => {
-        let element = document.getElementById("AppGameVvh");
-        if (element){
+    const showItem = (ID) => {
+        let vvh = document.getElementById("AppGameVvh");
+        let analy = document.getElementById("analyLogic");
+        let cusPos = document.getElementById("customPosLogic");
+
+        if (ID === "vvh") {
+            let element = vvh;
             if (element.style.display === "none") {
-                element.style.display = "block"
+                element.style.display = "block";
             } else {
-                element.style.display = "none"
+                element.style.display = "none";
             }
+            analy.style.display = "none";
+            cusPos.style.display = "none";
+        } else if (ID === "analysis") {
+            let element = analy;
+            if (element.style.display === "none") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+            vvh.style.display = "none";
+            cusPos.style.display = "none";
+        } else if (ID === "customPos") {
+            let element = cusPos;
+            if (element.style.display === "none") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+            vvh.style.display = "none";
+            analy.style.display = "none";
         }
     }
 
@@ -93,6 +125,17 @@
                 border-spacing: 5rem;
             }
         }
-
+        div.visuals {
+            display: none;
+        }
+        #customPosLogic {
+            border-radius: 1rem;
+            border: 0.1rem solid var(--neutralColor);
+            padding: 1rem;
+            float: left;
+            align-border: center;
+            justify-content: space-around;
+            border-spacing: 5rem;
+        }
     }
 </style>
