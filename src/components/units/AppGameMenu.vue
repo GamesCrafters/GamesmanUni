@@ -90,8 +90,7 @@
 
         #menuItems {
             margin-top: 2rem;
-            border-radius: 1rem;
-            border: 0.1rem solid var(--neutralColor);
+
             padding: 1rem;
             align-items: center;
             align-content: center;

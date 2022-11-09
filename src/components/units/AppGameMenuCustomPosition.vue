@@ -4,6 +4,9 @@
         <input v-model="text" id="inputPos" placeholder="Enter positions of game">
         <button id="submit" @click="doSomething()">Submit</button>
         <p id="infoText">Instructions on how to format the move history...</p>
+        <div id="fileUpload">
+            <AppGameMenuCustomPositionFileUpload/>
+        </div>
 
     </div>
 
@@ -15,11 +18,13 @@
     import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameMenu from "./AppGameMenu.vue";
+    import AppGameMenuCustomPositionFileUpload from "./AppGameMenuCustomPositionFileUpload.vue";
 
     const doSomething = () => {
         let elem = document.getElementById("inputPos").value;
         alert(elem);
     }
+
     const showInfo = () => {
         let element = document.getElementById("infoText")
         if (element.style.display === "none") {
@@ -47,6 +52,7 @@
         #infoText {
            padding: 1rem;
            text-align: center;
+           display: none;
         }
 
         #inputPos {
@@ -64,6 +70,7 @@
             border: 0.1rem solid var(--neutralColor);
 
         }
+
     }
 
 </style>
