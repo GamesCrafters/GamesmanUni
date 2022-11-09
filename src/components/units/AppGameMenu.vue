@@ -88,47 +88,20 @@
         padding: 4rem;
 
 
-        #menuItems {
+        .items {
             margin-top: 2rem;
-
+            display: inline-block;
             padding: 1rem;
             align-items: center;
             align-content: center;
             justify-content: center;
-            padding-left: 18rem;
-            padding-right: 10rem;
             justify-content: space-around;
-
-            #vvh {
-                border-radius: 1rem;
-                border: 0.1rem solid var(--neutralColor);
-                padding: 1rem;
-                float: left;
-                align-border: center;
-                justify-content: space-around;
-                border-spacing: 5rem;
-                margin-right: 1rem;
-            }
-            #analysis {
-                border-radius: 1rem;
-                border: 0.1rem solid var(--neutralColor);
-                padding: 1rem;
-                float: left;
-                align-border: center;
-                justify-content: space-around;
-                border-spacing: 5rem;
-                margin-right: 1rem;
-
-            }
-            #customPos {
-                border-radius: 1rem;
-                border: 0.1rem solid var(--neutralColor);
-                padding: 1rem;
-                float: left;
-                align-border: center;
-                justify-content: space-around;
-                border-spacing: 5rem;
-            }
+            border-radius: 1rem;
+            border: 0.1rem solid var(--neutralColor);
+            padding: 1rem;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
+            display: inline-block;
         }
         div.visuals {
             display: none;
