@@ -48,30 +48,22 @@
         { immediate: true }
     );
 </script>
+
 <style lang="scss" scoped>
     #search {
-        align: center;
         margin-top: 1%;
         margin-bottom: 1%;
         height: 2rem;
-        float: center;
-        border-padding: 5rem;
-        padding: 0.5rem;
-
+        width: 12.5rem;
+        display: inline-block;
         justify-content: center;
         border: 0.1rem solid var(--neutralColor);
         border-radius: 1rem;
         border-width: 0.5rem;
-        align-border: center;
-        margin-left: 40%;
-        margin-right: 40%;
-
-
-
     }
+    
     #app-games {
         float: top;
-        align: top;
         padding: 1rem 10%;
         > #games {
             align-content: center;
