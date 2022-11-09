@@ -90,6 +90,9 @@
 
         .items {
             margin-top: 2rem;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
+            margin-bottom: 2rem;
             display: inline-block;
             padding: 1rem;
             align-items: center;
@@ -99,8 +102,6 @@
             border-radius: 1rem;
             border: 0.1rem solid var(--neutralColor);
             padding: 1rem;
-            margin-right: 0.5rem;
-            margin-left: 0.5rem;
             display: inline-block;
         }
         div.visuals {
