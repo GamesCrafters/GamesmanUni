@@ -4,6 +4,7 @@
         <button id="app-game-body-statistics-moves-restart" @click="store.dispatch(actionTypes.restartMatch)">Restart</button>
         <button id="app-game-body-statistics-moves-redo" @click="store.dispatch(actionTypes.redoMove)" :disabled="disabledRedo">Redo</button>
         <button id="app-game-body-statistics-moves-customize" @click="promptForStartPosition">Customize</button>
+        <button id="app-game-body-statistics-moves-load-history" @click="promptForMoveHistory">Load Move History</button>
     </div>
 </template>
 
@@ -18,6 +19,12 @@
         let pos = window.prompt('Enter a valid board string:');
         if (pos) {
             store.dispatch(actionTypes.updateMatchStartPosition, { position: pos });
+        }
+    }
+    const promptForMoveHistory = () => {
+        let hist = window.prompt('Enter a valid move history string:');
+        if (hist) {
+            store.dispatch(actionTypes.loadMoveHistory, { history: hist });
         }
     }
 </script>

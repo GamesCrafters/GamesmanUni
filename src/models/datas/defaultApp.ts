@@ -29,10 +29,13 @@ export const defaultAvailableMove: Types.Move = {
     remoteness: 0,
 };
 
+export const defaultAvailableMoveNames: Types.MoveNames = {};
+
 export const defaultAvailableMoves: Types.Moves = {};
 
 export const defaultPosition: Types.Position = {
     ...defaultUpdate,
+    availableMoveNames: {},
     availableMoves: {},
     position: "",
     positionValue: "",

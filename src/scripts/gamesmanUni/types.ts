@@ -61,6 +61,7 @@ export type Variant = {
 export type Positions = Record<string, Position>;
 
 export type Position = Update & {
+    availableMoveNames: MoveNames;
     availableMoves: Moves;
     position: string;
     positionValue: string;
@@ -68,6 +69,8 @@ export type Position = Update & {
 };
 
 export type Moves = Record<string, Move>;
+
+export type MoveNames = Record<string, string>;
 
 export type Move = {
     deltaRemoteness: number;
