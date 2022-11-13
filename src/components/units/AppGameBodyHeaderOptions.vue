@@ -196,9 +196,9 @@
 
     const currentPlayerName = computed(() => (store.getters.users ? store.getters.users[currentPlayerId.value].name : ""));
     const updatedPlayerName = ref("");
-    const currentLeftPlayerName = computed(() => (store.getters.users ? store.getters.users[currentLeftPlayerId.value].name : ""));
+    const currentLeftPlayerName = computed(() => (store.getters.users && store.getters.users[currentLeftPlayerId.value] ? store.getters.users[currentLeftPlayerId.value].name : ""));
     const updatedLeftPlayerName = ref("");
-    const currentRightPlayerName = computed(() => (store.getters.users ? store.getters.users[currentRightPlayerId.value].name : ""));
+    const currentRightPlayerName = computed(() => (store.getters.users && store.getters.users[currentRightPlayerId.value] ? store.getters.users[currentRightPlayerId.value].name : ""));
     const updatedRightPlayerName = ref("");
     const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;

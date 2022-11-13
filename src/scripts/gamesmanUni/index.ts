@@ -4,6 +4,8 @@ import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
 
+const moveHistoryDelim = ':';
+
 const deepcopy = (obj: Object) => {
     return JSON.parse(JSON.stringify(obj));
 }
@@ -69,7 +71,7 @@ const formatMoveNames = (source: Array<{
 }>) => {
     const target: Types.MoveNames = { ...Defaults.defaultAvailableMoveNames };
     for (let i = 0; i < source.length; i++) {
-        target[source[i].moveName] = source[i].move;
+        target[source[i].moveName ? source[i].moveName : source[i].move] = source[i].move;
     }
     return target;
 }
@@ -136,31 +138,35 @@ const generateMatchId = (app: Types.App) => {
     return newId;
 };
 
-export const initiateMatch = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; matchType?: string }) => {
-    if (!Object.keys(app.gameTypes[payload.gameType].games).length || !Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length) {
+export const initiateMatch = async (app: Types.App, payload: {
+        gameType: string;
+        gameId: string;
+        variantId: string;
+        matchType?: string;
+        startPosition?: string
+    }) => {
+    const cachedGames = app.gameTypes[payload.gameType].games;
+    if (!Object.keys(cachedGames).length || !Object.keys(cachedGames[payload.gameId].variants.variants).length) {
         const updatedApp = await loadVariants(app, payload);
         if (!updatedApp) return undefined;
     }
-    const has_custom = app.gameTypes[payload.gameType].games[payload.gameId].custom;
-    let game = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId];
-    if (!game && has_custom) {
-        game = await loadVariant(app, payload);
-        app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId] = game;
+    const game = cachedGames[payload.gameId];
+    let gameVariant = game.variants.variants[payload.variantId];
+    const hasCustom = game.custom;
+    if (!gameVariant && hasCustom) {
+        gameVariant = await loadVariant(app, payload);
+        game.variants.variants[payload.variantId] = gameVariant;
     }
-    let startPosition = app.currentMatch.startPosition;
-    if (!startPosition) {
-        startPosition = game.startPosition;
-    }
+    const startPosition = payload.startPosition ? payload.startPosition : gameVariant.startPosition;
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
-    app.currentMatch = deepcopy(Defaults.defaultMatch);
     app.currentMatch.startPosition = startPosition;
-    app.currentMatch.moveHistory = startPosition;
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
-    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : game.positions[startPosition].positionValue === "lose" ? "cvp" : "pvc";
+    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : gameVariant.positions[startPosition].positionValue === "lose" ? "cvp" : "pvc";
     app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
     app.currentMatch.startingPlayerId = app.currentMatch.players[0];
@@ -171,7 +177,7 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
         move: "",
         moveName: "",
         moveValue: "",
-        position: { ...game.positions[startPosition] }
+        position: { ...gameVariant.positions[startPosition] }
     };
     app.currentMatch.ended = 0;
     app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
@@ -223,7 +229,7 @@ export const exitMatch = (app: Types.App) => {
         app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
         for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
     }
-    app.currentMatch.round.position.position = "";
+    app.currentMatch = deepcopy(Defaults.defaultMatch);
     return app;
 };
 
@@ -285,16 +291,17 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
                 position
             ]
         };
-        app.currentMatch.moveHistory += " " + app.currentMatch.round.position.availableMoves[payload.move].moveName;
+        const move = app.currentMatch.round.position.availableMoves[payload.move];
+        app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
         app.currentMatch.round.id += 1;
         app.currentMatch.round.players = [...app.currentMatch.round.players];
         if (app.currentMatch.gameType != "puzzles") {
-        //   let posArr = updatedPosition.position.split('_');
-        //   if (posArr.length === 5 && posArr[0] === 'R') {
-        //     app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
-        //   } else {
-            app.currentMatch.round.playerId = app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
-        //   }
+            let posArr = updatedPosition.position.split('_');
+            if (posArr.length === 5 && posArr[0] === 'R') {
+                app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
+            } else {
+                app.currentMatch.round.playerId = app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
+            }
         }
         app.currentMatch.round.move = "";
         app.currentMatch.round.moveValue = "";
@@ -311,11 +318,11 @@ const popMovesFromHistory = (history: string, count?: number) => {
         count = 1;
     }
     while (count > 0 && i >= 0) {
-        if (history[i--] === ' ') {
+        if (history[i--] === moveHistoryDelim) {
             --count;
         }
     }
-    if (++i <= 0) {
+    if (++i <= 1) {
         console.error("popMoveFromHistory: popping from empty move list")
         return "";
     }
@@ -327,7 +334,11 @@ export const redoMove = (app: Types.App, payload?: { count?: number }) => {
     const newRoundId = Math.min(Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id)), app.currentMatch.round.id + count);
     // Modify move history before changing current round id.
     for (let i = app.currentMatch.round.id; i < newRoundId; ++i) {
-        app.currentMatch.moveHistory += " " + app.currentMatch.rounds[i].moveName;
+        app.currentMatch.moveHistory += moveHistoryDelim + (
+            app.currentMatch.rounds[i].moveName ?
+            app.currentMatch.rounds[i].moveName :
+            app.currentMatch.rounds[i].move
+        );
     }
     app.currentMatch.round = { ...app.currentMatch.rounds[newRoundId] };
     app.currentMatch.round.move = "";
@@ -396,31 +407,31 @@ export const loadCommits = async (app: Types.App, payload?: { force?: boolean })
 
 export const loadMoveHistory = async (app: Types.App, payload: { history: string }) => {
     // Parse and load initial position, return undefined if initial position is invalid
-    let parsed = payload.history.split(' ');
-    if (parsed.length < 1) {
+    let parsed = payload.history.split(moveHistoryDelim);
+    if (parsed.length < 2) {
         return undefined;
     }
     let newApp: Types.App = deepcopy(app);
-    let updatedApp = await updateMatchStartPosition(newApp, { position: parsed[0] });
+    let updatedApp = await updateMatchStartPosition(newApp, { position: parsed[1] });
     if (!updatedApp) {
-        window.alert("loadMoveHistory: invalid position");
         return undefined;
     }
     // Restart match in PVP mode
     exitMatch(newApp);
     updatedApp = await initiateMatch(newApp, {
-        gameType: newApp.currentMatch.gameType,
-        gameId: newApp.currentMatch.gameId,
-        variantId: newApp.currentMatch.variantId,
-        matchType: "pvp"
+        gameType: app.currentMatch.gameType,
+        gameId: app.currentMatch.gameId,
+        variantId: app.currentMatch.variantId,
+        matchType: "pvp",
+        startPosition: parsed[1]
     });
     if (!updatedApp) {
         window.alert("loadMoveHistory: initiateMatch failed");
         return undefined;
     }
     // Do move one by one, return undefined if any move is invalid
-    for (let i = 1; i < parsed.length; ++i) {
-        let nextMove = newApp.currentMatch.round.position.availableMoveNames[parsed[i]];
+    for (let i = 2; i < parsed.length; ++i) {
+        const nextMove = newApp.currentMatch.round.position.availableMoveNames[parsed[i]];
         if (!nextMove) {
             window.alert("loadMoveHistory: invalid move [" + parsed[i] + "] encountered");
             return undefined;
@@ -432,14 +443,5 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
         }
     }
     // Load successful, update app.
-    app.commits = deepcopy(newApp.commits);
-    app.currentMatch = deepcopy(newApp.currentMatch);
-    app.dataSources = deepcopy(newApp.dataSources);
-    app.gameTypes = deepcopy(newApp.gameTypes);
-    app.lastUpdated = newApp.lastUpdated;
-    app.preferences = deepcopy(newApp.preferences);
-    app.status = newApp.status;
-    app.users = deepcopy(newApp.users);
-    app.version = newApp.version;
-    return app;
+    return newApp;
 }

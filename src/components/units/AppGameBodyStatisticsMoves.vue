@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
