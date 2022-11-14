@@ -1,19 +1,13 @@
 <template>
-    <div id="app-game-vvh" v-if="showVvh">
+    <div id="app-game-vvh">
         <AppGameVvhHeader />
         <AppGameVvhBody />
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed } from "vue";
     import AppGameVvhHeader from "./AppGameVvhHeader.vue";
     import AppGameVvhBody from "./AppGameVvhBody.vue";
-    import { useStore } from "../../scripts/plugins/store";
-
-    const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
-    const showVvh = computed(() => (options.value ? options.value.showVvh : true));
 </script>
 
 <style lang="scss" scoped>
