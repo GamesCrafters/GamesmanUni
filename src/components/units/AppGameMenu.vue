@@ -1,112 +1,61 @@
 <template>
-    <div id="menu">
-        <h1> Menu </h1>
-        <div id="menuItems">
-            <button id="vvh" class="items" @click="showItem('vvh')">
-                <p> Visual Value History </p>
-            </button>
-
-            <button id="analysis" class="items" @click="showItem('analysis')">
-                <p> Analysis </p>
-            </button>
-            <button id="customPos" class="items" @click="showItem('customPos')">
-                <p> Custom Position </p>
-            </button>
+    <div id="app-game-menu">
+        <AppGameMenuHeader/>
+        <div id="app-game-menu-content">
+            <div id="app-game-menu-content-buttons">
+                <button class="buttons" @click="activeTab = 'vvh'">
+                    Visual Value History
+                </button>
+                <!-- <button class="buttons" @click="activeTab = 'analysis'">
+                    Analysis
+                </button> -->
+                <button class="buttons" @click="activeTab = 'startPos'">
+                    Customize Starting Position
+                </button>
+                <button class="buttons" @click="activeTab = 'moveHist'">
+                    Move History
+                </button>
+            </div>
+            <div id="app-game-menu-content-active">
+                <AppGameVvh v-show="activeTab === 'vvh'"/>
+                <!-- <AppGameMenuAnalysis/> -->
+                <AppGameMenuCustomPosition v-show="activeTab === 'startPos'"/>
+                <AppGameMenuMoveHistory v-show="activeTab === 'moveHist'"/>
+            </div>
         </div>
-        <div id="AppGameVvh" class="visuals">
-            <AppGameVvh/>
-        </div>
-        <div id="analyLogic" class="visuals">
-             <p> Coming soon! </p>
-        </div>
-        <div id="customPosLogic" class="visuals">
-            <AppGameMenuCustomPosition/>
-        </div>
-
-
     </div>
-
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
-    import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { ref } from "vue";
     import AppGameVvh from "./AppGameVvh.vue";
+    import AppGameMenuHeader from "./AppGameMenuHeader.vue";
     import AppGameMenuCustomPosition from "./AppGameMenuCustomPosition.vue";
-    const store = useStore();
+    import AppGameMenuMoveHistory from "./AppGameMenuMoveHistory.vue";
 
-    const showItem = (ID) => {
-        let vvh = document.getElementById("AppGameVvh");
-        let analy = document.getElementById("analyLogic");
-        let cusPos = document.getElementById("customPosLogic");
-
-        if (ID === "vvh") {
-            let element = vvh;
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-            analy.style.display = "none";
-            cusPos.style.display = "none";
-        } else if (ID === "analysis") {
-            let element = analy;
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-            vvh.style.display = "none";
-            cusPos.style.display = "none";
-        } else if (ID === "customPos") {
-            let element = cusPos;
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-            vvh.style.display = "none";
-            analy.style.display = "none";
-        }
-    }
-
+    const activeTab = ref('vvh');
 </script>
 
 <style lang="scss" scoped>
-    #menu {
-        align-content: normal;
-        align-items: stretch;
-        flex: 3 1 auto;
+    #app-game-menu {
+        flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
-
-
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
-        padding: 4rem;
-
-
-        .items {
-            margin-top: 2rem;
-            margin-right: 0.5rem;
-            margin-left: 0.5rem;
-            margin-bottom: 2rem;
-            display: inline-block;
-            padding: 1rem;
-            align-items: center;
-            align-content: center;
-            justify-content: center;
-            justify-content: space-around;
+        #app-game-menu-content {
             border-radius: 1rem;
             border: 0.1rem solid var(--neutralColor);
-            padding: 1rem;
-            display: inline-block;
+            padding: 4rem;
+            .buttons {
+                margin-top: 2rem;
+                margin-right: 0.5rem;
+                margin-left: 0.5rem;
+                margin-bottom: 2rem;
+                padding: 0 0.5rem;
+                border-radius: 10rem;
+                border: 0.1rem solid var(--neutralColor);
+            }
         }
-        div.visuals {
-            display: none;
-        }
-
     }
 </style>

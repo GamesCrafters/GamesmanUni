@@ -1,16 +1,16 @@
 <template>
-    <div id="app-game-menu-customPos">
-        <div id="app-game-menu-customPos-input">
-            <button id="app-game-menu-customPos-input-info" @click="showInfo = !showInfo">𝓲</button>
+    <div id="app-game-menu-moveHist">
+        <div id="app-game-menu-moveHist-input">
+            <button id="app-game-menu-moveHist-input-info" @click="showInfo = !showInfo">𝓲</button>
             <textarea
-                v-model.lazy="inputPos"
-                id="app-game-menu-customPos-input-input"
-                placeholder="Enter starting position of game here"
+                v-model.lazy="inputHist"
+                id="app-game-menu-moveHist-input-input"
+                placeholder="Enter move history of game here"
             />
-            <button id="app-game-menu-customPos-input-submit" @click="doSomething">Submit</button>
+            <button id="app-game-menu-moveHist-input-submit" @click="doSomething">Submit</button>
         </div>
-        <p v-show="showInfo" id="app-game-menu-customPos-infoText">
-            Instructions on how to format the start position...
+        <p v-show="showInfo" id="app-game-menu-moveHist-infoText">
+            Instructions on how to format the move history...
         </p>
     </div>
 </template>
@@ -18,17 +18,18 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     // import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import AppGameMenuMoveHistoryFileUpload from "./AppGameMenuMoveHistoryFileUpload.vue";
 
     const showInfo = ref(false);
-    const inputPos = ref("");
+    const inputHist = ref("");
     const doSomething = () => {
-        window.alert(inputPos.value);
+        window.alert(inputHist.value);
     }
 </script>
 
 <style lang="scss" scoped>
-    #app-game-menu-customPos {
-        #app-game-menu-customPos-input {
+    #app-game-menu-moveHist {
+        #app-game-menu-moveHist-input {
             flex: 1 1 auto;
             display: flex;
             flex-direction: row;
@@ -36,30 +37,30 @@
             justify-content: center;
             margin: 2rem;
             align-items: center;
-            #app-game-menu-customPos-input-info {
+            #app-game-menu-moveHist-input-info {
                 margin-right: 2rem;
                 border-radius: 100%;
                 font-size: 2rem;
                 height: max(2.5rem, min(5vh, 5vw));
                 width: max(2.5rem, min(5vh, 5vw));
             }
-            #app-game-menu-customPos-input-input {
+            #app-game-menu-moveHist-input-input {
                 border-radius: 1rem;
                 border: 0.1rem solid var(--neutralColor);
                 padding: 1rem;
                 border-spacing: 5rem;
                 width: 50vh;
-                height: 3vh;
+                height: 6vh;
             }
-            #app-game-menu-customPos-input-submit {
+            #app-game-menu-moveHist-input-submit {
                 padding: 0.5rem;
                 margin-left: 2rem;
                 border: 0.1rem solid var(--neutralColor);
             }
         }
-        #app-game-menu-customPos-infoText {
-           padding: 1rem;
-           text-align: center;
+        #app-game-menu-moveHist-infoText {
+        padding: 1rem;
+        text-align: center;
         }
     }
 </style>
