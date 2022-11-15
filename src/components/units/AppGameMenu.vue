@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-menu">
-        <AppGameMenuHeader/>
+        <AppGameMenuHeader />
         <div id="app-game-menu-content">
             <div id="app-game-menu-content-buttons">
                 <button class="buttons" @click="activeTab = 'vvh'">

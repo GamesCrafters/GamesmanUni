@@ -10,7 +10,7 @@
             />
             <button id="app-game-menu-history-import-text-submit" @click="onTextSubmit">Submit</button>
         </div>
-        <!-- TODO: File upload goes here -->
+        <AppGameMenuHistoryImportFile />
         <p v-show="showInfo" id="app-game-menu-history-import-infoMsg">
             Instructions on how to format the move history...
         </p>
@@ -20,6 +20,7 @@
 <script lang="ts" setup>
     import { ref } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import AppGameMenuHistoryImportFile from "./AppGameMenuHistoryImportFile.vue";
 
     const store = useStore();
     const showInfo = ref(false);

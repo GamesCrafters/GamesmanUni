@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-menu-history">
-        <AppGameMenuHistoryImport/>
-        <AppGameMenuHistoryExport/>
+        <AppGameMenuHistoryImport />
+        <AppGameMenuHistoryExport />
     </div>
 </template>
 
