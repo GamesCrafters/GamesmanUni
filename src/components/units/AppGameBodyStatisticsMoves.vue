@@ -3,30 +3,16 @@
         <button id="app-game-body-statistics-moves-undo" @click="store.dispatch(actionTypes.undoMove)" :disabled="disabledUndo">Undo</button>
         <button id="app-game-body-statistics-moves-restart" @click="store.dispatch(actionTypes.restartMatch)">Restart</button>
         <button id="app-game-body-statistics-moves-redo" @click="store.dispatch(actionTypes.redoMove)" :disabled="disabledRedo">Redo</button>
-        <button id="app-game-body-statistics-moves-customize" @click="promptForStartPosition">Customize</button>
-        <button id="app-game-body-statistics-moves-load-history" @click="promptForMoveHistory">Load Move History</button>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
     const disabledUndo = computed(() => store.getters.currentRoundId <= 1);
     const disabledRedo = computed(() => store.getters.currentRoundId >= Object.keys(store.getters.currentRounds).length);
-    const promptForStartPosition = () => {
-        let pos = window.prompt('Enter a valid board string:');
-        if (pos) {
-            store.dispatch(actionTypes.updateMatchStartPosition, { position: pos });
-        }
-    }
-    const promptForMoveHistory = () => {
-        let hist = window.prompt('Enter a valid move history string:');
-        if (hist) {
-            store.dispatch(actionTypes.loadMoveHistory, { history: hist });
-        }
-    }
 </script>
 
 <style lang="scss" scoped>

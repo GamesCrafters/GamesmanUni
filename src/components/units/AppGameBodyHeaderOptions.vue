@@ -150,8 +150,8 @@
                     <h3 id="title">Visibility Options</h3>
                     <div id="options">
                         <div class="option">
-                            <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showVvh" />
-                            <label for="checkbox">Visual Value History</label>
+                            <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showMenu" />
+                            <label for="checkbox">Game Menu</label>
                         </div>
                         <div class="option">
                             <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showNextMoves" />

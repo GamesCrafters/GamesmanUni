@@ -7,8 +7,15 @@
                 id="app-game-menu-customPos-input-input"
                 placeholder="Enter starting position of game here"
             />
-            <button id="app-game-menu-customPos-input-submit" @click="doSomething">Submit</button>
+            <button id="app-game-menu-customPos-input-submit" @click="onTextSubmit">Submit</button>
         </div>
+        <h3>Current Start Position</h3>
+        <textarea
+            id="app-game-menu-customPos-currStartPos"
+            type="text"
+            v-model="currStartPosText"
+            readonly
+        ></textarea>
         <p v-show="showInfo" id="app-game-menu-customPos-infoText">
             Instructions on how to format the start position...
         </p>
@@ -17,12 +24,15 @@
 
 <script lang="ts" setup>
     import { computed, ref } from "vue";
-    // import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { actionTypes, useStore } from "../../scripts/plugins/store";
 
+    const store = useStore();
     const showInfo = ref(false);
     const inputPos = ref("");
-    const doSomething = () => {
-        window.alert(inputPos.value);
+    const currStartPosText = computed(() => store.getters.currentStartPosition);
+    const onTextSubmit = () => {
+        store.dispatch(actionTypes.updateMatchStartPosition, { position: inputPos.value });
+        inputPos.value = "";
     }
 </script>
 
@@ -48,14 +58,24 @@
                 border: 0.1rem solid var(--neutralColor);
                 padding: 1rem;
                 border-spacing: 5rem;
-                width: 50vh;
+                width: 30vw;
                 height: 3vh;
+                resize: none;
             }
             #app-game-menu-customPos-input-submit {
                 padding: 0.5rem;
                 margin-left: 2rem;
                 border: 0.1rem solid var(--neutralColor);
             }
+        }
+        #app-game-menu-customPos-currStartPos {
+            border-radius: 1rem;
+            border: 0.1rem solid var(--neutralColor);
+            padding: 0.5rem;
+            width: 40vw;
+            height: 3vh;
+            resize: none;
+            margin-top: 1rem;
         }
         #app-game-menu-customPos-infoText {
            padding: 1rem;

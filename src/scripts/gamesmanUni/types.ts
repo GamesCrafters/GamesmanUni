@@ -114,7 +114,7 @@ export type Options = {
     showNextMoveHints: boolean;
     showNextMoves: boolean;
     showOptions: boolean;
-    showVvh: boolean;
+    showMenu: boolean;
     showVvhGuides: boolean;
     showVvhMeters: boolean;
 };

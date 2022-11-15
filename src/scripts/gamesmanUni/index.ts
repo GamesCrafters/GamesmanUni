@@ -370,6 +370,7 @@ export const updateMatchType = (app: Types.App, payload: { matchType: string, pl
 
 export const updateMatchStartPosition = async (app: Types.App, payload: { position: string }) => {
     // Check if position is valid
+    payload.position = payload.position.replace(/(\r\n|\n|\r)/gm, "");
     const updatedApp = await loadPosition(app, {
         gameType: app.currentMatch.gameType,
         gameId: app.currentMatch.gameId,
@@ -407,8 +408,10 @@ export const loadCommits = async (app: Types.App, payload?: { force?: boolean })
 
 export const loadMoveHistory = async (app: Types.App, payload: { history: string }) => {
     // Parse and load initial position, return undefined if initial position is invalid
+    payload.history = payload.history.replace(/(\r\n|\n|\r)/gm, "");
     let parsed = payload.history.split(moveHistoryDelim);
     if (parsed.length < 2) {
+        window.alert("loadMoveHistory: game name or start position missing");
         return undefined;
     }
     let newApp: Types.App = deepcopy(app);

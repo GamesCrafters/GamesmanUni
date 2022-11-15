@@ -19,7 +19,7 @@
             <div id="app-game-menu-content-active">
                 <AppGameVvh v-show="activeTab === 'vvh'"/>
                 <!-- <AppGameMenuAnalysis/> -->
-                <AppGameMenuCustomPosition v-show="activeTab === 'startPos'"/>
+                <AppGameMenuPosition v-show="activeTab === 'startPos'"/>
                 <AppGameMenuMoveHistory v-show="activeTab === 'moveHist'"/>
             </div>
         </div>
@@ -30,8 +30,8 @@
     import { ref } from "vue";
     import AppGameVvh from "./AppGameVvh.vue";
     import AppGameMenuHeader from "./AppGameMenuHeader.vue";
-    import AppGameMenuCustomPosition from "./AppGameMenuCustomPosition.vue";
-    import AppGameMenuMoveHistory from "./AppGameMenuMoveHistory.vue";
+    import AppGameMenuPosition from "./AppGameMenuPosition.vue";
+    import AppGameMenuMoveHistory from "./AppGameMenuHistory.vue";
 
     const activeTab = ref('vvh');
 </script>
@@ -49,8 +49,8 @@
             padding: 4rem;
             .buttons {
                 margin-top: 2rem;
-                margin-right: 0.5rem;
-                margin-left: 0.5rem;
+                margin-right: 1rem;
+                margin-left: 1rem;
                 margin-bottom: 2rem;
                 padding: 0 0.5rem;
                 border-radius: 10rem;
