@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-menu-history-import-file">
-        <input type="file" accept=".txt" v-on:change="onFileChange" ref="somethingunique">
+        <input type="file" accept=".txt" v-on:change="onFileChange" />
     </div>
 </template>
 
@@ -8,7 +8,7 @@
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     interface HTMLInputEvent extends Event {
         target: HTMLInputElement & EventTarget
-    }
+    };
     const store = useStore();
     const readHistoryFromFile = (file: File) => {
         if (!file) return;
@@ -23,11 +23,11 @@
             console.log(reader.error);
             alert(reader.error);
         };
-    }
+    };
     const onFileChange = (e: HTMLInputEvent) => {
         if (!e.target || !e.target.files) return;
         readHistoryFromFile(e.target.files[0]);
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
