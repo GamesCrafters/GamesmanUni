@@ -9,10 +9,10 @@
                 <!-- <button class="buttons" @click="activeTab = 'analysis'">
                     Analysis
                 </button> -->
-                <button class="buttons" @click="activeTab = 'startPos'">
+                <button v-show="enabled" class="buttons" @click="activeTab = 'startPos'">
                     Customize Starting Position
                 </button>
-                <button class="buttons" @click="activeTab = 'moveHist'">
+                <button v-show="enabled" class="buttons" @click="activeTab = 'moveHist'">
                     Move History
                 </button>
             </div>
@@ -27,13 +27,25 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
+    import { useStore } from "../../scripts/plugins/store";
     import AppGameVvh from "./AppGameVvh.vue";
     import AppGameMenuHeader from "./AppGameMenuHeader.vue";
     import AppGameMenuPosition from "./AppGameMenuPosition.vue";
     import AppGameMenuMoveHistory from "./AppGameMenuHistory.vue";
 
     const activeTab = ref('vvh');
+
+    // Temporary fix for games that will break the Classic server
+    const store = useStore();
+    const game = store.getters.currentGameName;
+    const enabled = computed(() => {
+        return game != "Tic-Tac-Two" &&
+                game != "3-Spot" && 
+                game != "L-game" && 
+                game != "Nine Men's Morris" && 
+                game != "Bagh-Chal";
+    });
 </script>
 
 <style lang="scss" scoped>
