@@ -4,12 +4,14 @@
         <div id="app-game-menu-history-import-text">
             <button id="app-game-menu-history-import-text-info" @click="showInfo = !showInfo">𝓲</button>
             <textarea
-                v-model.lazy="inputHist"
+                v-model="inputHist"
                 id="app-game-menu-history-import-text-input"
                 placeholder="Enter move history of game here"
+                @keyup.enter="onTextSubmit"
             />
             <button id="app-game-menu-history-import-text-submit" @click="onTextSubmit">Submit</button>
         </div>
+        <div class="error" v-show="errorMsg">Error: {{ errorMsg }}</div>
         <AppGameMenuHistoryImportFile />
         <p v-show="showInfo" id="app-game-menu-history-import-infoMsg">
             Instructions on how to format the move history...
@@ -25,9 +27,15 @@
     const store = useStore();
     const showInfo = ref(false);
     const inputHist = ref("");
+    const errorMsg = ref("");
     const onTextSubmit = async () => {
-        await store.dispatch(actionTypes.loadMoveHistory, { history: inputHist.value });
-        inputHist.value = "";
+        const error = await store.dispatch(actionTypes.loadMoveHistory, { history: inputHist.value });
+        if (error) {
+            errorMsg.value = error.message;
+        } else {
+            errorMsg.value = "";
+            inputHist.value = "";
+        }
     };
 </script>
 
@@ -67,6 +75,10 @@
         #app-game-menu-history-import-infoMsg {
             padding: 1rem;
             text-align: center;
+        }
+        .error {
+            color: red;
+            margin: 1rem;
         }
     }
 </style>

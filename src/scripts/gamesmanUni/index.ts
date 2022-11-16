@@ -378,8 +378,7 @@ export const updateMatchStartPosition = async (app: Types.App, payload: { positi
         position: payload.position
     });
     if (!updatedApp) {
-        window.alert("updateMatchStartPosition: invalid position " + payload.position);
-        return undefined;
+        return Error("invalid position [" + payload.position + "]");
     }
     // Position is valid, update app.
     app.currentMatch.startPosition = payload.position;
@@ -411,17 +410,16 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
     payload.history = payload.history.replace(/(\r\n|\n|\r)/gm, "");
     let parsed = payload.history.split(moveHistoryDelim);
     if (parsed.length < 2) {
-        window.alert("loadMoveHistory: game name or start position missing");
-        return undefined;
+        return Error("game name or start position missing");
     }
     let newApp: Types.App = deepcopy(app);
-    let updatedApp = await updateMatchStartPosition(newApp, { position: parsed[1] });
-    if (!updatedApp) {
-        return undefined;
+    const updatedAppOrError = await updateMatchStartPosition(newApp, { position: parsed[1] });
+    if (updatedAppOrError instanceof Error) {
+        return updatedAppOrError;
     }
     // Restart match in PVP mode
     exitMatch(newApp);
-    updatedApp = await initiateMatch(newApp, {
+    let updatedApp = await initiateMatch(newApp, {
         gameType: app.currentMatch.gameType,
         gameId: app.currentMatch.gameId,
         variantId: app.currentMatch.variantId,
@@ -429,20 +427,17 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
         startPosition: parsed[1]
     });
     if (!updatedApp) {
-        window.alert("loadMoveHistory: initiateMatch failed");
-        return undefined;
+        return Error("UNREACHED: initiateMatch failed");
     }
     // Do move one by one, return undefined if any move is invalid
     for (let i = 2; i < parsed.length; ++i) {
         const nextMove = newApp.currentMatch.round.position.availableMoveNames[parsed[i]];
         if (!nextMove) {
-            window.alert("loadMoveHistory: invalid move [" + parsed[i] + "] encountered");
-            return undefined;
+            return Error("invalid move [" + parsed[i] + "]");
         }
         updatedApp = await runMove(newApp, { move: nextMove });
         if (!updatedApp) {
-            window.alert("loadMoveHistory: runMove returned undefined");
-            return undefined;
+            return Error("UNREACHED: runMove returned undefined");
         }
     }
     // Load successful, update app.

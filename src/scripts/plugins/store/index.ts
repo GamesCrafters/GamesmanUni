@@ -211,10 +211,10 @@ type Actions = {
     [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.updateMatchType](context: ActionContext, payload: { matchType: string; players: Array<string> }): void;
-    [actionTypes.updateMatchStartPosition](context: ActionContext, payload: { position: string }): void;
+    [actionTypes.updateMatchStartPosition](context: ActionContext, payload: { position: string }): Promise<void | Error>;
     [actionTypes.preFetchNextPositions](context: ActionContext): Promise<void>;
     [actionTypes.loadLatestCommits](context: ActionContext): Promise<void>;
-    [actionTypes.loadMoveHistory](context: ActionContext, payload: { history: string }): Promise<void>;
+    [actionTypes.loadMoveHistory](context: ActionContext, payload: { history: string }): Promise<void | Error>;
 };
 
 const actions: Vuex.ActionTree<State, State> & Actions = {
@@ -291,9 +291,11 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         context.commit(mutationTypes.setApp, updatedApp);
     },
     updateMatchStartPosition: async (context: ActionContext, payload: { position: string }) => {
-        const updatedApp = await GMU.updateMatchStartPosition(context.state.app, payload);
-        if (updatedApp) {
-            context.commit(mutationTypes.setApp, updatedApp);
+        const updatedAppOrError = await GMU.updateMatchStartPosition(context.state.app, payload);
+        if (updatedAppOrError instanceof Error) {
+            return updatedAppOrError;
+        } else {
+            context.commit(mutationTypes.setApp, updatedAppOrError);
             await context.dispatch(actionTypes.restartMatch, { matchType: "pvp" });
         }
     },
@@ -303,8 +305,12 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadMoveHistory: async (context: ActionContext, payload: { history: string }) => {
-        const updatedApp = await GMU.loadMoveHistory(context.state.app, payload);
-        if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
+        const updatedAppOrError = await GMU.loadMoveHistory(context.state.app, payload);
+        if (updatedAppOrError instanceof Error) {
+            return updatedAppOrError;
+        } else {
+            context.commit(mutationTypes.setApp, updatedAppOrError);
+        }
     }
 };
 

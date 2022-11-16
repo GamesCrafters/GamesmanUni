@@ -2,13 +2,15 @@
     <div id="app-game-menu-customPos">
         <div id="app-game-menu-customPos-input">
             <button id="app-game-menu-customPos-input-info" @click="showInfo = !showInfo">𝓲</button>
-            <textarea
+            <input
                 v-model.lazy="inputPos"
                 id="app-game-menu-customPos-input-input"
                 placeholder="Enter starting position of game here"
+                @keyup.enter="onTextSubmit"
             />
             <button id="app-game-menu-customPos-input-submit" @click="onTextSubmit">Submit</button>
         </div>
+        <div class="error" v-show="errorMsg">Error: {{ errorMsg }}</div>
         <h3>Current Start Position</h3>
         <textarea
             id="app-game-menu-customPos-currStartPos"
@@ -29,11 +31,17 @@
     const store = useStore();
     const showInfo = ref(false);
     const inputPos = ref("");
+    const errorMsg = ref("");
     const currStartPosText = computed(() => store.getters.currentStartPosition);
-    const onTextSubmit = () => {
-        store.dispatch(actionTypes.updateMatchStartPosition, { position: inputPos.value });
-        inputPos.value = "";
-    }
+    const onTextSubmit = async () => {
+        const error = await store.dispatch(actionTypes.updateMatchStartPosition, { position: inputPos.value });
+        if (error) {
+            errorMsg.value = error.message;
+        } else {
+            errorMsg.value = "";
+            inputPos.value = "";
+        }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -80,6 +88,10 @@
         #app-game-menu-customPos-infoText {
            padding: 1rem;
            text-align: center;
+        }
+        .error {
+            color: red;
+            margin: 1rem;
         }
     }
 </style>
