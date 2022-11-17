@@ -1,6 +1,9 @@
 <template>
     <div id="app-games">
         <h2>{{ gameTypeTitle }}</h2>
+        <div id="search">
+            <input type="text" v-model="search" placeholder="Search for..." /> <br>
+        </div>
         <div id="games">
             <router-link v-for="game in games" :key="game.id" :to="{ name: 'variants', params: { type: gameType, gameId: game.id } }">
                 <img :src="getLogoSource(game)" :alt="game.name + ' Logo'" style="width: 8rem" />
@@ -12,11 +15,10 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, watch } from "vue";
+    import { computed, ref, watch } from "vue";
     import { useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import type { Game } from "../../scripts/gamesmanUni/types";
-
     const route = useRoute();
     const store = useStore();
     const getLogoSource = (game: Game) => {
@@ -32,7 +34,13 @@
     };
     const gameType = computed(() => route.params.type as string);
     const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
-    const games = computed(() => store.getters.games(gameType.value).games);
+    const search = ref("");
+    const games = computed(() => {
+        let unfiltered = store.getters.games(gameType.value).games;
+        const asArray = Object.entries(unfiltered);
+        const filtered = asArray.filter(([_, value]) => value.name.toLowerCase().includes(search.value.toLowerCase()));
+        return Object.fromEntries(filtered);
+    });
     store.dispatch(actionTypes.loadGames, { type: gameType.value });
     watch(
         () => route.params.type as string,
@@ -42,7 +50,20 @@
 </script>
 
 <style lang="scss" scoped>
+    #search {
+        margin-top: 1%;
+        margin-bottom: 1%;
+        height: 2rem;
+        width: 12.5rem;
+        display: inline-block;
+        justify-content: center;
+        border: 0.1rem solid var(--neutralColor);
+        border-radius: 1rem;
+        border-width: 0.5rem;
+    }
+    
     #app-games {
+        float: top;
         padding: 1rem 10%;
         > #games {
             align-content: center;

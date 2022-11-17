@@ -87,7 +87,11 @@ const loadPosition = async (app: Types.App, payload: { gameType: string; gameId:
 
 export const preFetchNextPositions = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; position: string }) => {
     const positions = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId].positions;
-    for (const move of Object.values(positions[payload.position].availableMoves)) if (!(move.position in positions)) await loadPosition(app, { ...payload, position: move.position });
+    for (const move of Object.values(positions[payload.position].availableMoves)) {
+        if (!(move.position in positions)) {
+            await loadPosition(app, { ...payload, position: move.position });
+        }
+    }
     return app;
 };
 
@@ -116,7 +120,7 @@ export const initiateMatch = async (app: Types.App, payload: { gameType: string;
 
     const updatedApp = await loadPosition(app, { ...payload, position: game.startPosition });
     if (!updatedApp) return undefined;
-    app.currentMatch = Defaults.defaultMatch;
+    app.currentMatch = { ...Defaults.defaultMatch };
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
     app.currentMatch.gameId = payload.gameId;
@@ -168,17 +172,12 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
 export const isEndOfMatch = (app: Types.App) => !app.currentMatch.round.position.remoteness && app.currentMatch.round.position.positionValue !== "draw" && !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
-    app.currentMatch.round.position.position = "";
-
-    if (Object.entries(app.currentMatch.rounds).length <= 1) {
-        return app;
-    }
-    if (!isEndOfMatch(app)) { 
+    if (Object.entries(app.currentMatch.rounds).length > 1 && !isEndOfMatch(app)) { 
         app.currentMatch.lastPlayed = new Date().getTime();
-        app.currentMatch.rounds[app.currentMatch.round.id] = app.currentMatch.round;
+        app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
         for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
     }
-    app.currentMatch = { ...Defaults.defaultMatch };
+    app.currentMatch.round.position.position = "";
     return app;
 };
 
@@ -209,11 +208,25 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     if (isEndOfMatch(app)) {
         app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.ended = new Date().getTime();
-        for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
+        for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = { ...app.currentMatch };
     } else {
         const updatedApp = await loadPosition(app, { gameType: app.currentMatch.gameType, gameId: app.currentMatch.gameId, variantId: app.currentMatch.variantId, position: app.currentMatch.round.position.availableMoves[payload.move].position });
         if (!updatedApp) return undefined;
-        const updatedPosition = updatedApp.gameTypes[app.currentMatch.gameType].games[app.currentMatch.gameId].variants.variants[app.currentMatch.variantId].positions[app.currentMatch.round.position.availableMoves[payload.move].position];
+        const updatedPosition = { 
+            ...updatedApp.
+            gameTypes[app.currentMatch.gameType].
+            games[app.currentMatch.gameId].
+            variants.
+            variants[app.currentMatch.variantId].
+            positions[
+                app.
+                currentMatch.
+                round.
+                position.
+                availableMoves[payload.move].
+                position
+            ]
+        };
         app.currentMatch.round.id += 1;
         app.currentMatch.round.players = [...app.currentMatch.round.players];
         if (app.currentMatch.gameType != "puzzles") {
