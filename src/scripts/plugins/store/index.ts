@@ -296,7 +296,9 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             return updatedAppOrError;
         } else {
             context.commit(mutationTypes.setApp, updatedAppOrError);
-            await context.dispatch(actionTypes.restartMatch, { matchType: "pvp" });
+            await context.dispatch(actionTypes.restartMatch, {
+                matchType: context.state.app.currentMatch.gameType  === "puzzles" ? "p" : "pvp"
+            });
         }
     },
     preFetchNextPositions: async (context: ActionContext) => context.commit(mutationTypes.setApp, await GMU.preFetchNextPositions(context.state.app, { gameType: context.state.app.currentMatch.gameType, gameId: context.state.app.currentMatch.gameId, variantId: context.state.app.currentMatch.variantId, position: context.state.app.currentMatch.round.position.position })),

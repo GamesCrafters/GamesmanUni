@@ -227,7 +227,9 @@ export const exitMatch = (app: Types.App) => {
     if (Object.entries(app.currentMatch.rounds).length > 1 && !isEndOfMatch(app)) { 
         app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-        for (const player of app.currentMatch.players) app.users[player].matches[app.currentMatch.id] = app.currentMatch;
+        for (const player of app.currentMatch.players) {
+            app.users[player].matches[app.currentMatch.id] = deepcopy(app.currentMatch);
+        }
     }
     app.currentMatch = deepcopy(Defaults.defaultMatch);
     return app;
@@ -417,13 +419,13 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
     if (updatedAppOrError instanceof Error) {
         return updatedAppOrError;
     }
-    // Restart match in PVP mode
+    // Restart match in PVP mode (games) or P mode (puzzles)
     exitMatch(newApp);
     let updatedApp = await initiateMatch(newApp, {
         gameType: app.currentMatch.gameType,
         gameId: app.currentMatch.gameId,
         variantId: app.currentMatch.variantId,
-        matchType: "pvp",
+        matchType: app.currentMatch.gameType === "puzzles" ? "p" : "pvp",
         startPosition: parsed[1]
     });
     if (!updatedApp) {
