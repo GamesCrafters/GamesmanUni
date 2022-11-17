@@ -2,7 +2,7 @@
     <div id="app-games">
         <h2>{{ gameTypeTitle }}</h2>
         <div id="search">
-            <input type="text" v-model="search" placeholder="Search for..." /> <br>
+            <input type="text" v-model="search" placeholder="Search for..." @keydown.esc="search = ''"/> <br>
         </div>
         <div id="games">
             <router-link v-for="game in games" :key="game.id" :to="{ name: 'variants', params: { type: gameType, gameId: game.id } }">

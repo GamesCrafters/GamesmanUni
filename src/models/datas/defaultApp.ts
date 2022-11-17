@@ -29,10 +29,13 @@ export const defaultAvailableMove: Types.Move = {
     remoteness: 0,
 };
 
+export const defaultAvailableMoveNames: Types.MoveNames = {};
+
 export const defaultAvailableMoves: Types.Moves = {};
 
 export const defaultPosition: Types.Position = {
     ...defaultUpdate,
+    availableMoveNames: {},
     availableMoves: {},
     position: "",
     positionValue: "",
@@ -101,7 +104,7 @@ export const defaultOptions: Types.Options = {
     showNextMoveHints: true,
     showNextMoves: true,
     showOptions: false,
-    showVvh: true,
+    showMenu: true,
     showVvhGuides: true,
     showVvhMeters: false,
 };
@@ -126,9 +129,11 @@ export const defaultMatch: Types.Match = {
     gameId: "",
     variantId: "",
     type: "",
+    startPosition: "",
     players: [],
     startingPlayerId: "",
     rounds: {},
+    moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
     lastPlayed: 0,
@@ -182,5 +187,21 @@ export const defaultApp: Types.App = {
         c1: { id: "c1", name: "Computer 1", options: { ...defaultOptions }, matches: {} },
         c2: { id: "c2", name: "Computer 2", options: { ...defaultOptions }, matches: {} },
     },
-    currentMatch: { id: 0, gameType: "", gameId: "", variantId: "", type: "", players: [], startingPlayerId: "", rounds: {}, round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } }, created: 0, lastPlayed: 0, ended: 0 },
+    currentMatch: {
+        id: 0, gameType: "",
+        gameId: "",
+        variantId: "",
+        type: "",
+        startPosition: "",
+        players: [],
+        startingPlayerId: "",
+        rounds: {},
+        moveHistory: "",
+        round: {
+            ...defaultRound,
+            position: { ...defaultPosition, availableMoves: {} } },
+            created: 0,
+            lastPlayed: 0,
+            ended: 0
+        },
 };
