@@ -34,12 +34,12 @@
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const gameVariants = computed(() => {
         let total = game.value.variants.variants;
-            const asArray = Object.entries(total);
-            if (asArray.length == 1 && !gameCustom.value) {
-                window.location.href = window.location + '/' + Object.keys(total);
-            } else {
-                return total;
-            }
+        const asArray = Object.entries(total);
+        if (asArray.length == 1 && !gameCustom.value) {
+            router.replace({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: asArray[0][0] } });
+        } else {
+            return total;
+        }
     });
     const getLogoSource = (variantId: string) => {
         const images = import.meta.globEager("../../models/images/*.png");
