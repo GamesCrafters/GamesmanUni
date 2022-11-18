@@ -7,7 +7,7 @@
     :data-turn="richPositionData.turn">
 
     <defs>
-      <template v-for="(value, i) in ['', 'win', 'draw', 'tie', 'lose']" :key="i">
+      <template v-for="(value, i) in ['', 'win', 'draw', 'tie', 'lose', 'undecided']" :key="i">
         <marker
           :id="'app-game-board-default-arrow-marker' + (value ? '-' + value : '')"
           viewBox="0 0 10 10"
@@ -85,7 +85,7 @@
     <!-- Draw M-type (arrow) moves. -->
     <g v-for="(arrow, i) in richPositionData.arrows"
       :key="'arrow' + i">
-      <polyline v-if="arrow.move.hint != 'undecided'"
+      <polyline
         :points="formatArrowPolylinePoints(arrow, scaledWidth / backgroundGeometry[0])"
         :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
@@ -377,6 +377,9 @@
     }
     &-lose {
       fill: var(--loseColor);
+    }
+    &-undecided{
+      fill: var(--turn1Color)
     }
   }
 
