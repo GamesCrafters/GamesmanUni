@@ -1,12 +1,15 @@
 <template>
     <div id="app-game-body-statistics-message" v-if="showNextMoveHints">
-        <template v-if="!isEndOfMatch">
+        <template v-if="currentRemoteness != 0">
             <p v-if="!isPuzzleGame && currentPositionValue === 'draw'">
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a <mark :class="`uni-${currentPositionValue}`">draw</mark>!
             </p>
-            <p v-else>
+            <p v-else-if="!isPuzzleGame">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> the game in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
             </p>
+            <p v-else>
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <mark :class="`uni-win`">solve</mark> the puzzle in {{ currentRemoteness }} move<span v-if="currentRemoteness !== 1">s</span>.
+            </p> 
         </template>
         <template v-else>
             <p v-if="!isPuzzleGame && currentPositionValue === 'win'">
@@ -17,6 +20,9 @@
             </p>
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'lose'">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">lost</mark> the game!
+            </p>
+            <p v-else-if="isPuzzleGame">
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-win`">solved</mark> the puzzle!
             </p>
             <p v-else>
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> the game!

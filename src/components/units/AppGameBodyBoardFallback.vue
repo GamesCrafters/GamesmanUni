@@ -135,7 +135,11 @@
             if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))) {
                 // Add a piece to the board
                 const to = parseInt(matches[2]);
-                board[to].token = matches[1];
+                if (matches[1] == '-') {
+                  board[to].token = '●';
+                } else {
+                  board[to].token = matches[1];
+                }
                 board[to].move = move;
             } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)$/))) {
                 // Move a piece
@@ -295,10 +299,10 @@
       cursor: default;
 
       [data-turn="A"] &.move {
-        fill: var(--turn0Color);
+        fill: var(--turn1Color);
       }
       [data-turn="B"] &.move {
-        fill: var(--turn1Color);
+        fill: var(--turn2Color);
       }
 
       &.move.hint- {
@@ -321,10 +325,10 @@
       fill: var(--primaryColor);
 
       [data-turn="A"] & {
-        fill: var(--turn0Color);
+        fill: var(--turn1Color);
       }
       [data-turn="B"] & {
-        fill: var(--turn1Color);
+        fill: var(--turn2Color);
       }
 
       &-win {
