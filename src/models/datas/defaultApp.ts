@@ -9,7 +9,7 @@ export const defaultPreferences: Types.Preferences = {
     theme: "light",
     locale: "en",
     fallbackLocale: "en",
-    rootFontSize: "11px",
+    rootFontSize: "17px",
 };
 
 export const defaultDataSources: Types.DataSources = {
@@ -53,6 +53,7 @@ export const defaultVariant: Types.Variant = {
     positions: {},
     autogui_v2_data: null as any,
     status: "",
+    gui_status: "v0"
 };
 
 export const defaultVariants: Types.Variants = {
@@ -71,6 +72,7 @@ export const defaultGame: Types.Game = {
     variants: { ...defaultVariants, variants: {} },
     status: "",
     custom: false,
+    gui_status: "v0"
 };
 
 export const defaultGames: Types.Games = {

@@ -42,6 +42,7 @@ export type Game = {
     type: string;
     variants: Variants;
     status: string;
+    gui_status: string;
     custom: boolean;
 };
 
@@ -56,6 +57,7 @@ export type Variant = {
     positions: Positions;
     autogui_v2_data: object;
     status: string;
+    gui_status: string;
 };
 
 export type Positions = Record<string, Position>;

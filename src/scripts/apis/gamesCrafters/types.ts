@@ -1,5 +1,6 @@
 export type Status = {
     status: string;
+    gui_status: string;
 };
 
 export type Error = Status & {

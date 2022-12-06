@@ -23,6 +23,7 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
             name: game.name,
             type: payload.gameType,
             status: game.status,
+            gui_status: game.gui_status,
             variants: { ...Defaults.defaultVariants },
         };
     }
@@ -55,6 +56,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             positions: { ...Defaults.defaultPositions },
             autogui_v2_data: variant.autogui_v2_data,
             status: variant.status,
+            gui_status: variant.gui_status
         };
     }
     return app;
@@ -194,7 +196,8 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         startPosition: "",
         positions: {},
         autogui_v2_data: {},
-        status: ""
+        status: "",
+        gui_status: "v0"
     };
 
     const variant: Types.Variant = {
@@ -204,6 +207,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         positions: { ...Defaults.defaultPositions },
         autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
         status: variant_response.status,
+        gui_status: variant_response.gui_status
     }
     return variant;
 };

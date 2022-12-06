@@ -125,7 +125,7 @@
         "moreMessage": "点此访问GitHub以获取完整更新历史……"
     },
     "en": {
-        "title": "What's new!?",
+        "title": "What's new?",
         "message0": "If latest version listed here does not match",
         "message1": "version in footer, new content is available.",
         "message2": "Please try refreshing the page to get latest patches and updates.",

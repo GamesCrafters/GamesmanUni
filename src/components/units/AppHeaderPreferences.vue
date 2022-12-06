@@ -139,7 +139,7 @@
             "space": "Space",
             "terminal": "Terminal"
         },
-        "themeTitle": "Theme",
+        "themeTitle": "",
         "fontSizeUnit": "px"
     },
     "es": {
