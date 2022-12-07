@@ -85,7 +85,8 @@ const formatMoves = (source: Array<{
         moveValue: string;
         position: string;
         positionValue: string;
-        remoteness: number
+        remoteness: number;
+        mex: string;
     }>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
     if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
@@ -117,6 +118,7 @@ const loadPosition = async (app: Types.App, payload: { gameType: string; gameId:
         position: updatedPosition.response.position,
         positionValue: updatedPosition.response.positionValue,
         remoteness: updatedPosition.response.remoteness,
+        mex: updatedPosition.response["mex"] || "",
     };
     return app;
 };

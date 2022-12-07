@@ -85,9 +85,11 @@ export type Position = Status & {
             position: string;
             positionValue: string;
             remoteness: number;
+            mex: string;
         }>;
         position: string;
         positionValue: string;
         remoteness: number;
+        mex: string;
     };
 };

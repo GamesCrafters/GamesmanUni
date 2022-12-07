@@ -68,6 +68,7 @@ export type Position = Update & {
     position: string;
     positionValue: string;
     remoteness: number;
+    mex: string;
 };
 
 export type Moves = Record<string, Move>;
@@ -83,6 +84,7 @@ export type Move = {
     position: string;
     positionValue: string;
     remoteness: number;
+    mex: string;
 };
 
 export type Commits = Update & {

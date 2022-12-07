@@ -29,6 +29,7 @@ export const defaultAvailableMove: Types.Move = {
     position: "",
     positionValue: "",
     remoteness: 0,
+    mex: ""
 };
 
 export const defaultAvailableMoveNames: Types.MoveNames = {};
@@ -42,6 +43,7 @@ export const defaultPosition: Types.Position = {
     position: "",
     positionValue: "",
     remoteness: 0,
+    mex: ""
 };
 
 export const defaultPositions: Types.Positions = {};

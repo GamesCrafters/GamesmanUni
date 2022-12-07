@@ -85,7 +85,7 @@
     <!-- Draw M-type (arrow) moves. -->
     <g v-for="(arrow, i) in richPositionData.arrows"
       :key="'arrow' + i">
-      <polyline v-if="arrow.move.hint != 'undecided'"
+      <polyline
         :points="formatArrowPolylinePoints(arrow, scaledWidth / backgroundGeometry[0])"
         :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
@@ -93,6 +93,23 @@
           opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
         }"
         :marker-end="getHintArrowMarker(arrow.move)" />
+    </g>
+
+    <!-- Draw L-type (arrow) moves. -->
+    <g v-for="(line, i) in richPositionData.lines"
+      :key="'line' + i">
+      <line
+        :x1="centers[line.from][0] * scaledWidth / backgroundGeometry[0]"
+        :y1="centers[line.from][1] * scaledWidth / backgroundGeometry[0]"
+        :x2="centers[line.to][0] * scaledWidth / backgroundGeometry[0]"
+        :y2="centers[line.to][1] * scaledWidth / backgroundGeometry[0]"
+        :stroke-linecap="'round'"
+        :stroke-width="0.9"
+        :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(line.move)"
+        @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"
+        :style="{
+          opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1,
+        }" />
     </g>
   </svg>
 </template>
@@ -119,6 +136,12 @@
   }
 
   interface GDefaultRegular2DBoardArrow {
+    from: number;
+    to: number;
+    move: GDefaultRegular2DMove;
+  }
+
+  interface GDefaultRegular2DBoardLine {
     from: number;
     to: number;
     move: GDefaultRegular2DMove;
@@ -169,6 +192,7 @@
       const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
       const board: GDefaultRegular2DBoardCell[] = matches[4].split("").map((piece) => ({ piece }));
       let arrows: GDefaultRegular2DBoardArrow[] = [];
+      let lines: GDefaultRegular2DBoardLine[] = [];
       for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
         const move = {
           str: nextMoveData.move,
@@ -183,6 +207,12 @@
           board[to].move = move;
         } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({
+            from: parseInt(matches[1]),
+            to: parseInt(matches[2]),
+            move,
+          });
+        } else if ((matches = nextMoveData.move.match(/^L_([0-9]+)_([0-9]+)*/))) {
+          lines.push({
             from: parseInt(matches[1]),
             to: parseInt(matches[2]),
             move,
@@ -214,6 +244,7 @@
         turn: turn,
         board,
         arrows,
+        lines,
         validRichPosition,
       };
     }

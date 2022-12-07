@@ -26,6 +26,7 @@ type Getters = {
     currentPlayer(state: State): GMUTypes.User;
     currentPlayers(state: State): GMUTypes.Users;
     currentPosition(state: State): string;
+    currentPositionMex(state: State): string;
     currentPositionValue(state: State): string;
     currentRemoteness(state: State): number;
     currentRightPlayer(state: State): GMUTypes.User;
@@ -84,6 +85,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         return currentPlayers;
     },
     currentPosition: (state: State) => state.app.currentMatch.round.position.position,
+    currentPositionMex: (state: State) => state.app.currentMatch.round.position.mex,
     currentPositionValue: (state: State) => state.app.currentMatch.round.position.positionValue,
     currentRemoteness: (state: State) => state.app.currentMatch.round.position.remoteness,
     currentRightPlayer: (state: State) => (state.app.currentMatch.type !== "puzzles" ? state.app.users[state.app.currentMatch.players[1]] : { ...Defaults.defaultUser }),
