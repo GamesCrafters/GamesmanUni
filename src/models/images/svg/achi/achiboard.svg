@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg id="a" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
-   <rect x="4" y="4" width="100" height="100" stroke="black" fill="#d0f1f2"/>
-    <circle cx="4" cy="4" r="3" fill="black"/>
-    <circle cx="4" cy="54" r="3" fill="black"/>
-    <circle cx="4" cy="104" r="3" fill="black"/>
-    <circle cx="54" cy="4" r="3" fill="black"/>
-    <circle cx="54" cy="54" r="3" fill="black"/>
-    <circle cx="54" cy="104" r="3" fill="black"/>
-    <circle cx="104" cy="4" r="3" fill="black"/>
-    <circle cx="104" cy="54" r="3" fill="black"/>
-    <circle cx="104" cy="104" r="3" fill="black"/>
-
-    <line x1="4" y1="4" x2="104" y2="104" stroke="black"/>
-    <line x1="104" y1="4" x2="4" y2="104" stroke="black"/>
-    <line x1="4" y1="54" x2="104" y2="54" stroke="black"/>
-    <line x1="54" y1="4" x2="54" y2="104" stroke="black"/>
-
+<svg id="a" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="80" height="80" stroke-width="1.5" stroke="black" fill="#d0f1f2"/>
+  <line x1="10" y1="10" x2="90" y2="90" stroke-width="1.5" stroke="black"/>
+  <line x1="10" y1="90" x2="90" y2="10" stroke-width="1.5" stroke="black"/>
+  <line x1="10" y1="50" x2="90" y2="50" stroke-width="1.5" stroke="black"/>
+  <line x1="50" y1="10" x2="50" y2="90" stroke-width="1.5"  stroke="black"/>
 
 </svg>

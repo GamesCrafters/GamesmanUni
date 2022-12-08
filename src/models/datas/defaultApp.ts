@@ -9,7 +9,7 @@ export const defaultPreferences: Types.Preferences = {
     theme: "light",
     locale: "en",
     fallbackLocale: "en",
-    rootFontSize: "17px",
+    rootFontSize: "15px",
 };
 
 export const defaultDataSources: Types.DataSources = {
