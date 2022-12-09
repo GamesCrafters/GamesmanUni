@@ -101,9 +101,9 @@ watch(
     > #searchbar {
         border: 0.4rem solid var(--neutralColor);
         border-radius: 1rem;
-        width: 37rem;
+        width: 37%;
         height: 2rem;
-        font-size: 25px;
+        font-size: 150%;
         margin: 1rem;
     }
     > #category-header {
