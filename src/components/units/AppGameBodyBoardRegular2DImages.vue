@@ -45,33 +45,29 @@
       :href="getImageSource(foregroundImagePath)" />
 
     <!-- Draw A-type Moves. -->
-    <g v-for="(cell, i) in richPositionData.board" 
-      :key="'cell' + i">
-      <g v-if="cell.move">
+    <g v-for="(token, i) in richPositionData.tokens" 
+      :key="'token' + i">
+      <g v-if="token.move">
 
         <!-- If no move token specified, use default move token (a circle). -->
-        <circle v-if="cell.token == '-'"
-            :cx="centers[i][0]"
-            :cy="centers[i][1]"
+        <circle v-if="token.token == '-'"
+            :cx="centers[token.to][0]"
+            :cy="centers[token.to][1]"
             :r="defaultMoveTokenRadius"
-            :class="'app-game-board-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            :style="'--xorigin: ' + centers[i][0] + 'px ' + centers[i][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1) + ';'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
-              {{ cell.token }}
-        </circle>
+            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
         
         <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-        <image v-else-if="Object.keys(pieces).includes(cell.token)"
-            :x="centers[i][0] - 0.5 * pieces[cell.token].scale * scaledWidth / backgroundGeometry[0]"
-            :y="centers[i][1] - 0.5 * pieces[cell.token].scale * scaledWidth / backgroundGeometry[0]"
-            :width="pieces[cell.token].scale * scaledWidth / backgroundGeometry[0]"
-            :height="pieces[cell.token].scale * scaledWidth / backgroundGeometry[0]"
-            :href="getImageSource(pieces[cell.token].image)"
-            :class="'app-game-board-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            :style="'--xorigin: ' + centers[i][0] + 'px ' + centers[i][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1) + ';'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
-              {{ cell.token }}
-        </image>
+        <image v-else-if="Object.keys(pieces).includes(token.token)"
+            :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :width="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :height="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :href="getImageSource(pieces[token.token].image)"
+            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
       </g>
     </g>
 
@@ -125,8 +121,12 @@
 
   interface GDefaultRegular2DBoardCell {
     piece: string;
-    token?: string;
-    move?: GDefaultRegular2DMove;
+  }
+
+  interface GDefaultRegular2DBoardToken {
+    token: string;
+    to: number;
+    move: GDefaultRegular2DMove;
   }
 
   interface GDefaultRegular2DBoardArrow {
@@ -164,11 +164,12 @@
   const backgroundImagePath = theTheme.backgroundImage || "";
   const foregroundImagePath = theTheme.foregroundImage || "";
   const piecesOverArrows = theTheme.piecesOverArrows || false;
-  const arrowThickness = (theTheme.arrowThickness * scaledWidth / backgroundGeometry[0] / 2) || 0.75;
+  const arrowThickness = (theTheme.arrowThickness * scaledWidth / backgroundGeometry[0] / 2) || 1.5;
   const lineWidth = theTheme.lineWidth || 0.9;
   const defaultMoveTokenRadius = (theTheme.defaultMoveTokenRadius * scaledWidth / backgroundGeometry[0]) || 2;
-  const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
   const pieces = theTheme.pieces;
+  const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
+  console.log(centers);
   // Probably don't want ot reimport every time.
   const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
@@ -184,11 +185,12 @@
 
   const richPositionData = computed(() => {
     const position: string = currentPosition.value;
-    const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)!;
+    const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
     const validRichPosition = matches && matches.length >= 5;
     if (validRichPosition) {
       const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
       const board: GDefaultRegular2DBoardCell[] = matches[4].split("").map((piece) => ({ piece }));
+      let tokens: GDefaultRegular2DBoardToken[] = [];
       let arrows: GDefaultRegular2DBoardArrow[] = [];
       let lines: GDefaultRegular2DBoardLine[] = [];
       for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
@@ -201,8 +203,11 @@
         let matches;
         if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
           const to = parseInt(matches[2]);
-          board[to].token = matches[1];
-          board[to].move = move;
+          tokens.push({
+            token: matches[1],
+            to: to,
+            move: move,
+          })
         } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({
             from: parseInt(matches[1]),
@@ -237,6 +242,7 @@
       return {
         turn: turn,
         board,
+        tokens,
         arrows,
         lines,
         validRichPosition,
@@ -294,46 +300,12 @@
     }
   }
 
-  @keyframes pulsing-image {
+  @keyframes pulsing-token {
     0% {
       transform: scale(1);
     }
     100% {
       transform: scale(1.2);
-    }
-  }
-
-  .app-game-board-default-token {
-    cursor: default;
-
-    [data-turn="A"] &.move {
-      fill: var(--turn1Color);
-    }
-    [data-turn="B"] &.move {
-      fill: var(--turn2Color);
-    }
-
-    &.move.hint- {
-      &win {
-        fill: var(--winColor);
-      }
-      &draw {
-        fill: var(--drawColor);
-      }
-      &tie {
-        fill: var(--tieColor);
-      }
-      &lose {
-        fill: var(--loseColor);
-      }
-    }
-
-    &:hover {
-      animation-name: pulsing-circle;
-      animation-duration: 0.3s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-      animation-direction: alternate;
     }
   }
 
@@ -364,7 +336,7 @@
     }
 
     &:hover {
-      animation-name: pulsing-image;
+      animation-name: pulsing-token;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
       animation-timing-function: ease-in-out;

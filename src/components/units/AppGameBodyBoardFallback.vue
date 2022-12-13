@@ -1,53 +1,40 @@
 <template>
     <svg
-      v-if="richPositionData.validRichPosition"
+      v-if="richPositionData.validRichPosition"  id="app-game-body-board-fallback"
       xmlns="http://www.w3.org/2000/svg"
-      :viewBox="'-2 -2 ' + (richPositionData.columns * 20 + 4) + ' ' + (richPositionData.rows * 20 + 4)" :data-turn="richPositionData.turn">
-        <defs>
-          <template v-for="(value, i) in ['', 'win', 'draw', 'tie', 'lose']" :key="i">
-              <marker
-                :id="'app-game-board-default-arrow-marker' + (value ? '-' + value : '')"
-                viewBox="0 0 10 10"
-                refX="5"
-                refY="5"
-                markerWidth="4"
-                markerHeight="4"
-                orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" />
-              </marker>
-          </template>
-        </defs>
-        <g
-          v-for="(cell, i) in richPositionData.board"
-          :key="'cell' + i"
-          :set="(coords = calcRegular2DBoardTopLeftCoords(i))"
-          @click="!isComputerTurn && cell.move && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
-            <rect
-              :class="'app-game-board-default-cell ' + (cell.move ? 'move ' : '') + (cell.token != '-' && !cell.move ? 'placed ' : '')"
-              :x="coords[0] * 20"
-              :y="coords[1] * 20"
-              width="20"
-              height="20" />
-            <text
-              v-if="cell.token != '-' && cell.token != '*'"
-              :x="coords[0] * 20 + 10"
-              :y="coords[1] * 20 + 10"
-              :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-              :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses && cell.move ? cell.move.hintOpacity : 1 }">
+      :viewBox="'-2 -2 ' + (100 + 4) + ' ' + (100 + 4)" :data-turn="richPositionData.turn">
+      <g
+        v-for="(cell, i) in richPositionData.board"
+        :key="'cell' + i"
+        :set="(coords = calcRegular2DBoardTopLeftCoords(i))"
+        @click="!isComputerTurn && cell.move && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
+        <rect
+          :class="'app-game-board-default-cell ' + (cell.move ? 'move ' : '') + (cell.token != '-' && !cell.move ? 'placed ' : '')"
+          :x="xOffset + coords[0] * scaledWidth / richPositionData.columns"
+          :y="yOffset + coords[1] * scaledHeight / richPositionData.rows"
+          :width="scaledWidth / richPositionData.columns"
+          :height="scaledHeight / richPositionData.rows" />
+        <text v-if="cell.token != '-' && cell.token != '*'"
+          :x="xOffset + (coords[0] + 0.5) * scaledWidth / richPositionData.columns"
+          :y="yOffset + (coords[1] + 0.5) * scaledHeight / richPositionData.rows"
+          :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
+          :style="{ 
+            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses && cell.move ? cell.move.hintOpacity : 1,
+            font: boxSize * 3 / 4 + 'px arial'
+          }">
                 {{ cell.token }}
-            </text>
-        </g>
-        <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
-            <polyline
-                :points="formatArrowPolylinePoints(arrow, 20)"
-                :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-                @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
-                :style="{
-                    opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-                }"
-                :marker-end="getHintArrowMarker(arrow.move)"
-            />
-        </g>
+        </text>
+      </g>
+      <g v-for="(arrow, i) in richPositionData.arrows "
+        :key="'arrow' + i">
+        <polyline
+          :points="formatArrowPolylinePoints(arrow, boxSize / 14)"
+          :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+          :style="{
+            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
+          }"/>
+      </g>
     </svg>
     <div id="app-game-body-board-fallback" v-else>
         <div id="position">
@@ -193,33 +180,48 @@
       }
     });
 
+    const prop = richPositionData.value.rows * 100 / richPositionData.value.columns;
+    const scaledWidth = (prop >= 100 ? (100 * 100 / prop) : 100);
+    const scaledHeight = (prop >= 100 ? 100 : prop);
+    const xOffset = (100 - scaledWidth) / 2;
+    const yOffset = (100 - scaledHeight) / 2;
+    const boxSize = (richPositionData.value.rows > richPositionData.value.columns ? 100 / richPositionData.value.rows : 100 / richPositionData.value.columns);
+
     const calcRegular2DBoardTopLeftCoords = (i: number): [number, number] => {
         return [i % richPositionData.value.columns, Math.floor(i / richPositionData.value.columns)];
     };
 
-    const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, multiplier: number, startOffset: number = 7, endOffset: number = 3): string => {
-        let fromCoords = calcRegular2DBoardTopLeftCoords(arrow.from).map((a: number) => (a + 0.5) * multiplier);
-        let toCoords = calcRegular2DBoardTopLeftCoords(arrow.to).map((a: number) => (a + 0.5) * multiplier);
-        const dir = [toCoords[0] - fromCoords[0], toCoords[1] - fromCoords[1]];
-        const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
-        const startOffsetPct = startOffset / length;
-        const endOffsetPct = endOffset / length;
-        fromCoords[0] += dir[0] * startOffsetPct;
-        fromCoords[1] += dir[1] * startOffsetPct;
-        toCoords[0] -= dir[0] * endOffsetPct;
-        toCoords[1] -= dir[1] * endOffsetPct;
-        return `${fromCoords[0]},${fromCoords[1]} ` + `${toCoords[0]},${toCoords[1]}`;
-    };
+  const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 3, endOffset: number = 3): string => {
+    let fromCoords = calcRegular2DBoardTopLeftCoords(arrow.from).map((a: number) => ((a) + 0.5) * scaledWidth / richPositionData.value.columns);
+    let coords3 = calcRegular2DBoardTopLeftCoords(arrow.to).map((a: number) => ((a) + 0.5) * scaledHeight / richPositionData.value.rows);
+    fromCoords[0] += xOffset;
+    fromCoords[1] += yOffset;
+    coords3[0] += xOffset;
+    coords3[0] += yOffset;
+    const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
+    const perpdir = [dir[1], -dir[0]];
+    const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
+    let thickNorm = thickness / length;
+    const startOffsetPct = startOffset / length;
+    const endOffsetPct = endOffset / length;
+    fromCoords[0] += dir[0] * startOffsetPct;
+    fromCoords[1] += dir[1] * startOffsetPct;
+    coords3[0] -= dir[0] * endOffsetPct;
+    coords3[1] -= dir[1] * endOffsetPct;
+    const arrowheadHeight = 3 * thickNorm * Math.tan(0.959931); // 55 degrees
+    const midCoords = [coords3[0] - dir[0] * arrowheadHeight, coords3[1] - dir[1] * arrowheadHeight];
+    const coords0 = [fromCoords[0] - perpdir[0] * thickNorm, fromCoords[1] - perpdir[1] * thickNorm];
+    const coords6 = [fromCoords[0] + perpdir[0] * thickNorm, fromCoords[1] + perpdir[1] * thickNorm];
+
+    const coords1 = [midCoords[0] - perpdir[0] * thickNorm, midCoords[1] - perpdir[1] * thickNorm];
+    const coords2 = [midCoords[0] - 3 * perpdir[0] * thickNorm, midCoords[1] - 3 * perpdir[1] * thickNorm];
+    const coords5 = [midCoords[0] + perpdir[0] * thickNorm, midCoords[1] + perpdir[1] * thickNorm];
+    const coords4 = [midCoords[0] + 3 * perpdir[0] * thickNorm, midCoords[1] + 3 * perpdir[1] * thickNorm];
+
+    return `${coords0[0]},${coords0[1]} ${coords1[0]},${coords1[1]} ${coords2[0]},${coords2[1]} ${coords3[0]},${coords3[1]} ${coords4[0]},${coords4[1]} ${coords5[0]},${coords5[1]} ${coords6[0]},${coords6[1]}`;
+  };
 
     const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
-
-    const getHintArrowMarker = (move?: GDefaultRegular2DMove): string => {
-        if (!move) return "";
-        if (options.value.showNextMoveHints) {
-            return `url(#app-game-board-default-arrow-marker-${move.hint})`;
-        }
-        return "url(#app-game-board-default-arrow-marker)";
-    };
 
     const getMoveButtonHintClass = (moveValue: string): string => (options.value.showNextMoveHints ? "c-" + moveValue : "");
 </script>
@@ -264,6 +266,8 @@
         > #no-more-move {
             text-align: center;
         }
+        width: 100%;
+        height: 100%;
     }
 
     #app-game-board-default-position-value {
@@ -321,30 +325,6 @@
       }
     }
 
-    #app-game-board-default-arrow-marker {
-      fill: var(--primaryColor);
-
-      [data-turn="A"] & {
-        fill: var(--turn1Color);
-      }
-      [data-turn="B"] & {
-        fill: var(--turn2Color);
-      }
-
-      &-win {
-        fill: var(--winColor);
-      }
-      &-draw {
-        fill: var(--drawColor);
-      }
-      &-tie {
-        fill: var(--tieColor);
-      }
-      &-lose {
-        fill: var(--loseColor);
-      }
-    }
-
     @keyframes pulsing-arrow {
       0% {
         stroke-width: 1;
@@ -355,38 +335,45 @@
     }
 
     .app-game-board-default-arrow {
-      stroke: var(--primaryColor);
+    stroke: var(--primaryColor);
+    fill: var(--primaryColor);
 
-      [data-turn="A"] & {
-        stroke: var(--turn0Color);
-      }
-      [data-turn="B"] & {
-        stroke: var(--turn1Color);
-      }
+    [data-turn="A"] & {
+      stroke: var(--turn1Color);
+      fill: var(--turn1Color);
+    }
+    [data-turn="B"] & {
+      stroke: var(--turn2Color);
+      fill: var(--turn2Color);
+    }
 
-      &.hint- {
-        &win {
-          stroke: var(--winColor);
-        }
-        &draw {
-          stroke: var(--drawColor);
-        }
-        &tie {
-          stroke: var(--tieColor);
-        }
-        &lose {
-          stroke: var(--loseColor);
-        }
+    &.hint- {
+      &win {
+        stroke: var(--winColor);
+        fill: var(--winColor);
       }
-
-      &:hover {
-        animation-name: pulsing-arrow;
-        animation-duration: 0.3s;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-        animation-direction: alternate;
+      &draw {
+        stroke: var(--drawColor);
+        fill: var(--drawColor);
+      }
+      &tie {
+        stroke: var(--tieColor);
+        fill: var(--tieColor);
+      }
+      &lose {
+        stroke: var(--loseColor);
+        fill: var(--loseColor);
       }
     }
+
+    &:hover {
+      animation-name: pulsing-arrow;
+      animation-duration: 0.3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+    }
+  }
     svg {
       height: 15em;
       width: 15em;
