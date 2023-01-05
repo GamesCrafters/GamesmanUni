@@ -93,3 +93,9 @@ export type Position = Status & {
         mex: string;
     };
 };
+
+export type RandomPosition = Status & {
+    response: {
+        position: string;
+    }
+}

@@ -1,7 +1,8 @@
 <template>
     <div id="app-game-menu-customPos">
         <div id="app-game-menu-customPos-input">
-            <button id="app-game-menu-customPos-input-info" @click="showInfo = !showInfo">𝓲</button>
+            <button class="roundButton" @click="showInfo = !showInfo">𝓲</button>
+            <button v-if="isPuzzleGame" class="roundButton" @click="randomize">⚅</button>
             <input
                 v-model.lazy="inputPos"
                 id="app-game-menu-customPos-input-input"
@@ -29,6 +30,16 @@
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
+    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
+    const randomize = async () => {
+        await store.dispatch(actionTypes.initiateMatch, {
+            gameType: store.getters.currentGameType,
+            gameId: store.getters.currentGameId,
+            variantId: store.getters.currentVariantId,
+            startPosition: "random"
+        });
+    }
+
     const showInfo = ref(false);
     const inputPos = ref("");
     const errorMsg = ref("");
@@ -54,13 +65,6 @@
             justify-content: center;
             margin: 2rem;
             align-items: center;
-            #app-game-menu-customPos-input-info {
-                margin-right: 2rem;
-                border-radius: 100%;
-                font-size: 2rem;
-                height: max(2.5rem, min(5vh, 5vw));
-                width: max(2.5rem, min(5vh, 5vw));
-            }
             #app-game-menu-customPos-input-input {
                 border-radius: 1rem;
                 border: 0.1rem solid var(--neutralColor);
@@ -74,6 +78,13 @@
                 padding: 0.5rem;
                 margin-left: 2rem;
                 border: 0.1rem solid var(--neutralColor);
+            }
+            .roundButton {
+                margin-right: 2rem;
+                border-radius: 100%;
+                font-size: 2rem;
+                height: max(2.5rem, min(5vh, 5vw));
+                width: max(2.5rem, min(5vh, 5vw));
             }
         }
         #app-game-menu-customPos-currStartPos {

@@ -13,7 +13,7 @@
         </template>
         <template v-else>
             <p v-if="!isPuzzleGame && currentPositionValue === 'win'">
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">won</mark> the game! {{ mextStr }}
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has <mark :class="`uni-${currentPositionValue}`">won</mark> the game! {{ mexStr }}
             </p>
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'tie'">
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and <b class="uni-turn-2">{{ currentRightPlayerName }}</b> have <mark :class="`uni-${currentPositionValue}`">tied</mark> the game!

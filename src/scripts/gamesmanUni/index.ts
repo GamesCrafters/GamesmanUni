@@ -161,7 +161,15 @@ export const initiateMatch = async (app: Types.App, payload: {
         gameVariant = await loadVariant(app, payload);
         game.variants.variants[payload.variantId] = gameVariant;
     }
-    const startPosition = payload.startPosition ? payload.startPosition : gameVariant.startPosition;
+    let startPosition: string;
+    if (!payload.startPosition) {
+        startPosition = gameVariant.startPosition;
+    } else if (payload.startPosition === "random") {
+        const loaded = await GCTAPI.loadRandomPosition(`${app.dataSources.onePlayerGameAPI}/${payload.gameId}/${payload.variantId}/randpos`);
+        startPosition = loaded ? loaded.response.position : gameVariant.startPosition;
+    } else {
+        startPosition = payload.startPosition;
+    }
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
     app.currentMatch.startPosition = startPosition;
