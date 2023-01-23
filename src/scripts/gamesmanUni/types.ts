@@ -140,6 +140,7 @@ export type Match = {
     created: number;
     lastPlayed: number;
     ended: number;
+    backgroundLoading: boolean;
 };
 
 export type Rounds = Record<number, Round>;

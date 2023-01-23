@@ -144,6 +144,7 @@ export const defaultMatch: Types.Match = {
     created: 0,
     lastPlayed: 0,
     ended: 0,
+    backgroundLoading: false,
 };
 
 export const defaultUser: Types.User = {
@@ -208,6 +209,7 @@ export const defaultApp: Types.App = {
             position: { ...defaultPosition, availableMoves: {} } },
             created: 0,
             lastPlayed: 0,
-            ended: 0
+            ended: 0,
+            backgroundLoading: false,
         },
 };

@@ -46,6 +46,7 @@ type Getters = {
     locale(state: State): string;
     maximumRemoteness(state: State): (from: number, to: number) => number;
     moveHistory(state: State): string;
+    backgroundLoading(state: State): boolean;
     onePlayerGameAPI(state: State): string;
     position(state: State): (gameType: string, gameId: string, variantId: string, position: string) => GMUTypes.Position;
     positions(state: State): (gameType: string, gameId: string, variantId: string) => GMUTypes.Positions;
@@ -105,6 +106,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     locale: (state: State) => state.app.preferences.locale,
     maximumRemoteness: (state: State) => (from: number, to: number) => GMU.getMaximumRemoteness(state.app, { from, to }),
     moveHistory: (state: State) => state.app.currentMatch.moveHistory,
+    backgroundLoading: (state: State) => state.app.currentMatch.backgroundLoading,
     onePlayerGameAPI: (state: State) => state.app.dataSources.onePlayerGameAPI,
     position: (state: State) => (gameType: string, gameId: string, variantId: string, position: string) => state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions[position],
     positions: (state: State) => (gameType: string, gameId: string, variantId: string) => state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions,
@@ -262,12 +264,14 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         });
     },
     runMove: async (context: ActionContext, payload: { move: string }) => {
+        context.state.app.currentMatch.backgroundLoading = true;
         const updatedApp = await GMU.runMove(context.state.app, payload);
         if (updatedApp) {
             context.commit(mutationTypes.setApp, updatedApp);
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
         await store.dispatch(actionTypes.runComputerMove);
+        context.state.app.currentMatch.backgroundLoading = false;
     },
     runComputerMove: async (context: ActionContext) => {
         while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
