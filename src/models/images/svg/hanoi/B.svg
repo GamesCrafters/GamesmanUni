@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="9" width="12" height="4" rx="2.5" fill="#90C" stroke="#90C" />
+</svg>
