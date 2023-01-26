@@ -14,8 +14,10 @@ export const defaultPreferences: Types.Preferences = {
 
 export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
-    onePlayerGameAPI: "http://localhost:9001/",
+    onePlayerGameAPI: "https://nyc.cs.berkeley.edu/puzzles",
+    // onePlayerGameAPI: "http://localhost:9001/",
     twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
+    //twoPlayerGameAPI: "http://localhost:8082/games"
 };
 
 export const defaultAvailableMove: Types.Move = {
@@ -27,16 +29,21 @@ export const defaultAvailableMove: Types.Move = {
     position: "",
     positionValue: "",
     remoteness: 0,
+    mex: ""
 };
+
+export const defaultAvailableMoveNames: Types.MoveNames = {};
 
 export const defaultAvailableMoves: Types.Moves = {};
 
 export const defaultPosition: Types.Position = {
     ...defaultUpdate,
+    availableMoveNames: {},
     availableMoves: {},
     position: "",
     positionValue: "",
     remoteness: 0,
+    mex: ""
 };
 
 export const defaultPositions: Types.Positions = {};
@@ -48,6 +55,7 @@ export const defaultVariant: Types.Variant = {
     positions: {},
     autogui_v2_data: null as any,
     status: "",
+    gui_status: "v0"
 };
 
 export const defaultVariants: Types.Variants = {
@@ -66,6 +74,7 @@ export const defaultGame: Types.Game = {
     variants: { ...defaultVariants, variants: {} },
     status: "",
     custom: false,
+    gui_status: "v0"
 };
 
 export const defaultGames: Types.Games = {
@@ -101,7 +110,7 @@ export const defaultOptions: Types.Options = {
     showNextMoveHints: true,
     showNextMoves: true,
     showOptions: false,
-    showVvh: true,
+    showMenu: true,
     showVvhGuides: true,
     showVvhMeters: false,
 };
@@ -126,13 +135,16 @@ export const defaultMatch: Types.Match = {
     gameId: "",
     variantId: "",
     type: "",
+    startPosition: "",
     players: [],
     startingPlayerId: "",
     rounds: {},
+    moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
     lastPlayed: 0,
     ended: 0,
+    backgroundLoading: false,
 };
 
 export const defaultUser: Types.User = {
@@ -182,5 +194,22 @@ export const defaultApp: Types.App = {
         c1: { id: "c1", name: "Computer 1", options: { ...defaultOptions }, matches: {} },
         c2: { id: "c2", name: "Computer 2", options: { ...defaultOptions }, matches: {} },
     },
-    currentMatch: { id: 0, gameType: "", gameId: "", variantId: "", type: "", players: [], startingPlayerId: "", rounds: {}, round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } }, created: 0, lastPlayed: 0, ended: 0 },
+    currentMatch: {
+        id: 0, gameType: "",
+        gameId: "",
+        variantId: "",
+        type: "",
+        startPosition: "",
+        players: [],
+        startingPlayerId: "",
+        rounds: {},
+        moveHistory: "",
+        round: {
+            ...defaultRound,
+            position: { ...defaultPosition, availableMoves: {} } },
+            created: 0,
+            lastPlayed: 0,
+            ended: 0,
+            backgroundLoading: false,
+        },
 };

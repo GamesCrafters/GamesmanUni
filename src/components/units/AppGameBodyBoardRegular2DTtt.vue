@@ -12,7 +12,7 @@
                 <use href="#cross-bar" transform="translate(22) rotate(90)" />
             </g>
             <circle id="o-token" cx="11" cy="11" r="8" />
-            <circle id="hint" cx="11" cy="11" r="1" />
+            <circle id="hint" cx="11" cy="11" r="4" />
             <rect id="available-move-cell" x="1" y="1" width="20" height="20" />
         </defs>
         <use href="#board" x="0" y="0" />
@@ -69,15 +69,19 @@
         }
         .hint- {
             &win {
+                fill: var(--winColor);
                 stroke: var(--winColor);
             }
             &draw {
+                fill: var(--drawColor);
                 stroke: var(--drawColor);
             }
             &tie {
+                fill: var(--tieColor);
                 stroke: var(--tieColor);
             }
             &lose {
+                fill: var(--loseColor);
                 stroke: var(--loseColor);
             }
         }

@@ -143,15 +143,15 @@
                 </div>
                 <div id="computer-move-duration" v-if="updatedMatchType.includes('c')">
                     <h3 class="title">Computer Move Duration (milliseconds)</h3>
-                    <VueSlider id="slider" v-model="options.computerMoveDuration" :min="0" :max="10000" interval="10" :tooltip="'active'" />
+                    <VueSlider id="slider" v-model="options.computerMoveDuration" :min="0" :max="10000" :interval="10" :tooltip="'active'" />
                     <i>(Note: The actual duration will be either the ideal duration above or server data load time if there is any server data load action, whichever is greater.)</i>
                 </div>
                 <div id="visibility-options">
                     <h3 id="title">Visibility Options</h3>
                     <div id="options">
                         <div class="option">
-                            <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showVvh" />
-                            <label for="checkbox">Visual Value History</label>
+                            <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showMenu" />
+                            <label for="checkbox">Game Menu</label>
                         </div>
                         <div class="option">
                             <input class="uni-toggle-button" aria-label="toggle" type="checkbox" v-model="options.showNextMoves" />
@@ -196,9 +196,9 @@
 
     const currentPlayerName = computed(() => (store.getters.users ? store.getters.users[currentPlayerId.value].name : ""));
     const updatedPlayerName = ref("");
-    const currentLeftPlayerName = computed(() => (store.getters.users ? store.getters.users[currentLeftPlayerId.value].name : ""));
+    const currentLeftPlayerName = computed(() => (store.getters.users && store.getters.users[currentLeftPlayerId.value] ? store.getters.users[currentLeftPlayerId.value].name : ""));
     const updatedLeftPlayerName = ref("");
-    const currentRightPlayerName = computed(() => (store.getters.users ? store.getters.users[currentRightPlayerId.value].name : ""));
+    const currentRightPlayerName = computed(() => (store.getters.users && store.getters.users[currentRightPlayerId.value] ? store.getters.users[currentRightPlayerId.value].name : ""));
     const updatedRightPlayerName = ref("");
     const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;

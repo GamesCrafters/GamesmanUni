@@ -6,39 +6,36 @@
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
     :data-turn="richPositionData.turn">
 
-    <defs>
-      <template v-for="(value, i) in ['', 'win', 'draw', 'tie', 'lose', 'undecided']" :key="i">
-        <marker
-          :id="'app-game-board-default-arrow-marker' + (value ? '-' + value : '')"
-          viewBox="0 0 10 10"
-          refX="5"
-          refY="5"
-          markerWidth="4"
-          markerHeight="4"
-          orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" />
-        </marker>
-      </template>
-    </defs>
-
     <!-- Draw Background Image -->
     <image v-if="backgroundImagePath != ''"
-        :width="scaledWidth"
-        :height="scaledHeight"
-        :href="getImageSource(backgroundImagePath)" />
+      :width="scaledWidth"
+      :height="scaledHeight"
+      :href="getImageSource(backgroundImagePath)" />
+
+    <!-- Draw M-type (arrow) moves below pieces. -->
+    <g v-if="piecesOverArrows"> 
+      <g v-for="(arrow, i) in richPositionData.arrows "
+        :key="'arrow' + i">
+        <polyline
+          :points="formatArrowPolylinePoints(arrow, arrowThickness)"
+          :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+          :style="{
+            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
+          }"/>
+      </g>
+    </g>
 
     <!-- Draw Pieces on Board. -->
     <g v-for="(cell, i) in richPositionData.board"
-      :key="'cell' + i"
-      :set="(coords = getRegular2DBoardCenterCoords(i))">
-      <image
-            v-if="cell.piece != '-' && cell.piece != '*' && Object.keys(pieces).includes(cell.piece)"
-            :id="'piece' + i"
-            :x="(coords[0] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :y="(coords[1] - 0.5 * pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :width="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :height="(pieces[cell.piece].scale) * scaledWidth / backgroundGeometry[0]"
-            :href="getImageSource(pieces[cell.piece].image)" />
+      :key="'cell' + i">
+      <image v-if="cell.piece != '-' && cell.piece != '*' && Object.keys(pieces).includes(cell.piece)"
+        :id="'piece' + i"
+        :x="centers[i][0] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
+        :y="centers[i][1] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
+        :width="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
+        :height="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
+        :href="getImageSource(pieces[cell.piece].image)" />
     </g>
  
     <!-- Draw Foreground Image -->
@@ -48,51 +45,61 @@
       :href="getImageSource(foregroundImagePath)" />
 
     <!-- Draw A-type Moves. -->
-    <g v-for="(cell, i) in richPositionData.board" 
-      :key="'cell' + i"
-      :set="(coords = getRegular2DBoardCenterCoords(i))">
-      <g v-if="cell.move">
+    <g v-for="(token, i) in richPositionData.tokens" 
+      :key="'token' + i">
+      <g v-if="token.move">
 
         <!-- If no move token specified, use default move token (a circle). -->
-        <circle
-          v-if="cell.token == '-'"
-            :cx="coords[0] * scaledWidth / backgroundGeometry[0]"
-            :cy="coords[1] * scaledWidth / backgroundGeometry[0]"
-            :r="2"
-            :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })"
-            :style="{ opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1 }">
-              {{ cell.token }}
-        </circle>
+        <circle v-if="token.token == '-'"
+            :cx="centers[token.to][0]"
+            :cy="centers[token.to][1]"
+            :r="defaultMoveTokenRadius"
+            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
         
         <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-        <image
-          v-else-if="Object.keys(pieces).includes(cell.token)"
-            :x="(coords[0] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :y="(coords[1] - 0.5 * pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :width="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :height="(pieces[cell.token].scale) * scaledWidth / backgroundGeometry[0]"
-            :href="getImageSource(pieces[cell.token].image)"
-            :class="'app-game-board-image-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
-            :style="'--xorigin: ' + (coords[0] * scaledWidth / backgroundGeometry[0]) + 'px ' + (coords[1] * scaledWidth / backgroundGeometry[0]) + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cell.move.hintOpacity : 1) + ';'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
-              {{ cell.token }}
-        </image>
+        <image v-else-if="Object.keys(pieces).includes(token.token)"
+            :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :width="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :height="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+            :href="getImageSource(pieces[token.token].image)"
+            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
       </g>
-      
     </g>
 
-    <!-- Draw M-type (arrow) moves. -->
-    <g v-for="(arrow, i) in richPositionData.arrows"
-      :key="'arrow' + i">
-      <polyline
-        :points="formatArrowPolylinePoints(arrow, scaledWidth / backgroundGeometry[0])"
-        :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-        @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+    <!-- Draw M-type (arrow) moves on top of pieces. -->
+    <g v-if="!piecesOverArrows"> 
+      <g v-for="(arrow, i) in richPositionData.arrows "
+        :key="'arrow' + i">
+        <polyline
+          :points="formatArrowPolylinePoints(arrow, arrowThickness)"
+          :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+          :style="{
+            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
+          }"/>
+      </g>
+    </g>
+
+    <!-- Draw L-type (line) moves. -->
+    <g v-for="(line, i) in richPositionData.lines"
+      :key="'line' + i">
+      <line
+        :x1="centers[line.from][0]"
+        :y1="centers[line.from][1]"
+        :x2="centers[line.to][0]"
+        :y2="centers[line.to][1]"
+        :stroke-linecap="'round'"
+        :stroke-width="lineWidth"
+        :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(line.move)"
+        @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"
         :style="{
-          opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-        }"
-        :marker-end="getHintArrowMarker(arrow.move)" />
+          opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1,
+        }" />
     </g>
   </svg>
 </template>
@@ -114,11 +121,21 @@
 
   interface GDefaultRegular2DBoardCell {
     piece: string;
-    token?: string;
-    move?: GDefaultRegular2DMove;
+  }
+
+  interface GDefaultRegular2DBoardToken {
+    token: string;
+    to: number;
+    move: GDefaultRegular2DMove;
   }
 
   interface GDefaultRegular2DBoardArrow {
+    from: number;
+    to: number;
+    move: GDefaultRegular2DMove;
+  }
+
+  interface GDefaultRegular2DBoardLine {
     from: number;
     to: number;
     move: GDefaultRegular2DMove;
@@ -146,8 +163,13 @@
   const imagePathPrefix = "../../models/images/svg/";
   const backgroundImagePath = theTheme.backgroundImage || "";
   const foregroundImagePath = theTheme.foregroundImage || "";
-  const centers = theTheme.centers;
+  const piecesOverArrows = theTheme.piecesOverArrows || false;
+  const arrowThickness = (theTheme.arrowThickness * scaledWidth / backgroundGeometry[0] / 2) || 1.5;
+  const lineWidth = theTheme.lineWidth || 0.9;
+  const defaultMoveTokenRadius = (theTheme.defaultMoveTokenRadius * scaledWidth / backgroundGeometry[0]) || 2;
   const pieces = theTheme.pieces;
+  const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
+  console.log(centers);
   // Probably don't want ot reimport every time.
   const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
@@ -163,12 +185,14 @@
 
   const richPositionData = computed(() => {
     const position: string = currentPosition.value;
-    const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)!;
+    const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
     const validRichPosition = matches && matches.length >= 5;
     if (validRichPosition) {
       const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
       const board: GDefaultRegular2DBoardCell[] = matches[4].split("").map((piece) => ({ piece }));
+      let tokens: GDefaultRegular2DBoardToken[] = [];
       let arrows: GDefaultRegular2DBoardArrow[] = [];
+      let lines: GDefaultRegular2DBoardLine[] = [];
       for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
         const move = {
           str: nextMoveData.move,
@@ -179,10 +203,19 @@
         let matches;
         if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
           const to = parseInt(matches[2]);
-          board[to].token = matches[1];
-          board[to].move = move;
+          tokens.push({
+            token: matches[1],
+            to: to,
+            move: move,
+          })
         } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({
+            from: parseInt(matches[1]),
+            to: parseInt(matches[2]),
+            move,
+          });
+        } else if ((matches = nextMoveData.move.match(/^L_([0-9]+)_([0-9]+)*/))) {
+          lines.push({
             from: parseInt(matches[1]),
             to: parseInt(matches[2]),
             move,
@@ -192,19 +225,15 @@
         }
       }
       
-      const getRegular2DBoardCenterCoords = (i: number): [number, number] => {
-        return centers[i];
-      };
-      
       const computeSquaredLength = (ax: number, ay: number, bx: number, by: number): number => {
         return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
       };
 
       const compareArrowSquaredLength = (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
-        const aFromCoords = getRegular2DBoardCenterCoords(a.from);
-        const aToCoords = getRegular2DBoardCenterCoords(a.to);
-        const bFromCoords = getRegular2DBoardCenterCoords(b.from);
-        const bToCoords = getRegular2DBoardCenterCoords(b.to);
+        const aFromCoords = centers[a.from];
+        const aToCoords = centers[a.to];
+        const bFromCoords = centers[b.from];
+        const bToCoords = centers[b.to];
         return computeSquaredLength(bFromCoords[0], bFromCoords[1], bToCoords[0], bToCoords[1]) - computeSquaredLength(aFromCoords[0], aFromCoords[1], aToCoords[0], aToCoords[1]);
       };
 
@@ -213,7 +242,9 @@
       return {
         turn: turn,
         board,
+        tokens,
         arrows,
+        lines,
         validRichPosition,
       };
     }
@@ -223,34 +254,34 @@
     }
   });
 
-  const getRegular2DBoardCenterCoords = (i: number): [number, number] => {
-    return centers[i];
-  };
-
-  const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, multiplier: number, startOffset: number = 2, endOffset: number = 3): string => {
-    let fromCoords = getRegular2DBoardCenterCoords(arrow.from).map((a: number) => (a) * multiplier);
-    let toCoords = getRegular2DBoardCenterCoords(arrow.to).map((a: number) => (a) * multiplier);
-    const dir = [toCoords[0] - fromCoords[0], toCoords[1] - fromCoords[1]];
+  const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 2, endOffset: number = 2): string => {
+    let fromCoords = centers[arrow.from].map((a: number) => (a));
+    let coords3 = centers[arrow.to].map((a: number) => (a));
+    const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
+    const perpdir = [dir[1], -dir[0]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
+    let thickNorm = thickness / length;
     const startOffsetPct = startOffset / length;
     const endOffsetPct = endOffset / length;
     fromCoords[0] += dir[0] * startOffsetPct;
     fromCoords[1] += dir[1] * startOffsetPct;
-    toCoords[0] -= dir[0] * endOffsetPct;
-    toCoords[1] -= dir[1] * endOffsetPct;
-    return `${fromCoords[0]},${fromCoords[1]} ` + `${toCoords[0]},${toCoords[1]}`;
+    coords3[0] -= dir[0] * endOffsetPct;
+    coords3[1] -= dir[1] * endOffsetPct;
+    const arrowheadHeight = 3 * thickNorm * Math.tan(0.959931); // 55 degrees
+    const midCoords = [coords3[0] - dir[0] * arrowheadHeight, coords3[1] - dir[1] * arrowheadHeight];
+    const coords0 = [fromCoords[0] - perpdir[0] * thickNorm, fromCoords[1] - perpdir[1] * thickNorm];
+    const coords6 = [fromCoords[0] + perpdir[0] * thickNorm, fromCoords[1] + perpdir[1] * thickNorm];
+
+    const coords1 = [midCoords[0] - perpdir[0] * thickNorm, midCoords[1] - perpdir[1] * thickNorm];
+    const coords2 = [midCoords[0] - 3 * perpdir[0] * thickNorm, midCoords[1] - 3 * perpdir[1] * thickNorm];
+    const coords5 = [midCoords[0] + perpdir[0] * thickNorm, midCoords[1] + perpdir[1] * thickNorm];
+    const coords4 = [midCoords[0] + 3 * perpdir[0] * thickNorm, midCoords[1] + 3 * perpdir[1] * thickNorm];
+
+    return `${coords0[0]},${coords0[1]} ${coords1[0]},${coords1[1]} ${coords2[0]},${coords2[1]} ${coords3[0]},${coords3[1]} ${coords4[0]},${coords4[1]} ${coords5[0]},${coords5[1]} ${coords6[0]},${coords6[1]}`;
   };
 
   const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
   
-  const getHintArrowMarker = (move?: GDefaultRegular2DMove): string => {
-    if (!move) return "";
-    if (options.value.showNextMoveHints) {
-      return `url(#app-game-board-default-arrow-marker-${move.hint})`;
-    }
-    return "url(#app-game-board-default-arrow-marker)";
-  };
-
 </script>
 
 <style lang="scss" scoped>
@@ -269,16 +300,7 @@
     }
   }
 
-  @keyframes pulsing-circle {
-    0% {
-      r: 2;
-    }
-    100% {
-      r: 3;
-    }
-  }
-
-  @keyframes pulsing-image {
+  @keyframes pulsing-token {
     0% {
       transform: scale(1);
     }
@@ -287,41 +309,7 @@
     }
   }
 
-  .app-game-board-default-token {
-    cursor: default;
-
-    [data-turn="A"] &.move {
-      fill: var(--turn1Color);
-    }
-    [data-turn="B"] &.move {
-      fill: var(--turn2Color);
-    }
-
-    &.move.hint- {
-      &win {
-        fill: var(--winColor);
-      }
-      &draw {
-        fill: var(--drawColor);
-      }
-      &tie {
-        fill: var(--tieColor);
-      }
-      &lose {
-        fill: var(--loseColor);
-      }
-    }
-
-    &:hover {
-      animation-name: pulsing-circle;
-      animation-duration: 0.3s;
-      animation-iteration-count: infinite;
-      animation-timing-function: ease-in-out;
-      animation-direction: alternate;
-    }
-  }
-
-  .app-game-board-image-token {
+  .app-game-board-token {
     cursor: default;
     transform-origin: var(--xorigin);
     
@@ -348,7 +336,7 @@
     }
 
     &:hover {
-      animation-name: pulsing-image;
+      animation-name: pulsing-token;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
       animation-timing-function: ease-in-out;
@@ -356,55 +344,35 @@
     }
   }
 
-  #app-game-board-default-arrow-marker {
+  .app-game-board-default-arrow {
+    stroke: var(--primaryColor);
     fill: var(--primaryColor);
 
     [data-turn="A"] & {
+      stroke: var(--turn1Color);
       fill: var(--turn1Color);
     }
     [data-turn="B"] & {
-      fill: var(--turn2Color);
-    }
-
-    &-win {
-      fill: var(--winColor);
-    }
-    &-draw {
-      fill: var(--drawColor);
-    }
-    &-tie {
-      fill: var(--tieColor);
-    }
-    &-lose {
-      fill: var(--loseColor);
-    }
-    &-undecided{
-      fill: var(--turn1Color)
-    }
-  }
-
-  .app-game-board-default-arrow {
-    stroke: var(--primaryColor);
-
-    [data-turn="A"] & {
-      stroke: var(--turn1Color);
-    }
-    [data-turn="B"] & {
       stroke: var(--turn2Color);
+      fill: var(--turn2Color);
     }
 
     &.hint- {
       &win {
         stroke: var(--winColor);
+        fill: var(--winColor);
       }
       &draw {
         stroke: var(--drawColor);
+        fill: var(--drawColor);
       }
       &tie {
         stroke: var(--tieColor);
+        fill: var(--tieColor);
       }
       &lose {
         stroke: var(--loseColor);
+        fill: var(--loseColor);
       }
     }
 
@@ -415,7 +383,6 @@
       animation-timing-function: ease-in-out;
       animation-direction: alternate;
     }
-
   }
 
   svg {

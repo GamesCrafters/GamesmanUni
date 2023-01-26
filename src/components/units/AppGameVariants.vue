@@ -3,10 +3,9 @@
         <h2>{{ gameName }}</h2>
         <h3>{{ t("gameVariantsTitle") }}</h3>
         <div id="variants" v-if="game">
-            <router-link v-for="variant in gameVariants" :key="variant.id" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
+            <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui_status" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
                 <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.description + ' Logo'" style="width: 8rem" />
                 <p>{{ variant.description }}</p>
-                <i>Data Status: {{ variant.status }}</i>
             </router-link>
             <div v-if="gameCustom" v-on:click="customBoardRoute">
                 <img :src="getLogoSource('custom')" :alt="game.name + ' ' + 'Custom Logo'" style="width: 8rem" />
@@ -32,7 +31,15 @@
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
     const gameCustom = computed(() => (game.value ? game.value.custom : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
-    const gameVariants = computed(() => game.value.variants.variants);
+    const gameVariants = computed(() => {
+        let total = game.value.variants.variants;
+        const asArray = Object.entries(total);
+        if (asArray.length == 1 && !gameCustom.value) {
+            router.replace({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: asArray[0][0] } });
+        } else {
+            return total;
+        }
+    });
     const getLogoSource = (variantId: string) => {
         const images = import.meta.globEager("../../models/images/*.png");
         const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
@@ -41,11 +48,11 @@
         try {
             return images[VariantThumbnailFilePath].default;
         } catch (errorMessage) {
-            console.warn(`${gameId.value} game's ${variantId} variant logo does not exist yet.`);
+            //console.warn(`${gameId.value} game's ${variantId} variant logo does not exist yet.`);
             try {
                 return images[regularThumbnailFilePath].default;
             } catch (errorMessage) {
-                console.warn(`${gameId.value} game's regular variant logo does not exist yet.`);
+                //console.warn(`${gameId.value} game's regular variant logo does not exist yet.`);
             }
         }
         return images[appLogoFilePath].default;
@@ -77,6 +84,22 @@
                 > * {
                     text-align: center;
                 }
+            }
+
+            > a.v3 {
+                border: 0.2rem solid purple;
+            }
+
+            > a.v2 {
+                border: 0.2rem solid gold;
+            }
+
+            > a.v1 {
+                border: 0.2rem solid silver;
+            }
+
+            > a.v0 {
+                border: 0.2rem solid #CD7F32;
             }
 
             > div {

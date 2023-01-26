@@ -1,5 +1,6 @@
 export type Status = {
     status: string;
+    gui_status: string;
 };
 
 export type Error = Status & {
@@ -84,9 +85,17 @@ export type Position = Status & {
             position: string;
             positionValue: string;
             remoteness: number;
+            mex: string;
         }>;
         position: string;
         positionValue: string;
         remoteness: number;
+        mex: string;
     };
 };
+
+export type RandomPosition = Status & {
+    response: {
+        position: string;
+    }
+}

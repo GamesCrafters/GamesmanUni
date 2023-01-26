@@ -1,16 +1,20 @@
 <template>
     <div id="app-game-body-statistics">
-        <div id="first-row">
+        <div class="row">
             <AppGameBodyStatisticsData />
             <AppGameBodyStatisticsMoves />
         </div>
-        <AppGameBodyStatisticsMessage />
+        <div class="row">
+            <AppGameBodyStatisticsStatus />
+            <AppGameBodyStatisticsMessage />
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
     import AppGameBodyStatisticsMoves from "./AppGameBodyStatisticsMoves.vue";
     import AppGameBodyStatisticsData from "./AppGameBodyStatisticsData.vue";
+    import AppGameBodyStatisticsStatus from "./AppGameBodyStatisticsStatus.vue";
     import AppGameBodyStatisticsMessage from "./AppGameBodyStatisticsMessage.vue";
 </script>
 
@@ -22,7 +26,7 @@
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        > #first-row {
+        > .row {
             align-content: normal;
             align-items: stretch;
             display: flex;

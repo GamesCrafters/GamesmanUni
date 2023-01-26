@@ -42,6 +42,7 @@ export type Game = {
     type: string;
     variants: Variants;
     status: string;
+    gui_status: string;
     custom: boolean;
 };
 
@@ -56,18 +57,23 @@ export type Variant = {
     positions: Positions;
     autogui_v2_data: object;
     status: string;
+    gui_status: string;
 };
 
 export type Positions = Record<string, Position>;
 
 export type Position = Update & {
+    availableMoveNames: MoveNames;
     availableMoves: Moves;
     position: string;
     positionValue: string;
     remoteness: number;
+    mex: string;
 };
 
 export type Moves = Record<string, Move>;
+
+export type MoveNames = Record<string, string>;
 
 export type Move = {
     deltaRemoteness: number;
@@ -78,6 +84,7 @@ export type Move = {
     position: string;
     positionValue: string;
     remoteness: number;
+    mex: string;
 };
 
 export type Commits = Update & {
@@ -111,7 +118,7 @@ export type Options = {
     showNextMoveHints: boolean;
     showNextMoves: boolean;
     showOptions: boolean;
-    showVvh: boolean;
+    showMenu: boolean;
     showVvhGuides: boolean;
     showVvhMeters: boolean;
 };
@@ -124,13 +131,16 @@ export type Match = {
     gameId: string;
     variantId: string;
     type: string;
+    startPosition: string;
     players: Array<string>;
     startingPlayerId: string;
     rounds: Rounds;
+    moveHistory: string;
     round: Round;
     created: number;
     lastPlayed: number;
     ended: number;
+    backgroundLoading: boolean;
 };
 
 export type Rounds = Record<number, Round>;
