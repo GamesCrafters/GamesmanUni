@@ -10,6 +10,7 @@
     import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue"
     import AppGameBodyBoardRegular2DImages from "./AppGameBodyBoardRegular2DImages.vue";
     import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";
+    import AppGameBoardRegular2DQuarto from "./AppGameBodyBoardRegular2DQuarto.vue";
 
     const store = useStore();
     const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
@@ -20,6 +21,7 @@
     const regular2DGameBoards: Record<string, any> = {
         "ttt-misere": AppGameBoardRegular2DTtt,
         "ttt-regular": AppGameBoardRegular2DTtt,
+        "quarto-regular": AppGameBoardRegular2DQuarto,
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);
