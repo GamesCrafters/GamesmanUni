@@ -375,6 +375,11 @@ export const undoMove = (app: Types.App, payload?: { count?: number }) => {
     return app;
 };
 
+export const updateGameTheme = (app: Types.App, payload: { gameTheme : string }) => {
+    app.currentMatch.gameTheme = payload.gameTheme || "";
+    return app;
+}
+
 export const updateMatchType = (app: Types.App, payload: { matchType: string, players: Array<string> }) => {
     app.currentMatch.type = payload.matchType;
     const currentTurnIndex = app.currentMatch.players.indexOf(app.currentMatch.round.playerId);

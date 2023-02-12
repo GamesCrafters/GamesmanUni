@@ -169,7 +169,6 @@
   const defaultMoveTokenRadius = (theTheme.defaultMoveTokenRadius * scaledWidth / backgroundGeometry[0]) || 2;
   const pieces = theTheme.pieces;
   const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
-  console.log(centers);
   // Probably don't want ot reimport every time.
   const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
