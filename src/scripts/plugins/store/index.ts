@@ -18,6 +18,7 @@ type Getters = {
     currentAvailableMoves(state: State): GMUTypes.Moves;
     currentGameId(state: State): string;
     currentGameName(state: State): string;
+    currentGameTheme(state: State): string;
     currentGameType(state: State): string;
     currentLeftPlayer(state: State): GMUTypes.User;
     currentMatch(state: State): GMUTypes.Match;
@@ -96,6 +97,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     currentRoundId: (state: State) => state.app.currentMatch.round.id,
     currentRounds: (state: State) => state.app.currentMatch.rounds,
     currentStartPosition: (state: State) => state.app.currentMatch.startPosition,
+    currentGameTheme: (state: State) => state.app.currentMatch.gameTheme,
     currentVariantId: (state: State) => state.app.currentMatch.variantId,
     dataSources: (state: State) => state.app.dataSources,
     fallbackLocale: (state: State) => state.app.preferences.fallbackLocale,
@@ -193,6 +195,7 @@ export enum actionTypes {
     runComputerMove = "runComputerMove",
     redoMove = "redoMove",
     undoMove = "undoMove",
+    updateGameTheme = "updateGameTheme",
     updateMatchType = "updateMatchType",
     updateMatchStartPosition = "updateMatchStartPosition",
     preFetchNextPositions = "preFetchNextPositions",
@@ -216,6 +219,7 @@ type Actions = {
     [actionTypes.runComputerMove](context: ActionContext): Promise<void>;
     [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
+    [actionTypes.updateGameTheme](context: ActionContext, payload: { gameTheme : string }): void;
     [actionTypes.updateMatchType](context: ActionContext, payload: { matchType: string; players: Array<string> }): void;
     [actionTypes.updateMatchStartPosition](context: ActionContext, payload: { position: string }): Promise<void | Error>;
     [actionTypes.preFetchNextPositions](context: ActionContext): Promise<void>;
@@ -293,6 +297,10 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     undoMove: async (context: ActionContext, payload?: { count?: number }) => {
         context.commit(mutationTypes.setApp, GMU.undoMove(context.state.app, payload));
         await store.dispatch(actionTypes.runComputerMove);
+    },
+    updateGameTheme: (context: ActionContext, payload: { gameTheme : string }) => {
+        const updatedApp = GMU.updateGameTheme(context.state.app, payload);
+        context.commit(mutationTypes.setApp, updatedApp);
     },
     updateMatchType: (context: ActionContext, payload: { matchType: string; players: Array<string> }) => {
         const updatedApp = GMU.updateMatchType(context.state.app, payload);

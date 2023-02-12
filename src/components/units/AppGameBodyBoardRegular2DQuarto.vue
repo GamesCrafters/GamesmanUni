@@ -164,7 +164,7 @@
                         opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1,
                     }"/>
                 <use
-                    :href="'#' + displayMode + token.token"
+                    :href="'#' + gameTheme + token.token"
                     :transform="'translate(' + coords[0] + ' ' + coords[1] + ') scale(' + coords[2] + ')'"/>
             </g>
         </g>
@@ -174,13 +174,13 @@
                 :key="'cell' + i"
                 :set="(coords = calcTranslateAndScale(i))">
                 <use 
-                    :href="'#' + displayMode + cell.piece"
+                    :href="'#' + gameTheme + cell.piece"
                     :transform="'translate(' + coords[0] + ' ' + coords[1] + ')'" />
             </g>
 
             <!-- Draw Piece Being Placed. -->
             <use 
-                :href="'#' + displayMode + richPositionData.nextPiece"
+                :href="'#' + gameTheme + richPositionData.nextPiece"
                 :transform="'translate(58 113)'" />
 
             <!-- Draw the moves-->
@@ -204,7 +204,7 @@
                             opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1,
                         }"/>
                     <use
-                        :href="'#' + displayMode + token.token.toUpperCase()"
+                        :href="'#' + gameTheme + token.token.toUpperCase()"
                         :transform="'translate(' + coords[0] + ' ' + coords[1] + ') scale(' + coords[2] + ')'"
                         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
                 </g>
@@ -224,6 +224,25 @@
             </g>
 
         </g> 
+
+        <text x="83.5" y="107" style="stroke:black;stroke-width:0.15;fill:black" class="verysmall">Nibble</text>
+        <text x="77.5" y="110" style="stroke:black;stroke-width:0.15;fill:black" class="verysmall">Representation</text>
+
+        <g 
+            :style="'--xorigin: ' + 87.5 + 'px ' + 117 + 'px'"
+            :class="'quarto-move'"
+            @click="store.dispatch(actionTypes.updateGameTheme, { gameTheme: otherGameTheme })" >
+            <g v-if="gameTheme==='b'">
+                <rect x="80.5" y="113" width="14" height="8" rx="3" ry="5"
+                    :style="'fill:#7F00FF'" />
+                <text x="85.5" y="118" style="stroke:white;stroke-width:0.15;fill:white" class="verysmall">On</text> 
+            </g>
+            <g v-else>
+                <rect x="80.5" y="113" width="14" height="8" rx="3" ry="5"
+                    :style="'fill:#CBC3E3'" />
+                <text x="85.5" y="118" style="stroke:white;stroke-width:0.15;fill:white" class="verysmall">Off</text> 
+            </g>
+        </g>
 
         <!-- Toggle Binary/Real Pieces -->
         <g v-if=isPlacing>
@@ -267,9 +286,10 @@
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
     const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
-    const isInitial=computed(() => currentPosition.value==="R_A_17_1_-----------------");
-    const isPlacing=computed(() => currentPosition.value.slice(-1) != "-");
-    const displayMode = "b";
+    const isInitial = computed(() => currentPosition.value==="R_A_17_1_-----------------");
+    const isPlacing = computed(() => currentPosition.value.slice(-1) != "-");
+    const gameTheme = computed(() => store.getters.currentGameTheme || "r");
+    const otherGameTheme = computed(() => gameTheme.value === "r" ? "b" : "r");
     const richPositionData = computed(() => {
         const position: string = currentPosition.value;
         const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
@@ -339,6 +359,9 @@
         cursor: pointer;
     }
 
+    .verysmall {
+        font:3px sans-serif;
+    }
     .small {
         font:5px sans-serif;
     }

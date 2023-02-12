@@ -129,6 +129,7 @@ export type Match = {
     id: number;
     gameType: string;
     gameId: string;
+    gameTheme: string;
     variantId: string;
     type: string;
     startPosition: string;
