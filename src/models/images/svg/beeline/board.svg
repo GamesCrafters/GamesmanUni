@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="no"?>
+<svg id="bc" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <g id="hex">
+            <line x1="40" y1="20.0" x2="30" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="30" y1="37.3" x2="10" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="10" y1="37.3" x2="00" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="00" y1="20.0" x2="10" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="10" y1="02.7" x2="30" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="30" y1="02.7" x2="40" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" />
+        </g>
+    </defs>
+
+    <use href="#hex" x="100" y="0"/>
+    <use href="#hex" x="70" y="17.3"/>
+    <use href="#hex" x="130" y="17.3"/>
+    <use href="#hex" x="40" y="34.6"/>
+    <use href="#hex" x="100" y="34.6"/>
+    <use href="#hex" x="160" y="34.6"/>
+    <use href="#hex" x="10" y="51.9"/>
+    <use href="#hex" x="70" y="51.9"/>
+    <use href="#hex" x="130" y="51.9"/>
+    <use href="#hex" x="190" y="51.9"/>
+    <use href="#hex" x="40" y="69.2"/>
+    <use href="#hex" x="100" y="69.2"/>
+    <use href="#hex" x="160" y="69.2"/>
+    <use href="#hex" x="70" y="86.5"/>
+    <use href="#hex" x="130" y="86.5"/>
+    <use href="#hex" x="100" y="103.8"/>
+</svg>
