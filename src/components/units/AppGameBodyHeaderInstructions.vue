@@ -43,7 +43,7 @@
         let currGameId = store.getters.currentGameId;
         let game = store.getters.game(currGameType, currGameId);
         switch (store.getters.locale) {
-            case "en":
+            case "en": case "en-US":
                 return game ? game.instructions : "";
 
             case "cn":
