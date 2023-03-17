@@ -2,12 +2,12 @@
 <svg id="bc" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
     <defs>
         <g id="hex">
-            <line x1="40" y1="20.0" x2="30" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" />
-            <line x1="30" y1="37.3" x2="10" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" />
-            <line x1="10" y1="37.3" x2="00" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" />
-            <line x1="00" y1="20.0" x2="10" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" />
-            <line x1="10" y1="02.7" x2="30" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" />
-            <line x1="30" y1="02.7" x2="40" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" />
+            <line x1="40" y1="20.0" x2="30" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
+            <line x1="30" y1="37.3" x2="10" y2="37.3" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
+            <line x1="10" y1="37.3" x2="00" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
+            <line x1="00" y1="20.0" x2="10" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
+            <line x1="10" y1="02.7" x2="30" y2="02.7" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
+            <line x1="30" y1="02.7" x2="40" y2="20.0" style="stroke:rgb(0,0,0);stroke-width:2" stroke-linecap="round"/>
         </g>
     </defs>
 
