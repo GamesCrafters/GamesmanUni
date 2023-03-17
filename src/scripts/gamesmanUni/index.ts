@@ -134,7 +134,7 @@ export const preFetchNextPositions = async (app: Types.App, payload: { gameType:
 };
 
 const generateMatchId = (app: Types.App) => {
-    const reservedIds = new Set(...app.currentMatch!.players.map((player) => Object.keys(app.users[player].matches)));
+    const reservedIds = new Set(Object.keys(app.matches));
     let newId: number;
     do {
         newId = Math.floor(Math.random() * 10000);
@@ -146,46 +146,57 @@ export const initiateMatch = async (app: Types.App, payload: {
         gameType: string;
         gameId: string;
         variantId: string;
-        matchType?: string;
         startPosition?: string
-    }) => {
+}) => {
     const cachedGames = app.gameTypes[payload.gameType].games;
-    if (!Object.keys(cachedGames).length || !Object.keys(cachedGames[payload.gameId].variants.variants).length) {
+    if (!Object.keys(cachedGames).length ||
+        !Object.keys(cachedGames[payload.gameId].variants.variants).length) {
+        /* Load available variants if not found in cache. */
         const updatedApp = await loadVariants(app, payload);
         if (!updatedApp) return undefined;
     }
+
     const game = cachedGames[payload.gameId];
     let gameVariant = game.variants.variants[payload.variantId];
     const hasCustom = game.custom;
     if (!gameVariant && hasCustom) {
+        /* Load the selected variant if not found in cache. */
         gameVariant = await loadVariant(app, payload);
         game.variants.variants[payload.variantId] = gameVariant;
     }
+
     let startPosition: string;
     if (!payload.startPosition) {
+        /* Start Position not specified in payload, use default. */
         startPosition = gameVariant.startPosition;
     } else if (payload.startPosition === "random") {
-        const loaded = await GCTAPI.loadRandomPosition(`${app.dataSources.onePlayerGameAPI}/${payload.gameId}/${payload.variantId}/randpos`);
+        /* Requesting a random start position for puzzles. */
+        const loaded = await GCTAPI.loadRandomPosition(
+            `${app.dataSources.onePlayerGameAPI}/${payload.gameId}/${payload.variantId}/randpos`
+        );
         startPosition = loaded ? loaded.response.position : gameVariant.startPosition;
     } else {
+        /* Start position specified and assumed to be valid. */
         startPosition = payload.startPosition;
     }
+    const posArr = startPosition.split('_');
+
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
+
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
-    app.currentMatch.type = payload.matchType ? payload.matchType : payload.gameType === "puzzles" ? "p" : gameVariant.positions[startPosition].positionValue === "lose" ? "cvp" : "pvc";
-    app.currentMatch.players = app.currentMatch.gameType === "puzzles" ? [app.currentMatch.type + "1"] : app.currentMatch.type === "pvc" ? ["p1", "c1"] : app.currentMatch.type === "cvp" ? ["c1", "p1"] : app.currentMatch.type === "cvc" ? ["c1", "c2"] : app.currentMatch.type === "pvp" ? ["p1", "p2"] : [];
     app.currentMatch.id = generateMatchId(app);
-    app.currentMatch.startingPlayerId = app.currentMatch.players[0];
     app.currentMatch.round = {
         id: 1,
-        playerId: app.currentMatch.startingPlayerId,
-        players: [...app.currentMatch.players],
+        /* Unfortunately, there is no generic way to determine whose 
+           turn it is from an AutoGUI v0 position string.
+           In this case we always assume it's the first player's turn. */
+        firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
         move: "",
         moveName: "",
         moveValue: "",
@@ -227,7 +238,7 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
     for (let roundId = payload.from; roundId <= payload.to; roundId++) {
         const round = app.currentMatch.rounds[roundId];
         if (round.position.positionValue !== "draw") remotenesses.add(round.position.remoteness);
-        if (app.users[app.currentMatch.rounds[payload.to].playerId].options.showNextMoves) for (const availableMove in round.position.availableMoves) remotenesses.add(round.position.availableMoves[availableMove].remoteness);
+        if (app.options.showNextMoves) for (const availableMove in round.position.availableMoves) remotenesses.add(round.position.availableMoves[availableMove].remoteness);
     }
     return Math.max(...remotenesses);
 };
@@ -238,12 +249,10 @@ export const isEndOfMatch = (app: Types.App) =>
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
-    if (Object.entries(app.currentMatch.rounds).length > 1 && !isEndOfMatch(app)) { 
+    if (Object.entries(app.currentMatch.rounds).length > 1) { 
         app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
-        for (const player of app.currentMatch.players) {
-            app.users[player].matches[app.currentMatch.id] = deepcopy(app.currentMatch);
-        }
+        app.matches[app.currentMatch.id] = deepcopy(app.currentMatch);
     }
     app.currentMatch = deepcopy(Defaults.defaultMatch);
     return app;
@@ -278,13 +287,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         delete app.currentMatch.rounds[roundId];
     }
     app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
-    if (isEndOfMatch(app)) {
-        app.currentMatch.lastPlayed = new Date().getTime();
-        app.currentMatch.ended = new Date().getTime();
-        for (const player of app.currentMatch.players) {
-            app.users[player].matches[app.currentMatch.id] = deepcopy(app.currentMatch);
-        }
-    } else {
+    if (!isEndOfMatch(app)) {
         const updatedApp = await loadPosition(app, {
             gameType: app.currentMatch.gameType,
             gameId: app.currentMatch.gameId,
@@ -310,14 +313,8 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         const move = app.currentMatch.round.position.availableMoves[payload.move];
         app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
         app.currentMatch.round.id += 1;
-        app.currentMatch.round.players = [...app.currentMatch.round.players];
         if (app.currentMatch.gameType != "puzzles") {
-            let posArr = updatedPosition.position.split('_');
-            if (posArr.length === 5 && posArr[0] === 'R') {
-                app.currentMatch.round.playerId = posArr[1] === 'A' ? app.currentMatch.players[0] : app.currentMatch.players[1];
-            } else {
-                app.currentMatch.round.playerId = app.currentMatch.round.playerId === app.currentMatch.players[0] ? app.currentMatch.players[1] : app.currentMatch.players[0];
-            }
+            app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
         }
         app.currentMatch.round.move = "";
         app.currentMatch.round.moveValue = "";
@@ -380,15 +377,6 @@ export const updateGameTheme = (app: Types.App, payload: { gameTheme : string })
     return app;
 }
 
-export const updateMatchType = (app: Types.App, payload: { matchType: string, players: Array<string> }) => {
-    app.currentMatch.type = payload.matchType;
-    const currentTurnIndex = app.currentMatch.players.indexOf(app.currentMatch.round.playerId);
-    app.currentMatch.players = [...payload.players];
-    app.currentMatch.round.players = [...payload.players];
-    app.currentMatch.round.playerId = app.currentMatch.players[currentTurnIndex];
-    return app;
-}
-
 export const updateMatchStartPosition = async (app: Types.App, payload: { position: string }) => {
     // Check if position is valid
     payload.position = payload.position.replace(/(\r\n|\n|\r)/gm, "");
@@ -438,13 +426,11 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
     if (updatedAppOrError instanceof Error) {
         return updatedAppOrError;
     }
-    // Restart match in PVP mode (games) or P mode (puzzles)
     exitMatch(newApp);
     let updatedApp = await initiateMatch(newApp, {
         gameType: app.currentMatch.gameType,
         gameId: app.currentMatch.gameId,
         variantId: app.currentMatch.variantId,
-        matchType: app.currentMatch.gameType === "puzzles" ? "p" : "pvp",
         startPosition: parsed[1]
     });
     if (!updatedApp) {

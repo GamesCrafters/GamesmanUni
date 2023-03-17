@@ -34,13 +34,13 @@
     type CellData = { token: string; move: string; hint: string; hintOpacity: number };
     type BoardData = Record<number, CellData>;
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
+    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const cellCount = 9;
     const turn = computed(() => currentPosition.value[2])

@@ -20,19 +20,17 @@ type Getters = {
     currentGameName(state: State): string;
     currentGameTheme(state: State): string;
     currentGameType(state: State): string;
-    currentLeftPlayer(state: State): GMUTypes.User;
+    currentLeftPlayer(state: State): GMUTypes.Player;
     currentMatch(state: State): GMUTypes.Match;
     currentMatchId(state: State): number;
-    currentMatchType(state: State): string;
     currentMove(state: State): string;
     currentMoveValue(state: State): string;
-    currentPlayer(state: State): GMUTypes.User;
-    currentPlayers(state: State): GMUTypes.Users;
+    currentPlayer(state: State): GMUTypes.Player;
     currentPosition(state: State): string;
     currentPositionMex(state: State): string;
     currentPositionValue(state: State): string;
     currentRemoteness(state: State): number;
-    currentRightPlayer(state: State): GMUTypes.User;
+    currentRightPlayer(state: State): GMUTypes.Player;
     currentRound(state: State): (roundId?: number) => GMUTypes.Round;
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
@@ -55,11 +53,11 @@ type Getters = {
     rootFontSize(state: State): string;
     theme(state: State): string;
     twoPlayerGameAPI(state: State): string;
-    user(state: State): (userId: string) => GMUTypes.User;
-    userMatch(state: State): (userId: string, matchId: number) => GMUTypes.Match;
-    userMatchs(state: State): (userId: string) => GMUTypes.Matches;
-    userOptions(state: State): (userId: string) => GMUTypes.Options;
-    users(state: State): GMUTypes.Users;
+    // user(state: State): (userId: string) => GMUTypes.User;
+    // userMatch(state: State): (userId: string, matchId: number) => GMUTypes.Match;
+    // userMatchs(state: State): (userId: string) => GMUTypes.Matches;
+    options(state: State): GMUTypes.Options;
+    // users(state: State): GMUTypes.Users;
     variant(state: State): (gameType: string, gameId: string, variantId: string) => GMUTypes.Variant;
     variants(state: State): (gameType: string, gameId: string) => GMUTypes.Variants;
     version(state: State): string;
@@ -75,24 +73,17 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     currentGameId: (state: State) => state.app.currentMatch.gameId,
     currentGameName: (state: State) => state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].name,
     currentGameType: (state: State) => state.app.currentMatch.gameType,
-    currentLeftPlayer: (state: State) => state.app.users[state.app.currentMatch.players[0]],
+    currentLeftPlayer: (state: State) => state.app.currentMatch.firstPlayer,
     currentMatch: (state: State) => state.app.currentMatch,
     currentMatchId: (state: State) => state.app.currentMatch.id,
-    currentMatchType: (state: State) => state.app.currentMatch.type,
     currentMove: (state: State) => state.app.currentMatch.round.move,
     currentMoveValue: (state: State) => state.app.currentMatch.round.moveValue,
-    currentPlayer: (state: State) => state.app.users[state.app.currentMatch.round.playerId],
-    currentPlayers: (state: State) => {
-        const currentPlayers: GMUTypes.Users = {};
-        currentPlayers[state.app.currentMatch.players[0]] = state.app.users[state.app.currentMatch.players[0]];
-        if (state.app.currentMatch.players[1]) currentPlayers[state.app.currentMatch.players[1]] = state.app.users[state.app.currentMatch.players[1]];
-        return currentPlayers;
-    },
+    currentPlayer: (state: State) => state.app.currentMatch.round.firstPlayerTurn ? state.app.currentMatch.firstPlayer : state.app.currentMatch.secondPlayer,
     currentPosition: (state: State) => state.app.currentMatch.round.position.position,
     currentPositionMex: (state: State) => state.app.currentMatch.round.position.mex,
     currentPositionValue: (state: State) => state.app.currentMatch.round.position.positionValue,
     currentRemoteness: (state: State) => state.app.currentMatch.round.position.remoteness,
-    currentRightPlayer: (state: State) => (state.app.currentMatch.type !== "puzzles" ? state.app.users[state.app.currentMatch.players[1]] : { ...Defaults.defaultUser }),
+    currentRightPlayer: (state: State) => state.app.currentMatch.secondPlayer,
     currentRound: (state: State) => (roundId?: number) => roundId ? state.app.currentMatch.rounds[roundId] : state.app.currentMatch.round,
     currentRoundId: (state: State) => state.app.currentMatch.round.id,
     currentRounds: (state: State) => state.app.currentMatch.rounds,
@@ -116,11 +107,11 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     rootFontSize: (state: State) => state.app.preferences.rootFontSize,
     theme: (state: State) => state.app.preferences.theme,
     twoPlayerGameAPI: (state: State) => state.app.dataSources.twoPlayerGameAPI,
-    user: (state: State) => (userId: string) => state.app.users[userId],
-    userMatch: (state: State) => (userId: string, matchId: number) => state.app.users[userId].matches[matchId],
-    userMatchs: (state: State) => (userId: string) => state.app.users[userId].matches,
-    userOptions: (state: State) => (userId: string) => state.app.users[userId].options,
-    users: (state: State) => state.app.users,
+    // user: (state: State) => (userId: string) => state.app.users[userId],
+    // userMatch: (state: State) => (userId: string, matchId: number) => state.app.users[userId].matches[matchId],
+    // userMatchs: (state: State) => (userId: string) => state.app.users[userId].matches,
+    options: (state: State) => state.app.options,
+    // users: (state: State) => state.app.users,
     variant: (state: State) => (gameType: string, gameId: string, variantId: string) => state.app.gameTypes[gameType].games[gameId].variants.variants[variantId],
     variants: (state: State) => (gameType: string, gameId: string) => state.app.gameTypes[gameType].games[gameId].variants,
     version: (state: State) => state.app.version,
@@ -130,7 +121,8 @@ export enum mutationTypes {
     setApp = "setApp",
     setCurrentLeftPlayerName = "setCurrentLeftPlayerName",
     setCurrentRightPlayerName = "setCurrentRightPlayerName",
-    setCurrentPlayerName = "setCurrentPlayerName",
+    setLeftPlayerIsComputer = "setLeftPlayerIsComputer",
+    setRightPlayerIsComputer = "setRightPlayerIsComputer",
     setLocale = "setLocale",
     setOptions = "setOptions",
     setRootFontSize = "setRootFontSize",
@@ -145,7 +137,8 @@ type Mutations = {
     [mutationTypes.setApp](state: State, app: GMUTypes.App): void;
     [mutationTypes.setCurrentLeftPlayerName](state: State, leftPlayerName: string): void;
     [mutationTypes.setCurrentRightPlayerName](state: State, rightPlayerName: string): void;
-    [mutationTypes.setCurrentPlayerName](state: State, playerName: string): void;
+    [mutationTypes.setLeftPlayerIsComputer](state: State, isComputer: boolean): void;
+    [mutationTypes.setRightPlayerIsComputer](state: State, isComputer: boolean): void;
     [mutationTypes.setLocale](state: State, locale: string): void;
     [mutationTypes.setOptions](state: State, options: GMUTypes.Options): void;
     [mutationTypes.setRootFontSize](state: State, rootFontSize: string): void;
@@ -158,27 +151,18 @@ type Mutations = {
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
     setApp: (state: State, app: GMUTypes.App) => (state.app = app),
-    setCurrentLeftPlayerName: (state: State, leftPlayerName: string) => (state.app.users[state.app.currentMatch.players[0]].name = leftPlayerName),
-    setCurrentRightPlayerName: (state: State, rightPlayerName: string) => (state.app.users[state.app.currentMatch.players[1]].name = rightPlayerName),
-    setCurrentPlayerName: (state: State, playerName: string) => (state.app.users[state.app.currentMatch.players[0]].name = playerName),
+    setCurrentLeftPlayerName: (state: State, leftPlayerName: string) => (state.app.currentMatch.firstPlayer.name = leftPlayerName),
+    setCurrentRightPlayerName: (state: State, rightPlayerName: string) => (state.app.currentMatch.secondPlayer.name = rightPlayerName),
+    setLeftPlayerIsComputer: (state: State, isComputer: boolean) => (state.app.currentMatch.firstPlayer.isComputer = isComputer),
+    setRightPlayerIsComputer: (state: State, isComputer: boolean) => (state.app.currentMatch.secondPlayer.isComputer = isComputer),
     setLocale: (state: State, locale: string) => (state.app.preferences.locale = locale ? locale : state.app.preferences.locale),
-    setOptions: (state: State, options: GMUTypes.Options) => {
-        for (const player of state.app.currentMatch.players) state.app.users[player].options = options;
-    },
+    setOptions: (state: State, options: GMUTypes.Options) => (state.app.options = options),
     setRootFontSize: (state: State, rootFontSize: string) => (state.app.preferences.rootFontSize = rootFontSize ? rootFontSize : state.app.preferences.rootFontSize),
     setTheme: (state: State, theme?: string) => (state.app.preferences.theme = theme ? theme : state.app.preferences.theme),
-    showInstructions: (state: State, showInstructions: boolean) => {
-        for (const player of state.app.currentMatch.players) state.app.users[player].options.showInstructions = showInstructions;
-    },
-    showOptions: (state: State, showOptions: boolean) => {
-        for (const player of state.app.currentMatch.players) state.app.users[player].options.showOptions = showOptions;
-    },
-    showVvhGuides: (state: State, showVvhGuides: boolean) => {
-        for (const player of state.app.currentMatch.players) state.app.users[player].options.showVvhGuides = showVvhGuides;
-    },
-    showVvhMeters: (state: State, showVvhMeters: boolean) => {
-        for (const player of state.app.currentMatch.players) state.app.users[player].options.showVvhMeters = showVvhMeters;
-    },
+    showInstructions: (state: State, showInstructions: boolean) => (state.app.options.showInstructions = showInstructions),
+    showOptions: (state: State, showOptions: boolean) => (state.app.options.showOptions = showOptions),
+    showVvhGuides: (state: State, showVvhGuides: boolean) => (state.app.options.showVvhGuides = showVvhGuides),
+    showVvhMeters: (state: State, showVvhMeters: boolean) => (state.app.options.showVvhMeters = showVvhMeters),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
@@ -196,7 +180,6 @@ export enum actionTypes {
     redoMove = "redoMove",
     undoMove = "undoMove",
     updateGameTheme = "updateGameTheme",
-    updateMatchType = "updateMatchType",
     updateMatchStartPosition = "updateMatchStartPosition",
     preFetchNextPositions = "preFetchNextPositions",
     loadLatestCommits = "loadLatestCommits",
@@ -210,17 +193,15 @@ type Actions = {
         gameType: string
         gameId: string;
         variantId: string;
-        matchType?: string;
         startPosition?: string
     }): Promise<void>;
     [actionTypes.exitMatch](context: ActionContext): void;
-    [actionTypes.restartMatch](context: ActionContext, payload?: { matchType?: string }): Promise<void>;
+    [actionTypes.restartMatch](context: ActionContext): Promise<void>;
     [actionTypes.runMove](context: ActionContext, payload: { move: string }): Promise<void>;
     [actionTypes.runComputerMove](context: ActionContext): Promise<void>;
     [actionTypes.redoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.undoMove](context: ActionContext, payload?: { count?: number }): Promise<void>;
     [actionTypes.updateGameTheme](context: ActionContext, payload: { gameTheme : string }): void;
-    [actionTypes.updateMatchType](context: ActionContext, payload: { matchType: string; players: Array<string> }): void;
     [actionTypes.updateMatchStartPosition](context: ActionContext, payload: { position: string }): Promise<void | Error>;
     [actionTypes.preFetchNextPositions](context: ActionContext): Promise<void>;
     [actionTypes.loadLatestCommits](context: ActionContext): Promise<void>;
@@ -240,7 +221,6 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         gameType: string;
         gameId: string;
         variantId: string;
-        matchType?: string;
         startPosition?: string
     }) => {
         const updatedApp = await GMU.initiateMatch(context.state.app, payload);
@@ -251,11 +231,10 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         await store.dispatch(actionTypes.runComputerMove);
     },
     exitMatch: (context: ActionContext) => context.commit(mutationTypes.setApp, GMU.exitMatch(context.state.app)),
-    restartMatch: async (context: ActionContext, payload?: { matchType?: string }) => {
+    restartMatch: async (context: ActionContext) => {
         const currentGameType = context.getters.currentGameType;
         const currentGameId = context.getters.currentGameId;
         const currentVariantId = context.getters.currentVariantId;
-        const currentMatchType = context.getters.currentMatchType;
         const currentStartPosition = context.getters.currentStartPosition;
 
         context.dispatch(actionTypes.exitMatch);
@@ -263,7 +242,6 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             gameType: currentGameType,
             gameId: currentGameId,
             variantId: currentVariantId,
-            matchType: (payload && payload.matchType) ? payload.matchType : currentMatchType,
             startPosition: currentStartPosition
         });
     },
@@ -278,8 +256,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         context.state.app.currentMatch.backgroundLoading = false;
     },
     runComputerMove: async (context: ActionContext) => {
-        while (context.getters.currentPlayer.id[0] === "c" && !GMU.isEndOfMatch(context.state.app)) {
-            await new Promise((resolve) => setTimeout(resolve, store.getters.currentPlayer.options.computerMoveDuration));
+        while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
+            await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
             const updatedApp = await GMU.runMove(context.state.app, { move: GMU.generateComputerMove(context.state.app.currentMatch.round) });
             if (updatedApp) {
                 context.commit(mutationTypes.setApp, updatedApp);
@@ -302,19 +280,13 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         const updatedApp = GMU.updateGameTheme(context.state.app, payload);
         context.commit(mutationTypes.setApp, updatedApp);
     },
-    updateMatchType: (context: ActionContext, payload: { matchType: string; players: Array<string> }) => {
-        const updatedApp = GMU.updateMatchType(context.state.app, payload);
-        context.commit(mutationTypes.setApp, updatedApp);
-    },
     updateMatchStartPosition: async (context: ActionContext, payload: { position: string }) => {
         const updatedAppOrError = await GMU.updateMatchStartPosition(context.state.app, payload);
         if (updatedAppOrError instanceof Error) {
             return updatedAppOrError;
         } else {
             context.commit(mutationTypes.setApp, updatedAppOrError);
-            await context.dispatch(actionTypes.restartMatch, {
-                matchType: context.state.app.currentMatch.gameType  === "puzzles" ? "p" : "pvp"
-            });
+            await context.dispatch(actionTypes.restartMatch);
         }
     },
     preFetchNextPositions: async (context: ActionContext) => {

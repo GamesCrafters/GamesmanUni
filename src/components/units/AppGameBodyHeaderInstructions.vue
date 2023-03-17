@@ -37,7 +37,7 @@
     import TTT3DCnSource from "../../models/docs/cn/gameInstructions/ttt3d.md?raw";
 
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const instructions = computed(() => {
         let currGameType = store.getters.currentGameType;
         let currGameId = store.getters.currentGameId;
