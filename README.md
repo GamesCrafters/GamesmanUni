@@ -120,13 +120,23 @@
 
 ## Getting Started
 
-1. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you have not already though it should come with most OS.
+1. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you have not already, though it should come with most OS.
 
 2. Install latest current version of Node.
 
     You can get it from [Node JS Official Website](https://nodejs.org/en/download/), or via [Homebrew Formula](https://formulae.brew.sh/formula/node) on MacOS.
 
-    I suggest you use [Node Version Manager](https://github.com/nvm-sh/nvm) to easily switch between different Node JS versions for different projects on your system.
+    I suggest you use [Node Version Manager](https://github.com/nvm-sh/nvm) to easily switch between different Node JS versions for different projects on your system. To install NVM, run the following commands:
+    ```
+    # Download NVM installation script and run it.
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+    
+    # Install a specific version (version 18 here) of Node.js.
+    nvm install 18
+    
+    # Activate Node.js from NVM.
+    nvm use 18
+    ```
 
 3. Enable `corepack` binary.
 
@@ -151,13 +161,7 @@
     yarn
     ```
 
-6. Launch Development Hot Module Replacement (HMR) server.
-
-    ```zsh
-    yarn dev
-    ```
-
-7. Build GamesmanUni for production.
+6. Build GamesmanUni for production.
 
     ```zsh
     yarn build
@@ -165,10 +169,16 @@
 
     The site should be available in `./dist` once the build is done.
 
-8. Preview the production built of GamesmanUni locally.
+7. Preview the production built of GamesmanUni locally.
 
     ```zsh
     yarn preview
+    ```
+
+8. Launch Development Hot Module Replacement (HMR) server, recommended for development as you won't need to rebuild every time you make a change to a source file. Note that running this step does not replace `yarn build` since it doesn't update the contents in `./dist`. If you are pushing the latest build to the NYC server, you still need to run `yarn build` after making changes. 
+
+    ```zsh
+    yarn dev
     ```
 
 9. Preview the production built of GamesmanUni served with https locally to test PWA features.
