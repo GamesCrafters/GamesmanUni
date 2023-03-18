@@ -36,80 +36,80 @@
     <line x1="550" y1="750" x2="350" y2="950" stroke="black" stroke-width="4" />
     <!-- star -->
     <g transform="translate(150 250)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(750 250)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(250 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(450 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(650 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(150 750)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(750 750)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(250 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(450 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(650 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(50 350)">
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(50 650)">
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4", fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4", fill="none" />
+      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
+      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(850 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <g transform="translate(850 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4", fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4", fill="none" />
+      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
+      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
     </g>
     <!-- text -->
     <text x="250" y="500" font-size="80" font-family="LiSu" text-anchor="middle" dominant-baseline="central" fill="#000000">楚 河</text>
