@@ -19,7 +19,7 @@
     "cn": {
         "title": "欢迎！"
     },
-    "en": {
+    "en-US": {
         "title": "Welcome!"
     },
     "es": {

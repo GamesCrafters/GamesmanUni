@@ -115,7 +115,7 @@
     "cn": {
         "gameVariantsTitle": "请选择游戏变体"
     },
-    "en": {
+    "en-US": {
         "gameVariantsTitle": "Game Variants"
     }
 }

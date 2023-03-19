@@ -35,7 +35,7 @@
     const store = useStore();
     const { t } = useI18n();
     const { locale } = useI18n({ useScope: "global" });
-    const appLocales = ["cn", "en", "es", "hi"];
+    const appLocales = ["cn", "en-US", "es", "hi"];
     const appLocale = ref("");
     const setActiveLocaleOptionStyle = (localeOption: string) => (localeOption === appLocale.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
     const setAppLocale = (newAppLocale: string) => {
@@ -90,14 +90,14 @@
     "cn": {
         "appLocales": {
             "cn": "🇨🇳 简体中文",
-            "en": "🇺🇸 英文",
+            "en-US": "🇺🇸 英文",
             "es": "🇲🇽 西班牙语",
             "hi": "🇮🇳 印地语"
         },
         "themeTitle": "主题",
         "fontSizeUnit": "号字"
     },
-    "en": {
+    "en-US": {
         "appRootFontSizes": {
             "05px": "05",
             "06px": "06",
@@ -123,7 +123,7 @@
         },
         "appLocales": {
             "cn": "🇨🇳 Simplified Chinese",
-            "en": "🇺🇸 English",
+            "en-US": "🇺🇸 English",
             "es": "🇲🇽 Spanish",
             "hi": "🇮🇳 Hindi"
         },

@@ -278,13 +278,13 @@
     }
 
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
+    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const isInitial = computed(() => currentPosition.value==="R_A_17_1_-----------------");
     const isPlacing = computed(() => currentPosition.value.slice(-1) != "-");

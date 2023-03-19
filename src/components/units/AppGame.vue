@@ -18,7 +18,7 @@
     const gameId = computed(() => route.params.gameId as string);
     const variantId = computed(() => route.params.variantId as string);
     store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value });
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showVvh = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));
 </script>
