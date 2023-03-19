@@ -662,7 +662,7 @@
                                 :stroke-width="4 * positionValueSize"
                                 @click="roundNumber !== currentRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
-                                        count: currentRoundId - currentRounds[roundNumber].id
+                                        toRoundId: currentRounds[roundNumber].id
                                     })" />
                         </template>
                         <template v-else-if="currentRounds[roundNumber].position.positionValue === 'tie'">
@@ -674,7 +674,7 @@
                                 :stroke-width="4 * positionValueSize"
                                 @click="roundNumber !== currentRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
-                                        count: currentRoundId - currentRounds[roundNumber].id
+                                        toRoundId: currentRounds[roundNumber].id
                                     })" />
                             <line v-if="!isPuzzleGame"
                                 :class="roundNumber !== currentRoundId ? 'clickable' : ''"
@@ -686,7 +686,7 @@
                                 :stroke-width="linkWidth"
                                 @click="roundNumber !== currentRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
-                                        count: currentRoundId - currentRounds[roundNumber].id
+                                        toRoundId: currentRounds[roundNumber].id
                                     })" />
                             <circle :class="roundNumber !== currentRoundId ? 'clickable' : ''"
                                 class="tie position-value"
@@ -696,7 +696,7 @@
                                 :stroke-width="4 * positionValueSize"
                                 @click="roundNumber !== currentRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
-                                        count: currentRoundId - currentRounds[roundNumber].id
+                                        toRoundId: currentRounds[roundNumber].id
                                     })" />
                         </template>
                         <template v-else>
@@ -718,7 +718,7 @@
                                 :stroke-width="4 * positionValueSize"
                                 @click="roundNumber !== currentRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
-                                        count: currentRoundId - currentRounds[roundNumber].id
+                                        toRoundId: currentRounds[roundNumber].id
                                     })" />
                         </template>
                     </template>

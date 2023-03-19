@@ -163,27 +163,10 @@
     watch(
         () => options.value && options.value.showOptions,
         () => {
-            console.log("watch: options.value && options.value.showOptions triggered.");
             updatedLeftPlayer.value = { ...currentLeftPlayer.value };
             updatedRightPlayer.value = { ...currentRightPlayer.value };
         }
     );
-    // watch(
-    //     () => updatedLeftPlayerId.value,
-    //     () => {
-    //         console.log("watch: updatedLeftPlayerId.value triggered.");
-    //         console.log("updatedLeftPlayerId.value now becomes " + updatedLeftPlayerId.value);
-    //         (updatedLeftPlayerName.value = updatedLeftPlayerId.value === currentLeftPlayerId.value ? currentLeftPlayerName.value : users.value[updatedLeftPlayerId.value] ? users.value[updatedLeftPlayerId.value].name : "")
-    //     }
-    // );
-    // watch(
-    //     () => updatedRightPlayerId.value,
-    //     () => {
-    //         console.log("watch: updatedRightPlayerId.value triggered.");
-    //         console.log("updatedRightPlayerId.value now becomes " + updatedRightPlayerId.value);
-    //         (updatedRightPlayerName.value = updatedRightPlayerId.value === currentRightPlayerId.value ? currentRightPlayerName.value : users.value[updatedRightPlayerId.value] ? users.value[updatedRightPlayerId.value].name : "")
-    //     }
-    // );
 </script>
 
 <style lang="scss" scoped>

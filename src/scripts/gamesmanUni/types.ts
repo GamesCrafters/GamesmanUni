@@ -136,7 +136,6 @@ export type Match = {
     round: Round;
     created: number;
     lastPlayed: number;
-    ended: number;
     backgroundLoading: boolean;
 };
 

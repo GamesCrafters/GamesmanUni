@@ -142,7 +142,6 @@ export const defaultMatch: Types.Match = {
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
     lastPlayed: 0,
-    ended: 0,
     backgroundLoading: false,
 };
 
@@ -170,7 +169,6 @@ export const defaultApp: Types.App = {
             position: { ...defaultPosition, availableMoves: {} } },
             created: 0,
             lastPlayed: 0,
-            ended: 0,
             backgroundLoading: false,
     },
 };
