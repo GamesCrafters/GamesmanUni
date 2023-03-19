@@ -17,8 +17,10 @@ type Getters = {
     availableMoves(state: State):
         (gameType: string, gameId: string, variantId: string, position: string) =>
             GMUTypes.Moves;
+    backgroundLoading(state: State): boolean;
     commit(state: State): (sha: string) => GMUTypes.Commit;
     commits(state: State): GMUTypes.Commits;
+    computerMoving(state: State): boolean;
     currentAvailableMove(state: State): (move: string) => GMUTypes.Move;
     currentAvailableMoves(state: State): GMUTypes.Moves;
     currentGameId(state: State): string;
@@ -50,7 +52,6 @@ type Getters = {
     locale(state: State): string;
     maximumRemoteness(state: State): (from: number, to: number) => number;
     moveHistory(state: State): string;
-    backgroundLoading(state: State): boolean;
     onePlayerGameAPI(state: State): string;
     position(state: State):
         (gameType: string, gameId: string, variantId: string, position: string) =>
@@ -81,10 +82,14 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         (gameType: string, gameId: string, variantId: string, position: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
             positions[position].availableMoves,
+    backgroundLoading: (state: State) =>
+        state.app.currentMatch.backgroundLoading,
     commit: (state: State) => (sha: string) =>
         state.app.commits.commits[sha],
     commits: (state: State) =>
         state.app.commits,
+    computerMoving: (state: State) =>
+        state.app.currentMatch.computerMoving,
     currentAvailableMove: (state: State) =>
         (move: string) =>
             state.app.currentMatch.round.position.availableMoves[move],
@@ -156,8 +161,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             GMU.getMaximumRemoteness(state.app, { from, to }),
     moveHistory: (state: State) =>
         state.app.currentMatch.moveHistory,
-    backgroundLoading: (state: State) =>
-        state.app.currentMatch.backgroundLoading,
     onePlayerGameAPI: (state: State) =>
         state.app.dataSources.onePlayerGameAPI,
     position: (state: State) =>
@@ -352,24 +355,28 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     runMove: async (context: ActionContext, payload: { move: string }) => {
         context.state.app.currentMatch.backgroundLoading = true;
         const updatedApp = await GMU.runMove(context.state.app, payload);
+        context.state.app.currentMatch.backgroundLoading = false;
         if (updatedApp) {
             context.commit(mutationTypes.setApp, updatedApp);
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
         await store.dispatch(actionTypes.runComputerMove);
-        context.state.app.currentMatch.backgroundLoading = false;
     },
     runComputerMove: async (context: ActionContext) => {
+        context.state.app.currentMatch.computerMoving = true;
         while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
+            context.state.app.currentMatch.backgroundLoading = true;
             const updatedApp = await GMU.runMove(context.state.app, {
                 move: GMU.generateComputerMove(context.state.app.currentMatch.round)
             });
+            context.state.app.currentMatch.backgroundLoading = false;
             if (updatedApp) {
                 context.commit(mutationTypes.setApp, updatedApp);
                 if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
             }
         }
+        context.state.app.currentMatch.computerMoving = false;
     },
     redoMove: async (context: ActionContext) => {
         context.commit(mutationTypes.setApp, GMU.redoMove(context.state.app));

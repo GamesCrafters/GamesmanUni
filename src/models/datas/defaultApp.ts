@@ -143,6 +143,7 @@ export const defaultMatch: Types.Match = {
     created: 0,
     lastPlayed: 0,
     backgroundLoading: false,
+    computerMoving: false
 };
 
 export const defaultApp: Types.App = {
@@ -170,5 +171,6 @@ export const defaultApp: Types.App = {
             created: 0,
             lastPlayed: 0,
             backgroundLoading: false,
+            computerMoving: false
     },
 };

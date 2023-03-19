@@ -137,6 +137,7 @@ export type Match = {
     created: number;
     lastPlayed: number;
     backgroundLoading: boolean;
+    computerMoving: boolean;
 };
 
 export type Rounds = Record<number, Round>;

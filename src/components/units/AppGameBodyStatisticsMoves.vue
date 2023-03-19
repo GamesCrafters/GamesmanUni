@@ -7,7 +7,8 @@
         </button>
 
         <button id="app-game-body-statistics-moves-restart"
-            @click="store.dispatch(actionTypes.restartMatch)">
+            @click="store.dispatch(actionTypes.restartMatch)"
+            :disabled="disabledRestart">
                 Restart
         </button>
 
@@ -24,8 +25,10 @@
     import { actionTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
-    const disabledUndo = computed(() => !store.getters.undoMoveAvailable);
-    const disabledRedo = computed(() => !store.getters.redoMoveAvailable);
+    const computerMoving = computed(() => store.getters.computerMoving);
+    const disabledUndo = computed(() => !store.getters.undoMoveAvailable || computerMoving.value);
+    const disabledRestart = computed(() => computerMoving.value);
+    const disabledRedo = computed(() => !store.getters.redoMoveAvailable || computerMoving.value);
 </script>
 
 <style lang="scss" scoped>

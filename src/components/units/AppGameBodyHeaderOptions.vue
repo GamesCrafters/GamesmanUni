@@ -163,8 +163,12 @@
     watch(
         () => options.value && options.value.showOptions,
         () => {
-            updatedLeftPlayer.value = { ...currentLeftPlayer.value };
-            updatedRightPlayer.value = { ...currentRightPlayer.value };
+            if (options.value.showOptions) {
+                updatedLeftPlayer.value = { ...currentLeftPlayer.value };
+                updatedRightPlayer.value = { ...currentRightPlayer.value };
+                store.commit(mutationTypes.setLeftPlayerIsComputer, false);
+                store.commit(mutationTypes.setRightPlayerIsComputer, false);
+            }
         }
     );
 </script>
