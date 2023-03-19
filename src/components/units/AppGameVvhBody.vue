@@ -207,7 +207,7 @@
                     </template>
                 </template>
                 <rect v-if="!isEndOfMatch"
-                    :class="`turn-${isPuzzleGame ? 1 : turn(currentRoundId) === 1 ? 2 : 1}`"
+                    :class="`turn-0`"
                     class="round-row"
                     :x="gridLeft"
                     :y="gridBottom - rowHeight"
