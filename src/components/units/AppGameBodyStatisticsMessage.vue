@@ -37,9 +37,8 @@
 
     const store = useStore();
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
-    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-    const currentTurn = computed(() => (isPuzzleGame.value ? 1 : store.getters.currentPlayer ? (store.getters.currentPlayer.id === store.getters.currentLeftPlayer.id ? 1 : 2) : 0));
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const currentTurn = computed(() => (store.getters.currentMatch.round.firstPlayerTurn ? 1 : 2));
+    const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const currentLeftPlayerName = computed(() => store.getters.currentLeftPlayer.name);
     const currentRightPlayerName = computed(() => store.getters.currentRightPlayer.name);

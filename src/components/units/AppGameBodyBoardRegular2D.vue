@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { useStore } from "../../scripts/plugins/store";
     import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue"
     import AppGameBodyBoardRegular2DImages from "./AppGameBodyBoardRegular2DImages.vue";
     import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";

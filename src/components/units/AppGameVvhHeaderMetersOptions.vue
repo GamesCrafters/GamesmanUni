@@ -7,7 +7,7 @@
     import { mutationTypes, useStore } from "../../scripts/plugins/store";
 
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
 </script>
 

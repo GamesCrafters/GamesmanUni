@@ -34,22 +34,23 @@
     type CellData = { token: string; move: string; hint: string; hintOpacity: number };
     type BoardData = Record<number, CellData>;
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
+    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const cellCount = 9;
+    const turn = computed(() => currentPosition.value[2])
     const board = computed(() => {
         let board: BoardData = {};
         for (let cell: number = 1; cell <= cellCount; cell++) board[cell] = { token: currentPosition.value[7 + cell], move: "", hint: "", hintOpacity: 1 };
         for (let availableMove in availableMoves.value) Object.assign(board[+availableMoves.value[availableMove].move[4] + 1], { move: availableMoves.value[availableMove].move, hint: availableMoves.value[availableMove].moveValue, hintOpacity: availableMoves.value[availableMove].moveValueOpacity });
         return board;
     });
-    const getHintClass = (hint: string): string => (showNextMoveHints.value ? "hint-" + hint : "");
+    const getHintClass = (hint: string): string => (showNextMoveHints.value ? "hint-" + hint : "hint-" + turn.value);
 </script>
 
 <style lang="scss" scoped>
@@ -68,6 +69,14 @@
             stroke: var(--turn2Color);
         }
         .hint- {
+            &A {
+                fill: var(--turn1Color);
+                stroke: var(--turn1Color);
+            }
+            &B {
+                fill: var(--turn2Color);
+                stroke: var(--turn2Color);
+            }
             &win {
                 fill: var(--winColor);
                 stroke: var(--winColor);

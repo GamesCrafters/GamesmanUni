@@ -49,7 +49,7 @@
         "About": "关于",
         "Updates": "更新日志"
     },
-    "en": {
+    "en-US": {
         "Home": "Home",
         "Puzzles": "Puzzles",
         "Games": "Games",
