@@ -154,13 +154,13 @@
   const gameType = computed(() => store.getters.currentGameType);
   const gameId = computed(() => store.getters.currentGameId);
   const variantId = computed(() => store.getters.currentVariantId);
-  const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data).value;
-  const defaultTheme = autoguiV2Data.defaultTheme;
-  const theTheme = autoguiV2Data.themes[defaultTheme];
+  const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data);
+  const defaultTheme = autoguiV2Data.value.defaultTheme;
+  // Change theme here!!!
+  const theTheme = autoguiV2Data.value.themes[defaultTheme];
   const scaledWidth = 100;
   const backgroundGeometry = theTheme.backgroundGeometry;
   const scaledHeight = backgroundGeometry[1] * scaledWidth / backgroundGeometry[0];
-  const imagePathPrefix = "../../models/images/svg/";
   const backgroundImagePath = theTheme.backgroundImage || "";
   const foregroundImagePath = theTheme.foregroundImage || "";
   const piecesOverArrows = theTheme.piecesOverArrows || false;
@@ -169,8 +169,8 @@
   const defaultMoveTokenRadius = (theTheme.defaultMoveTokenRadius * scaledWidth / backgroundGeometry[0]) || 2;
   const pieces = theTheme.pieces;
   const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
-  // Probably don't want ot reimport every time.
   const gimages = import.meta.globEager("../../models/images/svg/**/*");
+  const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
 
   const getImageSource = (imagePath: string) => {
     try {
@@ -178,7 +178,7 @@
     } catch (errorMessage) {
       console.warn(`${imagePath} image does not exist yet.`);
     }
-    return import.meta.globEager("../../models/images/logo-gamescrafters.png")["../../models/images/logo-gamescrafters.png"].default;
+    return logo["../../models/images/logo-gamescrafters.png"].default;
   };
   /* End Code Cleanup Required Here */
 

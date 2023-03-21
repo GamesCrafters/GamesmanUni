@@ -226,7 +226,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: "",
         startPosition: "",
         positions: {},
-        autogui_v2_data: {},
+        autogui_v2_data: {} as GCTAPITypes.AutoGUIv2Data,
         status: "",
         gui_status: "v0"
     };
