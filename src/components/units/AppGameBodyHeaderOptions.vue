@@ -4,7 +4,24 @@
         <UniPopupWindow v-if="(options && options.showOptions) || false" @close="updateOptions()">
             <div id="popup">
                 <h1 id="title">{{ gameName }} ({{ variantDescription }})</h1>
-                
+
+                <!-- themes -->
+                <div id="gameThemes" v-if="gameThemes.length > 1">
+                    <h3 id="title">Themes</h3>
+                    <div class="uni-dropdown">
+                        <div class="uni-dropdown-selection">{{ currentGameTheme }} ▼</div>
+                        <div class="uni-dropdown-menu">
+                            <div class="uni-dropdown-menu-option"
+                                    v-for="gameTheme in gameThemes"
+                                    :key="gameTheme"
+                                    @click="setGameTheme(gameTheme)">
+                                {{ gameTheme }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- player settings -->
                 <div id="players">
                     <h3 id="title" v-if="isPuzzleGame">Player</h3>
                     <h3 id="title" v-else>Players</h3>
@@ -62,6 +79,7 @@
                     </div>
                 </div>
 
+                <!-- computer move settings -->
                 <div id="computer-move-duration" v-if="computerInLoop">
                     <h3 class="title">Computer Move Duration (milliseconds)</h3>
                     <VueSlider id="slider"
@@ -77,6 +95,7 @@
                     </i>
                 </div>
 
+                <!-- visibility options -->
                 <div id="visibility-options">
                     <h3 id="title">Visibility Options</h3>
                     <div id="options">
@@ -146,11 +165,18 @@
         if (!game.value || !gameVariant.value) return "";
         return gameVariant.value.description;
     });
+    const gameThemes = Object.keys(gameVariant.value.autogui_v2_data.themes);
+    const currentGameTheme = computed(() => store.getters.currentGameTheme);
+    const setGameTheme = (newGameTheme: string) => {
+        store.commit(mutationTypes.setGameTheme, newGameTheme);
+    }
+
     const options = computed(() => (store.getters.options));
     const computerInLoop = computed(() => (currentLeftPlayer.value.isComputer || currentRightPlayer.value.isComputer));
+
     const updateOptions = () => {
         store.commit(mutationTypes.showOptions, false);
-        if (updatedLeftPlayer.value.name) 
+        if (updatedLeftPlayer.value.name)
             store.commit(mutationTypes.setCurrentLeftPlayerName, updatedLeftPlayer.value.name);
         if (updatedRightPlayer.value.name)
             store.commit(mutationTypes.setCurrentRightPlayerName, updatedRightPlayer.value.name);
@@ -197,58 +223,6 @@
                 padding: 1rem 10%;
                 > #title {
                     margin: 1rem;
-                }
-            }
-            > #match-types {
-                padding: 1rem 10%;
-                > #title {
-                    margin: 1rem;
-                }
-                > #types {
-                    align-content: center;
-                    align-items: center;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    > .type {
-                        border: 0.1rem solid var(--neutralColor);
-                        border-radius: 1rem;
-                        margin: 1rem;
-                        padding: 1rem;
-                        align-content: center;
-                        align-items: center;
-                        display: flex;
-                        flex-direction: column;
-                        flex-wrap: nowrap;
-                        justify-content: center;
-                    }
-                }
-            }
-            > #match-players {
-                padding: 1rem 10%;
-                > #title {
-                    margin: 1rem;
-                }
-                > #players {
-                    align-content: center;
-                    align-items: center;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    > .player {
-                        border: 0.1rem solid var(--neutralColor);
-                        border-radius: 1rem;
-                        margin: 1rem;
-                        padding: 1rem;
-                        align-content: center;
-                        align-items: center;
-                        display: flex;
-                        flex-direction: column;
-                        flex-wrap: nowrap;
-                        justify-content: center;
-                    }
                 }
             }
             > #players {

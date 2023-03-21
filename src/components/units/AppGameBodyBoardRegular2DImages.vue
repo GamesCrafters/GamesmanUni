@@ -1,7 +1,7 @@
 <template>
   <!--Render board only if the boardstring is valid i.e. is a "validRichPosition". -->
-  <svg
-    v-if="richPositionData.validRichPosition" id="app-game-body-board-regular-2d-images"
+  <svg v-if="richPositionData.validRichPosition"
+    id="app-game-body-board-regular-2d-images"
     xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
     :data-turn="richPositionData.turn">
@@ -10,7 +10,8 @@
     <image v-if="backgroundImagePath != ''"
       :width="scaledWidth"
       :height="scaledHeight"
-      :href="getImageSource(backgroundImagePath)" />
+      :href="getImageSource(backgroundImagePath)"
+    />
 
     <!-- Draw M-type (arrow) moves below pieces. -->
     <g v-if="piecesOverArrows"> 
@@ -22,33 +23,33 @@
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
           :style="{
             opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-          }"/>
+          }"
+        />
       </g>
     </g>
 
     <!-- Draw Pieces on Board. -->
-    <g v-for="(cell, i) in richPositionData.board"
-      :key="'cell' + i">
+    <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
       <image v-if="cell.piece != '-' && cell.piece != '*' && Object.keys(pieces).includes(cell.piece)"
         :id="'piece' + i"
         :x="centers[i][0] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
         :y="centers[i][1] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
         :width="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
         :height="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
-        :href="getImageSource(pieces[cell.piece].image)" />
+        :href="getImageSource(pieces[cell.piece].image)"
+      />
     </g>
  
     <!-- Draw Foreground Image -->
     <image v-if="foregroundImagePath != ''"
       :width="scaledWidth"
       :height="scaledHeight"
-      :href="getImageSource(foregroundImagePath)" />
+      :href="getImageSource(foregroundImagePath)"
+    />
 
     <!-- Draw A-type Moves. -->
-    <g v-for="(token, i) in richPositionData.tokens" 
-      :key="'token' + i">
+    <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i">
       <g v-if="token.move">
-
         <!-- If no move token specified, use default move token (a circle). -->
         <circle v-if="token.token == '-'"
             :cx="centers[token.to][0]"
@@ -56,38 +57,41 @@
             :r="defaultMoveTokenRadius"
             :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
             :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"
+        />
         
         <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
         <image v-else-if="Object.keys(pieces).includes(token.token)"
-            :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-            :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-            :width="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-            :height="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-            :href="getImageSource(pieces[token.token].image)"
-            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
+          :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+          :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+          :width="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+          :height="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
+          :href="getImageSource(pieces[token.token].image)"
+          :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+          :style="'--xorigin: ' + centers[token.to][0] + 'px ' + 
+            centers[token.to][1] + 'px; opacity: ' + 
+            (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"
+        />
       </g>
     </g>
 
     <!-- Draw M-type (arrow) moves on top of pieces. -->
     <g v-if="!piecesOverArrows"> 
-      <g v-for="(arrow, i) in richPositionData.arrows "
-        :key="'arrow' + i">
+      <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
         <polyline
           :points="formatArrowPolylinePoints(arrow, arrowThickness)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
           :style="{
             opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-          }"/>
+          }"
+        />
       </g>
     </g>
 
     <!-- Draw L-type (line) moves. -->
-    <g v-for="(line, i) in richPositionData.lines"
-      :key="'line' + i">
+    <g v-for="(line, i) in richPositionData.lines" :key="'line' + i">
       <line
         :x1="centers[line.from][0]"
         :y1="centers[line.from][1]"
@@ -99,7 +103,8 @@
         @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"
         :style="{
           opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1,
-        }" />
+        }"
+      />
     </g>
   </svg>
 </template>
@@ -107,6 +112,8 @@
 <script lang="ts" setup>
   import { computed } from "vue";
   import { actionTypes, useStore } from "../../scripts/plugins/store";
+  const gimages = import.meta.globEager("../../models/images/svg/**/*");
+  const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
 
   enum UWAPITurn {
     A = "A",
@@ -143,9 +150,9 @@
 
   const store = useStore();
   const options = computed(() => store.getters.options);
-  const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
-  const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
-  const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
+  // const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
+  // const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
+  // const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
   const currentPosition = computed(() => store.getters.currentPosition.replace(/^;/, "").replace(/;$/, "").replace(/;/g, "\n").replace(/=/g, " = "));
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
@@ -154,23 +161,20 @@
   const gameType = computed(() => store.getters.currentGameType);
   const gameId = computed(() => store.getters.currentGameId);
   const variantId = computed(() => store.getters.currentVariantId);
-  const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data);
-  const defaultTheme = autoguiV2Data.value.defaultTheme;
-  // Change theme here!!!
-  const theTheme = autoguiV2Data.value.themes[defaultTheme];
+  const autoguiV2Data = computed(() => store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
+  const currentTheme = computed(() => store.getters.currentGameTheme);
+  const theTheme = computed(() => autoguiV2Data.value.themes[currentTheme.value]);
   const scaledWidth = 100;
-  const backgroundGeometry = theTheme.backgroundGeometry;
-  const scaledHeight = backgroundGeometry[1] * scaledWidth / backgroundGeometry[0];
-  const backgroundImagePath = theTheme.backgroundImage || "";
-  const foregroundImagePath = theTheme.foregroundImage || "";
-  const piecesOverArrows = theTheme.piecesOverArrows || false;
-  const arrowThickness = (theTheme.arrowThickness * scaledWidth / backgroundGeometry[0] / 2) || 1.5;
-  const lineWidth = theTheme.lineWidth || 0.9;
-  const defaultMoveTokenRadius = (theTheme.defaultMoveTokenRadius * scaledWidth / backgroundGeometry[0]) || 2;
-  const pieces = theTheme.pieces;
-  const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry[0]));
-  const gimages = import.meta.globEager("../../models/images/svg/**/*");
-  const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
+  const backgroundGeometry = computed(() => theTheme.value.backgroundGeometry);
+  const scaledHeight = computed(() => backgroundGeometry.value[1] * scaledWidth / backgroundGeometry.value[0]);
+  const backgroundImagePath = computed(() => theTheme.value.backgroundImage || "");
+  const foregroundImagePath = computed(() => theTheme.value.foregroundImage || "");
+  const piecesOverArrows = computed(() => theTheme.value.piecesOverArrows || false);
+  const arrowThickness = computed(() => (theTheme.value.arrowThickness * scaledWidth / backgroundGeometry.value[0] / 2) || 1.5);
+  const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
+  const defaultMoveTokenRadius = computed(() => (theTheme.value.defaultMoveTokenRadius * scaledWidth / backgroundGeometry.value[0]) || 2);
+  const pieces = computed(() => theTheme.value.pieces);
+  const centers = computed(() => theTheme.value.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry.value[0])));
 
   const getImageSource = (imagePath: string) => {
     try {
@@ -229,10 +233,10 @@
       };
 
       const compareArrowSquaredLength = (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
-        const aFromCoords = centers[a.from];
-        const aToCoords = centers[a.to];
-        const bFromCoords = centers[b.from];
-        const bToCoords = centers[b.to];
+        const aFromCoords = centers.value[a.from];
+        const aToCoords = centers.value[a.to];
+        const bFromCoords = centers.value[b.from];
+        const bToCoords = centers.value[b.to];
         return computeSquaredLength(bFromCoords[0], bFromCoords[1], bToCoords[0], bToCoords[1]) - computeSquaredLength(aFromCoords[0], aFromCoords[1], aToCoords[0], aToCoords[1]);
       };
 
@@ -254,8 +258,8 @@
   });
 
   const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 2, endOffset: number = 2): string => {
-    let fromCoords = centers[arrow.from].map((a: number) => (a));
-    let coords3 = centers[arrow.to].map((a: number) => (a));
+    let fromCoords = centers.value[arrow.from].map((a: number) => (a));
+    let coords3 = centers.value[arrow.to].map((a: number) => (a));
     const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
     const perpdir = [dir[1], -dir[0]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));

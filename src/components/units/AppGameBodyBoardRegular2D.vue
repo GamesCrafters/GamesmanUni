@@ -17,7 +17,7 @@
     const gameId = computed(() => (currentMatch.value ? currentMatch.value.gameId : ""));
     const variantId = computed(() => (currentMatch.value ? currentMatch.value.variantId : ""));
     const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
-    const autoguiV2Data = computed(() => store.getters.variant(gameType.value, gameId.value, variantId.value).autogui_v2_data).value;
+    const autoguiV2Data = computed(() => store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
     const regular2DGameBoards: Record<string, any> = {
         "ttt-misere": AppGameBoardRegular2DTtt,
         "ttt-regular": AppGameBoardRegular2DTtt,
@@ -25,7 +25,7 @@
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);
-    const autoguiV2DataExists = (autoguiV2Data != null);
+    const autoguiV2DataExists = (autoguiV2Data.value != null);
 </script>
 
 <style lang="scss" scoped>

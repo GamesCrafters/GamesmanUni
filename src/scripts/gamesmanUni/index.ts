@@ -160,7 +160,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     let gameVariant = game.variants.variants[payload.variantId];
     const hasCustom = game.custom;
     if (!gameVariant && hasCustom) {
-        /* Load the selected variant if not found in cache. */
+        /* Load the selected custom variant if not found in cache. */
         gameVariant = await loadVariant(app, payload);
         game.variants.variants[payload.variantId] = gameVariant;
     }
@@ -184,6 +184,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
+    app.currentMatch.gameTheme = gameVariant.autogui_v2_data.defaultTheme;
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
@@ -218,6 +219,7 @@ export const restartMatch = async (app: Types.App) => {
     return app;
 };
 
+// This function is for custom variants.
 const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; force?: boolean }) => {
     const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
     const variant_response = await GCTAPI.loadVariant(baseDataSource + `/${payload.gameId}/variants/${payload.variantId}`, payload);
@@ -231,16 +233,15 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         gui_status: "v0"
     };
 
-    const variant: Types.Variant = {
+    return {
         id: payload.variantId,
-        description: payload.variantId,
+        description: variant_response.response.variant[0].description,
         startPosition: variant_response.response.variant[0].startPosition,
         positions: { ...Defaults.defaultPositions },
         autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
         status: variant_response.status,
         gui_status: variant_response.gui_status
-    }
-    return variant;
+    };
 };
 
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
@@ -462,7 +463,7 @@ export const undoMove = (app: Types.App, payload?: { toRoundId?: number }) => {
 };
 
 export const updateGameTheme = (app: Types.App, payload: { gameTheme : string }) => {
-    app.currentMatch.gameTheme = payload.gameTheme || "";
+    app.currentMatch.gameTheme = payload.gameTheme;
     return app;
 };
 

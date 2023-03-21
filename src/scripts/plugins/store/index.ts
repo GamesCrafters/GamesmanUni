@@ -1,5 +1,6 @@
 import * as Vuex from "vuex";
 import * as Defaults from "../../../models/datas/defaultApp";
+import { AutoGUIv2Data } from "../../apis/gamesCrafters/types";
 import * as GMU from "../../gamesmanUni";
 import * as GMUTypes from "../../gamesmanUni/types";
 
@@ -11,6 +12,9 @@ const state: State = { app: Defaults.defaultApp };
 const preFetchEnabled: boolean = false;
 
 type Getters = {
+    autoguiV2Data(state: State):
+        (gameType: string, gameId: string, variantId: string) =>
+            AutoGUIv2Data;
     availableMove(state: State):
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             GMUTypes.Move;
@@ -74,6 +78,9 @@ type Getters = {
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
+    autoguiV2Data: (state: State)  =>
+        (gameType: string, gameId: string, variantId: string) =>
+            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].autogui_v2_data,
     availableMove: (state: State) =>
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
@@ -199,6 +206,7 @@ export enum mutationTypes {
     setApp = "setApp",
     setCurrentLeftPlayerName = "setCurrentLeftPlayerName",
     setCurrentRightPlayerName = "setCurrentRightPlayerName",
+    setGameTheme = "setGameTheme",
     setLeftPlayerIsComputer = "setLeftPlayerIsComputer",
     setRightPlayerIsComputer = "setRightPlayerIsComputer",
     setLocale = "setLocale",
@@ -215,6 +223,7 @@ type Mutations = {
     [mutationTypes.setApp](state: State, app: GMUTypes.App): void;
     [mutationTypes.setCurrentLeftPlayerName](state: State, leftPlayerName: string): void;
     [mutationTypes.setCurrentRightPlayerName](state: State, rightPlayerName: string): void;
+    [mutationTypes.setGameTheme](state: State, gameTheme: string): void;
     [mutationTypes.setLeftPlayerIsComputer](state: State, isComputer: boolean): void;
     [mutationTypes.setRightPlayerIsComputer](state: State, isComputer: boolean): void;
     [mutationTypes.setLocale](state: State, locale: string): void;
@@ -234,6 +243,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.currentMatch.firstPlayer.name = leftPlayerName),
     setCurrentRightPlayerName: (state: State, rightPlayerName: string) =>
         (state.app.currentMatch.secondPlayer.name = rightPlayerName),
+    setGameTheme: (state: State, gameTheme: string) =>
+        state.app.currentMatch.gameTheme = gameTheme,
     setLeftPlayerIsComputer: (state: State, isComputer: boolean) =>
         (state.app.currentMatch.firstPlayer.isComputer = isComputer),
     setRightPlayerIsComputer: (state: State, isComputer: boolean) =>
