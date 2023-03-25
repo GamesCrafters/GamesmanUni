@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Author: Jiachun Li -->
-<svg id="a" viewBox="0 0 900 1000" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 900 1000" xmlns="http://www.w3.org/2000/svg">
     <rect x="0" y="0" width="900" height="1000" fill="#f1cb9d" />
     <rect x="45" y="45" width="810" height="910" fill="#f1cb9d" stroke="black" stroke-width="3"/>
     <rect x="50" y="50" width="800" height="900" fill="#f1cb9d" stroke="black" stroke-width="4" />
