@@ -184,7 +184,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    app.currentMatch.gameTheme = gameVariant.autogui_v2_data.defaultTheme;
+    app.currentMatch.gameTheme = gameVariant.autogui_v2_data ? gameVariant.autogui_v2_data.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();

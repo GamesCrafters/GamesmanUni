@@ -14,10 +14,11 @@
 
     const route = useRoute();
     const store = useStore();
-    const gameType = computed(() => route.params.type as string);
-    const gameId = computed(() => route.params.gameId as string);
-    const variantId = computed(() => route.params.variantId as string);
-    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value });
+    /* Change the following values to computed refs if game may change dynamically on this page. */
+    const gameType = route.params.type as string;
+    const gameId = route.params.gameId as string;
+    const variantId = route.params.variantId as string;
+    store.dispatch(actionTypes.initiateMatch, { gameType: gameType, gameId: gameId, variantId: variantId });
     const options = computed(() => store.getters.options);
     const showMenu = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));

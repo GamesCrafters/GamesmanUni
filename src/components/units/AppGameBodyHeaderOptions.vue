@@ -165,7 +165,11 @@
         if (!game.value || !gameVariant.value) return "";
         return gameVariant.value.description;
     });
-    const gameThemes = Object.keys(gameVariant.value.autogui_v2_data.themes);
+    const gameThemes = computed(() =>
+        gameVariant.value.autogui_v2_data ?
+        Object.keys(gameVariant.value.autogui_v2_data.themes) :
+        []
+    );
     const currentGameTheme = computed(() => store.getters.currentGameTheme);
     const setGameTheme = (newGameTheme: string) => {
         store.commit(mutationTypes.setGameTheme, newGameTheme);
