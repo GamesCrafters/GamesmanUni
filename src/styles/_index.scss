@@ -143,8 +143,8 @@ button {
         border: 0.1rem solid var(--primaryColor);
         border-radius: 1rem;
         display: none;
-        max-height: 70vh;
-        overflow-y: scroll;
+        max-height: 30vh;
+        overflow-y: auto;
         position: absolute;
         z-index: 1;
     }

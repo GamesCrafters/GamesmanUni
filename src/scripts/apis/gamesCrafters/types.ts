@@ -8,12 +8,10 @@ export type Error = Status & {
 };
 
 export type OnePlayerGames = Status & {
-    response: Array<
-        Status & {
-            gameId: string;
-            name: string;
-        }
-    >;
+    response: Array<Status & {
+        gameId: string;
+        name: string;
+    }>;
 };
 
 export type OnePlayerGameVariants = Status & {
@@ -24,25 +22,21 @@ export type OnePlayerGameVariants = Status & {
         gameId: string;
         instructions: string;
         name: string;
-        variants: Array<
-            Status & {
-                description: string;
-                startPosition: string;
-                variantId: string;
-                autogui_v2_data: object;
-            }
-        >;
+        variants: Array<Status & {
+            description: string;
+            startPosition: string;
+            variantId: string;
+            autogui_v2_data: AutoGUIv2Data;
+        }>;
         custom: string;
     };
 };
 
 export type TwoPlayerGames = Status & {
-    response: Array<
-        Status & {
+    response: Array<Status & {
             gameId: string;
-            name: string;
-        }
-    >;
+        name: string;
+    }>;
 };
 
 export type TwoPlayerGameVariants = Status & {
@@ -50,30 +44,51 @@ export type TwoPlayerGameVariants = Status & {
         gameId: string;
         instructions: string;
         name: string;
-        variants: Array<
-            Status & {
-                description: string;
-                startPosition: string;
-                variantId: string;
-                autogui_v2_data: object;
-            }
-        >;
+        variants: Array<Status & {
+            description: string;
+            startPosition: string;
+            variantId: string;
+            autogui_v2_data: AutoGUIv2Data;
+        }>;
         custom: string;
     };
 };
 
 export type GameVariant = Status & {
     response: {
-        variant: Array<
-        {
+        variant: Array<{
             description: string;
             startPosition: string;
             variantId: string;
-            autogui_v2_data: object;
-        }
-        >;
-    }
-}
+            autogui_v2_data: AutoGUIv2Data;
+        }>;
+    };
+};
+
+export type AutoGUIv2Data = {
+    defaultTheme: string;
+    themes: Record<string, AutoGUIv2Theme>;
+};
+
+export type AutoGUIv2Theme = {
+    backgroundGeometry: AutoGUIv2Coordinate;
+    backgroundImage: string;
+    foregroundImage: string;
+    piecesOverArrows: boolean;
+    arrowThickness: number;
+    lineWidth: number;
+    defaultMoveTokenRadius: number;
+    centers: Array<AutoGUIv2Coordinate>;
+    pieces: Record<string, AutoGUIv2Token>;
+};
+
+export type AutoGUIv2Coordinate =
+    [x: number, y: number];
+
+export type AutoGUIv2Token = {
+    image: string;
+    scale: number;
+};
 
 export type Position = Status & {
     response: {
@@ -98,4 +113,4 @@ export type RandomPosition = Status & {
     response: {
         position: string;
     }
-}
+};

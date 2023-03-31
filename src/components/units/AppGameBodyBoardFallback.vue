@@ -90,13 +90,13 @@
     };
 
     const store = useStore();
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
+    const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition.replace(/^;/, "").replace(/;$/, "").replace(/;/g, "\n").replace(/=/g, " = "));
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.id[0] === "c");
+    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;

@@ -1,3 +1,5 @@
+import { AutoGUIv2Data } from "../apis/gamesCrafters/types";
+
 export type Update = {
     status: string;
     lastUpdated: number;
@@ -9,9 +11,15 @@ export type App = Update & {
     dataSources: DataSources;
     gameTypes: GameTypes;
     commits: Commits;
-    users: Users;
+    options: Options;
+    matches: Matches;
     currentMatch: Match;
 };
+
+export type Player = {
+    name: string;
+    isComputer: boolean;
+}
 
 export type Preferences = {
     theme: string;
@@ -55,7 +63,7 @@ export type Variant = {
     description: string;
     startPosition: string;
     positions: Positions;
-    autogui_v2_data: object;
+    autogui_v2_data: AutoGUIv2Data;
     status: string;
     gui_status: string;
 };
@@ -102,15 +110,6 @@ export type Commit = {
     authorGitHubUrl: string;
 };
 
-export type Users = Record<string, User>;
-
-export type User = {
-    id: string;
-    name: string;
-    options: Options;
-    matches: Matches;
-};
-
 export type Options = {
     computerMoveDuration: number;
     showInstructions: boolean;
@@ -131,25 +130,23 @@ export type Match = {
     gameId: string;
     gameTheme: string;
     variantId: string;
-    type: string;
     startPosition: string;
-    players: Array<string>;
-    startingPlayerId: string;
+    firstPlayer: Player;
+    secondPlayer: Player;
     rounds: Rounds;
     moveHistory: string;
     round: Round;
     created: number;
     lastPlayed: number;
-    ended: number;
     backgroundLoading: boolean;
+    computerMoving: boolean;
 };
 
 export type Rounds = Record<number, Round>;
 
 export type Round = {
     id: number;
-    playerId: string;
-    players: Array<string>;
+    firstPlayerTurn: boolean;
     move: string;
     moveName: string;
     moveValue: string;
