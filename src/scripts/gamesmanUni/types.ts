@@ -1,3 +1,5 @@
+import { AutoGUIv2Data } from "../apis/gamesCrafters/types";
+
 export type Update = {
     status: string;
     lastUpdated: number;
@@ -61,7 +63,7 @@ export type Variant = {
     description: string;
     startPosition: string;
     positions: Positions;
-    autogui_v2_data: object;
+    autogui_v2_data: AutoGUIv2Data;
     status: string;
     gui_status: string;
 };

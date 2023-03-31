@@ -41,10 +41,11 @@
         }
     });
     const getLogoSource = (variantId: string) => {
-        const images = import.meta.globEager("../../models/images/*.png");
+        const images = import.meta.globEager("../../models/images/thumbnail/*.png");
+        const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
         const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
-        const regularThumbnailFilePath = `../../models/images/thumbnail-${gameId.value}-regular.png`;
-        const VariantThumbnailFilePath = `../../models/images/thumbnail-${gameId.value}-${variantId}.png`;
+        const regularThumbnailFilePath = `../../models/images/thumbnail/${gameId.value}-regular.png`;
+        const VariantThumbnailFilePath = `../../models/images/thumbnail/${gameId.value}-${variantId}.png`;
         try {
             return images[VariantThumbnailFilePath].default;
         } catch (errorMessage) {
@@ -55,7 +56,7 @@
                 //console.warn(`${gameId.value} game's regular variant logo does not exist yet.`);
             }
         }
-        return images[appLogoFilePath].default;
+        return logo[appLogoFilePath].default;
     };
     const customBoardRoute = () => {
         let boardStr = window.prompt('Enter a valid board string:');
