@@ -1,4 +1,8 @@
 <svg width="45" height="45" clip-rule="evenodd" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <!-- Adapted from Lila "staunty" chess pieces by GitHub user sadsnake1 under CC BY-NC-SA 4.0:
+      https://creativecommons.org/licenses/by-nc-sa/4.0/.
+      The color of the piece has been modified from the original work, which can be found
+      at https://github.com/lichess-org/lila/tree/master/public/piece/staunty. -->
  <path d="m27.67 15.225v-3.5436h4.4396v-4.4293h-4.9344v-3.8933h-4.366v3.8933h-4.9344v4.4293h4.4396v3.5436" style="clip-rule:evenodd;fill-rule:evenodd;fill:#505050;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;stroke-linecap:round;stroke-width:1.2;stroke:#1e1e1e"/>
  <rect x="20.299" y="14.215" width="9.3984" height="2.7873" ry="1.3937" style="fill:#505050;paint-order:normal;stroke-linejoin:round;stroke-width:1.2;stroke:#1e1e1e"/>
  <path d="m26.416 14.215c0.72479 0 1.3082 0.62142 1.3082 1.3935 0 0.77209-0.58336 1.3935-1.3082 1.3935h1.9736c0.72478 0 1.3081-0.62144 1.3081-1.3935 0-0.77209-0.58336-1.3935-1.3081-1.3935z" style="fill:#000000;opacity:.18;paint-order:normal"/>
