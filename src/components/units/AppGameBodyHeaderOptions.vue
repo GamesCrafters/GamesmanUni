@@ -9,7 +9,7 @@
                 <div id="gameThemes" v-if="gameThemes.length > 1">
                     <h3 id="title">Themes</h3>
                     <div class="uni-dropdown">
-                        <div class="uni-dropdown-selection">{{ currentGameTheme }} ▼</div>
+                        <div class="uni-dropdown-selection" style="padding:0.5rem 1.5rem 0.5rem 0.5rem;">{{ currentGameTheme }} ▼</div>
                         <div class="uni-dropdown-menu">
                             <div class="uni-dropdown-menu-option"
                                     v-for="gameTheme in gameThemes"
@@ -80,7 +80,7 @@
                 </div>
 
                 <!-- computer move settings -->
-                <div id="computer-move-duration" v-if="computerInLoop">
+                <div id="computer-move-duration" v-show="computerInLoop">
                     <h3 class="title">Computer Move Duration (milliseconds)</h3>
                     <VueSlider id="slider"
                         v-model="options.computerMoveDuration"
@@ -172,7 +172,7 @@
     }
 
     const options = computed(() => (store.getters.options));
-    const computerInLoop = computed(() => (currentLeftPlayer.value.isComputer || currentRightPlayer.value.isComputer));
+    const computerInLoop = computed(() => (updatedLeftPlayer.value.isComputer || updatedRightPlayer.value.isComputer));
 
     const updateOptions = () => {
         store.commit(mutationTypes.showOptions, false);
@@ -219,11 +219,8 @@
             > #title {
                 margin: 1rem;
             }
-            > #computer-move-duration {
+            > #gameThemes {
                 padding: 1rem 10%;
-                > #title {
-                    margin: 1rem;
-                }
             }
             > #players {
                 padding: 1rem 10%;
@@ -264,6 +261,12 @@
                             text-align: center;
                         }
                     }
+                }
+            }
+            > #computer-move-duration {
+                padding: 1rem 10%;
+                > #title {
+                    margin: 1rem;
                 }
             }
             > #visibility-options {
