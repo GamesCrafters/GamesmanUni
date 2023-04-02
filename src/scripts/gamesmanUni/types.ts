@@ -120,6 +120,7 @@ export type Options = {
     showMenu: boolean;
     showVvhGuides: boolean;
     showVvhMeters: boolean;
+    vvhScrolling: boolean;
 };
 
 export type Matches = Record<number, Match>;

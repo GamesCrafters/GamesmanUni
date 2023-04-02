@@ -210,7 +210,18 @@ export const initiateMatch = async (app: Types.App, payload: {
 
 export const restartMatch = async (app: Types.App) => {
     /* Reset round id to 1 and delete all rounds. */
-    app.currentMatch.round = {...app.currentMatch.rounds[1]};
+    const posArr = app.currentMatch.startPosition.split('_');
+    const gameType = app.currentMatch.gameType;
+    const gameId = app.currentMatch.gameId;
+    const variantId = app.currentMatch.variantId
+    app.currentMatch.round = {
+        id: 1,
+        firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
+        move: "",
+        moveName: "",
+        moveValue: "",
+        position: { ...app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions[app.currentMatch.startPosition] }
+    };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveName = "";
     app.currentMatch.round.moveValue = "";
@@ -279,7 +290,7 @@ export const exitMatch = (app: Types.App) => {
 export const generateComputerMove = (round: Types.Round) => {
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
-    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
     if (currentPositionValue === "win" || currentPositionValue === "tie") {
         const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);

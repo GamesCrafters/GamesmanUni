@@ -217,6 +217,7 @@ export enum mutationTypes {
     showOptions = "showOptions",
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
+    toggleVvhScrolling = "toggleVvhScrolling",
 }
 
 type Mutations = {
@@ -234,6 +235,7 @@ type Mutations = {
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
+    [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -267,6 +269,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhGuides = showVvhGuides),
     showVvhMeters: (state: State, showVvhMeters: boolean) =>
         (state.app.options.showVvhMeters = showVvhMeters),
+    toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
+        (state.app.options.vvhScrolling = vvhScrolling),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

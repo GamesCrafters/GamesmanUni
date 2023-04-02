@@ -17,23 +17,33 @@
                 </button>
             </div>
             <div id="app-game-menu-content-active">
-                <AppGameVvh v-show="activeTab === 'vvh'"/>
+                <AppGameVvh v-show="activeTab === 'vvh'"
+                            :style="{
+                                'max-height': vvhMaxHeight,
+                                'overflow-y': vvhScrollingStyle
+                            }"
+                />
                 <!-- <AppGameMenuAnalysis/> -->
-                <AppGameMenuPosition v-show="activeTab === 'startPos'"/>
-                <AppGameMenuMoveHistory v-show="activeTab === 'moveHist'"/>
+                <AppGameMenuPosition v-show="activeTab === 'startPos'" />
+                <AppGameMenuMoveHistory v-show="activeTab === 'moveHist'" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
+    import { useStore } from "../../scripts/plugins/store";
     import AppGameVvh from "./AppGameVvh.vue";
     import AppGameMenuHeader from "./AppGameMenuHeader.vue";
     import AppGameMenuPosition from "./AppGameMenuPosition.vue";
     import AppGameMenuMoveHistory from "./AppGameMenuHistory.vue";
 
+    const store = useStore();
     const activeTab = ref('vvh');
+    const vvhScrolling = computed(() => store.getters.options.vvhScrolling);
+    const vvhMaxHeight = computed(() => vvhScrolling.value ? "90vh" : "none");
+    const vvhScrollingStyle = computed(() => vvhScrolling.value ? "scroll" : "visible");
 </script>
 
 <style lang="scss" scoped>
