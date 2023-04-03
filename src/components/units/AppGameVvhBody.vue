@@ -798,12 +798,12 @@
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
     const currentRounds = computed(() => store.getters.currentRounds);
-    const currentValuedRounds = computed(() => {
-        return store.getters.currentValuedRounds;
-    });
-    const currentValuedRoundId = computed(() => {
-        return Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length);
-    });
+    const currentValuedRounds = computed(() => 
+        currentRounds.value.filter(round => round.position.positionValue !== "unsolved")
+    );
+    const currentValuedRoundId = computed(() =>
+        Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
+    );
     const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
 
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));

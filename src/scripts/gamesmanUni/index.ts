@@ -212,18 +212,21 @@ export const initiateMatch = async (app: Types.App, payload: {
 };
 
 export const restartMatch = async (app: Types.App) => {
-    /* Reset round id to 1 and delete all existing rounds. */
     const posArr = app.currentMatch.startPosition.split('_');
     const gameType = app.currentMatch.gameType;
     const gameId = app.currentMatch.gameId;
     const variantId = app.currentMatch.variantId
+    const game = app.gameTypes[gameType].games[gameId];
+    const startPosition = app.currentMatch.startPosition;
+
+    /* Reset round id to 1 and delete all existing rounds. */
     app.currentMatch.round = {
         id: 1,
         firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
         move: "",
         moveName: "",
         moveValue: "",
-        position: { ...app.gameTypes[gameType].games[gameId].variants.variants[variantId].positions[app.currentMatch.startPosition] }
+        position: deepcopy(game.variants.variants[variantId].positions[startPosition])
     };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveName = "";
@@ -232,6 +235,7 @@ export const restartMatch = async (app: Types.App) => {
         deepcopy(Defaults.defaultRound),
         deepcopy(app.currentMatch.round)
     ];
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
