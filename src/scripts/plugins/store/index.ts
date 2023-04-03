@@ -1,5 +1,6 @@
 import * as Vuex from "vuex";
 import * as Defaults from "../../../models/datas/defaultApp";
+import { AutoGUIv2Data } from "../../apis/gamesCrafters/types";
 import * as GMU from "../../gamesmanUni";
 import * as GMUTypes from "../../gamesmanUni/types";
 
@@ -11,6 +12,9 @@ const state: State = { app: Defaults.defaultApp };
 const preFetchEnabled: boolean = false;
 
 type Getters = {
+    autoguiV2Data(state: State):
+        (gameType: string, gameId: string, variantId: string) =>
+            AutoGUIv2Data;
     availableMove(state: State):
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             GMUTypes.Move;
@@ -42,6 +46,7 @@ type Getters = {
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
     currentStartPosition(state: State): string;
+    currentValuedRounds(state: State): GMUTypes.Rounds;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
     fallbackLocale(state: State): string;
@@ -74,6 +79,9 @@ type Getters = {
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
+    autoguiV2Data: (state: State)  =>
+        (gameType: string, gameId: string, variantId: string) =>
+            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].autogui_v2_data,
     availableMove: (state: State) =>
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
@@ -140,6 +148,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.gameTheme,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
+    currentValuedRounds: (state: State) =>
+        state.app.currentMatch.rounds.filter(round => round.position.positionValue !== "unsolved"),
     dataSources: (state: State) =>
         state.app.dataSources,
     fallbackLocale: (state: State) =>
@@ -199,6 +209,7 @@ export enum mutationTypes {
     setApp = "setApp",
     setCurrentLeftPlayerName = "setCurrentLeftPlayerName",
     setCurrentRightPlayerName = "setCurrentRightPlayerName",
+    setGameTheme = "setGameTheme",
     setLeftPlayerIsComputer = "setLeftPlayerIsComputer",
     setRightPlayerIsComputer = "setRightPlayerIsComputer",
     setLocale = "setLocale",
@@ -209,12 +220,14 @@ export enum mutationTypes {
     showOptions = "showOptions",
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
+    toggleVvhScrolling = "toggleVvhScrolling",
 }
 
 type Mutations = {
     [mutationTypes.setApp](state: State, app: GMUTypes.App): void;
     [mutationTypes.setCurrentLeftPlayerName](state: State, leftPlayerName: string): void;
     [mutationTypes.setCurrentRightPlayerName](state: State, rightPlayerName: string): void;
+    [mutationTypes.setGameTheme](state: State, gameTheme: string): void;
     [mutationTypes.setLeftPlayerIsComputer](state: State, isComputer: boolean): void;
     [mutationTypes.setRightPlayerIsComputer](state: State, isComputer: boolean): void;
     [mutationTypes.setLocale](state: State, locale: string): void;
@@ -225,6 +238,7 @@ type Mutations = {
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
+    [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -234,6 +248,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.currentMatch.firstPlayer.name = leftPlayerName),
     setCurrentRightPlayerName: (state: State, rightPlayerName: string) =>
         (state.app.currentMatch.secondPlayer.name = rightPlayerName),
+    setGameTheme: (state: State, gameTheme: string) =>
+        state.app.currentMatch.gameTheme = gameTheme,
     setLeftPlayerIsComputer: (state: State, isComputer: boolean) =>
         (state.app.currentMatch.firstPlayer.isComputer = isComputer),
     setRightPlayerIsComputer: (state: State, isComputer: boolean) =>
@@ -256,6 +272,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhGuides = showVvhGuides),
     showVvhMeters: (state: State, showVvhMeters: boolean) =>
         (state.app.options.showVvhMeters = showVvhMeters),
+    toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
+        (state.app.options.vvhScrolling = vvhScrolling),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

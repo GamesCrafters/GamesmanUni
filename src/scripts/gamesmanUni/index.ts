@@ -160,7 +160,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     let gameVariant = game.variants.variants[payload.variantId];
     const hasCustom = game.custom;
     if (!gameVariant && hasCustom) {
-        /* Load the selected variant if not found in cache. */
+        /* Load the selected custom variant if not found in cache. */
         gameVariant = await loadVariant(app, payload);
         game.variants.variants[payload.variantId] = gameVariant;
     }
@@ -184,6 +184,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
+    app.currentMatch.gameTheme = gameVariant.autogui_v2_data ? gameVariant.autogui_v2_data.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
@@ -200,24 +201,46 @@ export const initiateMatch = async (app: Types.App, payload: {
         move: "",
         moveName: "",
         moveValue: "",
-        position: { ...gameVariant.positions[startPosition] }
+        position: deepcopy(gameVariant.positions[startPosition])
     };
-    app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+    app.currentMatch.rounds = [
+        deepcopy(Defaults.defaultRound),
+        deepcopy(app.currentMatch.round)
+    ];
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
 export const restartMatch = async (app: Types.App) => {
-    /* Reset round id to 1 and delete all rounds. */
-    app.currentMatch.round = {...app.currentMatch.rounds[1]};
+    const posArr = app.currentMatch.startPosition.split('_');
+    const gameType = app.currentMatch.gameType;
+    const gameId = app.currentMatch.gameId;
+    const variantId = app.currentMatch.variantId
+    const game = app.gameTypes[gameType].games[gameId];
+    const startPosition = app.currentMatch.startPosition;
+
+    /* Reset round id to 1 and delete all existing rounds. */
+    app.currentMatch.round = {
+        id: 1,
+        firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
+        move: "",
+        moveName: "",
+        moveValue: "",
+        position: deepcopy(game.variants.variants[variantId].positions[startPosition])
+    };
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveName = "";
     app.currentMatch.round.moveValue = "";
-    app.currentMatch.rounds = { 1: { ...app.currentMatch.round } };
+    app.currentMatch.rounds = [
+        deepcopy(Defaults.defaultRound),
+        deepcopy(app.currentMatch.round)
+    ];
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
+// This function is for custom variants.
 const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; force?: boolean }) => {
     const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
     const variant_response = await GCTAPI.loadVariant(baseDataSource + `/${payload.gameId}/variants/${payload.variantId}`, payload);
@@ -226,21 +249,20 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: "",
         startPosition: "",
         positions: {},
-        autogui_v2_data: {},
+        autogui_v2_data: {} as GCTAPITypes.AutoGUIv2Data,
         status: "",
         gui_status: "v0"
     };
 
-    const variant: Types.Variant = {
+    return {
         id: payload.variantId,
-        description: payload.variantId,
+        description: variant_response.response.variant[0].description,
         startPosition: variant_response.response.variant[0].startPosition,
         positions: { ...Defaults.defaultPositions },
         autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
         status: variant_response.status,
         gui_status: variant_response.gui_status
-    }
-    return variant;
+    };
 };
 
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
@@ -266,9 +288,9 @@ export const isEndOfMatch = (app: Types.App) =>
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
-    if (Object.entries(app.currentMatch.rounds).length > 1) { 
+    if (app.currentMatch.rounds.length > 2) { 
         app.currentMatch.lastPlayed = new Date().getTime();
-        app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+        app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
         app.matches[app.currentMatch.id] = deepcopy(app.currentMatch);
     }
     app.currentMatch = deepcopy(Defaults.defaultMatch);
@@ -278,7 +300,7 @@ export const exitMatch = (app: Types.App) => {
 export const generateComputerMove = (round: Types.Round) => {
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
-    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
     if (currentPositionValue === "win" || currentPositionValue === "tie") {
         const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
@@ -299,12 +321,11 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.round.moveName = moveObj.move;
     }
     // Rewrite history by deleting all subsequent moves made ealier.
-    for (let roundId = app.currentMatch.round.id;
-         roundId <= Math.max(...Object.keys(app.currentMatch.rounds).map((roundId) => parseInt(roundId)));
-         roundId++) {
-        delete app.currentMatch.rounds[roundId];
-    }
-    app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
+    app.currentMatch.rounds.splice(
+        app.currentMatch.round.id, 
+        app.currentMatch.rounds.length - app.currentMatch.round.id
+    );
+    app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
     if (!isEndOfMatch(app)) {
         const updatedApp = await loadPosition(app, {
             gameType: app.currentMatch.gameType,
@@ -342,7 +363,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.round.move = "";
         app.currentMatch.round.moveValue = "";
         app.currentMatch.round.position = updatedPosition;
-        app.currentMatch.rounds[app.currentMatch.round.id] = { ...app.currentMatch.round };
+        app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
         app.currentMatch.lastPlayed = new Date().getTime();
     }
     return app;
@@ -372,7 +393,7 @@ const undoRedoAvailable = (app: Types.App, roundOffset: number) => {
         /* Undo/redo move is always disabled in CVC mode. */
         return false;
     }
-    const maxRoundId = Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id));
+    const maxRoundId = app.currentMatch.rounds.length - 1;
     for (let i = app.currentMatch.round.id + roundOffset;
          i >= 1 && i <= maxRoundId;
          i += roundOffset
@@ -388,7 +409,7 @@ const undoRedoAvailable = (app: Types.App, roundOffset: number) => {
 };
 
 const gotoRoundId = (app: Types.App, roundId: number) => {
-    app.currentMatch.round = { ...app.currentMatch.rounds[roundId] };
+    app.currentMatch.round = deepcopy(app.currentMatch.rounds[roundId]);
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
@@ -402,7 +423,7 @@ export const redoMoveAvailable = (app: Types.App) => {
 export const redoMove = (app: Types.App) => {
     /* Redo the next human action in history. */
     const currRoundId = app.currentMatch.round.id;
-    const maxRoundId = Math.max(...Object.values(app.currentMatch.rounds).map((round) => round.id));
+    const maxRoundId = app.currentMatch.rounds.length - 1;
     let toRoundId = currRoundId; // Placeholder value to satisfy analyzer.
     const firstPlayerIsComputer = app.currentMatch.firstPlayer.isComputer;
     const secondPlayerIsComputer = app.currentMatch.secondPlayer.isComputer;
@@ -462,7 +483,7 @@ export const undoMove = (app: Types.App, payload?: { toRoundId?: number }) => {
 };
 
 export const updateGameTheme = (app: Types.App, payload: { gameTheme : string }) => {
-    app.currentMatch.gameTheme = payload.gameTheme || "";
+    app.currentMatch.gameTheme = payload.gameTheme;
     return app;
 };
 

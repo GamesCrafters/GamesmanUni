@@ -113,11 +113,12 @@ export const defaultOptions: Types.Options = {
     showMenu: true,
     showVvhGuides: true,
     showVvhMeters: false,
+    vvhScrolling: false
 };
 
 export const defaultMatches: Types.Matches = {};
 
-export const defaultRounds: Types.Rounds = {};
+export const defaultRounds: Types.Rounds = [];
 
 export const defaultRound: Types.Round = {
     id: 0,
@@ -137,7 +138,7 @@ export const defaultMatch: Types.Match = {
     startPosition: "",
     firstPlayer: {name: "Player 1", isComputer: false},
     secondPlayer: {name: "Player 2", isComputer: false},
-    rounds: {},
+    rounds: [],
     moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
     created: 0,
@@ -163,7 +164,7 @@ export const defaultApp: Types.App = {
         startPosition: "",
         firstPlayer: {name: "Player 1", isComputer: false},
         secondPlayer: {name: "Player 2", isComputer: false},
-        rounds: {},
+        rounds: [],
         moveHistory: "",
         round: {
             ...defaultRound,

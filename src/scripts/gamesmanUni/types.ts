@@ -1,3 +1,5 @@
+import { AutoGUIv2Data } from "../apis/gamesCrafters/types";
+
 export type Update = {
     status: string;
     lastUpdated: number;
@@ -61,7 +63,7 @@ export type Variant = {
     description: string;
     startPosition: string;
     positions: Positions;
-    autogui_v2_data: object;
+    autogui_v2_data: AutoGUIv2Data;
     status: string;
     gui_status: string;
 };
@@ -118,6 +120,7 @@ export type Options = {
     showMenu: boolean;
     showVvhGuides: boolean;
     showVvhMeters: boolean;
+    vvhScrolling: boolean;
 };
 
 export type Matches = Record<number, Match>;
@@ -140,7 +143,7 @@ export type Match = {
     computerMoving: boolean;
 };
 
-export type Rounds = Record<number, Round>;
+export type Rounds = Array<Round>;
 
 export type Round = {
     id: number;

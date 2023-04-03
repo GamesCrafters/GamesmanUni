@@ -48,15 +48,16 @@ import type { Game } from "../../scripts/gamesmanUni/types";
 const route = useRoute();
 const store = useStore();
 const getLogoSource = (game: Game) => {
-    const images = import.meta.globEager("../../models/images/*.png");
+    const images = import.meta.globEager("../../models/images/thumbnail/*.png");
+    const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
     const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
-    const gameThumbnailFilePath = `../../models/images/thumbnail-${game.id}-regular.png`;
+    const gameThumbnailFilePath = `../../models/images/thumbnail/${game.id}-regular.png`;
     try {
         return images[gameThumbnailFilePath].default;
     } catch (errorMessage) {
         //console.warn(`${game.name} game logo does not exist yet.`);
     }
-    return images[appLogoFilePath].default;
+    return logo[appLogoFilePath].default;
 };
 const gameType = computed(() => route.params.type as string);
 const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
