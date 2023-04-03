@@ -58,7 +58,6 @@
             border: 0.1rem solid var(--neutralColor);
             padding: 4rem;
             .buttons {
-                margin-top: 2rem;
                 margin-right: 1rem;
                 margin-left: 1rem;
                 margin-bottom: 2rem;
