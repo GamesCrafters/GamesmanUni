@@ -56,7 +56,10 @@
             :cy="centers[token.to][1]"
             :r="defaultMoveTokenRadius"
             :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
+            :style="'--xorigin: ' + centers[token.to][0] +
+                    'px ' + centers[token.to][1] +
+                    'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) +
+                    ';'"
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"
         />
         
@@ -153,7 +156,12 @@
   // const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
   // const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
   // const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
-  const currentPosition = computed(() => store.getters.currentPosition.replace(/^;/, "").replace(/;$/, "").replace(/;/g, "\n").replace(/=/g, " = "));
+  const currentPosition = computed(() =>
+    store.getters.currentPosition.replace(/^;/, "")
+                                 .replace(/;$/, "")
+                                 .replace(/;/g, "\n")
+                                 .replace(/=/g, " = ")
+  );
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
 
@@ -161,20 +169,26 @@
   const gameType = computed(() => store.getters.currentGameType);
   const gameId = computed(() => store.getters.currentGameId);
   const variantId = computed(() => store.getters.currentVariantId);
-  const autoguiV2Data = computed(() => store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
+  const autoguiV2Data = computed(() =>
+    store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
   const currentTheme = computed(() => store.getters.currentGameTheme);
   const theTheme = computed(() => autoguiV2Data.value.themes[currentTheme.value]);
   const scaledWidth = 100;
   const backgroundGeometry = computed(() => theTheme.value.backgroundGeometry);
-  const scaledHeight = computed(() => backgroundGeometry.value[1] * scaledWidth / backgroundGeometry.value[0]);
+  const scaledHeight = computed(() =>
+    backgroundGeometry.value[1] * scaledWidth / backgroundGeometry.value[0]);
   const backgroundImagePath = computed(() => theTheme.value.backgroundImage || "");
   const foregroundImagePath = computed(() => theTheme.value.foregroundImage || "");
   const piecesOverArrows = computed(() => theTheme.value.piecesOverArrows || false);
-  const arrowThickness = computed(() => (theTheme.value.arrowThickness * scaledWidth / backgroundGeometry.value[0] / 2) || 1.5);
+  const arrowThickness = computed(() =>
+    (theTheme.value.arrowThickness * scaledWidth / backgroundGeometry.value[0] / 2) || 1.5);
   const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
-  const defaultMoveTokenRadius = computed(() => (theTheme.value.defaultMoveTokenRadius * scaledWidth / backgroundGeometry.value[0]) || 2);
+  const defaultMoveTokenRadius = computed(() =>
+    (theTheme.value.defaultMoveTokenRadius * scaledWidth / backgroundGeometry.value[0]) || 2);
   const pieces = computed(() => theTheme.value.pieces);
-  const centers = computed(() => theTheme.value.centers.map((a: [number, number]) => a.map((b: number) => b * scaledWidth / backgroundGeometry.value[0])));
+  const centers = computed(() =>
+    theTheme.value.centers.map((a: [number, number]) =>
+      a.map((b: number) => b * scaledWidth / backgroundGeometry.value[0])));
 
   const getImageSource = (imagePath: string) => {
     try {
@@ -232,12 +246,14 @@
         return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
       };
 
-      const compareArrowSquaredLength = (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
+      const compareArrowSquaredLength = 
+          (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
         const aFromCoords = centers.value[a.from];
         const aToCoords = centers.value[a.to];
         const bFromCoords = centers.value[b.from];
         const bToCoords = centers.value[b.to];
-        return computeSquaredLength(bFromCoords[0], bFromCoords[1], bToCoords[0], bToCoords[1]) - computeSquaredLength(aFromCoords[0], aFromCoords[1], aToCoords[0], aToCoords[1]);
+        return computeSquaredLength(bFromCoords[0], bFromCoords[1], bToCoords[0], bToCoords[1]) - 
+               computeSquaredLength(aFromCoords[0], aFromCoords[1], aToCoords[0], aToCoords[1]);
       };
 
       arrows = arrows.sort(compareArrowSquaredLength);
@@ -257,7 +273,11 @@
     }
   });
 
-  const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 2, endOffset: number = 2): string => {
+  const formatArrowPolylinePoints = 
+      (arrow: GDefaultRegular2DBoardArrow,
+      thickness: number = 0.75,
+      startOffset: number = 2,
+      endOffset: number = 2): string => {
     let fromCoords = centers.value[arrow.from].map((a: number) => (a));
     let coords3 = centers.value[arrow.to].map((a: number) => (a));
     const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
@@ -280,10 +300,18 @@
     const coords5 = [midCoords[0] + perpdir[0] * thickNorm, midCoords[1] + perpdir[1] * thickNorm];
     const coords4 = [midCoords[0] + 3 * perpdir[0] * thickNorm, midCoords[1] + 3 * perpdir[1] * thickNorm];
 
-    return `${coords0[0]},${coords0[1]} ${coords1[0]},${coords1[1]} ${coords2[0]},${coords2[1]} ${coords3[0]},${coords3[1]} ${coords4[0]},${coords4[1]} ${coords5[0]},${coords5[1]} ${coords6[0]},${coords6[1]}`;
+    return `${coords0[0]},${coords0[1]}
+            ${coords1[0]},${coords1[1]}
+            ${coords2[0]},${coords2[1]}
+            ${coords3[0]},${coords3[1]}
+            ${coords4[0]},${coords4[1]}
+            ${coords5[0]},${coords5[1]}
+            ${coords6[0]},${coords6[1]}`;
   };
 
-  const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
+  const getBoardMoveElementHintClass = 
+    (move?: GDefaultRegular2DMove): string => 
+      (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
   
 </script>
 
@@ -336,6 +364,9 @@
       &lose {
         filter: var(--loseFilter);
       }
+      &unsolved {
+        filter: var(--unsolvedFilter);
+      }
     }
 
     &:hover {
@@ -376,6 +407,10 @@
       &lose {
         stroke: var(--loseColor);
         fill: var(--loseColor);
+      }
+      &unsolved {
+        stroke: var(--unsolvedColor);
+        fill: var(--unsolvedColor)
       }
     }
 

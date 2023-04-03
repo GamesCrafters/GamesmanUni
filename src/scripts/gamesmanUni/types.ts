@@ -120,6 +120,7 @@ export type Options = {
     showMenu: boolean;
     showVvhGuides: boolean;
     showVvhMeters: boolean;
+    vvhScrolling: boolean;
 };
 
 export type Matches = Record<number, Match>;
@@ -142,7 +143,7 @@ export type Match = {
     computerMoving: boolean;
 };
 
-export type Rounds = Record<number, Round>;
+export type Rounds = Array<Round>;
 
 export type Round = {
     id: number;

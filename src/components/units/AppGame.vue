@@ -1,7 +1,7 @@
 <template>
     <div id="app-game">
         <AppGameBody />
-        <AppGameMenu v-show="showVvh"/>
+        <AppGameMenu v-show="showMenu"/>
     </div>
 </template>
 
@@ -20,7 +20,7 @@
     const variantId = route.params.variantId as string;
     store.dispatch(actionTypes.initiateMatch, { gameType: gameType, gameId: gameId, variantId: variantId });
     const options = computed(() => store.getters.options);
-    const showVvh = computed(() => (options.value ? options.value.showMenu : true));
+    const showMenu = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));
 </script>
 

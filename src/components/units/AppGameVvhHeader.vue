@@ -1,14 +1,23 @@
 <template>
     <div id="app-game-vvh-header">
-        <AppGameVvhHeaderGuidesOptions />
+        <div id="app-game-vvh-header-left">
+            <!-- TODO: implement VVH instructions and change the behavior of the button below. -->
+            <AppGameVvhHeaderInstructions class="buttons" title="Show Game Instructions" />
+            <AppGameVvhHeaderGuidesOptions class="buttons" title="Toggle Graph Legend" />
+        </div>
         <AppGameVvhHeaderTitle />
-        <AppGameVvhHeaderMetersOptions />
+        <div id="app-game-vvh-header-right">
+            <AppGameVvhHeaderScrollOptions class="buttons" title="Toggle Scrolling" />
+            <AppGameVvhHeaderMetersOptions class="buttons" title="Toggle Options" />
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import AppGameVvhHeaderGuidesOptions from "./AppGameVvhHeaderGuidesOptions.vue";
-    import AppGameVvhHeaderMetersOptions from "./AppGameVvhHeaderMetersOptions.vue";
+    import AppGameVvhHeaderGuidesOptions from "./AppGameVvhHeaderLegend.vue";
+    import AppGameVvhHeaderMetersOptions from "./AppGameVvhHeaderOptions.vue";
+    import AppGameVvhHeaderScrollOptions from "./AppGameVvhHeaderScrolling.vue";
+    import AppGameVvhHeaderInstructions from "./AppGameVvhHeaderInstructions.vue";
     import AppGameVvhHeaderTitle from "./AppGameVvhHeaderTitle.vue";
 </script>
 
@@ -22,6 +31,10 @@
         justify-content: space-around;
         > * {
             margin: 1rem;
+        }
+        .buttons {
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
         }
     }
 </style>

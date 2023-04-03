@@ -46,6 +46,7 @@ type Getters = {
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
     currentStartPosition(state: State): string;
+    currentValuedRounds(state: State): GMUTypes.Rounds;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
     fallbackLocale(state: State): string;
@@ -147,6 +148,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.gameTheme,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
+    currentValuedRounds: (state: State) =>
+        state.app.currentMatch.rounds.filter(round => round.position.positionValue !== "unsolved"),
     dataSources: (state: State) =>
         state.app.dataSources,
     fallbackLocale: (state: State) =>
@@ -217,6 +220,7 @@ export enum mutationTypes {
     showOptions = "showOptions",
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
+    toggleVvhScrolling = "toggleVvhScrolling",
 }
 
 type Mutations = {
@@ -234,6 +238,7 @@ type Mutations = {
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
+    [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -267,6 +272,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhGuides = showVvhGuides),
     showVvhMeters: (state: State, showVvhMeters: boolean) =>
         (state.app.options.showVvhMeters = showVvhMeters),
+    toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
+        (state.app.options.vvhScrolling = vvhScrolling),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
