@@ -46,6 +46,7 @@ type Getters = {
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
     currentStartPosition(state: State): string;
+    currentValuedRounds(state: State): GMUTypes.Rounds;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
     fallbackLocale(state: State): string;
@@ -147,6 +148,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.gameTheme,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
+    currentValuedRounds: (state: State) =>
+        state.app.currentMatch.rounds.filter(round => round.position.positionValue !== "unsolved"),
     dataSources: (state: State) =>
         state.app.dataSources,
     fallbackLocale: (state: State) =>
