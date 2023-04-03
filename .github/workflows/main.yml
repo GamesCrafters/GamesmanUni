@@ -33,7 +33,7 @@ jobs:
                   command: |
                       cd prod/GamesmanUni
                       echo "Pulling from GitHub ---------------------------------------------------"
-                      git pull
+                      git reset --hard origin/main
                       echo "Checking and installing new dependencies ------------------------------"
                       yarn install
                       echo "Building prod ---------------------------------------------------------"
