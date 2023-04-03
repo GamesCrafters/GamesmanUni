@@ -143,7 +143,7 @@ export type Match = {
     computerMoving: boolean;
 };
 
-export type Rounds = Record<number, Round>;
+export type Rounds = Array<Round>;
 
 export type Round = {
     id: number;
