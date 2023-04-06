@@ -33,13 +33,16 @@ jobs:
                   command: |
                       cd prod/GamesmanUni
                       echo "Pulling from GitHub ---------------------------------------------------"
+                      git fetch -v
                       git reset --hard origin/main
                       echo "Checking and installing new dependencies ------------------------------"
                       yarn install
                       echo "Building prod ---------------------------------------------------------"
                       yarn build
                       echo "Pushing to prod -------------------------------------------------------"
+                      mv /var/www/html/uni/assets /var/www/html/uni/assets2
                       sudo rsync -au dist/ /var/www/html/uni/
+                      rm -r /var/www/html/uni/assets2
                   host: nyc.cs.berkeley.edu
                   port: 2222
                   user: github
