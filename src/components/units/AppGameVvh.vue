@@ -1,13 +1,24 @@
 <template>
     <div id="app-game-vvh">
         <AppGameVvhHeader />
-        <AppGameVvhBody />
+        <AppGameVvhBody :style="{
+                            'max-height': vvhMaxHeight,
+                            'overflow-y': vvhScrollingStyle
+                        }"
+        />
     </div>
 </template>
 
 <script lang="ts" setup>
+    import { computed } from "vue";
+    import { useStore } from "../../scripts/plugins/store";
     import AppGameVvhHeader from "./AppGameVvhHeader.vue";
     import AppGameVvhBody from "./AppGameVvhBody.vue";
+
+    const store = useStore();
+    const vvhScrolling = computed(() => store.getters.options.vvhScrolling);
+    const vvhMaxHeight = computed(() => vvhScrolling.value ? "40em" : "none");
+    const vvhScrollingStyle = computed(() => vvhScrolling.value ? "scroll" : "visible");
 </script>
 
 <style lang="scss" scoped>
