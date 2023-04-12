@@ -72,16 +72,6 @@
         }
     );
 
-    /* VVH autoscrolling */
-    const vvh = ref<HTMLDivElement | null>(null);
-    const currentRoundId = computed(() => store.getters.currentRoundId);
-    // watch(
-    //     () => currentRoundId.value,
-    //     () => {
-    //         if (vvh.value) vvh.value?.scrollIntoView();
-    //     }
-    // );
-
     onBeforeRouteLeave(async () => {
         store.dispatch(actionTypes.exitMatch)
     });
