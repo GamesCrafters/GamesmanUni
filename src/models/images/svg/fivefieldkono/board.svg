@@ -1,315 +1,42 @@
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="200"
-   height="200"
-   id="svg2"
-   sodipodi:version="0.32"
-   inkscape:version="0.44">
-  <defs
-     id="defs4">
-    <linearGradient
-       id="shadowLinearGradient">
-      <stop
-         style="stop-color:black;"
-         offset="0"
-         id="shadowCenter" />
-      <stop
-         style="stop-color:black;stop-opacity:0"
-         offset="1"
-         id="shadowEdge" />
-    </linearGradient>
-    <linearGradient
-       id="whiteLinearGradient">
-      <stop
-         style="stop-color:#ffffff"
-         offset="0"
-         id="whiteHighlight" />
-      <stop
-         style="stop-color:#dddddd"
-         offset="0.5"
-         id="whiteMidtone" />
-      <stop
-         style="stop-color:#999999"
-         offset="1"
-         id="whiteBase" />
-    </linearGradient>
-    <linearGradient
-       id="blackLinearGradient">
-      <stop
-         style="stop-color:#888888"
-         offset="0"
-         id="blackHighlight" />
-      <stop
-         style="stop-color:#5b5b5b"
-         offset="0.5"
-         id="blackMidtone" />
-      <stop
-         style="stop-color:#000000"
-         offset="1"
-         id="blackBase" />
-    </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#shadowLinearGradient"
-       id="shadowGradient"
-       cx="2"
-       cy="2"
-       fx="0"
-       fy="0"
-       r="10"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#whiteLinearGradient"
-       id="whiteGradient"
-       cx="0"
-       cy="0"
-       fx="-5"
-       fy="-5"
-       r="10"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#blackLinearGradient"
-       id="blackGradient"
-       cx="0"
-       cy="0"
-       fx="-5"
-       fy="-5"
-       r="10"
-       gradientUnits="userSpaceOnUse" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     gridtolerance="50"
-     guidetolerance="10"
-     objecttolerance="50"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="100"
-     inkscape:cy="100"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     inkscape:window-width="1024"
-     inkscape:window-height="721"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:object-nodes="false"
-     inkscape:guide-bbox="false"
-     inkscape:object-points="false"
-     inkscape:object-bbox="false"
-     inkscape:object-paths="false"
-     inkscape:grid-bbox="false"
-     showguides="true"
-     inkscape:guide-points="false"
-     inkscape:grid-points="false" />
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(20,20)">
-    <g
-       id="everything"
-       transform="scale(40)">
-      <g
-         id="pieceStyles">
-        <g
-           id="whitePiece"
-	   transform="scale(.025)">
-          <path
-             sodipodi:type="arc"
-             style="fill:url(#shadowGradient);"
-             id="path5000"
-             sodipodi:cx="2"
-             sodipodi:cy="2"
-             sodipodi:rx="10"
-             sodipodi:ry="10"
-             height="40"
-             width="40"
-             d="M 12,2 A 10 10 0 1 1 -8,2 A 10 10 0 1 1 12,2 z" />
-          <path
-             sodipodi:type="arc"
-             style="fill:url(#whiteGradient);"
-             id="path5001"
-             sodipodi:cx="0"
-             sodipodi:cy="0"
-             sodipodi:rx="10"
-             sodipodi:ry="10"
-             height="40"
-             width="40"
-             d="M 10,0 A 10 10 0 1 1 -10,0 A 10 10 0 1 1 10,0 z" />
-        </g>
-        <g
-           id="blackPiece"
-	   transform="scale(.025)">
-          <path
-             sodipodi:type="arc"
-             style="fill:url(#shadowGradient);"
-             id="path6000"
-             sodipodi:cx="2"
-             sodipodi:cy="2"
-             sodipodi:rx="10"
-             sodipodi:ry="10"
-             height="40"
-             width="40"
-             d="M 12,2 A 10 10 0 1 1 -8,2 A 10 10 0 1 1 12,2 z" />
-          <path
-             sodipodi:type="arc"
-             style="fill:url(#blackGradient);"
-             id="path6001"
-             sodipodi:cx="0"
-             sodipodi:cy="0"
-             sodipodi:rx="10"
-             sodipodi:ry="10"
-             height="40"
-             width="40"
-             d="M 10,0 A 10 10 0 1 1 -10,0 A 10 10 0 1 1 10,0 z" />
-        </g>
-      </g>
-      <g
-         id="board">
-        <rect
-           y="-.5"
-           x="-.5"
-           height="5"
-           width="5"
-           id="boardBackground"
-           style="fill:#fff0c0" />
-        <path
-           id="movementLines"
-           d="M 0,3 L 1,4 M 0,2 L 2,4 M 0,1 L 3,4 M 0,0 L 4,4 M 1,0 L 4,3 M 2,0 L 4,2 M 3,0 L 4,1 M 1,0 L 0,1 M 2,0 L 0,2 M 3,0 L 0,3 M 4,0 L 0,4 M 4,1 L 1,4 M 4,2 L 2,4 M 4,3 L 3,4 z"
-           style="fill:none;stroke:black;stroke-width:.025;stroke-opacity:.25"/>
-        <g
-           id="intersections">
-          <path
-             sodipodi:type="arc"
-             style="fill:black;stroke:none;"
-             id="path1000"
-             sodipodi:cx="0"
-             sodipodi:cy="0"
-             sodipodi:rx=".05"
-             sodipodi:ry=".05"
-             d="M 0,0 m -.05,0 a .05 .05 0 1 1 .1,0 a .05 .05 0 1 1 -.1,0 z" />
-          <use
-             xlink:href="#path1000"
-             id="use1000"
-             transform="translate(1,0)" />
-          <use
-             xlink:href="#path1000"
-             id="use1001"
-             transform="translate(2,0)" />
-          <use
-             xlink:href="#path1000"
-             id="use1002"
-             transform="translate(3,0)" />
-          <use
-             xlink:href="#path1000"
-             id="use1003"
-             transform="translate(4,0)" />
-          <use
-             xlink:href="#path1000"
-             id="use1004"
-             transform="translate(0,1)" />
-          <use
-             xlink:href="#path1000"
-             id="use1005"
-             transform="translate(1,1)" />
-          <use
-             xlink:href="#path1000"
-             id="use1006"
-             transform="translate(2,1)" />
-          <use
-             xlink:href="#path1000"
-             id="use1007"
-             transform="translate(3,1)" />
-          <use
-             xlink:href="#path1000"
-             id="use1008"
-             transform="translate(4,1)" />
-          <use
-             xlink:href="#path1000"
-             id="use1009"
-             transform="translate(0,2)" />
-          <use
-             xlink:href="#path1000"
-             id="use1010"
-             transform="translate(1,2)" />
-          <use
-             xlink:href="#path1000"
-             id="use1011"
-             transform="translate(2,2)" />
-          <use
-             xlink:href="#path1000"
-             id="use1012"
-             transform="translate(3,2)" />
-          <use
-             xlink:href="#path1000"
-             id="use1013"
-             transform="translate(4,2)" />
-          <use
-             xlink:href="#path1000"
-             id="use1014"
-             transform="translate(0,3)" />
-          <use
-             xlink:href="#path1000"
-             id="use1015"
-             transform="translate(1,3)" />
-          <use
-             xlink:href="#path1000"
-             id="use1016"
-             transform="translate(2,3)" />
-          <use
-             xlink:href="#path1000"
-             id="use1017"
-             transform="translate(3,3)" />
-          <use
-             xlink:href="#path1000"
-             id="use1018"
-             transform="translate(4,3)" />
-          <use
-             xlink:href="#path1000"
-             id="use1019"
-             transform="translate(0,4)" />
-          <use
-             xlink:href="#path1000"
-             id="use1020"
-             transform="translate(1,4)" />
-          <use
-             xlink:href="#path1000"
-             id="use1021"
-             transform="translate(2,4)" />
-          <use
-             xlink:href="#path1000"
-             id="use1022"
-             transform="translate(3,4)" />
-          <use
-             xlink:href="#path1000"
-             id="use1023"
-             transform="translate(4,4)" />
-        </g>
-      </g>
-    </g>
-  </g>
+<svg id="eD9zPRr4VjJ1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+  <rect width="200" height="200" rx="0" ry="0" fill="#fff0c0" stroke-width="0"/>
+  <line x1="-40.127302" y1="40" x2="40.127302" y2="-40" transform="translate(59.872698 59.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="-40.127302" y1="40" x2="40.127302" y2="-40" transform="translate(139.618094 139.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="-20" y1="20" x2="20" y2="-20" transform="translate(159.745396 159.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-60" y1="-60" x2="60" y2="60" transform="translate(119.745396 79.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-40" y1="-40" x2="40" y2="40" transform="translate(139.745396 59.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="-40" y1="-40" x2="40" y2="40" transform="translate(59.745396 139.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="-20" y1="20" x2="20" y2="-20" transform="translate(39.745396 39.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-60" y1="-60" x2="60" y2="60" transform="translate(79.745396 119.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-59.936349" y1="60" x2="59.936349" y2="-60" transform="translate(79.681745 79.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-59.936349" y1="60" x2="59.936349" y2="-60" transform="translate(119.809047 119.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-20.063651" y1="-20" x2="20.063651" y2="20" transform="translate(39.809047 159.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-20.063651" y1="-20" x2="20.063651" y2="20" transform="translate(159.681745 39.549344)" opacity="0.7" fill="none" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="-80" y1="-80" x2="80" y2="80" transform="translate(99.745396 99.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="-80" y1="-80" x2="80" y2="80" transform="matrix(-1 0 0 1.000005 99.745396 99.549344)" opacity="0.7" fill="none" stroke="#b7410e" stroke-width="1.5"/>
+  <ellipse rx="2" ry="2" transform="translate(179.745396 19.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(179.745396 59.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(179.745396 99.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(179.745396 139.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(179.745396 179.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(139.745396 179.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(59.745396 179.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(99.745396 179.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(19.745396 179.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(139.745396 139.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(59.745396 139.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(99.745396 139.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(19.745396 139.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(139.745396 99.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(59.745396 99.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(99.745396 99.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(19.745396 99.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(139.745396 59.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(59.745396 59.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(99.745396 59.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(19.745396 59.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(139.745396 19.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(59.745396 19.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(99.745396 19.549344)" stroke-width="0"/>
+  <ellipse rx="2" ry="2" transform="translate(19.745396 19.549344)" stroke-width="0"/>
 </svg>
