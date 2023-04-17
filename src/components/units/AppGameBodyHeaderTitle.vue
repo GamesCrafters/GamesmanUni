@@ -19,7 +19,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #app-game-header-title {
+    #app-game-body-header-title {
         align-content: center;
         align-items: center;
         display: flex;

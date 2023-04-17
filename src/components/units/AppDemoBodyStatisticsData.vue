@@ -1,5 +1,5 @@
 <template>
-    <div id="app-game-body-statistics-data">
+    <div id="app-demo-body-statistics-data">
         <p id="roundId">Move #{{ roundId }}</p>
         <p id="turn">{{ currentPlayerName }}'s Turn</p>
     </div>
@@ -15,11 +15,11 @@
 </script>
 
 <style lang="scss" scoped>
-    #app-game-body-statistics-data {
+    #app-demo-body-statistics-data {
         > * {
             border-radius: 1rem;
             border: 0.1rem solid var(--neutralColor);
-            padding: 0.5rem;
+            padding: 1rem;
             text-align: center;
         }
     }

@@ -309,10 +309,12 @@ type Actions = {
         gameId: string
     }): Promise<void>;
     [actionTypes.initiateMatch](context: ActionContext, payload: {
-        gameType: string
+        gameType: string;
         gameId: string;
         variantId: string;
-        startPosition?: string
+        startPosition?: string;
+        firstPlayerIsComputer?: boolean;
+        secondPlayerIsComputer?: boolean;
     }): Promise<void>;
     [actionTypes.exitMatch](context: ActionContext): void;
     [actionTypes.restartMatch](context: ActionContext): Promise<void>;
@@ -353,7 +355,9 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         gameType: string;
         gameId: string;
         variantId: string;
-        startPosition?: string
+        startPosition?: string;
+        firstPlayerIsComputer?: boolean;
+        secondPlayerIsComputer?: boolean;
     }) => {
         const updatedApp = await GMU.initiateMatch(context.state.app, payload);
         if (updatedApp) {
@@ -384,6 +388,7 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         context.state.app.currentMatch.computerMoving = true;
         while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
+            if (!context.state.app.currentMatch.gameType) return;
             context.state.app.currentMatch.backgroundLoading = true;
             const updatedApp = await GMU.runMove(context.state.app, {
                 move: GMU.generateComputerMove(context.state.app.currentMatch.round)
