@@ -32,10 +32,10 @@
     <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
       <image v-if="cell.piece != '-' && cell.piece != '*' && Object.keys(pieces).includes(cell.piece)"
         :id="'piece' + i"
-        :x="centers[i][0] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
-        :y="centers[i][1] - 0.5 * pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
-        :width="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
-        :height="pieces[cell.piece].scale * scaledWidth / backgroundGeometry[0]"
+        :x="centers[i][0] - 0.5 * pieces[cell.piece].scale * widthFactor"
+        :y="centers[i][1] - 0.5 * pieces[cell.piece].scale * widthFactor"
+        :width="pieces[cell.piece].scale * widthFactor"
+        :height="pieces[cell.piece].scale * widthFactor"
         :href="getImageSource(pieces[cell.piece].image)"
       />
     </g>
@@ -55,7 +55,7 @@
             :cx="centers[token.to][0]"
             :cy="centers[token.to][1]"
             :r="defaultMoveTokenRadius"
-            :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
             :style="'--xorigin: ' + centers[token.to][0] +
                     'px ' + centers[token.to][1] +
                     'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) +
@@ -64,18 +64,29 @@
         />
         
         <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-        <image v-else-if="Object.keys(pieces).includes(token.token)"
-          :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-          :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-          :width="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-          :height="pieces[token.token].scale * scaledWidth / backgroundGeometry[0]"
-          :href="getImageSource(pieces[token.token].image)"
-          :class="'app-game-board-token ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-          :style="'--xorigin: ' + centers[token.to][0] + 'px ' + 
-            centers[token.to][1] + 'px; opacity: ' + 
-            (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) + ';'"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"
-        />
+        <g v-else-if="Object.keys(pieces).includes(token.token)">
+          <mask
+            :id="'svgmask' + i">
+            <image
+              :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * widthFactor"
+              :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * widthFactor"
+              :width="pieces[token.token].scale * widthFactor"
+              :height="pieces[token.token].scale * widthFactor"
+              :href="getImageSource(pieces[token.token].image)"/>
+          </mask>
+          <rect
+            :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * widthFactor"
+            :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * widthFactor"
+            :width="pieces[token.token].scale * widthFactor" 
+            :height="pieces[token.token].scale * widthFactor"
+            :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + 
+              centers[token.to][1] + 'px; opacity: ' + 
+              (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) +
+              ';mask: url(#svgmask' + i + ');'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"
+          />
+        </g>
       </g>
     </g>
 
@@ -175,20 +186,20 @@
   const theTheme = computed(() => autoguiV2Data.value.themes[currentTheme.value]);
   const scaledWidth = 100;
   const backgroundGeometry = computed(() => theTheme.value.backgroundGeometry);
-  const scaledHeight = computed(() =>
-    backgroundGeometry.value[1] * scaledWidth / backgroundGeometry.value[0]);
+  const widthFactor = computed(() => scaledWidth / backgroundGeometry.value[0]);
+  const scaledHeight = computed(() => backgroundGeometry.value[1] * widthFactor.value);
   const backgroundImagePath = computed(() => theTheme.value.backgroundImage || "");
   const foregroundImagePath = computed(() => theTheme.value.foregroundImage || "");
   const piecesOverArrows = computed(() => theTheme.value.piecesOverArrows || false);
   const arrowThickness = computed(() =>
-    (theTheme.value.arrowThickness * scaledWidth / backgroundGeometry.value[0] / 2) || 1.5);
+    (theTheme.value.arrowThickness * widthFactor.value / 2) || 1.5);
   const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
   const defaultMoveTokenRadius = computed(() =>
-    (theTheme.value.defaultMoveTokenRadius * scaledWidth / backgroundGeometry.value[0]) || 2);
+    (theTheme.value.defaultMoveTokenRadius * widthFactor.value) || 2);
   const pieces = computed(() => theTheme.value.pieces);
   const centers = computed(() =>
     theTheme.value.centers.map((a: [number, number]) =>
-      a.map((b: number) => b * scaledWidth / backgroundGeometry.value[0])));
+      a.map((b: number) => b * widthFactor.value)));
 
   const getImageSource = (imagePath: string) => {
     try {
@@ -340,32 +351,32 @@
     }
   }
 
-  .app-game-board-token {
+  .app-game-board-default-button {
     cursor: default;
     transform-origin: var(--xorigin);
     
     [data-turn="A"] &.move {
-      filter: var(--turn1Filter);
+      fill: var(--turn1Color);
     }
     [data-turn="B"] &.move {
-      filter: var(--turn2Filter);
+      fill: var(--turn2Color);
     }
 
     &.move.hint- {
       &win {
-        filter: var(--winFilter);
+        fill: var(--winColor);
       }
       &draw {
-        filter: var(--drawFilter);
+        fill: var(--drawColor);
       }
       &tie {
-        filter: var(--tieFilter);
+        fill: var(--tieColor);
       }
       &lose {
-        filter: var(--loseFilter);
+        fill: var(--loseColor);
       }
       &unsolved {
-        filter: var(--unsolvedFilter);
+        fill: var(--unsolvedColor);
       }
     }
 
