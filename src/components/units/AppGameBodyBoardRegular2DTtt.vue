@@ -3,13 +3,13 @@
         <defs>
             <g id="board">
                 <path id="bar" d="M1,22 L65,22" />
-                <use href="#bar" transform="translate(0 22)" />
-                <use href="#bar" transform="translate(44) rotate(90)" />
-                <use href="#bar" transform="translate(66) rotate(90)" />
+                <use href="#bar" transform="translate(0,22)" />
+                <use href="#bar" transform="translate(44,0) rotate(90)" />
+                <use href="#bar" transform="translate(66,0) rotate(90)" />
             </g>
             <g id="x-token">
                 <path id="cross-bar" d="M3,3 L19,19" />
-                <use href="#cross-bar" transform="translate(22) rotate(90)" />
+                <use href="#cross-bar" transform="translate(22,0) rotate(90)" />
             </g>
             <circle id="o-token" cx="11" cy="11" r="8" />
             <circle id="hint" cx="11" cy="11" r="4" />
@@ -17,11 +17,36 @@
         </defs>
         <use href="#board" x="0" y="0" />
         <g v-for="cell in cellCount" :key="cell">
-            <use v-if="board[cell].token === 'x'" href="#x-token" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
-            <use v-else-if="board[cell].token === 'o'" href="#o-token" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
+            <use v-if="board[cell].token === 'x'"
+                 href="#x-token"
+                 :x="((cell - 1) % 3) * 22"
+                 :y="Math.floor((cell - 1) / 3) * 22"
+                 stroke="var(--turn1Color)"
+            />
+            <use v-else-if="board[cell].token === 'o'"
+                 href="#o-token"
+                 :x="((cell - 1) % 3) * 22"
+                 :y="Math.floor((cell - 1) / 3) * 22"
+                 stroke="var(--turn2Color)"
+            />
             <g v-else>
-                <use v-if="showNextMoves && board[cell].hint" :class="getHintClass(board[cell].hint)" :style="{ opacity: showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1 }" href="#hint" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
-                <use :class="currentRemoteness && !isComputerTurn && 'available-move-pointer'" @click="!isComputerTurn && currentRemoteness && store.dispatch(actionTypes.runMove, { move: board[cell].move })" href="#available-move-cell" :x="((cell - 1) % 3) * 22" :y="Math.floor((cell - 1) / 3) * 22" />
+                <use v-if="showNextMoves && board[cell].hint"
+                     :class="getHintClass(board[cell].hint)"
+                     :style="{ opacity: showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1 }"
+                     href="#hint"
+                     :x="((cell - 1) % 3) * 22"
+                     :y="Math.floor((cell - 1) / 3) * 22"
+                />
+                <use v-if="currentRemoteness && !isComputerTurn"
+                     class="available-move-pointer"
+                     @click="store.dispatch(actionTypes.runMove, { move: board[cell].move })"
+                     href="#available-move-cell"
+                     :x="((cell - 1) % 3) * 22"
+                     :y="Math.floor((cell - 1) / 3) * 22"
+                     fill-opacity=0
+                     fill="var(--backgroundColor)"
+                     stroke-opacity=0
+                />
             </g>
         </g>
     </svg>
@@ -62,42 +87,31 @@
             stroke-width: 2;
             stroke: var(--neutralColor);
         }
-        #x-token {
-            stroke: var(--turn1Color);
-        }
-        #o-token {
-            stroke: var(--turn2Color);
-        }
         .hint- {
             &A {
-                fill: var(--turn1Color);
                 stroke: var(--turn1Color);
+                fill: var(--turn1Color);
             }
             &B {
-                fill: var(--turn2Color);
                 stroke: var(--turn2Color);
+                fill: var(--turn2Color);
             }
             &win {
-                fill: var(--winColor);
                 stroke: var(--winColor);
+                fill: var(--winColor);
             }
             &draw {
-                fill: var(--drawColor);
                 stroke: var(--drawColor);
+                fill: var(--drawColor);
             }
             &tie {
-                fill: var(--tieColor);
                 stroke: var(--tieColor);
+                fill: var(--tieColor);
             }
             &lose {
-                fill: var(--loseColor);
                 stroke: var(--loseColor);
+                fill: var(--loseColor);
             }
-        }
-        #available-move-cell {
-            fill-opacity: 0;
-            fill: var(--backgroundColor);
-            stroke-opacity: 0;
         }
         .available-move-pointer {
             cursor: pointer;
