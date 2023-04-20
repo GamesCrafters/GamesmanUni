@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+     y="0px"
+     viewBox="0 0 40 40"  xml:space="preserve">
+
+    <rect x="5" y="5" width="30" height="30" stroke="black" stroke-width="0.5" fill="#fb93f8"/>
+
+    <line x1="15" y1="5" x2="15" y2="35" stroke="black" stroke-width="0.5"/>
+    <line x1="25" y1="5" x2="25" y2="35" stroke="black" stroke-width="0.5"/>
+    <line x1="35" y1="5" x2="35" y2="35" stroke="black" stroke-width="0.5"/>
+
+    <line x1="5" y1="15" x2="35" y2="15" stroke="black" stroke-width="0.5"/>
+    <line x1="5" y1="25" x2="35" y2="25" stroke="black" stroke-width="0.5"/>
+    <line x1="5" y1="35" x2="35" y2="35" stroke="black" stroke-width="0.5"/>
+
+</svg>
