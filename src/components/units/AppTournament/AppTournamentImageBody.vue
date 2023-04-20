@@ -84,6 +84,7 @@
       </g>
     </g>
   </svg>
+  <h1 v-if="swanCount > 0">Swans Left to Place: {{swanCount}}</h1>
 </template>
 
 <script lang="ts" setup>
@@ -154,6 +155,18 @@
   const centers = computed(() =>
     theTheme.value.centers.map((a: [number, number]) =>
       a.map((b: number) => b * widthFactor.value)));
+
+  const swanCount = computed(() => {
+    if (gameId.value === 'swans') {
+      if (currentPosition.value[currentPosition.value.length - 2] != '=') {
+        return currentPosition.value.slice(-2);
+      } else {
+        return currentPosition.value.slice(-1);
+      }
+    } else {
+      return 0;
+    }
+  })
 
   const getImageSource = (imagePath: string) => {
     try {

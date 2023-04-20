@@ -11,11 +11,13 @@
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
     import AppTournamentBody from "./AppTournamentBody.vue"
     import AppTournamentHeader from "./AppTournamentHeader.vue";
+    import gsap from "gsap";
 
     const store = useStore();
     const games = [
         { gameType: "games", gameId: "ttt", variantId: "misere", userIsFirstPlayer: true },
         { gameType: "games", gameId: "snake", variantId: "regular", userIsFirstPlayer: true },
+        { gameType: "games", gameId: "swans", variantId: "3", userIsFirstPlayer: false, startPosition: "R_B_4_4_x--x-----o-----x_phase=1_numSwans=11"},
         { gameType: "games", gameId: "connect4c", variantId: "6x6", userIsFirstPlayer: false }
     ];
 
@@ -25,6 +27,7 @@
             gameType: games[currentGameIndex.value].gameType,
             gameId: games[currentGameIndex.value].gameId,
             variantId: games[currentGameIndex.value].variantId,
+            startPosition: games[currentGameIndex.value].startPosition || undefined,
             firstPlayerIsComputer: !(games[currentGameIndex.value].userIsFirstPlayer),
             secondPlayerIsComputer: games[currentGameIndex.value].userIsFirstPlayer
         });
@@ -39,18 +42,25 @@
     watch(
         () => isEndOfMatch.value,
         async () => {
-            /* Prevents restarting if already left the Demo page. */
-            if (!store.getters.currentMatch.gameType) return;
-            /* Prevents restarting when isEndOfMatch becomes false. */
-            if (!isEndOfMatch.value) return;
-            await new Promise((resolve) => setTimeout(resolve, gameOverTimeoutMilisec));
-            if (++currRep.value == repeat) {
-                /* If reached max repeat times, load the next game in list. */
-                currRep.value = 0;
-                currentGameIndex.value = (currentGameIndex.value + 1) % games.length;
-                initiateCurrentGame();
-            } else {
-                store.dispatch(actionTypes.restartMatch);
+            if (isEndOfMatch.value) {
+                await new Promise(r => setTimeout(r, 5000));
+                gsap.to("#app-tournament", {duration: 0.5, autoAlpha: 0});
+                /* Prevents restarting if already left the Demo page. */
+                if (!store.getters.currentMatch.gameType) return;
+                /* Prevents restarting when isEndOfMatch becomes false. */
+                if (!isEndOfMatch.value) return;
+                // await new Promise((resolve) => setTimeout(resolve, gameOverTimeoutMilisec));
+                if (++currRep.value == repeat) {
+                    /* If reached max repeat times, load the next game in list. */
+                    currRep.value = 0;
+                    currentGameIndex.value = (currentGameIndex.value + 1) % games.length;
+                    await new Promise(r => setTimeout(r, 500));
+                    initiateCurrentGame();
+                    await new Promise(r => setTimeout(r, 3000));
+                    gsap.to("#app-tournament", {autoAlpha: 1});
+                } else {
+                    store.dispatch(actionTypes.restartMatch);
+                }
             }
         }
     );

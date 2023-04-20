@@ -56,25 +56,29 @@
         ) ? 1 : 2);
     const resultsMessage = computed(() => {
         if (currentPositionValue.value === 'win') {
-            return (currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮"
+            return (currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮";
         } else if (currentPositionValue.value === 'tie') {
-            return "The game is a tie. 😐"
+            return "The game is a tie. 😐";
+        } else if (currentPositionValue.value === 'lose') {
+            return (!currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮";
         } else {
-            return (!currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮"
+            return "";
         }
     })
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);    
-    const tournamentGamesList = ["Misére Tic-Tac-Toe", "Snake", "6x6 Connect 4"];
+    const tournamentGamesList = ["Misére Tic-Tac-Toe", "Snake", "Dragons & Swans", "6x6 Connect 4"];
     const whichTournamentGame = computed(() => tournamentGamesList.indexOf(gameName.value));
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
     const rulesStrings = [
         "A family classic, this game is played on a 3-by-3 grid. Players alternate placing X and O pieces until one player creates a three-in-a-row of their own pieces, either vertically, horizontally, or diagonally. However, we are playing the misére variant, so you LOSE if you create a 3-in-a-row.",
         "The first player controls the snake's head and the second player controls the snake's tail. Players alternate turns moving one space up, right or left into any adjacent open square. Once a player has moved to an open spot, the departure square becomes occupied and neither player is allowed to move into that space. The game ends when there is no more room for a player to move. The last person to make a legal move wins.",
+        "One player controls three dragons. The other player places and moves around 12 swans. A dragon can move to an orthogonally adjacent empty space. A dragon can also eat a swan by jumping over it to an empty space. The dragons' goal is to eat all of the swans. The swans player starts by placing one swan per turn. After all 12 swans have been placed, the swans player during each turn moves one swan to an orthogonally adjacent space. The swans' goal is to trap the drgaons.",
         "The game is played on a 6-by-6 grid with gravity. Pieces fall to the bottom in the column they are dropped into. The players alternate dropping blue and red pieces, aiming to create a run of four in a row. As in tic-tac-toe, runs can be vertical, horizontal, or diagonal."
     ];
     const scoringStrings = [
         "Your score will be the number of tie moves you make. Tie moves are moves that will bring you to a tie ending state assuming perfect play.",
         "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves.",
+        "We have placed you in a losing position. Try to delay your loss as much as you can. Your score is the number of moves you make before the game ends.",
         "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves."
     ];
 
