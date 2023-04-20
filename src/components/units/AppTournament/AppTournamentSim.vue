@@ -4,13 +4,13 @@
         <!-- Background. -->
         <template v-for="j in 15"
             :key="j">
-            <line v-if="isEndOfMatch && (currentPosition[1 + j] === '-')"
+            <line v-if="(currentPosition[1 + j] === '-')"
                 :x1="vertices[edges[j - 1][0]][0]"
                 :y1="vertices[edges[j - 1][0]][1]"
                 :x2="vertices[edges[j - 1][1]][0]"
                 :y2="vertices[edges[j - 1][1]][1]"
                 :style="'stroke:gray;stroke-width:0.2;'"
-                :opacity="0.2"
+                :opacity="isEndOfMatch ? 0.2 : 1"
             />
         </template>
 
@@ -21,10 +21,8 @@
                 :y1="vertices[move.from][1]"
                 :x2="vertices[move.to][0]"
                 :y2="vertices[move.to][1]"
-                :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
-                :style="{
-                    opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
-                }"
+                :class="'app-sim-default-move'"
+                :style="'stroke:gray;stroke-width:0.2;'"
                 @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
         </g>
 
@@ -52,7 +50,7 @@
 
 <script lang="ts" setup>
     import { computed, watch } from "vue";
-    import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { actionTypes, useStore } from "../../../scripts/plugins/store";
 
     enum UWAPITurn {
         A = "A",
@@ -73,8 +71,6 @@
 
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
-    const options = computed(() => store.getters.options);
-    const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
 
     const vertices = computed(() => [
         [-4, 0], [2, 3.4641], [-2, 3.4641], [4, 0], [-2, -3.4641], [2, -3.4641]
@@ -113,10 +109,6 @@
         };
     });
 
-    const getBoardMoveElementHintClass = 
-    (move?: GSimMove): string => 
-      (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
-
 </script>
 
 <style lang="scss" scoped>
@@ -129,21 +121,8 @@
         }
     }
 
-    .app-sim-move {
-        stroke: gray;
-        stroke-width: 0.2;
-
-        &.hint- {
-            &win {
-                stroke: var(--winColor);
-            }
-            &tie {
-                stroke: var(--tieColor);
-            }
-            &lose {
-                stroke: var(--loseColor);
-            }
-        }
+    .app-sim-default-move {
+        stroke: var(--primaryColor);
 
         &:hover {
             animation-name: pulsing-arrow;

@@ -11,6 +11,7 @@
     import AppTournamentImageBody from "./AppTournamentImageBody.vue";
     import AppGameBodyBoardFallback from "../AppGameBodyBoardFallback.vue";
     import AppTournamentTTT from "./AppTournamentTTT.vue";
+    import AppTournamentSim from "./AppTournamentSim.vue";
 
     const store = useStore();
     const gameId = computed(() => store.getters.currentGameId);
@@ -18,6 +19,7 @@
     const position = computed(() => store.getters.currentPosition);
     const getGameBoardComponent = computed(() => {
         if (gameId.value === 'ttt') return AppTournamentTTT;
+        if (gameId.value === 'sim') return AppTournamentSim;
         if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)) return AppTournamentImageBody;
         return AppGameBodyBoardFallback;
     });

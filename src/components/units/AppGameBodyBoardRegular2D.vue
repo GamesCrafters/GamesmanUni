@@ -11,6 +11,7 @@
     import AppGameBodyBoardRegular2DImages from "./AppGameBodyBoardRegular2DImages.vue";
     import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";
     import AppGameBoardRegular2DQuarto from "./AppGameBodyBoardRegular2DQuarto.vue";
+    import AppGameBodyBoardSimRegular from "./AppGameBodyBoardSimRegular.vue";
 
     const store = useStore();
     const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
@@ -22,6 +23,7 @@
         "ttt-misere": AppGameBoardRegular2DTtt,
         "ttt-regular": AppGameBoardRegular2DTtt,
         "quarto-regular": AppGameBoardRegular2DQuarto,
+        "sim-regular": AppGameBodyBoardSimRegular
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);

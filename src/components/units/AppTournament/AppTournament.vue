@@ -18,7 +18,8 @@
         { gameType: "games", gameId: "ttt", variantId: "misere", userIsFirstPlayer: true },
         { gameType: "games", gameId: "snake", variantId: "regular", userIsFirstPlayer: true },
         { gameType: "games", gameId: "swans", variantId: "3", userIsFirstPlayer: false, startPosition: "R_B_4_4_x--x-----o-----x_phase=1_numSwans=11"},
-        { gameType: "games", gameId: "connect4c", variantId: "6x6", userIsFirstPlayer: false }
+        { gameType: "games", gameId: "connect4c", variantId: "6x6", userIsFirstPlayer: false },
+        { gameType: "games", gameId: "sim", variantId: "regular", userIsFirstPlayer: false}
     ];
 
     const currentGameIndex = ref(0);
@@ -53,11 +54,15 @@
                 if (++currRep.value == repeat) {
                     /* If reached max repeat times, load the next game in list. */
                     currRep.value = 0;
-                    currentGameIndex.value = (currentGameIndex.value + 1) % games.length;
+                    currentGameIndex.value += 1;
                     await new Promise(r => setTimeout(r, 500));
-                    initiateCurrentGame();
+                    if (currentGameIndex.value > games.length) {
+
+                    } else {
+                        initiateCurrentGame();
+                    }
                     await new Promise(r => setTimeout(r, 3000));
-                    gsap.to("#app-tournament", {autoAlpha: 1});
+                    gsap.to("#app-tournament", {duration: 0.5, autoAlpha: 1});
                 } else {
                     store.dispatch(actionTypes.restartMatch);
                 }
