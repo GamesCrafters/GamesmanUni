@@ -1,8 +1,11 @@
 <template>
     <div id="app-footer">
-        <a v-for="externalLink in externalLinks" :="externalLink.attributes">{{ externalLink.value }}</a>
+        <a v-for="(externalLink, i) in externalLinks" :="externalLink.attributes" :key="'exLink'+ i">{{ externalLink.value }}</a>
         <router-link to="/demo">
             <a>Demo Mode</a>
+        </router-link>
+        <router-link to="/tournament">
+            <a>Tournament</a>
         </router-link>
     </div>
 </template>

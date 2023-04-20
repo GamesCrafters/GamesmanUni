@@ -1,0 +1,114 @@
+<template>
+    <div id="app-tournament-header">
+        <h1><b>{{gameName}}</b></h1>
+        <br><br>
+        <p>
+            <b>Rules</b>: {{rulesStrings[whichTournamentGame]}}
+        </p>
+        <br>
+        <p>
+            <b>Scoring</b>: {{scoringStrings[whichTournamentGame]}}
+        </p>
+        <br><br><br><br><br>
+        <div id="app-tournament-turn-indicator" v-if="!isEndOfMatch">
+            <h1 v-if="whoseTurn == 1" style="color:blue;">{{whoseTurn === 1 ? leftName : rightName}} Turn</h1>
+            <h1 v-else style="color:red;">{{whoseTurn === 1 ? leftName : rightName}} Turn</h1>
+        </div>
+        <div id="app-tournament-results" v-else>
+            <h1 v-if="isEndOfMatch">
+                {{resultsMessage}}
+            </h1>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>
+    import { computed } from "vue";
+    import { useStore } from "../../../scripts/plugins/store";
+
+    const store = useStore();
+    const gameId = computed(() => store.getters.currentGameId);
+    const variantId = computed(() => store.getters.currentVariantId);
+    const position = computed(() => store.getters.currentPosition);
+    const gameType = computed(() => store.getters.currentGameType);
+    const gameName = computed(() => {
+        if (!store.getters.games(gameType.value)) return "";
+        if (!store.getters.game(gameType.value, gameId.value)) return "";
+        const candidate = store.getters.game(gameType.value, gameId.value).name;
+        if (candidate === 'Tic-Tac-Toe') {
+            return 'Misére Tic-Tac-Toe'
+        } else if (candidate === 'Connect 4') {
+            return '6x6 Connect 4'
+        }
+        return candidate
+    });
+    const currentLeftPlayer = computed(() => store.getters.currentLeftPlayer);
+    const currentRightPlayer = computed(() => store.getters.currentRightPlayer);
+    const currentPlayer = computed(() => store.getters.currentPlayer);
+    const leftName = computed(() => currentLeftPlayer.value.isComputer ? "Computer's" : "Your");
+    const leftIsComputer = computed(() => currentLeftPlayer.value.isComputer);
+    const rightName = computed(() => currentLeftPlayer.value.isComputer ? "Your" : "Computer's");
+    const whoseTurn = computed(() => (
+            (
+                currentPlayer.value.isComputer && leftIsComputer.value ||
+                !currentPlayer.value.isComputer && !leftIsComputer.value
+            )
+        ) ? 1 : 2);
+    const resultsMessage = computed(() => {
+        if (currentPositionValue.value === 'win') {
+            return (currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮"
+        } else if (currentPositionValue.value === 'tie') {
+            return "The game is a tie. 😐"
+        } else {
+            return (!currentPlayer.value.isComputer) ? "You lost. 💀" : "You won! 😮"
+        }
+    })
+    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);    
+    const tournamentGamesList = ["Misére Tic-Tac-Toe", "Snake", "6x6 Connect 4"];
+    const whichTournamentGame = computed(() => tournamentGamesList.indexOf(gameName.value));
+    const currentPositionValue = computed(() => store.getters.currentPositionValue);
+    const rulesStrings = [
+        "A family classic, this game is played on a 3-by-3 grid. Players alternate placing X and O pieces until one player creates a three-in-a-row of their own pieces, either vertically, horizontally, or diagonally. However, we are playing the misére variant, so you LOSE if you create a 3-in-a-row.",
+        "The first player controls the snake's head and the second player controls the snake's tail. Players alternate turns moving one space up, right or left into any adjacent open square. Once a player has moved to an open spot, the departure square becomes occupied and neither player is allowed to move into that space. The game ends when there is no more room for a player to move. The last person to make a legal move wins.",
+        "The game is played on a 6-by-6 grid with gravity. Pieces fall to the bottom in the column they are dropped into. The players alternate dropping blue and red pieces, aiming to create a run of four in a row. As in tic-tac-toe, runs can be vertical, horizontal, or diagonal."
+    ];
+    const scoringStrings = [
+        "Your score will be the number of tie moves you make. Tie moves are moves that will bring you to a tie ending state assuming perfect play.",
+        "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves.",
+        "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves."
+    ];
+
+</script>
+
+<style lang="scss" scoped>
+    #app-tournament-header {
+        width: 30%;
+        border-radius: 1rem;
+        margin: 1rem;
+
+        p {
+            font-size: 200%;
+        }
+        b {
+            font-size: 100%;
+            font-weight: bold;
+        }
+        h1 {
+            font-size: 300%;
+        }
+    }
+
+    #app-tournament-turn-indicator {
+        text-align: center;
+        border-radius: 0.1rem;
+        font-size: 150%;
+        margin: 0.1rem;
+    }
+
+    #app-tournament-results {
+        text-align: center;
+        border-radius: 0.1rem;
+        font-size: 150%;
+        margin: 0.1rem;
+    }
+</style>

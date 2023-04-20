@@ -194,8 +194,8 @@ export const initiateMatch = async (app: Types.App, payload: {
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
     app.currentMatch.id = generateMatchId(app);
-    if (payload.firstPlayerIsComputer) app.currentMatch.firstPlayer.isComputer = true;
-    if (payload.secondPlayerIsComputer) app.currentMatch.secondPlayer.isComputer = true;
+    if (!(payload.firstPlayerIsComputer === undefined)) app.currentMatch.firstPlayer.isComputer = payload.firstPlayerIsComputer;
+    if (!(payload.secondPlayerIsComputer === undefined)) app.currentMatch.secondPlayer.isComputer = payload.secondPlayerIsComputer;
     app.currentMatch.round = {
         id: 1,
         /* Unfortunately, there is no generic way to determine whose 
