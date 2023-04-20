@@ -18,6 +18,8 @@
             <h1 v-if="isEndOfMatch">
                 {{resultsMessage}}
             </h1>
+            <br>
+            {{actualResult}} {{potentialStrings[whichTournamentGame]}}
         </div>
     </div>
 </template>
@@ -83,6 +85,40 @@
         "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves.",
         "Winning results in a higher score than losing. Winning in fewer moves results in a higher score than winning in more moves. Losing in more moves results in a higher score than losing in fewer moves."
     ];
+
+    const potentialStrings = [
+        "In perfect play, one would tie the game.",
+        "In perfect play, one would make 6 moves to win the game.",
+        "In perfect play, one would make as many as 25 moves before the game ends.",
+        "In perfect play, one would make 18 moves to win the game.",
+        "In perfect play, one would make 7 moves to win the game."
+    ]
+
+    const movesMade = computed(() => {
+        if (gameId.value === "connect4c" || gameId.value === "sim") {
+            return Math.floor((store.getters.currentRoundId - 1) / 2);
+        } else {
+            return Math.floor(store.getters.currentRoundId / 2);
+        }
+    });
+    const resultsMessage2 = computed(() => {
+        if (currentPositionValue.value === 'win') {
+            return (currentPlayer.value.isComputer) ? "lose" : "win";
+        } else if (currentPositionValue.value === 'tie') {
+            return "tie";
+        } else if (currentPositionValue.value === 'lose') {
+            return (!currentPlayer.value.isComputer) ? "lose" : "win";
+        } else {
+            return "";
+        }
+    });
+    const actualResult = computed(() => {
+        if (gameId.value === "swans") {
+            return "You made " + movesMade.value + " moves total."
+        } else {
+            return "You made " + movesMade.value + " moves to " + resultsMessage2.value + " the game.";
+        }
+    });
 </script>
 
 <style lang="scss" scoped>

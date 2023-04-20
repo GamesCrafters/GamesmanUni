@@ -97,8 +97,6 @@
                     to: Number(nextMoveData.moveName[1]) - 1
                 };
 
-                console.log(Number(nextMoveData.moveName[0]) - 1, Number(nextMoveData.moveName[1]) - 1);
-
                 moves.push(move);
             }
         }
