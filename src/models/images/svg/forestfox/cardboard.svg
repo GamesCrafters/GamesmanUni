@@ -21,7 +21,8 @@
     <line x1="650" y1="650" x2="650" y2="850" stroke="black" stroke-width="4" />
     
     <!-- prompt -->
-    <text x="200" y="330" font-size="30" text-anchor="middle" dominant-baseline="central" fill="#000000">Last Card</text>
+    <text x="125" y="330" font-size="30" text-anchor="middle" dominant-baseline="central" fill="#000000">First</text>
+    <text x="275" y="330" font-size="30" text-anchor="middle" dominant-baseline="central" fill="#000000">Second</text>    
     <text x="650" y="330" font-size="30" text-anchor="middle" dominant-baseline="central" fill="#000000">Decree Card</text>
     <text x="425" y="330" font-size="30" text-anchor="middle" dominant-baseline="central" fill="#000000">Score</text>
 </svg>
