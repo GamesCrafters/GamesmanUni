@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Author: Jiachun Li -->
+<svg viewBox="0 0 850 900" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="850" height="900" fill="#f1cb9d" />
+    <rect x="50" y="50" width="750" height="800" fill="#f1cb9d" stroke="black" stroke-width="4" />
+    <!-- horizontal line -->
+    <line x1="50" y1="250" x2="800" y2="250" stroke="black" stroke-width="4" />
+    <line x1="50" y1="650" x2="800" y2="650" stroke="black" stroke-width="4" />
+    <line x1="50" y1="350" x2="800" y2="350" stroke="black" stroke-width="4" />    
+    <line x1="50" y1="550" x2="800" y2="550" stroke="black" stroke-width="4" />    
+    <!-- vertical line -->
+    <line x1="200" y1="50" x2="200" y2="250" stroke="black" stroke-width="4" />
+    <line x1="200" y1="650" x2="200" y2="850" stroke="black" stroke-width="4" />
+    <line x1="350" y1="50" x2="350" y2="250" stroke="black" stroke-width="4" />
+    <line x1="350" y1="350" x2="350" y2="550" stroke="black" stroke-width="4" />
+    <line x1="350" y1="650" x2="350" y2="850" stroke="black" stroke-width="4" />
+    <line x1="500" y1="50" x2="500" y2="250" stroke="black" stroke-width="4" />
+    <line x1="500" y1="350" x2="500" y2="550" stroke="black" stroke-width="4" />
+    <line x1="500" y1="650" x2="500" y2="850" stroke="black" stroke-width="4" />
+    <line x1="650" y1="50" x2="650" y2="250" stroke="black" stroke-width="4" />    
+    <line x1="650" y1="650" x2="650" y2="850" stroke="black" stroke-width="4" />
+</svg>
