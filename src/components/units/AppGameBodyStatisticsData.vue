@@ -19,7 +19,7 @@
         > * {
             border-radius: 1rem;
             border: 0.1rem solid var(--neutralColor);
-            padding: 1rem;
+            padding: 0.5rem;
             text-align: center;
         }
     }

@@ -32,14 +32,20 @@ jobs:
               with:
                   command: |
                       cd prod/GamesmanUni
+                      echo "Fetching from remote --------------------------------------------------"
+                      git fetch -v
                       echo "Pulling from GitHub ---------------------------------------------------"
                       git reset --hard origin/main
                       echo "Checking and installing new dependencies ------------------------------"
                       yarn install
                       echo "Building prod ---------------------------------------------------------"
                       yarn build
+                      echo "Rename old assets folder ----------------------------------------------"
+                      mv /var/www/html/uni/assets /var/www/html/uni/assets2
                       echo "Pushing to prod -------------------------------------------------------"
                       sudo rsync -au dist/ /var/www/html/uni/
+                      echo "Remove old assets folder ----------------------------------------------"
+                      rm -r /var/www/html/uni/assets2
                   host: nyc.cs.berkeley.edu
                   port: 2222
                   user: github

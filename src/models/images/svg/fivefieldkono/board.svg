@@ -1,0 +1,43 @@
+<svg id="eD9zPRr4VjJ1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+  <rect width="200" height="200" rx="0" ry="0" fill="#fff0c0" stroke-width="0"/>
+  <line x1="20" y1="100" x2="100" y2="20" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="100" y1="180" x2="180" y2="100" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="100" y1="20" x2="180" y2="100" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="20" y1="100" x2="100" y2="180" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="20" y1="20" x2="180" y2="180" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="20" y1="180" x2="180" y2="20" opacity="0.7" stroke="#b7410e" stroke-width="1.5"/>
+  <line x1="60" y1="20" x2="20" y2="60"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="140" y1="180" x2="180" y2="140"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="20" y1="60" x2="140" y2="180"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="60" y1="20" x2="180" y2="140"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="140" y1="20" x2="20" y2="140"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="180" y1="60" x2="60" y2="180"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="60" y1="180" x2="20" y2="140"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  <line x1="140" y1="20" x2="180" y2="60"  opacity="0.7" stroke="#87ceeb" stroke-width="1.5"/>
+  
+  <circle cx="20" cy="20" r="2" fill="black"/>
+  <circle cx="20" cy="60" r="2" fill="black"/>
+  <circle cx="20" cy="100" r="2" fill="black"/>
+  <circle cx="20" cy="140" r="2" fill="black"/>
+  <circle cx="20" cy="180" r="2" fill="black"/>
+  <circle cx="60" cy="20" r="2" fill="black"/>
+  <circle cx="60" cy="60" r="2" fill="black"/>
+  <circle cx="60" cy="100" r="2" fill="black"/>
+  <circle cx="60" cy="140" r="2" fill="black"/>
+  <circle cx="60" cy="180" r="2" fill="black"/>
+  <circle cx="100" cy="20" r="2" fill="black"/>
+  <circle cx="100" cy="60" r="2" fill="black"/>
+  <circle cx="100" cy="100" r="2" fill="black"/>
+  <circle cx="100" cy="140" r="2" fill="black"/>
+  <circle cx="100" cy="180" r="2" fill="black"/>
+  <circle cx="140" cy="20" r="2" fill="black"/>
+  <circle cx="140" cy="60" r="2" fill="black"/>
+  <circle cx="140" cy="100" r="2" fill="black"/>
+  <circle cx="140" cy="140" r="2" fill="black"/>
+  <circle cx="140" cy="180" r="2" fill="black"/>
+  <circle cx="180" cy="20" r="2" fill="black"/>
+  <circle cx="180" cy="60" r="2" fill="black"/>
+  <circle cx="180" cy="100" r="2" fill="black"/>
+  <circle cx="180" cy="140" r="2" fill="black"/>
+  <circle cx="180" cy="180" r="2" fill="black"/>
+</svg>
