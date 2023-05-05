@@ -2,27 +2,6 @@ name: test
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-    dev:
-        runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/dev'
-        steps:
-            - name: Pushing build to NYC
-              uses: fifsky/ssh-action@master
-              with:
-                  command: |
-                      cd dev/GamesmanUni
-                      echo "Pulling from GitHub ---------------------------------------------------"
-                      git pull
-                      echo "Checking and installing new dependencies ------------------------------"
-                      yarn install
-                      echo "Building prod ---------------------------------------------------------"
-                      yarn build
-                      echo "Pushing to prod -------------------------------------------------------"
-                      sudo rsync -au dist/ /var/www/html/dev/uni/
-                  host: nyc.cs.berkeley.edu
-                  port: 2222
-                  user: github
-                  key: ${{ secrets.KEY }}
     prod:
         runs-on: ubuntu-latest
         if: github.ref == 'refs/heads/main'
@@ -31,22 +10,20 @@ jobs:
               uses: fifsky/ssh-action@master
               with:
                   command: |
-                      cd prod/GamesmanUni
+                      cd GamesmanUni
                       echo "Fetching from remote --------------------------------------------------"
                       git fetch -v
                       echo "Pulling from GitHub ---------------------------------------------------"
                       git reset --hard origin/main
                       echo "Checking and installing new dependencies ------------------------------"
+                      nvm use 18
                       yarn install
                       echo "Building prod ---------------------------------------------------------"
                       yarn build
-                      echo "Rename old assets folder ----------------------------------------------"
-                      mv /var/www/html/uni/assets /var/www/html/uni/assets2
                       echo "Pushing to prod -------------------------------------------------------"
-                      sudo rsync -au dist/ /var/www/html/uni/
-                      echo "Remove old assets folder ----------------------------------------------"
-                      rm -r /var/www/html/uni/assets2
+                      sudo /bin/rsync -au /home/github/GamesmanUni/dist/ /var/www/html/uni/
                   host: nyc.cs.berkeley.edu
                   port: 2222
                   user: github
                   key: ${{ secrets.KEY }}
+                  pass: ${{ secrets.PASS }}
