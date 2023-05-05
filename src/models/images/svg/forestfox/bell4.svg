@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: Jiachun Li -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="518px" height="733px" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-107 0 733 733" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g><path style="opacity:1" fill="#eeefe0" d="M -0.5,-0.5 C 0.833333,-0.5 2.16667,-0.5 3.5,-0.5C 2.20498,0.488369 0.871651,1.48837 -0.5,2.5C -0.5,1.5 -0.5,0.5 -0.5,-0.5 Z"/></g>
 <g><path style="opacity:1" fill="#e1e0d5" d="M 512.5,-0.5 C 514.167,-0.5 515.833,-0.5 517.5,-0.5C 517.5,0.833333 517.5,2.16667 517.5,3.5C 515.809,2.13632 514.142,0.802988 512.5,-0.5 Z"/></g>
 <g><path style="opacity:1" fill="#030303" d="M 3.5,-0.5 C 173.167,-0.5 342.833,-0.5 512.5,-0.5C 514.142,0.802988 515.809,2.13632 517.5,3.5C 517.5,245.5 517.5,487.5 517.5,729.5C 516.599,730.29 515.932,731.29 515.5,732.5C 344.167,732.5 172.833,732.5 1.5,732.5C 1.16667,731.5 0.5,730.833 -0.5,730.5C -0.5,487.833 -0.5,245.167 -0.5,2.5C 0.871651,1.48837 2.20498,0.488369 3.5,-0.5 Z"/></g>
