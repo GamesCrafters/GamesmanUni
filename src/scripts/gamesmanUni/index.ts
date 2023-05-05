@@ -173,8 +173,9 @@ export const initiateMatch = async (app: Types.App, payload: {
         startPosition = gameVariant.startPosition;
     } else if (payload.startPosition === "random") {
         /* Requesting a random start position for puzzles. */
+        const ds = (payload.gameType == "puzzles") ? `${app.dataSources.onePlayerGameAPI}` : `${app.dataSources.twoPlayerGameAPI}`
         const loaded = await GCTAPI.loadRandomPosition(
-            `${app.dataSources.onePlayerGameAPI}/${payload.gameId}/${payload.variantId}/randpos`
+            `${ds}/${payload.gameId}/${payload.variantId}/randpos`
         );
         startPosition = loaded ? loaded.response.position : gameVariant.startPosition;
     } else {

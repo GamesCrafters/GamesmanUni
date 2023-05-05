@@ -2,7 +2,7 @@
     <div id="app-game-menu-customPos">
         <div id="app-game-menu-customPos-input">
             <button class="roundButton" @click="showInfo = !showInfo">𝓲</button>
-            <button v-if="isPuzzleGame" class="roundButton" @click="randomize">⚅</button>
+            <button class="roundButton" @click="randomize">⚅</button>
             <input
                 v-model.lazy="inputPos"
                 id="app-game-menu-customPos-input-input"
