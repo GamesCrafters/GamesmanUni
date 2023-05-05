@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="39 39 22 22" style="enable-background:new 39 39 22 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#path6000_00000129887211141538828870000005751685046540346772_);}
+	.st1{fill:url(#path6001_00000015317886506602013140000000047751402487301011_);}
+</style>
+<g id="blackPiece">
+	
+		<radialGradient id="path6000_00000133498797375483631040000012904421654305643412_" cx="-107.6189" cy="-90.5162" r="10.0083" fx="-109.6206" fy="-92.5178" gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#000000"/>
+		<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+	</radialGradient>
+	<path id="path6000" style="fill:url(#path6000_00000133498797375483631040000012904421654305643412_);" d="M61.9,52
+		c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z"/>
+	
+		<radialGradient id="path6001_00000092449180234355965330000008259959042322749862_" cx="-109.6189" cy="-92.5162" r="10.0083" fx="-114.623" fy="-97.5203" gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#888888"/>
+		<stop  offset="0.5" style="stop-color:#5B5B5B"/>
+		<stop  offset="1" style="stop-color:#000000"/>
+	</radialGradient>
+	<path id="path6001" style="fill:url(#path6001_00000092449180234355965330000008259959042322749862_);" d="M59.9,50
+		c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z"/>
+</g>
+</svg>
