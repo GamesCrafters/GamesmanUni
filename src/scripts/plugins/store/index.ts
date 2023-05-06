@@ -386,8 +386,10 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     },
     runComputerMove: async (context: ActionContext) => {
         context.state.app.currentMatch.computerMoving = true;
+        /* Keep moving until it becomes a human player's turn or the match is over. */
         while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
+            /* If user leaves the game page during timeout, abort. */
             if (!context.state.app.currentMatch.gameType) return;
             context.state.app.currentMatch.backgroundLoading = true;
             const updatedApp = await GMU.runMove(context.state.app, {

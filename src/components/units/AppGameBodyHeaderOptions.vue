@@ -28,8 +28,7 @@
 
                     <div id="names" v-if="isPuzzleGame">
                         <div class="name">
-                            <h4 class="title" v-if="updatedLeftPlayer.isComputer">Computer</h4>
-                            <h4 class="title" v-else>Player</h4>
+                            <h4 class="title">Current Player</h4>
                             <input class="uni-turn-1 input"
                                 aria-label="text"
                                 :placeholder="`Current: ${currentLeftPlayerName}`"
@@ -39,6 +38,11 @@
                                     updatedLeftPlayer.name ? updatedLeftPlayer.name : currentLeftPlayer.name
                                 }}</span>
                             </p>
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="updatedLeftPlayer.isComputer" />
+                            <label for="checkbox">Computer</label>
                         </div>
                     </div>
                     <div id="names" v-else>

@@ -23,7 +23,7 @@
                 :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :style="{
-                    opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
+                    opacity: showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
                 }"
                 @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
         </g>
@@ -51,13 +51,8 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, watch } from "vue";
+    import { computed } from "vue";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-
-    enum UWAPITurn {
-        A = "A",
-        B = "B",
-    }
 
     interface GSimMove {
         str: string; // UWAPI move string
@@ -68,13 +63,13 @@
     }
 
     const store = useStore();
-
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
+    const showNextMoveDeltaRemotenesses = computed(() => options.value ? options.value.showNextMoveDeltaRemotenesses : true);
+    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
 
     const vertices = computed(() => [
         [-4, 0], [2, 3.4641], [-2, 3.4641], [4, 0], [-2, -3.4641], [2, -3.4641]

@@ -288,8 +288,7 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
 };
 
 export const isEndOfMatch = (app: Types.App) =>
-    !app.currentMatch.round.position.remoteness &&
-    app.currentMatch.round.position.positionValue !== "draw" &&
+    !app.currentMatch.round.position.remoteness ||
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
@@ -331,46 +330,44 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.rounds.length - app.currentMatch.round.id
     );
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
-    if (!isEndOfMatch(app)) {
-        const updatedApp = await loadPosition(app, {
-            gameType: app.currentMatch.gameType,
-            gameId: app.currentMatch.gameId,
-            variantId: app.currentMatch.variantId,
-            position: moveObj.position
-        });
-        if (!updatedApp) return undefined;
-        const updatedPosition = { 
-            ...updatedApp.
-            gameTypes[app.currentMatch.gameType].
-            games[app.currentMatch.gameId].
-            variants.
-            variants[app.currentMatch.variantId].
-            positions[
-                app.
-                currentMatch.
-                round.
-                position.
-                availableMoves[payload.move].
-                position
-            ]
-        };
-        const move = moveObj;
-        app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
-        app.currentMatch.round.id += 1;
-        let posArr = updatedPosition.position.split('_');
-        if (posArr.length === 5 && posArr[0] === 'R') {
-            app.currentMatch.round.firstPlayerTurn = posArr[1] === 'A'
-        } else if (app.currentMatch.gameType === "puzzles") {
-            app.currentMatch.round.firstPlayerTurn = true;
-        } else {
-            app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
-        }
-        app.currentMatch.round.move = "";
-        app.currentMatch.round.moveValue = "";
-        app.currentMatch.round.position = updatedPosition;
-        app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
-        app.currentMatch.lastPlayed = new Date().getTime();
+    const updatedApp = await loadPosition(app, {
+        gameType: app.currentMatch.gameType,
+        gameId: app.currentMatch.gameId,
+        variantId: app.currentMatch.variantId,
+        position: moveObj.position
+    });
+    if (!updatedApp) return undefined;
+    const updatedPosition = { 
+        ...updatedApp.
+        gameTypes[app.currentMatch.gameType].
+        games[app.currentMatch.gameId].
+        variants.
+        variants[app.currentMatch.variantId].
+        positions[
+            app.
+            currentMatch.
+            round.
+            position.
+            availableMoves[payload.move].
+            position
+        ]
+    };
+    const move = moveObj;
+    app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
+    app.currentMatch.round.id += 1;
+    let posArr = updatedPosition.position.split('_');
+    if (posArr.length === 5 && posArr[0] === 'R') {
+        app.currentMatch.round.firstPlayerTurn = posArr[1] === 'A'
+    } else if (app.currentMatch.gameType === "puzzles") {
+        app.currentMatch.round.firstPlayerTurn = true;
+    } else {
+        app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
     }
+    app.currentMatch.round.move = "";
+    app.currentMatch.round.moveValue = "";
+    app.currentMatch.round.position = updatedPosition;
+    app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
+    app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
