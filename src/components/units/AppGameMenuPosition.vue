@@ -22,6 +22,17 @@
         <p v-show="showInfo" id="app-game-menu-customPos-infoText">
             Instructions on how to format the start position...
         </p>
+
+        <h3 style="margin: 2rem 0 0 0;">Current Position</h3>
+        <div id="app-game-menu-currPos">
+            <textarea
+                id="app-game-menu-currPos-display"
+                type="text"
+                v-model="currPosText"
+                readonly
+            ></textarea>
+            <button class="roundButton" @click="copyCurrentPositionToClipboard">⎘</button>
+        </div>
     </div>
 </template>
 
@@ -44,6 +55,7 @@
     const inputPos = ref("");
     const errorMsg = ref("");
     const currStartPosText = computed(() => store.getters.currentStartPosition);
+    const currPosText = computed(() => store.getters.currentPosition);
     const onTextSubmit = async () => {
         const error = await store.dispatch(actionTypes.updateMatchStartPosition, { position: inputPos.value });
         if (error) {
@@ -53,6 +65,10 @@
             inputPos.value = "";
         }
     };
+
+    const copyCurrentPositionToClipboard = async () => {
+        await navigator.clipboard.writeText(window.location.href + "/positions/" + currPosText.value);
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -95,6 +111,33 @@
             height: 3vh;
             resize: none;
             margin-top: 1rem;
+        }
+        #app-game-menu-currPos {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+
+            #app-game-menu-currPos-display {
+                border-radius: 1rem;
+                border: 0.1rem solid var(--neutralColor);
+                padding: 0.5rem;
+                border-spacing: 5rem;
+                width: 30vw;
+                height: 3vh;
+                margin: 0 2rem 0 0;
+                resize: none;
+            }
+
+            .roundButton {
+                margin-right: 2rem;
+                border-radius: 100%;
+                font-size: 2rem;
+                height: max(2.5rem, min(5vh, 5vw));
+                width: max(2.5rem, min(5vh, 5vw));
+            }
         }
         #app-game-menu-customPos-infoText {
            padding: 1rem;

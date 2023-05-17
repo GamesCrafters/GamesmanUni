@@ -3,7 +3,6 @@ import * as GCTAPITypes from "../apis/gamesCrafters/types";
 import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
-
 const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
