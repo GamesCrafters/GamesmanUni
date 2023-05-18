@@ -31,7 +31,8 @@
                 v-model="currPosText"
                 readonly
             ></textarea>
-            <button class="roundButton" @click="copyCurrentPositionToClipboard">⎘</button>
+            <button @click="copyCurrentPositionToClipboard"
+                :class="'roundButton' + copied">⎘</button>
         </div>
     </div>
 </template>
@@ -54,8 +55,15 @@
     const showInfo = ref(false);
     const inputPos = ref("");
     const errorMsg = ref("");
+    const copied = ref('');
     const currStartPosText = computed(() => store.getters.currentStartPosition);
-    const currPosText = computed(() => store.getters.currentPosition);
+    const currPosText = computed(() => {
+        copied.value = '';
+        return store.getters.currentPosition;
+    });
+    const currGameId = computed(() => store.getters.currentGameId);
+    const currVariantId = computed(() => store.getters.currentVariantId);
+    const currGameType = computed(() => store.getters.currentGameType);
     const onTextSubmit = async () => {
         const error = await store.dispatch(actionTypes.updateMatchStartPosition, { position: inputPos.value });
         if (error) {
@@ -66,8 +74,9 @@
         }
     };
 
-    const copyCurrentPositionToClipboard = async () => {
-        await navigator.clipboard.writeText(window.location.href + "/positions/" + currPosText.value);
+    const copyCurrentPositionToClipboard = () => {
+        navigator.clipboard.writeText(`${window.location.origin}/uni/${currGameType.value}/${currGameId.value}/variants/${currVariantId.value}/${currPosText.value}`);
+        copied.value = 'clicked';
     }
 </script>
 
@@ -137,6 +146,15 @@
                 font-size: 2rem;
                 height: max(2.5rem, min(5vh, 5vw));
                 width: max(2.5rem, min(5vh, 5vw));
+
+                &clicked {
+                    margin-right: 2rem;
+                    border-radius: 100%;
+                    font-size: 2rem;
+                    height: max(2.5rem, min(5vh, 5vw));
+                    width: max(2.5rem, min(5vh, 5vw));
+                    background-color: rgba(76, 220, 37, 0.645);
+                }
             }
         }
         #app-game-menu-customPos-infoText {

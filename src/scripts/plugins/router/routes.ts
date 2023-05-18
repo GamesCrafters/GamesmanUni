@@ -15,7 +15,7 @@ export const routes = [
     { path: "/:type", component: TheGamesPage, name: "puzzles" },
     { path: "/:type/:gameId/variants", component: TheVariantsPage, name: "variants" },
     { path: "/:type/:gameId/variants/:variantId", component: TheGamePage, name: "game" },
-    { path: "/:type/:gameId/variants/:variantId/positions/:initialPosition", component: TheGamePage, name: "init" },
+    { path: "/:type/:gameId/variants/:variantId/:initialPosition", component: TheGamePage, name: "init" },
     { path: "/updates", component: TheUpdatesPage, name: "updates" },
     { path: "/demo", component: TheDemoPage, name: "demo" },
     { path: "/tournament", component: TheTournamentPage, name: "tournament" },
