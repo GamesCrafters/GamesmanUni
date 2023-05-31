@@ -9,8 +9,8 @@
     import { computed } from "vue";
     import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-    import AppGameBody from "./AppGameBody.vue";
-    import AppGameMenu from "./AppGameMenu.vue";
+    import AppGameBody from "./GameBody/AppGameBody.vue";
+    import AppGameMenu from "./GameMenu/AppGameMenu.vue";
 
     const route = useRoute();
     const store = useStore();
