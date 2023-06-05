@@ -158,12 +158,7 @@
 
   const store = useStore();
   const options = computed(() => store.getters.options);
-  const currentPosition = computed(() =>
-    store.getters.currentPosition.replace(/^;/, "")
-                                 .replace(/;$/, "")
-                                 .replace(/;/g, "\n")
-                                 .replace(/=/g, " = ")
-  );
+  const currentPosition = computed(() => store.getters.currentPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
 

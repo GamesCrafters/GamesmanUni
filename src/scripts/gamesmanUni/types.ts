@@ -143,6 +143,7 @@ export type Match = {
     backgroundLoading: boolean;
     computerMoving: boolean;
     transitionTo: any;
+    animationPlaying: boolean;
 };
 
 export type Rounds = Array<Round>;

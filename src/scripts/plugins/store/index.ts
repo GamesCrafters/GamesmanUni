@@ -12,6 +12,7 @@ const state: State = { app: Defaults.defaultApp };
 const preFetchEnabled: boolean = false;
 
 type Getters = {
+    animationPlaying(state: State): boolean;
     autoguiV2Data(state: State):
         (gameType: string, gameId: string, variantId: string) =>
             AutoGUIv2Data;
@@ -80,6 +81,7 @@ type Getters = {
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
+    animationPlaying: (state: State) => state.app.currentMatch.animationPlaying,
     autoguiV2Data: (state: State)  =>
         (gameType: string, gameId: string, variantId: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].autogui_v2_data,
@@ -380,12 +382,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     runMove: async (context: ActionContext, payload: { move: string }) => {
         context.state.app.currentMatch.computerMoving = true;
         context.state.app.currentMatch.backgroundLoading = true;
-        const updatedApp = await GMU.runMove(context.state.app, payload);
+        await GMU.runMove(context.state.app, payload);
         context.state.app.currentMatch.backgroundLoading = false;
-        if (updatedApp) {
-            context.commit(mutationTypes.setApp, updatedApp);
-            if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
-        }
         context.state.app.currentMatch.computerMoving = false;
         await store.dispatch(actionTypes.runComputerMove);
     },
@@ -397,14 +395,10 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             /* If user leaves the game page during timeout, abort. */
             if (!context.state.app.currentMatch.gameType) return;
             context.state.app.currentMatch.backgroundLoading = true;
-            const updatedApp = await GMU.runMove(context.state.app, {
+            await GMU.runMove(context.state.app, {
                 move: GMU.generateComputerMove(context.state.app.currentMatch.round)
             });
             context.state.app.currentMatch.backgroundLoading = false;
-            if (updatedApp) {
-                context.commit(mutationTypes.setApp, updatedApp);
-                if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
-            }
         }
         context.state.app.currentMatch.computerMoving = false;
     },

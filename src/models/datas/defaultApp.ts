@@ -147,6 +147,7 @@ export const defaultMatch: Types.Match = {
     backgroundLoading: false,
     computerMoving: false,
     transitionTo: "",
+    animationPlaying: false
 };
 
 export const defaultApp: Types.App = {
@@ -169,6 +170,7 @@ export const defaultApp: Types.App = {
         rounds: [],
         moveHistory: "",
         transitionTo: "",
+        animationPlaying: false,
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },

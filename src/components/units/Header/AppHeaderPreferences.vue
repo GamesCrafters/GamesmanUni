@@ -1,6 +1,11 @@
 <template>
     <div id="app-header-preferences">
         <div class="uni-dropdown">
+            <div class="uni-dropdown-selection">
+                <img alt="Sound On" src="../../../models/images/soundon.png" style="width: 2rem" />
+            </div>
+        </div>
+        <div class="uni-dropdown">
             <div class="uni-dropdown-selection">{{ t(`appThemes.${appTheme}`) }} {{ t("themeTitle") }} ▼</div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" v-for="themeOption in appThemes" :key="themeOption" :style="setActiveThemeOptionStyle(themeOption)" @click="setAppTheme(themeOption)">
