@@ -46,6 +46,7 @@ type Getters = {
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
     currentStartPosition(state: State): string;
+    currentTransitionTo(state: State): string;
     currentValuedRounds(state: State): GMUTypes.Rounds;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
@@ -107,6 +108,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.gameId,
     currentGameName: (state: State) =>
         state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].name,
+    currentGameTheme: (state: State) =>
+        state.app.currentMatch.gameTheme,
     currentGameType: (state: State) =>
         state.app.currentMatch.gameType,
     currentLeftPlayer: (state: State) =>
@@ -144,8 +147,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.rounds,
     currentStartPosition: (state: State) =>
         state.app.currentMatch.startPosition,
-    currentGameTheme: (state: State) =>
-        state.app.currentMatch.gameTheme,
+    currentTransitionTo: (state: State) =>
+        state.app.currentMatch.transitionTo,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
     currentValuedRounds: (state: State) =>
@@ -375,6 +378,7 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         await store.dispatch(actionTypes.runComputerMove);
     },
     runMove: async (context: ActionContext, payload: { move: string }) => {
+        context.state.app.currentMatch.computerMoving = true;
         context.state.app.currentMatch.backgroundLoading = true;
         const updatedApp = await GMU.runMove(context.state.app, payload);
         context.state.app.currentMatch.backgroundLoading = false;
@@ -382,6 +386,7 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
+        context.state.app.currentMatch.computerMoving = false;
         await store.dispatch(actionTypes.runComputerMove);
     },
     runComputerMove: async (context: ActionContext) => {

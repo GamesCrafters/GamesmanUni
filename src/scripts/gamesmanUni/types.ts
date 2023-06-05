@@ -93,6 +93,7 @@ export type Move = {
     positionValue: string;
     remoteness: number;
     mex: string;
+    animationPhases: Array<Array<string>>;
 };
 
 export type Commits = Update & {
@@ -141,6 +142,7 @@ export type Match = {
     lastPlayed: number;
     backgroundLoading: boolean;
     computerMoving: boolean;
+    transitionTo: any;
 };
 
 export type Rounds = Array<Round>;

@@ -136,7 +136,7 @@ watch(
         }
 
         > a.v3 {
-            border: 0.2rem solid purple;
+            border: 0.2rem solid rgb(180, 27, 180);
         }
 
         > a.v2 {

@@ -86,6 +86,7 @@ const formatMoves = (source: Array<{
         positionValue: string;
         remoteness: number;
         mex: string;
+        animationPhases: Array<Array<string>>;
     }>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
     if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
@@ -188,6 +189,7 @@ export const initiateMatch = async (app: Types.App, payload: {
 
     app.currentMatch.gameTheme = gameVariant.autogui_v2_data ? gameVariant.autogui_v2_data.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
+    app.currentMatch.transitionTo = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
@@ -232,6 +234,7 @@ export const restartMatch = async (app: Types.App) => {
         moveValue: "",
         position: deepcopy(game.variants.variants[variantId].positions[startPosition])
     };
+    app.currentMatch.transitionTo = startPosition;
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveName = "";
     app.currentMatch.round.moveValue = "";
@@ -323,7 +326,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     } else {
         app.currentMatch.round.moveName = moveObj.move;
     }
-    // Rewrite history by deleting all subsequent moves made ealier.
+    // Rewrite history by deleting all subsequent moves made earlier.
     app.currentMatch.rounds.splice(
         app.currentMatch.round.id, 
         app.currentMatch.rounds.length - app.currentMatch.round.id
@@ -335,7 +338,9 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         variantId: app.currentMatch.variantId,
         position: moveObj.position
     });
-    if (!updatedApp) return undefined;
+    if (!updatedApp) {
+        return undefined;
+    }
     const updatedPosition = { 
         ...updatedApp.
         gameTypes[app.currentMatch.gameType].
@@ -351,6 +356,8 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
             position
         ]
     };
+    app.currentMatch.transitionTo = updatedPosition.position;
+    await new Promise(r => setTimeout(r, 500));
     const move = moveObj;
     app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
     app.currentMatch.round.id += 1;
@@ -414,6 +421,8 @@ const gotoRoundId = (app: Types.App, roundId: number) => {
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
+    app.currentMatch.transitionTo = "";
+    app.currentMatch.transitionTo = app.currentMatch.round.position.position;
     return app;
 };
 

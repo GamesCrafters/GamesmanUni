@@ -16,8 +16,8 @@ export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
     onePlayerGameAPI: "https://nyc.cs.berkeley.edu/puzzles",
     // onePlayerGameAPI: "http://localhost:9001/",
-    twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
-    //twoPlayerGameAPI: "http://localhost:8082/games"
+    //twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
+    twoPlayerGameAPI: "http://localhost:8082/games"
 };
 
 export const defaultAvailableMove: Types.Move = {
@@ -29,7 +29,8 @@ export const defaultAvailableMove: Types.Move = {
     position: "",
     positionValue: "",
     remoteness: 0,
-    mex: ""
+    mex: "",
+    animationPhases: []
 };
 
 export const defaultAvailableMoveNames: Types.MoveNames = {};
@@ -144,7 +145,8 @@ export const defaultMatch: Types.Match = {
     created: 0,
     lastPlayed: 0,
     backgroundLoading: false,
-    computerMoving: false
+    computerMoving: false,
+    transitionTo: "",
 };
 
 export const defaultApp: Types.App = {
@@ -166,6 +168,7 @@ export const defaultApp: Types.App = {
         secondPlayer: {name: "Player 2", isComputer: false},
         rounds: [],
         moveHistory: "",
+        transitionTo: "",
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },
