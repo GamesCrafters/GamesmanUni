@@ -7,7 +7,7 @@
 <script lang="ts" setup>
     import { computed } from "vue";
     import { useStore } from "../../../scripts/plugins/store";
-    import AppGameBodyBoardFallback from "../GameBody/AppGameBodyBoardFallback.vue";
+    import CharacterAutoGUI from "../GameBody/CharacterAutoGUI.vue";
     import AppGameBodyBoardRegular2D from "../GameBody/AppGameBodyBoardRegular2D.vue";
 
     const store = useStore();
@@ -19,6 +19,6 @@
         if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)) return AppGameBodyBoardRegular2D;
         const gameBoard = `${gameId}-${variantId}`;
         if (gameBoard in gameBoards) return gameBoards[gameBoard];
-        return AppGameBodyBoardFallback;
+        return CharacterAutoGUI;
     });
 </script>

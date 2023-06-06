@@ -1,5 +1,5 @@
 <template>
-    <svg id="app-game-body-board-sim-regular" viewBox="-4.5 -4.5 9 9" xmlns="http://www.w3.org/2000/svg">
+    <svg id="custom-gui-sim" viewBox="-4.5 -4.5 9 9" xmlns="http://www.w3.org/2000/svg">
 
         <!-- Lines to place (available move buttons). -->
         <g v-for="(move, i) in richPositionData.moves" :key="'move' + i">

@@ -9,7 +9,7 @@
     import { useStore } from "../../../scripts/plugins/store";
     import AppTournamentHeader from "./AppTournamentHeader.vue";
     import AppTournamentImageBody from "./AppTournamentImageBody.vue";
-    import AppGameBodyBoardFallback from "../GameBody/AppGameBodyBoardFallback.vue";
+    import CharacterAutoGUI from "../GameBody/CharacterAutoGUI.vue";
     import AppTournamentTTT from "./AppTournamentTTT.vue";
     import AppTournamentSim from "./AppTournamentSim.vue";
 
@@ -21,7 +21,7 @@
         if (gameId.value === 'ttt') return AppTournamentTTT;
         if (gameId.value === 'sim') return AppTournamentSim;
         if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/)) return AppTournamentImageBody;
-        return AppGameBodyBoardFallback;
+        return CharacterAutoGUI;
     });
 </script>
 

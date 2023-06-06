@@ -1,7 +1,7 @@
 <template>
   <!-- Render board only if the boardstring is valid i.e. is a "validRichPosition". -->
   <svg v-if="richPositionData.validRichPosition"
-    id="app-game-body-board-regular-2d-images"
+    id="image-autogui"
     xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
     :data-turn="richPositionData.turn">
@@ -425,7 +425,7 @@
 
 <style lang="scss" scoped>
 
-  #app-game-body-board-regular-2d-images {
+  #image-autogui {
     height: 100%;
     width: 100%;
   }

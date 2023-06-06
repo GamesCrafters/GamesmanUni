@@ -1,7 +1,7 @@
 <template>
-    <svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <svg id="custom-gui-tictactoe" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
         <!-- Draw three-in-a-row highlighters. -->
-        <g :class="'highlighter' + misere" v-if="currentRemoteness == 0">
+        <g :class="'highlighter' + isMisere" v-if="currentRemoteness == 0">
             <rect v-if="triplets[0] || triplets[3] || triplets[6]" x="1" y="1" width="20" height="20"/>
             <rect v-if="triplets[0] || triplets[4]" x="23" y="1" width="20" height="20"/>
             <rect v-if="triplets[0] || triplets[5] || triplets[7]" x="45" y="1" width="20" height="20"/>
@@ -59,7 +59,7 @@
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const turn = computed(() => currentPosition.value[2]);
     const animationPlaying = computed(() => store.getters.animationPlaying);
-    const misere = computed(() => store.getters.currentVariantId === 'misere' ? "-misere" : "")
+    const isMisere = computed(() => store.getters.currentVariantId === "misere" ? "misere" : "");
     const board = computed(() => {
         let board: BoardData = {};
         for (let cell: number = 0; cell < 9; cell++) board[cell] = { mark: currentPosition.value[8 + cell], move: "", hint: "", hintOpacity: 1 };
@@ -72,6 +72,18 @@
     const b16 = (cond: boolean): number => cond ? 16 : 0;
     const triplets = computed(() => {
         const str = currentPosition.value.split('_')[4];
+        console.log([
+            str[0] != '-' && str[0] == str[1] && str[1] == str[2],
+            str[3] != '-' && str[3] == str[4] && str[4] == str[5],
+            str[6] != '-' && str[6] == str[7] && str[7] == str[8],
+            str[0] != '-' && str[0] == str[3] && str[3] == str[6],
+            str[1] != '-' && str[1] == str[4] && str[4] == str[7],
+            str[2] != '-' && str[2] == str[5] && str[5] == str[8],
+            str[0] != '-' && str[0] == str[4] && str[4] == str[8],
+            str[2] != '-' && str[2] == str[4] && str[4] == str[6]
+        ]
+
+        )
         return [
             str[0] != '-' && str[0] == str[1] && str[1] == str[2],
             str[3] != '-' && str[3] == str[4] && str[4] == str[5],
@@ -86,7 +98,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #app-game-body-board-regular-2d-ttt {
+    #custom-gui-tictactoe {
         height: 100%;
         width: 100%;
         > * {
@@ -122,9 +134,9 @@
             fill: rgb(153, 223, 153);
         }
 
-        .highlighter-misere rect {
+        .highlightermisere rect {
             stroke-width: 0;
-            stroke: rgb(255, 138, 125);
+            fill: rgb(255, 138, 125);
         }
 
         @keyframes pulsing-token {
