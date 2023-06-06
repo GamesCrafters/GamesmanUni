@@ -135,8 +135,7 @@
     hint: string;
     hintOpacity: number;
     nextPosition: string;
-    animationPhases: Array<Array<string>>;
-  }
+}
 
   interface GDefaultRegular2DBoardToken {
     token: string;
@@ -221,8 +220,7 @@
           str: nextMoveData.move,
           hint: nextMoveData.moveValue,
           hintOpacity: nextMoveData.moveValueOpacity,
-          nextPosition: nextMoveData.position,
-          animationPhases: nextMoveData.animationPhases
+          nextPosition: nextMoveData.position
         };
 
         let matches;

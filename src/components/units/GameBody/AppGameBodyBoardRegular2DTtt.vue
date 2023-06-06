@@ -1,5 +1,18 @@
 <template>
     <svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <!-- Draw three-in-a-row highlighters. -->
+        <g :class="'highlighter' + misere" v-if="currentRemoteness == 0">
+            <rect v-if="triplets[0] || triplets[3] || triplets[6]" x="1" y="1" width="20" height="20"/>
+            <rect v-if="triplets[0] || triplets[4]" x="23" y="1" width="20" height="20"/>
+            <rect v-if="triplets[0] || triplets[5] || triplets[7]" x="45" y="1" width="20" height="20"/>
+            <rect v-if="triplets[1] || triplets[3]" x="1" y="23" width="20" height="20"/>
+            <rect v-if="triplets[1] || triplets[4] || triplets[6] || triplets[7]" x="23" y="23" width="20" height="20"/>
+            <rect v-if="triplets[1] || triplets[5]" x="45" y="23" width="20" height="20"/>
+            <rect v-if="triplets[2] || triplets[3] || triplets[7]" x="1" y="45" width="20" height="20"/>
+            <rect v-if="triplets[2] || triplets[4]" x="23" y="45" width="20" height="20"/>
+            <rect v-if="triplets[2] || triplets[5] || triplets[6]" x="45" y="45" width="20" height="20"/>
+        </g>
+
         <!-- Draw board -->
         <line x1="1" y1="22" x2="65" y2="22"/>
         <line x1="1" y1="44" x2="65" y2="44"/>
@@ -31,9 +44,7 @@
 <script lang="ts" setup>
     import { computed, ref, watch } from "vue";
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
-    const sfx = import.meta.globEager("../../../models/images/svg/ttt/*");
-    import gsap from "gsap";
-
+    
     type CellData = { mark: string; move: string; hint: string; hintOpacity: number };
     type BoardData = Record<number, CellData>;
     const store = useStore();
@@ -42,11 +53,13 @@
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
+    const currentValue = computed(() => store.getters.currentPositionValue);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
     const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const turn = computed(() => currentPosition.value[2]);
     const animationPlaying = computed(() => store.getters.animationPlaying);
+    const misere = computed(() => store.getters.currentVariantId === 'misere' ? "-misere" : "")
     const board = computed(() => {
         let board: BoardData = {};
         for (let cell: number = 0; cell < 9; cell++) board[cell] = { mark: currentPosition.value[8 + cell], move: "", hint: "", hintOpacity: 1 };
@@ -57,7 +70,19 @@
     const xOffset = (cell: number): number => (cell % 3) * 22;
     const yOffset = (cell: number): number => Math.floor(cell / 3) * 22;
     const b16 = (cond: boolean): number => cond ? 16 : 0;
-    const transitionTo = computed(() => store.getters.currentTransitionTo);
+    const triplets = computed(() => {
+        const str = currentPosition.value.split('_')[4];
+        return [
+            str[0] != '-' && str[0] == str[1] && str[1] == str[2],
+            str[3] != '-' && str[3] == str[4] && str[4] == str[5],
+            str[6] != '-' && str[6] == str[7] && str[7] == str[8],
+            str[0] != '-' && str[0] == str[3] && str[3] == str[6],
+            str[1] != '-' && str[1] == str[4] && str[4] == str[7],
+            str[2] != '-' && str[2] == str[5] && str[5] == str[8],
+            str[0] != '-' && str[0] == str[4] && str[4] == str[8],
+            str[2] != '-' && str[2] == str[4] && str[4] == str[6]
+        ]
+    });
 </script>
 
 <style lang="scss" scoped>
@@ -90,6 +115,16 @@
                 stroke: var(--loseColor);
                 fill: var(--loseColor);
             }
+        }
+
+        .highlighter rect {
+            stroke-width: 0;
+            fill: rgb(153, 223, 153);
+        }
+
+        .highlighter-misere rect {
+            stroke-width: 0;
+            stroke: rgb(255, 138, 125);
         }
 
         @keyframes pulsing-token {

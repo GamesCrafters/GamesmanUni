@@ -1,52 +1,47 @@
 <template>
     <svg id="app-game-body-board-sim-regular" viewBox="-4.5 -4.5 9 9" xmlns="http://www.w3.org/2000/svg">
 
-        <!-- Background. -->
-        <template v-for="j in 15"
-            :key="j">
-            <line v-if="isEndOfMatch && (currentPosition[1 + j] === '-')"
-                :x1="vertices[edges[j - 1][0]][0]"
-                :y1="vertices[edges[j - 1][0]][1]"
-                :x2="vertices[edges[j - 1][1]][0]"
-                :y2="vertices[edges[j - 1][1]][1]"
-                :style="'stroke:gray;stroke-width:0.2;'"
-                :opacity="0.2"
-            />
-        </template>
-
-        <!-- Lines to place. -->
+        <!-- Lines to place (available move buttons). -->
         <g v-for="(move, i) in richPositionData.moves" :key="'move' + i">
-            <line 
-                :x1="vertices[move.from][0]"
-                :y1="vertices[move.from][1]"
-                :x2="vertices[move.to][0]"
-                :y2="vertices[move.to][1]"
+            <!-- Line for animation P1. -->
+            <line :id="'simpermline' + move.name"
+                :x1="move.fromX" :y1="move.fromY"
+                :x2="move.toX" :y2="move.toY"
+                :opacity=0
+                :style="'stroke:' + ((richPositionData.moves.length % 2) ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
+
+            <line v-if="!animationPlaying"
+                :x1="move.fromX" :y1="move.fromY"
+                :x2="move.toX" :y2="move.toY"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :style="{
                     opacity: showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
                 }"
                 @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
+            
+            <!-- Line for animation P2. -->
+            <line :id="'simline' + move.name"
+                :x1="move.fromX" :y1="move.fromY"
+                :x2="move.fromX" :y2="move.fromY"
+                :style="'stroke:' + ((richPositionData.moves.length % 2) ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
         </g>
 
         <!-- Lines placed. -->
-        <template v-for="j in 15"
-            :key="j">
-            <line v-if="!(currentPosition[1 + j] === '-')"
-                :x1="vertices[edges[j - 1][0]][0]"
-                :y1="vertices[edges[j - 1][0]][1]"
-                :x2="vertices[edges[j - 1][1]][0]"
-                :y2="vertices[edges[j - 1][1]][1]"
-                :style="'stroke:' + ((currentPosition[1 + j] == 'x') ? 'blue' : 'red') + ';stroke-width:0.3;'"
-            />
-        </template>
+        <g v-for="(_, j) in 15" :key="'p' + j">
+            <line v-if="!(currentPosition[2 + j] === '-')"
+                :x1="vertices[edges[j][0]][0]"
+                :y1="vertices[edges[j][0]][1]"
+                :x2="vertices[edges[j][1]][0]"
+                :y2="vertices[edges[j][1]][1]"
+                :style="'stroke:' + ((currentPosition[2 + j] == 'x') ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
+        </g>
 
-        <circle v-for="n in 6"
-            :key="n"
-            :cx="vertices[n - 1][0]"
-            :cy="vertices[n - 1][1]"
+        <!-- Six points. -->
+        <circle v-for="(_, n) in 6" :key="'c' + n"
+            :cx="vertices[n][0]"
+            :cy="vertices[n][1]"
             :r="0.3"
-            :style="'fill:black;'"
-            />
+            :style="'fill:black;'"/>
     </svg>
 </template>
 
@@ -58,28 +53,32 @@
         str: string; // UWAPI move string
         hint: string;
         hintOpacity: number;
-        from: number;
-        to: number;
+        name: string;
+        fromX: number;
+        fromY: number;
+        toX: number;
+        toY: number;
     }
 
     const store = useStore();
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-    const currentPosition = computed(() => store.getters.currentPosition);
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => options.value ? options.value.showNextMoveDeltaRemotenesses : true);
     const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
+    const currentPosition = computed(() => store.getters.currentPosition);
+    const animationPlaying = computed(() => store.getters.animationPlaying);
 
-    const vertices = computed(() => [
-        [-4, 0], [2, 3.4641], [-2, 3.4641], [4, 0], [-2, -3.4641], [2, -3.4641]
-    ]);
+    const vertices = [
+        [4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]
+    ];
 
-    const edges = computed(() => [
+    const edges = [
         [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], 
         [1, 2], [1, 3], [1, 4], [1, 5], [2, 3],
         [2, 4], [2, 5], [3, 4], [3, 5], [4, 5]
-    ]);
+    ];
     
     const richPositionData = computed(() => {
         const position: string = currentPosition.value;
@@ -87,25 +86,23 @@
         const validRichPosition = matches && matches.length >= 2;
         let moves: GSimMove[] = [];
         if (validRichPosition) {
-            for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
-                const move = {
+            for (let nextMoveData of Object.values(currentAvailableMoves.value)) {
+                var fromNum = Number(nextMoveData.moveName[0]) - 1;
+                var toNum = Number(nextMoveData.moveName[1]) - 1;
+                moves.push({
                     str: nextMoveData.move,
                     hint: nextMoveData.moveValue,
                     hintOpacity: nextMoveData.moveValueOpacity,
-                    from: Number(nextMoveData.moveName[0]) - 1,
-                    to: Number(nextMoveData.moveName[1]) - 1
-                };
-
-                console.log(Number(nextMoveData.moveName[0]) - 1, Number(nextMoveData.moveName[1]) - 1);
-
-                moves.push(move);
+                    name: nextMoveData.moveName,
+                    fromX: vertices[fromNum][0],
+                    fromY: vertices[fromNum][1],
+                    toX: vertices[toNum][0],
+                    toY: vertices[toNum][1]
+                });
             }
         }
 
-        return {
-            moves,
-            validRichPosition,
-        };
+        return { moves, validRichPosition };
     });
 
     const getBoardMoveElementHintClass = 
@@ -115,13 +112,9 @@
 </script>
 
 <style lang="scss" scoped>
-    @keyframes pulsing-arrow {
-        0% {
-            stroke-width: 0.2;
-        }
-        100% {
-            stroke-width: 0.3;
-        }
+    @keyframes pulsing-line {
+        0% { stroke-width: 0.2; }
+        100% { stroke-width: 0.3; }
     }
 
     .app-sim-move {
@@ -141,7 +134,7 @@
         }
 
         &:hover {
-            animation-name: pulsing-arrow;
+            animation-name: pulsing-line;
             animation-duration: 0.3s;
             animation-iteration-count: infinite;
             animation-timing-function: ease-in-out;

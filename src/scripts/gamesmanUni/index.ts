@@ -318,16 +318,14 @@ export const generateComputerMove = (round: Types.Round) => {
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };
 
-const animationHasFinished = async() => {
-
-}
-
 export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.move = payload.move;
     const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
     app.currentMatch.transitionTo = moveObj.position; // Setting `transitionTo` begins move animation
-    const animationDuration = handleMoveAnimation(app.currentMatch.round.position.position, moveObj.position, moveObj);
-    app.currentMatch.animationPlaying = true;
+    const animationDuration = handleMoveAnimation(app.currentMatch, moveObj);
+    if (animationDuration != 0) {
+        app.currentMatch.animationPlaying = true;
+    }
     app.currentMatch.round.moveValue = moveObj.moveValue;
     app.currentMatch.round.moveName = moveObj.moveName ? moveObj.moveName : moveObj.move;
 

@@ -4,7 +4,7 @@ const sfx = import.meta.globEager("../../models/images/svg/ttt/*");
 
 /* All animation functions should return the animation duration in milliseconds. */
 
-const animateTicTacToe = (currPosition: string, nextPosition: string) => {
+const animateTTT = (currPosition: string, nextPosition: string) => {
     const currBoard = currPosition.split("_")[4];
     const nextBoard = nextPosition.split("_")[4];
     var i, diffIdx = -1;
@@ -35,6 +35,25 @@ const animateTicTacToe = (currPosition: string, nextPosition: string) => {
     return 0;
 }
 
-export const handleMoveAnimation = (currPosition: string, nextPosition: string, moveObj: Types.Move) => {
-    return animateTicTacToe(currPosition, nextPosition);
+const animateSim = (moveObj: Types.Move) => {
+    const vertices = [[4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]];
+    var audio = new Audio(sfx['../../models/images/svg/ttt/O.mp3'].default);
+    audio.play();
+    const c = Number(moveObj.moveName[0]) - 1;
+    const d = Number(moveObj.moveName[1]) - 1;    
+    gsap.to("#simline" + moveObj.moveName, {duration: 0.498, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
+    gsap.to("#simpermline" + moveObj.moveName, {delay: 0.498, duration: 0.001, opacity: 1});
+    gsap.to("#simline" + moveObj.moveName, {delay: 0.499, duration: 0.001, attr: {"x2": vertices[c][0], "y2": vertices[c][1]}});
+    return 500;
+}
+
+export const handleMoveAnimation = (currentMatch: Types.Match, moveObj: Types.Move) => {
+    const currPosition = currentMatch.round.position.position;
+    const nextPosition = moveObj.position;
+    if (currentMatch.gameId === 'ttt') {
+        return animateTTT(currPosition, nextPosition);
+    } else if (currentMatch.gameId === 'sim') {
+        return animateSim(moveObj);
+    }
+    return 0;
 }
