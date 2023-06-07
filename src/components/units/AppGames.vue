@@ -2,7 +2,7 @@
     <div id="app-games">
         <input id="searchbar" type="text" v-model="search" @keydown.esc="search = ''" :placeholder="'Search for ' + gameType" /> <br />
         <div id="category-header" v-if="Object.keys(gamesV3).length">
-            <h2>{{ gameTypeTitle }} with Artisan Animated GUIs</h2>
+            <h2>{{ gameTypeTitle }} with Animated GUIs</h2>
         </div>
         <div id="games">
             <router-link class="v3" v-for="game in gamesV3" :key="game.id" :to="{ name: 'variants', params: { type: gameType, gameId: game.id } }">

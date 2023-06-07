@@ -26,6 +26,7 @@ export type Preferences = {
     locale: string;
     fallbackLocale: string;
     rootFontSize: string;
+    volume: number;
 };
 
 export type DataSources = {
@@ -142,7 +143,6 @@ export type Match = {
     lastPlayed: number;
     backgroundLoading: boolean;
     computerMoving: boolean;
-    transitionTo: any;
     animationPlaying: boolean;
 };
 

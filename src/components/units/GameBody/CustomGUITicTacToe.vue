@@ -72,18 +72,6 @@
     const b16 = (cond: boolean): number => cond ? 16 : 0;
     const triplets = computed(() => {
         const str = currentPosition.value.split('_')[4];
-        console.log([
-            str[0] != '-' && str[0] == str[1] && str[1] == str[2],
-            str[3] != '-' && str[3] == str[4] && str[4] == str[5],
-            str[6] != '-' && str[6] == str[7] && str[7] == str[8],
-            str[0] != '-' && str[0] == str[3] && str[3] == str[6],
-            str[1] != '-' && str[1] == str[4] && str[4] == str[7],
-            str[2] != '-' && str[2] == str[5] && str[5] == str[8],
-            str[0] != '-' && str[0] == str[4] && str[4] == str[8],
-            str[2] != '-' && str[2] == str[4] && str[4] == str[6]
-        ]
-
-        )
         return [
             str[0] != '-' && str[0] == str[1] && str[1] == str[2],
             str[3] != '-' && str[3] == str[4] && str[4] == str[5],

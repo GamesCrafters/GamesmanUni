@@ -193,8 +193,6 @@
     return currentPosition.value ? 1 : 1;
   });
 
-  const transitionTo = computed(() => store.getters.currentTransitionTo);
-
   const getImageSource = (imagePath: string) => {
     try {
       return gimages["../../../models/images/svg/" + imagePath].default;
@@ -322,104 +320,104 @@
     (move?: GDefaultRegular2DMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
 
-  watch(transitionTo, (newValue: any, oldValue: any) => {
-    showMoveButtons.value = false;
-    if (Boolean(newValue) == false || Boolean(oldValue) == false) return;
-    const currBoard = oldValue.split("_")[4];
-    const nextBoard = newValue.split("_")[4];
-    if (currBoard.length != nextBoard.length) return;
-    var diffIdxs = [];
-    var i, j;
+  // watch(transitionTo, (newValue: any, oldValue: any) => {
+  //   showMoveButtons.value = false;
+  //   if (Boolean(newValue) == false || Boolean(oldValue) == false) return;
+  //   const currBoard = oldValue.split("_")[4];
+  //   const nextBoard = newValue.split("_")[4];
+  //   if (currBoard.length != nextBoard.length) return;
+  //   var diffIdxs = [];
+  //   var i, j;
 
-    if (animationType.value === "simpleSlidePlaceRemove") {
-      var fromIdx = null;
-      var toIdx = null;
-      var appearDisappearIdx = null;
-      var appearing = null;
-      for (i = 0; i < currBoard.length; i++) {
-        if (currBoard[i] != nextBoard[i]) {
-          diffIdxs.push(i);
-        }
-      }
+  //   if (animationType.value === "simpleSlidePlaceRemove") {
+  //     var fromIdx = null;
+  //     var toIdx = null;
+  //     var appearDisappearIdx = null;
+  //     var appearing = null;
+  //     for (i = 0; i < currBoard.length; i++) {
+  //       if (currBoard[i] != nextBoard[i]) {
+  //         diffIdxs.push(i);
+  //       }
+  //     }
 
-      if (diffIdxs.length == 1) {
-        i = diffIdxs[0];
-        if (nextBoard[i] == '-') { // Removal (fade-out)
-          appearing = false;
-        } else if (currBoard[i] == '-') { // Placement (fade-in)
-          appearing = true;
-        } else {
-          return;
-        }
-        appearDisappearIdx = i;
-      } else if (diffIdxs.length == 2) {
-        i = diffIdxs[0];
-        j = diffIdxs[1];
-        if (currBoard[j] == nextBoard[i] && currBoard[j] != '-') {
-          i = j;
-          j = diffIdxs[0];
-        }
-        if (currBoard[i] == nextBoard[j]) {
-          if (currBoard[j] != '-' && nextBoard[i] != '-') {
-            return;
-          } else if (currBoard[j] != '-') { // Capture
-            appearDisappearIdx = j;
-            appearing = false;
-          } else if (nextBoard[i] != '-') { // Uncapture
-            appearDisappearIdx = i;
-            appearing = true;
-          }
-          fromIdx = i;
-          toIdx = j;
-        } else {
-          return;
-        }
-      } else if (diffIdxs.length == 3) {
-        for (const idx1 of diffIdxs) {
-          for (const idx2 of diffIdxs) {
-            if (currBoard[idx1] == nextBoard[idx2] && currBoard[idx1] != '-') {
-              fromIdx = idx1;
-              toIdx = idx2;
-            }
-          }
-        }
-        if (fromIdx == null) {
-          return;
-        }
-        for (const idx of diffIdxs) {
-          if (fromIdx != idx && toIdx != idx) {
-            appearDisappearIdx = idx;
-          }
-        }
-        if (currBoard[appearDisappearIdx!] == '-') {
-          appearing = true;
-        } else if (nextBoard[appearDisappearIdx!] == '-') {
-          appearing = false;
-        } else {
-          return;
-        }
-      } else {
-        return;
-      }
+  //     if (diffIdxs.length == 1) {
+  //       i = diffIdxs[0];
+  //       if (nextBoard[i] == '-') { // Removal (fade-out)
+  //         appearing = false;
+  //       } else if (currBoard[i] == '-') { // Placement (fade-in)
+  //         appearing = true;
+  //       } else {
+  //         return;
+  //       }
+  //       appearDisappearIdx = i;
+  //     } else if (diffIdxs.length == 2) {
+  //       i = diffIdxs[0];
+  //       j = diffIdxs[1];
+  //       if (currBoard[j] == nextBoard[i] && currBoard[j] != '-') {
+  //         i = j;
+  //         j = diffIdxs[0];
+  //       }
+  //       if (currBoard[i] == nextBoard[j]) {
+  //         if (currBoard[j] != '-' && nextBoard[i] != '-') {
+  //           return;
+  //         } else if (currBoard[j] != '-') { // Capture
+  //           appearDisappearIdx = j;
+  //           appearing = false;
+  //         } else if (nextBoard[i] != '-') { // Uncapture
+  //           appearDisappearIdx = i;
+  //           appearing = true;
+  //         }
+  //         fromIdx = i;
+  //         toIdx = j;
+  //       } else {
+  //         return;
+  //       }
+  //     } else if (diffIdxs.length == 3) {
+  //       for (const idx1 of diffIdxs) {
+  //         for (const idx2 of diffIdxs) {
+  //           if (currBoard[idx1] == nextBoard[idx2] && currBoard[idx1] != '-') {
+  //             fromIdx = idx1;
+  //             toIdx = idx2;
+  //           }
+  //         }
+  //       }
+  //       if (fromIdx == null) {
+  //         return;
+  //       }
+  //       for (const idx of diffIdxs) {
+  //         if (fromIdx != idx && toIdx != idx) {
+  //           appearDisappearIdx = idx;
+  //         }
+  //       }
+  //       if (currBoard[appearDisappearIdx!] == '-') {
+  //         appearing = true;
+  //       } else if (nextBoard[appearDisappearIdx!] == '-') {
+  //         appearing = false;
+  //       } else {
+  //         return;
+  //       }
+  //     } else {
+  //       return;
+  //     }
 
-      console.log("entering watch " + appearing + " " + fromIdx + " " + toIdx + " " + appearDisappearIdx);
+  //     console.log("entering watch " + appearing + " " + fromIdx + " " + toIdx + " " + appearDisappearIdx);
 
-      if (fromIdx != null && toIdx != null) { // Play sliding animation
-        const toCoords = centers.value[toIdx];
-        const fromCoords = centers.value[fromIdx];
-        gsap.to("#piece" + fromIdx, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
-      }
+  //     if (fromIdx != null && toIdx != null) { // Play sliding animation
+  //       const toCoords = centers.value[toIdx];
+  //       const fromCoords = centers.value[fromIdx];
+  //       gsap.to("#piece" + fromIdx, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+  //     }
       
-      // If `appearing` is null, don't play an appearing or disappearing animation
-      if (appearing === false) { // Play disappearing animation
-        gsap.to("#piece" + appearDisappearIdx, {duration: 0.5, autoAlpha: 0.01});
-      } else if (appearing === true) { // Play appearing animation
-        console.log("appear");
-      }
-    } else if (animationType.value === "custom") {
-      console.log("Custom");
-    }
-  });
+  //     // If `appearing` is null, don't play an appearing or disappearing animation
+  //     if (appearing === false) { // Play disappearing animation
+  //       gsap.to("#piece" + appearDisappearIdx, {duration: 0.5, autoAlpha: 0.01});
+  //     } else if (appearing === true) { // Play appearing animation
+  //       console.log("appear");
+  //     }
+  //   } else if (animationType.value === "custom") {
+  //     console.log("Custom");
+  //   }
+  // });
   
 </script>
 

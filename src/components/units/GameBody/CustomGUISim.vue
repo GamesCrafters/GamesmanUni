@@ -1,47 +1,31 @@
 <template>
     <svg id="custom-gui-sim" viewBox="-4.5 -4.5 9 9" xmlns="http://www.w3.org/2000/svg">
-
-        <!-- Lines to place (available move buttons). -->
-        <g v-for="(move, i) in richPositionData.moves" :key="'move' + i">
-            <!-- Line for animation P1. -->
-            <line :id="'simpermline' + move.name"
-                :x1="move.fromX" :y1="move.fromY"
-                :x2="move.toX" :y2="move.toY"
-                :opacity=0
-                :style="'stroke:' + ((richPositionData.moves.length % 2) ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
-
-            <line v-if="!animationPlaying"
-                :x1="move.fromX" :y1="move.fromY"
-                :x2="move.toX" :y2="move.toY"
+        
+        <!-- Available move buttons (i.e., lines left to draw). -->
+        <g v-if="!animationPlaying">
+            <line v-for="(move, i) in richPositionData.moves" :key="'move' + i"
+                :x1="vertices[move.from][0]" :y1="vertices[move.from][1]"
+                :x2="vertices[move.to][0]" :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :style="{
                     opacity: showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
                 }"
                 @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
-            
-            <!-- Line for animation P2. -->
-            <line :id="'simline' + move.name"
-                :x1="move.fromX" :y1="move.fromY"
-                :x2="move.fromX" :y2="move.fromY"
-                :style="'stroke:' + ((richPositionData.moves.length % 2) ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
         </g>
 
-        <!-- Lines placed. -->
-        <g v-for="(_, j) in 15" :key="'p' + j">
-            <line v-if="!(currentPosition[2 + j] === '-')"
-                :x1="vertices[edges[j][0]][0]"
-                :y1="vertices[edges[j][0]][1]"
-                :x2="vertices[edges[j][1]][0]"
-                :y2="vertices[edges[j][1]][1]"
-                :style="'stroke:' + ((currentPosition[2 + j] == 'x') ? 'blue' : 'red') + ';stroke-width:0.3;'"/>
-        </g>
+        <!-- Already-drawn lines. -->
+        <line v-for="(_, j) in 15" :key="'p' + j"
+            :id="'simline' + moveNameList[j]"
+            :x1="vertices[edges[j][0]][0]" :y1="vertices[edges[j][0]][1]"
+            :x2="currentPosition[2 + j] === '-' ? vertices[edges[j][0]][0] : vertices[edges[j][1]][0]"
+            :y2="currentPosition[2 + j] === '-' ? vertices[edges[j][0]][1] : vertices[edges[j][1]][1]"
+            :style="'stroke:' + lineColor(currentPosition[2 + j]) + ';stroke-width:0.3;'"/>
 
         <!-- Six points. -->
         <circle v-for="(_, n) in 6" :key="'c' + n"
-            :cx="vertices[n][0]"
-            :cy="vertices[n][1]"
-            :r="0.3"
-            :style="'fill:black;'"/>
+            :cx="vertices[n][0]" :cy="vertices[n][1]"
+            r="0.3" fill="black"/>
+
     </svg>
 </template>
 
@@ -50,18 +34,14 @@
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
 
     interface GSimMove {
-        str: string; // UWAPI move string
+        str: string;
         hint: string;
         hintOpacity: number;
-        name: string;
-        fromX: number;
-        fromY: number;
-        toX: number;
-        toY: number;
+        from: number;
+        to: number;
     }
 
     const store = useStore();
-    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
@@ -70,15 +50,29 @@
     const currentPosition = computed(() => store.getters.currentPosition);
     const animationPlaying = computed(() => store.getters.animationPlaying);
 
-    const vertices = [
-        [4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]
-    ];
+    const isBlueTurn = computed(() => {
+        var bluesturn = false;
+        for (var i = 2; i < 17; i++) {
+            if (currentPosition.value[i] === '-') {
+                bluesturn = !bluesturn;
+            }
+        }
+        return bluesturn;
+    });
+
+    const lineColor = ((character: string) : string => {
+        return ((character === '-' && isBlueTurn.value) || character === 'x') ? 'blue' : 'red';
+    });
+
+    const vertices = [ [4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641] ];
 
     const edges = [
         [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], 
         [1, 2], [1, 3], [1, 4], [1, 5], [2, 3],
         [2, 4], [2, 5], [3, 4], [3, 5], [4, 5]
     ];
+
+    const moveNameList = ['12', '13', '14', '15', '16', '23', '24', '25', '26', '34', '35', '36', '45', '46', '56']
     
     const richPositionData = computed(() => {
         const position: string = currentPosition.value;
@@ -87,17 +81,12 @@
         let moves: GSimMove[] = [];
         if (validRichPosition) {
             for (let nextMoveData of Object.values(currentAvailableMoves.value)) {
-                var fromNum = Number(nextMoveData.moveName[0]) - 1;
-                var toNum = Number(nextMoveData.moveName[1]) - 1;
                 moves.push({
                     str: nextMoveData.move,
                     hint: nextMoveData.moveValue,
                     hintOpacity: nextMoveData.moveValueOpacity,
-                    name: nextMoveData.moveName,
-                    fromX: vertices[fromNum][0],
-                    fromY: vertices[fromNum][1],
-                    toX: vertices[toNum][0],
-                    toY: vertices[toNum][1]
+                    from: Number(nextMoveData.moveName[0]) - 1,
+                    to: Number(nextMoveData.moveName[1]) - 1
                 });
             }
         }
@@ -122,15 +111,9 @@
         stroke-width: 0.2;
 
         &.hint- {
-            &win {
-                stroke: var(--winColor);
-            }
-            &tie {
-                stroke: var(--tieColor);
-            }
-            &lose {
-                stroke: var(--loseColor);
-            }
+            &win { stroke: var(--winColor); }
+            &tie { stroke: var(--tieColor); }
+            &lose { stroke: var(--loseColor); }
         }
 
         &:hover {

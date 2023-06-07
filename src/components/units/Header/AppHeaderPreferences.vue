@@ -2,7 +2,19 @@
     <div id="app-header-preferences">
         <div class="uni-dropdown">
             <div class="uni-dropdown-selection">
-                <img alt="Sound On" src="../../../models/images/soundon.png" style="width: 2rem" />
+                <img alt="Volume" v-if="preferences.volume" src='../../../models/images/sfxon.svg' style="width: 1.5rem" />
+                <img alt="Volume" v-else src='../../../models/images/sfxoff.svg' style="width: 1.5rem"/>
+            </div>
+            <div class="uni-dropdown-menu">
+                <div class="uni-dropdown-menu-option" style="background:var(--neutralColor)">
+                    Sound Effects
+                    <VueSlider id="slider"
+                            v-model="preferences.volume"
+                            :min="0"
+                            :max="1"
+                            :interval="0.1"
+                            :tooltip="'none'"/>
+                </div>
             </div>
         </div>
         <div class="uni-dropdown">
@@ -33,11 +45,13 @@
 </template>
 
 <script lang="ts" setup>
-    import { ref } from "vue";
+    import { computed, ref } from "vue";
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { useI18n } from "vue-i18n";
+    import VueSlider from "vue-slider-component";
 
     const store = useStore();
+    const preferences = computed(() => (store.getters.preferences));
     const { t } = useI18n();
     const { locale } = useI18n({ useScope: "global" });
     const appLocales = ["cn", "en-US", "es", "hi"];

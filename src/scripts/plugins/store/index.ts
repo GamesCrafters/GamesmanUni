@@ -47,7 +47,6 @@ type Getters = {
     currentRoundId(state: State): number;
     currentRounds(state: State): GMUTypes.Rounds;
     currentStartPosition(state: State): string;
-    currentTransitionTo(state: State): string;
     currentValuedRounds(state: State): GMUTypes.Rounds;
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
@@ -78,6 +77,7 @@ type Getters = {
     variants(state: State): (gameType: string, gameId: string) =>
         GMUTypes.Variants;
     version(state: State): string;
+    volume(state: State): number;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -149,8 +149,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.rounds,
     currentStartPosition: (state: State) =>
         state.app.currentMatch.startPosition,
-    currentTransitionTo: (state: State) =>
-        state.app.currentMatch.transitionTo,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
     currentValuedRounds: (state: State) =>
@@ -208,6 +206,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.gameTypes[gameType].games[gameId].variants,
     version: (state: State) =>
         state.app.version,
+    volume: (state: State) =>
+        state.app.preferences.volume
 };
 
 export enum mutationTypes {

@@ -190,7 +190,6 @@ export const initiateMatch = async (app: Types.App, payload: {
 
     app.currentMatch.gameTheme = gameVariant.autogui_v2_data ? gameVariant.autogui_v2_data.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
-    app.currentMatch.transitionTo = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = payload.gameType;
@@ -235,7 +234,6 @@ export const restartMatch = async (app: Types.App) => {
         moveValue: "",
         position: deepcopy(game.variants.variants[variantId].positions[startPosition])
     };
-    app.currentMatch.transitionTo = startPosition;
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveName = "";
     app.currentMatch.round.moveValue = "";
@@ -321,8 +319,7 @@ export const generateComputerMove = (round: Types.Round) => {
 export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.move = payload.move;
     const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
-    app.currentMatch.transitionTo = moveObj.position; // Setting `transitionTo` begins move animation
-    const animationDuration = handleMoveAnimation(app.currentMatch, moveObj);
+    const animationDuration = handleMoveAnimation(app.preferences.volume, app.currentMatch, moveObj);
     if (animationDuration != 0) {
         app.currentMatch.animationPlaying = true;
     }
@@ -421,8 +418,6 @@ const gotoRoundId = (app: Types.App, roundId: number) => {
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.lastPlayed = new Date().getTime();
-    app.currentMatch.transitionTo = "";
-    app.currentMatch.transitionTo = app.currentMatch.round.position.position;
     return app;
 };
 
