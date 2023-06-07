@@ -3,6 +3,7 @@ import * as GCTAPITypes from "../apis/gamesCrafters/types";
 import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
+import { handleMoveAnimation } from "./moveAnimation"
 const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
@@ -86,6 +87,7 @@ const formatMoves = (source: Array<{
         positionValue: string;
         remoteness: number;
         mex: string;
+        animationPhases: Array<Array<string>>;
     }>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
     if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
@@ -317,13 +319,14 @@ export const generateComputerMove = (round: Types.Round) => {
 export const runMove = async (app: Types.App, payload: { move: string }) => {
     app.currentMatch.round.move = payload.move;
     const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
-    app.currentMatch.round.moveValue = moveObj.moveValue;
-    if (moveObj.hasOwnProperty('moveName')) {
-        app.currentMatch.round.moveName = moveObj.moveName;
-    } else {
-        app.currentMatch.round.moveName = moveObj.move;
+    const animationDuration = handleMoveAnimation(app.preferences.volume, app.currentMatch, moveObj);
+    if (animationDuration != 0) {
+        app.currentMatch.animationPlaying = true;
     }
-    // Rewrite history by deleting all subsequent moves made ealier.
+    app.currentMatch.round.moveValue = moveObj.moveValue;
+    app.currentMatch.round.moveName = moveObj.moveName ? moveObj.moveName : moveObj.move;
+
+    // Rewrite history by deleting all subsequent moves made earlier.
     app.currentMatch.rounds.splice(
         app.currentMatch.round.id, 
         app.currentMatch.rounds.length - app.currentMatch.round.id
@@ -351,9 +354,9 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
             position
         ]
     };
-    const move = moveObj;
-    app.currentMatch.moveHistory += moveHistoryDelim + (move.moveName ? move.moveName : move.move);
-    app.currentMatch.round.id += 1;
+    await new Promise(r => setTimeout(r, animationDuration));
+    app.currentMatch.animationPlaying = false;
+    app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.moveName ? moveObj.moveName : moveObj.move);
     let posArr = updatedPosition.position.split('_');
     if (posArr.length === 5 && posArr[0] === 'R') {
         app.currentMatch.round.firstPlayerTurn = posArr[1] === 'A'
@@ -364,9 +367,10 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     }
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
+    app.currentMatch.lastPlayed = new Date().getTime();
+    app.currentMatch.round.id += 1;
     app.currentMatch.round.position = updatedPosition;
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
-    app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 

@@ -1,17 +1,17 @@
 <template>
     <component v-if="customGameBoardExists" :is="regular2DGameBoards[gameBoard]" />
-    <component v-else-if="autoguiV2DataExists" :is="AppGameBodyBoardRegular2DImages" />
-    <component v-else :is="AppGameBodyBoardFallback" />
+    <component v-else-if="autoguiV2DataExists" :is="ImageAutoGUI" />
+    <component v-else :is="CharacterAutoGUI" />
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
     import { useStore } from "../../../scripts/plugins/store";
-    import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue"
-    import AppGameBodyBoardRegular2DImages from "./AppGameBodyBoardRegular2DImages.vue";
-    import AppGameBoardRegular2DTtt from "./AppGameBodyBoardRegular2DTtt.vue";
-    import AppGameBoardRegular2DQuarto from "./AppGameBodyBoardRegular2DQuarto.vue";
-    import AppGameBodyBoardSimRegular from "./AppGameBodyBoardSimRegular.vue";
+    import CharacterAutoGUI from "./CharacterAutoGUI.vue"
+    import ImageAutoGUI from "./ImageAutoGUI.vue";
+    import CustomGUITicTacToe from "./CustomGUITicTacToe.vue";
+    import CustomGUIQuarto from "./CustomGUIQuarto.vue";
+    import CustomGUISim from "./CustomGUISim.vue";
 
     const store = useStore();
     const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
@@ -20,10 +20,10 @@
     const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
     const autoguiV2Data = computed(() => store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
     const regular2DGameBoards: Record<string, any> = {
-        "ttt-misere": AppGameBoardRegular2DTtt,
-        "ttt-regular": AppGameBoardRegular2DTtt,
-        "quarto-regular": AppGameBoardRegular2DQuarto,
-        "sim-regular": AppGameBodyBoardSimRegular
+        "ttt-misere": CustomGUITicTacToe,
+        "ttt-regular": CustomGUITicTacToe,
+        "quarto-regular": CustomGUIQuarto,
+        "sim-regular": CustomGUISim
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);

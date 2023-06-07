@@ -1,6 +1,6 @@
 <template>
     <svg
-      v-if="richPositionData.validRichPosition"  id="app-game-body-board-fallback"
+      v-if="richPositionData.validRichPosition"  id="character-autogui"
       xmlns="http://www.w3.org/2000/svg"
       :viewBox="'-2 -2 ' + (100 + 4) + ' ' + (100 + 4)" :data-turn="richPositionData.turn">
       <g
@@ -229,7 +229,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #app-game-body-board-fallback {
+    #character-autogui {
         > * {
             border: 0.1rem solid var(--neutralColor);
             border-radius: 1rem;

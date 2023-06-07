@@ -1,5 +1,5 @@
 <template>
-    <svg id="app-game-body-board-regular-2d-quarto" viewBox="-2 -2 104 128" xmlns="http://www.w3.org/2000/svg"
+    <svg id="custom-gui-quarto" viewBox="-2 -2 104 128" xmlns="http://www.w3.org/2000/svg"
     :data-turn="richPositionData.turn">
         <defs>
             <g id="rA">
@@ -367,7 +367,7 @@
 </script>
 
 <style lang="scss" scoped>
-    #app-game-body-board-regular-2d-quarto {
+    #custom-gui-quarto {
         height: 100%;
         width: 100%;
     }

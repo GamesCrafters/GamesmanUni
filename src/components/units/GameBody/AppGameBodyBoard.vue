@@ -8,7 +8,7 @@
     import { computed } from "vue";
     import { useRoute } from "vue-router";
     import { useStore } from "../../../scripts/plugins/store";
-    import AppGameBodyBoardFallback from "./AppGameBodyBoardFallback.vue";
+    import CharacterAutoGUI from "./CharacterAutoGUI.vue";
     import AppGameBodyBoardRegular2D from "./AppGameBodyBoardRegular2D.vue";
 
     const route = useRoute();
@@ -21,6 +21,6 @@
         if (position.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)(?:_(.*))?$/) || position.value[0] == 'C') return AppGameBodyBoardRegular2D;
         const gameBoard = `${gameId}-${variantId}`;
         if (gameBoard in gameBoards) return gameBoards[gameBoard];
-        return AppGameBodyBoardFallback;
+        return CharacterAutoGUI;
     };
 </script>
