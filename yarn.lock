@@ -3204,6 +3204,7 @@ __metadata:
     "@vitejs/plugin-vue": 2.3.3
     "@vue/compiler-sfc": 3.2.37
     axios: 0.27.2
+    gsap: ^3.11.3
     https-localhost: 4.7.1
     lodash: 4.17.21
     markdown-it-link-attributes: 4.0.0
@@ -3327,6 +3328,13 @@ __metadata:
   version: 4.2.10
   resolution: "graceful-fs@npm:4.2.10"
   checksum: 3f109d70ae123951905d85032ebeae3c2a5a7a997430df00ea30df0e3a6c60cf6689b109654d6fdacd28810a053348c4d14642da1d075049e6be1ba5216218da
+  languageName: node
+  linkType: hard
+
+"gsap@npm:^3.11.3":
+  version: 3.11.5
+  resolution: "gsap@npm:3.11.5"
+  checksum: 0d62c9405ed9703f8c65e6190b648d9691fa84bd03bcde0d286cd29d80c5865c22aa57a128b33299c0c15d41473e83f13be1645700325f3821dd912a3022350d
   languageName: node
   linkType: hard
 

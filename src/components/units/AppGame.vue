@@ -1,7 +1,7 @@
 <template>
     <div id="app-game">
         <AppGameBody />
-        <AppGameMenu v-show="showVvh"/>
+        <AppGameMenu v-show="showMenu"/>
     </div>
 </template>
 
@@ -9,17 +9,19 @@
     import { computed } from "vue";
     import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-    import AppGameBody from "./AppGameBody.vue";
-    import AppGameMenu from "./AppGameMenu.vue";
+    import AppGameBody from "./GameBody/AppGameBody.vue";
+    import AppGameMenu from "./GameMenu/AppGameMenu.vue";
 
     const route = useRoute();
     const store = useStore();
-    const gameType = computed(() => route.params.type as string);
-    const gameId = computed(() => route.params.gameId as string);
-    const variantId = computed(() => route.params.variantId as string);
-    store.dispatch(actionTypes.initiateMatch, { gameType: gameType.value, gameId: gameId.value, variantId: variantId.value });
-    const options = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.options : undefined));
-    const showVvh = computed(() => (options.value ? options.value.showMenu : true));
+    /* Change the following values to computed refs if game may change dynamically on this page. */
+    const gameType = route.params.type as string;
+    const gameId = route.params.gameId as string;
+    const variantId = route.params.variantId as string;
+    const initialPosition = route.params.initialPosition as string;
+    store.dispatch(actionTypes.initiateMatch, { gameType: gameType, gameId: gameId, variantId: variantId, startPosition: initialPosition });
+    const options = computed(() => store.getters.options);
+    const showMenu = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));
 </script>
 

@@ -2,7 +2,7 @@
     <div id="app-games">
         <input id="searchbar" type="text" v-model="search" @keydown.esc="search = ''" :placeholder="'Search for ' + gameType" /> <br />
         <div id="category-header" v-if="Object.keys(gamesV3).length">
-            <h2>{{ gameTypeTitle }} with Artisan Animated GUIs</h2>
+            <h2>{{ gameTypeTitle }} with Animated GUIs</h2>
         </div>
         <div id="games">
             <router-link class="v3" v-for="game in gamesV3" :key="game.id" :to="{ name: 'variants', params: { type: gameType, gameId: game.id } }">
@@ -48,15 +48,16 @@ import type { Game } from "../../scripts/gamesmanUni/types";
 const route = useRoute();
 const store = useStore();
 const getLogoSource = (game: Game) => {
-    const images = import.meta.globEager("../../models/images/*.png");
+    const images = import.meta.globEager("../../models/images/thumbnail/*.png");
+    const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
     const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
-    const gameThumbnailFilePath = `../../models/images/thumbnail-${game.id}-regular.png`;
+    const gameThumbnailFilePath = `../../models/images/thumbnail/${game.id}-regular.png`;
     try {
         return images[gameThumbnailFilePath].default;
     } catch (errorMessage) {
         //console.warn(`${game.name} game logo does not exist yet.`);
     }
-    return images[appLogoFilePath].default;
+    return logo[appLogoFilePath].default;
 };
 const gameType = computed(() => route.params.type as string);
 const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
@@ -135,7 +136,7 @@ watch(
         }
 
         > a.v3 {
-            border: 0.2rem solid purple;
+            border: 0.2rem solid rgb(180, 27, 180);
         }
 
         > a.v2 {
