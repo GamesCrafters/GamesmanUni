@@ -35,9 +35,7 @@ const animateSim = (volume: number, moveObj: Types.Move): number => {
 }
 
 const animateQuarto = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
-    if (currPosition === "R_A_17_1_-----------------") {
-        return 0;
-    }
+    if (currPosition === "R_A_17_1_-----------------") return 0;
     var to = -1;
     for (var i = 0; i < 16; i++) {
         if (currPosition.split("_")[4][i] != nextPosition.split("_")[4][i]) {
@@ -46,8 +44,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
         }
     }
     var toCoords = [12.5 + (to % 4) * 25, 12.5 + Math.floor(to / 4) * 25];
-    gsap.to("#toPlace", {duration: 0.5, x: toCoords[0], y: toCoords[1]});
-
+    gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
     return 500;
 }
 

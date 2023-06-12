@@ -39,7 +39,7 @@
         <!-- Draw the board. -->
         <path d="M0,0 h100 v100 h-100z M0,25 h100z M0,50 h100z M0,75 h100z M25,0 v100z M50,0 v100z M75,0 v100z" stroke="black" stroke-width="0.5" fill="#888888"/>
 
-        <g v-if="currentPosition==='R_A_17_1_-----------------'">
+        <g v-if="isInitial">
             <g v-if="!animationPlaying">
                 <rect x="2.5" y="2.5" width="95" height="95" rx="4" ry="4" opacity="0.99" fill="#FFFFFF"/>
                 <text x="25" y="10" fill="black" class="small">Choose a Piece for the</text>
@@ -138,11 +138,15 @@
     const gameTheme = computed(() => store.getters.currentGameTheme || "r");
     const otherGameTheme = computed(() => gameTheme.value === "r" ? "b" : "r");
     const animationPlaying = computed(() => store.getters.animationPlaying);
+    const isInitial = computed(() => currentPosition.value === "R_A_17_1_-----------------");
     const richPositionData = computed(() => {
         const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
         const validRichPosition = matches && matches.length >= 5 && matches[4].length == 17;
         if (validRichPosition) {
-            gsap.to("#toPlace", {duration: 0.01, x: 58, y: 113});
+            if (document.getElementById("toPlace")) {
+                gsap.set("#toPlace", {x: 58, y: 113});
+            }
+            const turn = matches[1];
             const board = matches[4].substring(0, 16);
             let tokens: GDefaultRegular2DBoardToken[] = [];
             const nextPiece = matches[4].slice(-1);
@@ -162,6 +166,7 @@
             }
 
             return {
+                turn: turn,
                 board,
                 tokens,
                 nextPiece,

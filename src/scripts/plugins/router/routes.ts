@@ -5,7 +5,6 @@ import TheVariantsPage from "../../../components/views/TheVariantsPage.vue";
 import TheGamePage from "../../../components/views/TheGamePage.vue";
 import TheUpdatesPage from "../../../components/views/TheUpdatesPage.vue";
 import TheDemoPage from "../../../components/views/TheDemoPage.vue"
-import TheTournamentPage from "../../../components/views/TheTournamentPage.vue"
 import The404Page from "../../../components/views/The404Page.vue";
 
 export const routes = [
@@ -18,6 +17,5 @@ export const routes = [
     { path: "/:type/:gameId/variants/:variantId/:initialPosition", component: TheGamePage, name: "init" },
     { path: "/updates", component: TheUpdatesPage, name: "updates" },
     { path: "/demo", component: TheDemoPage, name: "demo" },
-    { path: "/tournament", component: TheTournamentPage, name: "tournament" },
     { path: "/:pathMatch(.*)*", component: The404Page, name: "pageNotFound" },
 ];

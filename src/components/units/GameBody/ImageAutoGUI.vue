@@ -1,8 +1,7 @@
 <template>
   <!-- Render board only if the boardstring is valid i.e. is a "validRichPosition". -->
   <svg v-if="richPositionData.validRichPosition"
-    id="image-autogui"
-    xmlns="http://www.w3.org/2000/svg"
+    id="image-autogui" xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
     :data-turn="richPositionData.turn">
 
@@ -18,10 +17,8 @@
         <polyline
           :points="formatArrowPolylinePoints(arrow, arrowThickness)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
-          :style="{
-            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-          }"/>
+          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
       </g>
     </g>
 
@@ -49,15 +46,13 @@
         <g v-if="token.move">
           <!-- If no move token specified, use default move button (a circle). -->
           <circle v-if="token.token == '-'"
-              :cx="centers[token.to][0]"
-              :cy="centers[token.to][1]"
-              :r="defaultMoveTokenRadius"
-              :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-              :style="'--xorigin: ' + centers[token.to][0] +
-                      'px ' + centers[token.to][1] +
-                      'px; opacity: ' + (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) +
-                      ';'"
-              @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
+            :cx="centers[token.to][0]"
+            :cy="centers[token.to][1]"
+            :r="defaultMoveTokenRadius"
+            :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
+            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;'"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           
           <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
           <g v-else-if="Object.keys(pieces).includes(token.token)">
@@ -75,10 +70,8 @@
               :width="pieces[token.token].scale * widthFactor" 
               :height="pieces[token.token].scale * widthFactor"
               :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-              :style="'--xorigin: ' + centers[token.to][0] + 'px ' + 
-                centers[token.to][1] + 'px; opacity: ' + 
-                (options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1) +
-                ';mask: url(#svgmask' + i + ');'"
+              :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
+              :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
               @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           </g>
         </g>
@@ -90,10 +83,8 @@
           <polyline
             :points="formatArrowPolylinePoints(arrow, arrowThickness)"
             :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
-            :style="{
-              opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
-            }"/>
+            :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
         </g>
       </g>
 
@@ -107,12 +98,9 @@
           :stroke-linecap="'round'"
           :stroke-width="lineWidth"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(line.move)"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"
-          :style="{
-            opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1,
-          }"/>
+          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"/>
       </g>
-
     </g>
   </svg>
 </template>
@@ -123,17 +111,12 @@
   //import gsap from "gsap";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
-  enum UWAPITurn {
-    A = "A",
-    B = "B",
-  }
-
   interface GDefaultRegular2DMove {
     str: string; // UWAPI move string
     hint: string;
     hintOpacity: number;
     nextPosition: string;
-}
+  }
 
   interface GDefaultRegular2DBoardToken {
     token: string;
@@ -194,11 +177,10 @@
   /* End Code Cleanup Required Here */
 
   const richPositionData = computed(() => {
-    const position: string = currentPosition.value;
-    const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
+    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
     const validRichPosition = matches && matches.length >= 5;
     if (validRichPosition) {
-      const turn = matches[1] == "A" ? UWAPITurn.A : UWAPITurn.B;
+      const turn = matches[1];
       const board = matches[4];
       let tokens: GDefaultRegular2DBoardToken[] = [];
       let arrows: GDefaultRegular2DBoardArrow[] = [];
@@ -213,11 +195,10 @@
 
         let matches;
         if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
-          const to = parseInt(matches[2]);
           tokens.push({
             token: matches[1],
-            to: to,
-            move: move,
+            to: parseInt(matches[2]),
+            move,
           })
         } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({
@@ -231,8 +212,6 @@
             to: parseInt(matches[2]),
             move,
           });
-        } else {
-          console.error("NOTREACHED");
         }
       }
       
@@ -306,8 +285,7 @@
             ${coords6[0]},${coords6[1]}`;
   };
 
-  const getBoardMoveElementHintClass = 
-    (move?: GDefaultRegular2DMove): string => 
+  const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
 </script>
 
@@ -332,12 +310,8 @@
     cursor: default;
     transform-origin: var(--xorigin);
     
-    [data-turn="A"] &.move {
-      fill: var(--turn1Color);
-    }
-    [data-turn="B"] &.move {
-      fill: var(--turn2Color);
-    }
+    [data-turn="A"] &.move { fill: var(--turn1Color); }
+    [data-turn="B"] &.move { fill: var(--turn2Color); }
 
     &.move.hint- {
       &win      { fill: var(--winColor); }

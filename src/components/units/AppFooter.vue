@@ -4,9 +4,6 @@
         <router-link to="/demo">
             <a>Demo Mode</a>
         </router-link>
-        <router-link to="/tournament">
-            <a>Tournament</a>
-        </router-link>
     </div>
 </template>
 

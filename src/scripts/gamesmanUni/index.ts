@@ -332,13 +332,15 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.rounds.length - app.currentMatch.round.id
     );
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
-    const updatedApp = await loadPosition(app, {
-        gameType: app.currentMatch.gameType,
-        gameId: app.currentMatch.gameId,
-        variantId: app.currentMatch.variantId,
-        position: moveObj.position
-    });
-    if (!updatedApp) return undefined;
+    var updatedApp = null;
+    while (!updatedApp) {
+        updatedApp = await loadPosition(app, {
+            gameType: app.currentMatch.gameType,
+            gameId: app.currentMatch.gameId,
+            variantId: app.currentMatch.variantId,
+            position: moveObj.position
+        });
+    };
     const updatedPosition = { 
         ...updatedApp.
         gameTypes[app.currentMatch.gameType].
