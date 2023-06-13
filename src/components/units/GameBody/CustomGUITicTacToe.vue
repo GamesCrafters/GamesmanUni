@@ -28,8 +28,7 @@
                 <circle v-if="showNextMoves && board[cell].hint"
                     r="3" :cx="11 + xOffset(cell)" :cy="11 + yOffset(cell)"
                     :class="getHintClass(board[cell].hint)"
-                    :style="{ opacity: showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1 }"
-                />
+                    :opacity="showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1"/>
                 <rect v-if="currentRemoteness && !isComputerTurn"
                     cursor="pointer" fill="var(--backgroundColor)"
                     @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: board[cell].move })"

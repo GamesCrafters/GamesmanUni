@@ -382,8 +382,12 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     runMove: async (context: ActionContext, payload: { move: string }) => {
         context.state.app.currentMatch.computerMoving = true;
         context.state.app.currentMatch.backgroundLoading = true;
-        await GMU.runMove(context.state.app, payload);
+        const updatedApp = await GMU.runMove(context.state.app, payload);
         context.state.app.currentMatch.backgroundLoading = false;
+        if (updatedApp) {
+            context.commit(mutationTypes.setApp, updatedApp);
+            if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
+        }
         context.state.app.currentMatch.computerMoving = false;
         await store.dispatch(actionTypes.runComputerMove);
     },
@@ -395,10 +399,14 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             /* If user leaves the game page during timeout, abort. */
             if (!context.state.app.currentMatch.gameType) return;
             context.state.app.currentMatch.backgroundLoading = true;
-            await GMU.runMove(context.state.app, {
+            const updatedApp = await GMU.runMove(context.state.app, {
                 move: GMU.generateComputerMove(context.state.app.currentMatch.round)
             });
             context.state.app.currentMatch.backgroundLoading = false;
+            if (updatedApp) {
+                context.commit(mutationTypes.setApp, updatedApp);
+                if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
+            }
         }
         context.state.app.currentMatch.computerMoving = false;
     },

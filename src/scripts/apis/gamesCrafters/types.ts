@@ -75,7 +75,7 @@ export type AutoGUIv2Theme = {
     backgroundImage: string;
     foregroundImage: string;
     piecesOverArrows: boolean;
-    arrowThickness: number;
+    arrowWidth: number;
     lineWidth: number;
     defaultMoveTokenRadius: number;
     centers: Array<AutoGUIv2Coordinate>;

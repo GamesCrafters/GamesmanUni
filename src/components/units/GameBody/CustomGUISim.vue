@@ -7,9 +7,7 @@
                 :x1="vertices[move.from][0]" :y1="vertices[move.from][1]"
                 :x2="vertices[move.to][0]" :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
-                :style="{
-                    opacity: showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1,
-                }"
+                :opacity="showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1"
                 @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
         </g>
 

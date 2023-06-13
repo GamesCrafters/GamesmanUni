@@ -1,8 +1,8 @@
 <template>
     <svg
-      v-if="richPositionData.validRichPosition"  id="character-autogui"
+      v-if="richPositionData.validRichPosition" id="character-autogui"
       xmlns="http://www.w3.org/2000/svg"
-      :viewBox="'-2 -2 ' + (100 + 4) + ' ' + (100 + 4)" :data-turn="richPositionData.turn">
+      viewBox="-2 -2 104 104" :data-turn="richPositionData.turn">
       <g
         v-for="(cell, i) in richPositionData.board"
         :key="'cell' + i"
@@ -13,7 +13,7 @@
           :y="yOffset + centers[i][1] * scaledHeight / richPositionData.rows"
           :width="scaledWidth / richPositionData.columns"
           :height="scaledHeight / richPositionData.rows" />
-        <text v-if="cell.token != '-' && cell.token != '*'"
+        <text v-if="cell.token != '-'"
           :x="xOffset + (centers[i][0] + 0.5) * scaledWidth / richPositionData.columns"
           :y="yOffset + (centers[i][1] + 0.5) * scaledHeight / richPositionData.rows"
           :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
@@ -35,7 +35,7 @@
           }"/>
       </g>
     </svg>
-    <div id="app-game-body-board-fallback" v-else>
+    <div id="character-autogui" v-else>
         <div id="position">
             <h3>Current Position</h3>
             <pre>{{ currentPosition }}</pre>
@@ -127,16 +127,6 @@
                     to: parseInt(matches[2]),
                     move,
                 });
-            } else if ((matches = nextMoveData.move.match(/^S_([LR])_([0-9]+)_([0-9]+)$/))) {
-                // Shift the board
-                const dir = matches[1];
-                const row = parseInt(matches[2]);
-                const amt = parseInt(matches[3]); // Not visualizing this at the moment
-                arrows.push({
-                    from: dir == "R" ? numColumns * row : numColumns * (row + 1) - 1,
-                    to: dir == "R" ? numColumns * row + 1 : numColumns * (row + 1) - 2,
-                    move,
-                });
             } else {
                 console.error("NOTREACHED");
             }
@@ -186,20 +176,23 @@
         return [i % richPositionData.value.columns, Math.floor(i / richPositionData.value.columns)];
     };
 
-    const centers = computed(() => 
-      [...Array(richPositionData.value.rows * richPositionData.value.columns).keys()].map(
-        (i: number) => 
-        [i % richPositionData.value.columns, Math.floor(i / richPositionData.value.columns)]
-      )
-    );
+    const centers = computed(() => {
+        let lst: number[][] = [];
+        for (var i = 0; i < richPositionData.value.rows * richPositionData.value.columns; i++) {
+            lst.push([i % richPositionData.value.columns, Math.floor(i / richPositionData.value.columns)]);
+        }
+        return lst;
+    });
 
   const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 3, endOffset: number = 3): string => {
-    let fromCoords = calcRegular2DBoardTopLeftCoords(arrow.from).map((a: number) => ((a) + 0.5) * scaledWidth / richPositionData.value.columns);
-    let coords3 = calcRegular2DBoardTopLeftCoords(arrow.to).map((a: number) => ((a) + 0.5) * scaledHeight / richPositionData.value.rows);
+    let q = calcRegular2DBoardTopLeftCoords(arrow.from);
+    let r = calcRegular2DBoardTopLeftCoords(arrow.to);
+    let fromCoords = [((q[0] + 0.5) * scaledWidth / richPositionData.value.columns), ((q[1] + 0.5) * scaledHeight / richPositionData.value.rows)];
+    let coords3 = [((r[0] + 0.5) * scaledWidth / richPositionData.value.columns), ((r[1] + 0.5) * scaledHeight / richPositionData.value.rows)];
     fromCoords[0] += xOffset;
     fromCoords[1] += yOffset;
     coords3[0] += xOffset;
-    coords3[0] += yOffset;
+    coords3[1] += yOffset;
     const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
     const perpdir = [dir[1], -dir[0]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
@@ -300,7 +293,6 @@
     }
 
     .app-game-board-default-token {
-      alignment-baseline: middle;
       text-anchor: middle;
       cursor: default;
 
