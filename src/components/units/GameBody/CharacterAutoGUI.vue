@@ -293,6 +293,7 @@
     }
 
     .app-game-board-default-token {
+      alignment-baseline: middle;
       text-anchor: middle;
       cursor: default;
 
