@@ -1,7 +1,7 @@
 <template>
 <div class="welcome">
-    <h2 id="app-welcome">Play and visualize two-player, abstract strategy games!</h2>
-    <p id="game-info"><strong>68+</strong> games integrated &emsp;&emsp;&emsp; <strong>9+</strong> puzzles strongly solved</p>
+    <h2 id="app-welcome">Play and visualize two-player abstract strategy games!</h2>
+    <p id="game-info"><strong>44+</strong> games integrated &emsp;&emsp;&emsp; <strong>9+</strong> puzzles strongly solved</p>
     <div class="explore-buttons-container">
         <button @click="exploreAllGames">Explore All Games</button>
         <button @click="exploreAllPuzzles">Explore All Puzzles</button>

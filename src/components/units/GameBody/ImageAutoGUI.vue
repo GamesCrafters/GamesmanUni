@@ -15,7 +15,7 @@
     <g v-if="!animationPlaying && piecesOverArrows"> 
       <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
         <polyline
-          :points="formatArrowPolylinePoints(arrow, arrowThickness)"
+          :points="formatArrowPolylinePoints(arrow, arrowWidth)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
@@ -51,7 +51,7 @@
             :r="defaultMoveTokenRadius"
             :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
-            :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;'"
+            :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;'"
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           
           <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
@@ -71,7 +71,7 @@
               :height="pieces[token.token].scale * widthFactor"
               :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
-              :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
+              :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
               @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           </g>
         </g>
@@ -81,7 +81,7 @@
       <g v-if="!piecesOverArrows"> 
         <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
           <polyline
-            :points="formatArrowPolylinePoints(arrow, arrowThickness)"
+            :points="formatArrowPolylinePoints(arrow, arrowWidth)"
             :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
@@ -96,8 +96,9 @@
           :x2="centers[line.to][0]"
           :y2="centers[line.to][1]"
           :stroke-linecap="'round'"
+          :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
           :stroke-width="lineWidth"
-          :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(line.move)"
+          :class="'app-game-board-default-line ' + getBoardMoveElementHintClass(line.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"/>
       </g>
@@ -161,8 +162,8 @@
   const animationPlaying = computed(() => store.getters.animationPlaying);
   const backgroundImagePath = computed(() => theTheme.value.backgroundImage || "");
   const foregroundImagePath = computed(() => theTheme.value.foregroundImage || "");
-  const arrowThickness = computed(() =>
-    (theTheme.value.arrowThickness * widthFactor.value / 2) || 1.5);
+  const arrowWidth = computed(() =>
+    (theTheme.value.arrowWidth * widthFactor.value / 2) || 1.5);
   const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
   const defaultMoveTokenRadius = computed(() =>
     (theTheme.value.defaultMoveTokenRadius * widthFactor.value) || 2);
@@ -301,6 +302,11 @@
     100% { stroke-width: 1.5; }
   }
 
+  @keyframes pulsing-line {
+    0% { stroke-width: var(--w); }
+    100% { stroke-width: var(--w2); }
+  }
+
   @keyframes pulsing-token {
     0% { transform: scale(1); }
     100% { transform: scale(1.2); }
@@ -308,7 +314,7 @@
 
   .app-game-board-default-button {
     cursor: default;
-    transform-origin: var(--xorigin);
+    transform-origin: var(--tOrigin);
     
     [data-turn="A"] &.move { fill: var(--turn1Color); }
     [data-turn="B"] &.move { fill: var(--turn2Color); }
@@ -368,6 +374,29 @@
 
     &:hover {
       animation-name: pulsing-arrow;
+      animation-duration: 0.3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+    }
+  }
+
+  .app-game-board-default-line {
+    stroke: var(--primaryColor);
+
+    [data-turn="A"] & { stroke: var(--turn1Color); }
+    [data-turn="B"] & { stroke: var(--turn2Color); }
+
+    &.hint- {
+      &win { stroke: var(--winColor); }
+      &draw { stroke: var(--drawColor); }
+      &tie { stroke: var(--tieColor); }
+      &lose { stroke: var(--loseColor); }
+      &unsolved { stroke: var(--unsolvedColor); }
+    }
+
+    &:hover {
+      animation-name: pulsing-line;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
       animation-timing-function: ease-in-out;
