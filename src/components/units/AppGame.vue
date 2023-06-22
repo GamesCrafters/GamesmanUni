@@ -9,8 +9,8 @@
     import { computed } from "vue";
     import { onBeforeRouteLeave, useRoute } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
-    import AppGameBody from "./AppGameBody.vue";
-    import AppGameMenu from "./AppGameMenu.vue";
+    import AppGameBody from "./GameBody/AppGameBody.vue";
+    import AppGameMenu from "./GameMenu/AppGameMenu.vue";
 
     const route = useRoute();
     const store = useStore();
@@ -18,7 +18,8 @@
     const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
-    store.dispatch(actionTypes.initiateMatch, { gameType: gameType, gameId: gameId, variantId: variantId });
+    const initialPosition = route.params.initialPosition as string;
+    store.dispatch(actionTypes.initiateMatch, { gameType: gameType, gameId: gameId, variantId: variantId, startPosition: initialPosition });
     const options = computed(() => store.getters.options);
     const showMenu = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));

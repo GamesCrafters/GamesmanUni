@@ -130,6 +130,11 @@ button {
         border-radius: 1rem;
         font-weight: 400;
         padding: 0.5rem;
+        > img {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
     }
     .uni-dropdown-menu {
         background-color: var(--neutralColor);

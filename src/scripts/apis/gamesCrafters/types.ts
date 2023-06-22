@@ -75,10 +75,12 @@ export type AutoGUIv2Theme = {
     backgroundImage: string;
     foregroundImage: string;
     piecesOverArrows: boolean;
-    arrowThickness: number;
+    arrowWidth: number;
     lineWidth: number;
     defaultMoveTokenRadius: number;
     centers: Array<AutoGUIv2Coordinate>;
+    piecesToBeIntroduced: string;
+    animationType: string;
     pieces: Record<string, AutoGUIv2Token>;
 };
 
@@ -101,6 +103,7 @@ export type Position = Status & {
             positionValue: string;
             remoteness: number;
             mex: string;
+            animationPhases: Array<Array<string>>;
         }>;
         position: string;
         positionValue: string;

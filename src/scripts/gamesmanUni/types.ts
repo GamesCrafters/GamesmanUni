@@ -26,6 +26,7 @@ export type Preferences = {
     locale: string;
     fallbackLocale: string;
     rootFontSize: string;
+    volume: number;
 };
 
 export type DataSources = {
@@ -93,6 +94,7 @@ export type Move = {
     positionValue: string;
     remoteness: number;
     mex: string;
+    animationPhases: Array<Array<string>>;
 };
 
 export type Commits = Update & {
@@ -141,6 +143,7 @@ export type Match = {
     lastPlayed: number;
     backgroundLoading: boolean;
     computerMoving: boolean;
+    animationPlaying: boolean;
 };
 
 export type Rounds = Array<Round>;

@@ -3,5 +3,5 @@
      y="0px"
      viewBox="0 0 25 25" style="enable-background:new 0 0 25 25;" xml:space="preserve">
 
-    <circle cx="12.5" cy="12.5" r="10" stroke="black" stroke-width="0.5" fill="white"/>
+    <circle cx="12.5" cy="12.5" r="12.5" fill="white"/>
 </svg>

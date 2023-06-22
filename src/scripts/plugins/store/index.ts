@@ -12,6 +12,7 @@ const state: State = { app: Defaults.defaultApp };
 const preFetchEnabled: boolean = false;
 
 type Getters = {
+    animationPlaying(state: State): boolean;
     autoguiV2Data(state: State):
         (gameType: string, gameId: string, variantId: string) =>
             AutoGUIv2Data;
@@ -76,9 +77,11 @@ type Getters = {
     variants(state: State): (gameType: string, gameId: string) =>
         GMUTypes.Variants;
     version(state: State): string;
+    volume(state: State): number;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
+    animationPlaying: (state: State) => state.app.currentMatch.animationPlaying,
     autoguiV2Data: (state: State)  =>
         (gameType: string, gameId: string, variantId: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].autogui_v2_data,
@@ -107,6 +110,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.gameId,
     currentGameName: (state: State) =>
         state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].name,
+    currentGameTheme: (state: State) =>
+        state.app.currentMatch.gameTheme,
     currentGameType: (state: State) =>
         state.app.currentMatch.gameType,
     currentLeftPlayer: (state: State) =>
@@ -144,8 +149,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.currentMatch.rounds,
     currentStartPosition: (state: State) =>
         state.app.currentMatch.startPosition,
-    currentGameTheme: (state: State) =>
-        state.app.currentMatch.gameTheme,
     currentVariantId: (state: State) =>
         state.app.currentMatch.variantId,
     currentValuedRounds: (state: State) =>
@@ -203,6 +206,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.gameTypes[gameType].games[gameId].variants,
     version: (state: State) =>
         state.app.version,
+    volume: (state: State) =>
+        state.app.preferences.volume
 };
 
 export enum mutationTypes {
@@ -375,6 +380,7 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         await store.dispatch(actionTypes.runComputerMove);
     },
     runMove: async (context: ActionContext, payload: { move: string }) => {
+        context.state.app.currentMatch.computerMoving = true;
         context.state.app.currentMatch.backgroundLoading = true;
         const updatedApp = await GMU.runMove(context.state.app, payload);
         context.state.app.currentMatch.backgroundLoading = false;
@@ -382,12 +388,15 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
+        context.state.app.currentMatch.computerMoving = false;
         await store.dispatch(actionTypes.runComputerMove);
     },
     runComputerMove: async (context: ActionContext) => {
         context.state.app.currentMatch.computerMoving = true;
+        /* Keep moving until it becomes a human player's turn or the match is over. */
         while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
+            /* If user leaves the game page during timeout, abort. */
             if (!context.state.app.currentMatch.gameType) return;
             context.state.app.currentMatch.backgroundLoading = true;
             const updatedApp = await GMU.runMove(context.state.app, {
