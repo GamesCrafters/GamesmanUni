@@ -324,7 +324,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         app.currentMatch.animationPlaying = true;
     }
     app.currentMatch.round.moveValue = moveObj.moveValue;
-    app.currentMatch.round.moveName = moveObj.moveName ? moveObj.moveName : moveObj.move;
+    app.currentMatch.round.moveName = moveObj.moveName !== undefined ? moveObj.moveName : moveObj.move;
 
     // Rewrite history by deleting all subsequent moves made earlier.
     app.currentMatch.rounds.splice(
