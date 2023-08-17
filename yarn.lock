@@ -3212,7 +3212,7 @@ __metadata:
     prettier: 2.7.1
     sass: 1.53.0
     typescript: 4.7.4
-    vite: 2.9.13
+    vite: 2.9.16
     vite-plugin-package-version: 1.0.2
     vite-plugin-pwa: 0.12.0
     vue: 3.2.37
@@ -4835,7 +4835,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.43.1, rollup@npm:^2.59.0, rollup@npm:^2.70.2":
+"rollup@npm:>=2.59.0 <2.78.0":
+  version: 2.77.3
+  resolution: "rollup@npm:2.77.3"
+  dependencies:
+    fsevents: ~2.3.2
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: b179c68249584565ddb5664a241e8e48c293b2207718d885b08ee25797d98857a383f06b544bb89819407da5a71557f4713309a278f61c4778bb32b1d3321a1c
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^2.43.1, rollup@npm:^2.70.2":
   version: 2.75.7
   resolution: "rollup@npm:2.75.7"
   dependencies:
@@ -5566,15 +5580,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:2.9.13":
-  version: 2.9.13
-  resolution: "vite@npm:2.9.13"
+"vite@npm:2.9.16":
+  version: 2.9.16
+  resolution: "vite@npm:2.9.16"
   dependencies:
     esbuild: ^0.14.27
     fsevents: ~2.3.2
     postcss: ^8.4.13
     resolve: ^1.22.0
-    rollup: ^2.59.0
+    rollup: ">=2.59.0 <2.78.0"
   peerDependencies:
     less: "*"
     sass: "*"
@@ -5591,7 +5605,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: a5e501b920a448c352e9b3836019dea56c523535f8e8540160708c2e164d84da6655ae39abbba1e2888092f5c6cd03dd06279852422359b51be601914645f49f
+  checksum: b09d899861d9266ce67bf123f4b3c9adf46bd6f9dad186237e69e08b5862d7fb38984e8503abe622f6396b1b5b6f182617292ce71e9237e1ac3c0a771d611b5a
   languageName: node
   linkType: hard
 
