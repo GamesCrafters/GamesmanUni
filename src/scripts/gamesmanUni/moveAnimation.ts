@@ -182,7 +182,13 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
     } else if (currentMatch.gameId === 'quarto') {
         return animateQuarto(volume, currPosition, nextPosition, moveObj);
     } else {
-        return animateImageAutoGUI(volume, currPosition, nextPosition, moveObj);
+        const store = useStore();
+        const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
+            store.getters.currentGameId, store.getters.currentVariantId));
+        if (autoguiV2Data.value != null) {
+            return animateImageAutoGUI(volume, currPosition, nextPosition, moveObj);
+        }
+        return 0;
     }
     return 0;
 }
@@ -206,11 +212,16 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
             gsap.set("#toPlace", {x: 58, y: 113});
         }
     } else {
-        // Note: gsap.set() is unreliable (only achieves the reset as intended
-        // 50% of the time for some reason) so we use fromTo instead 
-        gsap.to(".entity", {duration: 0.001, opacity: 1});
-        if (document.getElementById("appearingPiece")) {
-            document.getElementById("appearingPiece")?.remove();
+        const store = useStore();
+        const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
+            store.getters.currentGameId, store.getters.currentVariantId));
+        if (autoguiV2Data.value != null) {
+            // Note: gsap.set() is unreliable (only achieves the reset as intended
+            // 50% of the time for some reason) so we use fromTo instead 
+            gsap.to(".entity", {duration: 0.001, opacity: 1});
+            if (document.getElementById("appearingPiece")) {
+                document.getElementById("appearingPiece")?.remove();
+            }
         }
     }
 }
