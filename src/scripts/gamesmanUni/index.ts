@@ -3,7 +3,7 @@ import * as GCTAPITypes from "../apis/gamesCrafters/types";
 import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
-import { handleMoveAnimation } from "./moveAnimation"
+import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
 const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
@@ -358,6 +358,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     };
     await new Promise(r => setTimeout(r, animationDuration));
     app.currentMatch.animationPlaying = false;
+    animationEpilogue(app.currentMatch);
     app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.moveName ? moveObj.moveName : moveObj.move);
     let posArr = updatedPosition.position.split('_');
     if (posArr.length === 5 && posArr[0] === 'R') {

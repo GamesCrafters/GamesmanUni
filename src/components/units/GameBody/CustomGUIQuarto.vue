@@ -114,7 +114,6 @@
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import gsap from "gsap";
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
 
     interface GDefaultRegular2DMove {
@@ -143,9 +142,6 @@
         const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
         const validRichPosition = matches && matches.length >= 5 && matches[4].length == 17;
         if (validRichPosition) {
-            if (document.getElementById("toPlace")) {
-                gsap.set("#toPlace", {x: 58, y: 113});
-            }
             const turn = matches[1];
             const board = matches[4].substring(0, 16);
             let tokens: GDefaultRegular2DBoardToken[] = [];

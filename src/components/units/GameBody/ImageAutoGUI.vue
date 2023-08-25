@@ -24,11 +24,10 @@
 
     <!-- Draw Pieces. -->
     <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
-      <image v-if="cell != '-' && Object.keys(pieces).includes(cell)"
+      <image class="entity" v-if="cell != '-' && Object.keys(pieces).includes(cell)"
         :id="'piece' + i"
         :x="centers[i][0] - 0.5 * pieces[cell].scale * widthFactor"
         :y="centers[i][1] - 0.5 * pieces[cell].scale * widthFactor"
-        :class="'entity'"
         :width="pieces[cell].scale * widthFactor"
         :height="pieces[cell].scale * widthFactor"
         :href="getImageSource(pieces[cell].image)"/>
@@ -109,7 +108,6 @@
 <script lang="ts" setup>
   import { computed } from "vue";
   import { actionTypes, useStore } from "../../../scripts/plugins/store";
-  //import gsap from "gsap";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
   interface GDefaultRegular2DMove {
@@ -168,12 +166,6 @@
   const defaultMoveTokenRadius = computed(() =>
     (theTheme.value.defaultMoveTokenRadius * widthFactor.value) || 2);
   const piecesOverArrows = computed(() => theTheme.value.piecesOverArrows || false);
-
-  // gsap.config({ nullTargetWarn: false }); // Suppress target-not-found warnings.
-  // const origOpacity = computed(() => {
-  //   gsap.to(".entity", {duration: 0.001, opacity: 1});
-  //   return currentPosition.value ? 1 : 1;
-  // });
 
   /* End Code Cleanup Required Here */
 
