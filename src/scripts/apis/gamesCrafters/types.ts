@@ -81,6 +81,7 @@ export type AutoGUIv2Theme = {
     centers: Array<AutoGUIv2Coordinate>;
     piecesToBeIntroduced: string;
     animationType: string;
+    animationWindow: Array<number>;
     pieces: Record<string, AutoGUIv2Token>;
 };
 

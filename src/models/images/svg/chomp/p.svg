@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 25 25">
+    <rect x="0" y="0" width="25" height="25" fill="#784A10"/>
+    <rect x="0.5" y="0.5" width="24" height="24" fill="#7A553B"/>
+    <circle cx="12.5" cy="12.5" r="10" fill="none" stroke-width="2" stroke="#784A10"/>
+    <line x1="5.42893218813" y1="5.42893218813" x2="19.5710678119" y2="19.5710678119" stroke-width="2" stroke="#784A10"/>
+</svg>

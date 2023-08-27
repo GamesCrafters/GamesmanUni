@@ -50,6 +50,10 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     return 500;
 }
 
+/* 
+    TODO: FIX FOREGROUND IMAGE STACKING ISSUE WITH
+    INTRODUCED PIECES
+*/
 const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
     const store = useStore();
     const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
@@ -68,15 +72,21 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     const currBoard = currPosition.split("_")[4];
     const nextBoard = nextPosition.split("_")[4];
     if (currBoard.length != nextBoard.length) return 0;
+    const animationWindow = theTheme.value.animationWindow || [0, currBoard.length];
     var diffIdxs = [];
     var i, j;
+
+    var svg = document.getElementById('image-autogui'); //Get svg element
+    var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+    g.setAttribute("id", "appearingPieces");
+    svg!.appendChild(g);
 
     if (animationType.value === "simpleSlidePlaceRemove") {
         var fromIdx = null;
         var toIdx = null;
         var appearDisappearIdx = null;
         var appearing = null;
-        for (i = 0; i < currBoard.length; i++) {
+        for (i = animationWindow[0]; i < animationWindow[1]; i++) {
             if (currBoard[i] != nextBoard[i]) {
                 diffIdxs.push(i);
             }
@@ -141,11 +151,6 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         } else {
             return 0;
         }
-        if (fromIdx != null && toIdx != null) { // Play sliding animation
-            const toCoords = centers.value[toIdx];
-            const fromCoords = centers.value[fromIdx];
-            gsap.to("#piece" + fromIdx, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
-        }
         
         // If `appearing` is null, don't play an appearing or disappearing animation
         if (appearing === false) { // Play disappearing animation
@@ -155,16 +160,56 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             var appearingChar = nextBoard[appearDisappearIdx];
             var svg = document.getElementById('image-autogui'); //Get svg element
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
-            newElement.setAttribute("id", "appearingPiece");
+            newElement.setAttribute("class", "appearingPiece");
             newElement.setAttribute("x", (centers.value[appearDisappearIdx][0] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
             newElement.setAttribute("y", (centers.value[appearDisappearIdx][1] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
             newElement.setAttribute("width", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
             newElement.setAttribute("height", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
             newElement.setAttribute("href", getImageSource(pieces.value[appearingChar].image));
             newElement.setAttribute("opacity", (0.001).toString());
-            svg!.appendChild(newElement);
-            gsap.fromTo("#appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
+            g!.appendChild(newElement);
+            gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
         }
+
+        if (fromIdx != null && toIdx != null) { // Play sliding animation
+            const toCoords = centers.value[toIdx];
+            const fromCoords = centers.value[fromIdx];
+            gsap.fromTo("#piece" + fromIdx, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
+
+            var movingChar = currBoard[fromIdx];
+            var svg = document.getElementById('image-autogui'); //Get svg element
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
+            newElement.setAttribute("class", "movingPiece");
+            newElement.setAttribute("x", (centers.value[fromIdx][0] - 0.5 * pieces.value[movingChar].scale * widthFactor.value).toString());
+            newElement.setAttribute("y", (centers.value[fromIdx][1] - 0.5 * pieces.value[movingChar].scale * widthFactor.value).toString());
+            newElement.setAttribute("width", (pieces.value[movingChar].scale * widthFactor.value).toString()); //Set path's data
+            newElement.setAttribute("height", (pieces.value[movingChar].scale * widthFactor.value).toString()); //Set path's data
+            newElement.setAttribute("href", getImageSource(pieces.value[movingChar].image));
+            g!.appendChild(newElement);
+            gsap.to(".movingPiece", {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+        }
+        return 500;
+    } else if (animationType.value === "naiveInterpolate") {
+        for (i = animationWindow[0]; i < animationWindow[1]; i++) {
+            if (currBoard[i] != nextBoard[i]) {
+                if (currBoard[i] != '-') { // Piece originally at i shall fade out
+                    gsap.fromTo("#piece" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+                } 
+                if (nextBoard[i] != '-') { // Piece that will be at i shall fade in
+                    var appearingChar = nextBoard[i];
+                    var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
+                    newElement.setAttribute("class", "appearingPiece");
+                    newElement.setAttribute("x", (centers.value[i][0] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
+                    newElement.setAttribute("y", (centers.value[i][1] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
+                    newElement.setAttribute("width", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
+                    newElement.setAttribute("height", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
+                    newElement.setAttribute("href", getImageSource(pieces.value[appearingChar].image));
+                    newElement.setAttribute("opacity", (0.001).toString());
+                    g!.appendChild(newElement);
+                }
+            }
+        }
+        gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
         return 500;
     } else if (animationType.value === "custom") {
         console.log("Custom");
@@ -219,8 +264,8 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 
             gsap.to(".entity", {duration: 0.001, opacity: 1});
-            if (document.getElementById("appearingPiece")) {
-                document.getElementById("appearingPiece")?.remove();
+            if (document.getElementById("appearingPieces")) {
+                document.getElementById("appearingPieces")?.remove();
             }
         }
     }
