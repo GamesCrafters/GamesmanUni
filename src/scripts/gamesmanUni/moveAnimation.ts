@@ -37,17 +37,50 @@ const animateSim = (volume: number, moveObj: Types.Move): number => {
 }
 
 const animateQuarto = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
-    if (currPosition === "R_A_17_1_-----------------") return 0;
-    var to = -1;
-    for (var i = 0; i < 16; i++) {
-        if (currPosition.split("_")[4][i] != nextPosition.split("_")[4][i]) {
-            to = i;
-            break;
+    var duration = 0;
+    var delay = 0;
+    if (currPosition !== "R_A_17_1_-----------------") { // If currPosition is not the initial position
+        var to = -1;
+        for (var i = 0; i < 16; i++) {
+            if (currPosition.split("_")[4][i] != nextPosition.split("_")[4][i]) {
+                to = i;
+                break;
+            }
         }
+        var toCoords = [12.5 + (to % 4) * 25, 12.5 + Math.floor(to / 4) * 25];
+        gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
+        duration += 500;
+        delay = 0.5
     }
-    var toCoords = [12.5 + (to % 4) * 25, 12.5 + Math.floor(to / 4) * 25];
-    gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
-    return 500;
+    if (nextPosition[25] != '-') { // i.e. if there is a piece-to-place
+        const store = useStore();
+        var svg = document.getElementById('custom-gui-quarto'); //Get svg element
+        var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+        g.setAttribute("id", "appearingPieces");
+        svg!.appendChild(g);
+        var gameTheme = store.getters.currentGameTheme || "r";
+
+        var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'use'); //Create a path in SVG's namespace
+        newElement.setAttribute("class", "appearingPiece");
+        newElement.setAttribute("href", "#" + gameTheme + nextPosition[25]);
+        newElement.setAttribute("transform", "translate(58 113)");
+        newElement.setAttribute("opacity", "0.001");
+        g.appendChild(newElement);
+
+        var newText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+        newText.setAttribute("id", "textIntermediate");
+        newText.setAttribute("x", "0");
+        newText.setAttribute("y", "116.5");
+        newText.setAttribute("style", "font: 12px sans-serif;stroke:black;stroke-width:0.5;fill:black");
+        newText.setAttribute("opacity", "0.001");
+        newText.appendChild(document.createTextNode("Placing:"));
+        g.appendChild(newText);
+        
+        duration += 500;
+        gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, delay: delay, opacity: 1});
+        gsap.fromTo("#textIntermediate", {opacity: 0}, {duration: 0.5, delay: delay, opacity: 1});
+    }
+    return duration;
 }
 
 /* 
@@ -56,23 +89,21 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 */
 const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
     const store = useStore();
-    const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
-        store.getters.currentGameId, store.getters.currentVariantId));
-    const currentTheme = computed(() => store.getters.currentGameTheme);
-    const theTheme = computed(() => autoguiV2Data.value.themes[currentTheme.value]);
+    const autoguiV2Data = store.getters.autoguiV2Data(store.getters.currentGameType, store.getters.currentGameId, store.getters.currentVariantId);
+    const currentTheme = store.getters.currentGameTheme;
+    const theTheme = autoguiV2Data.themes[currentTheme];
     const scaledWidth = 100;
-    const backgroundGeometry = computed(() => theTheme.value.backgroundGeometry);
-    const widthFactor = computed(() => scaledWidth / backgroundGeometry.value[0]);
-    const animationType = computed(() => theTheme.value.animationType || "");
-    const pieces = computed(() => theTheme.value.pieces);
-    const centers = computed(() => theTheme.value.centers.map((a: [number, number]) =>
-        a.map((b: number) => b * widthFactor.value)));
+    const backgroundGeometry = theTheme.backgroundGeometry;
+    const widthFactor = scaledWidth / backgroundGeometry[0];
+    const animationType = theTheme.animationType || "";
+    const pieces = theTheme.pieces;
+    const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * widthFactor));
     const getImageSource = (imagePath: string) => gimages["../../models/images/svg/" + imagePath].default;
     
     const currBoard = currPosition.split("_")[4];
     const nextBoard = nextPosition.split("_")[4];
     if (currBoard.length != nextBoard.length) return 0;
-    const animationWindow = theTheme.value.animationWindow || [0, currBoard.length];
+    const animationWindow = theTheme.animationWindow || [0, currBoard.length];
     var diffIdxs = [];
     var i, j;
 
@@ -81,7 +112,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     g.setAttribute("id", "appearingPieces");
     svg!.appendChild(g);
 
-    if (animationType.value === "simpleSlidePlaceRemove") {
+    if (animationType === "simpleSlidePlaceRemove") {
         var fromIdx = null;
         var toIdx = null;
         var appearDisappearIdx = null;
@@ -161,35 +192,35 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             var svg = document.getElementById('image-autogui'); //Get svg element
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
             newElement.setAttribute("class", "appearingPiece");
-            newElement.setAttribute("x", (centers.value[appearDisappearIdx][0] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
-            newElement.setAttribute("y", (centers.value[appearDisappearIdx][1] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
-            newElement.setAttribute("width", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
-            newElement.setAttribute("height", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
-            newElement.setAttribute("href", getImageSource(pieces.value[appearingChar].image));
-            newElement.setAttribute("opacity", (0.001).toString());
-            g!.appendChild(newElement);
+            newElement.setAttribute("x", (centers[appearDisappearIdx][0] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
+            newElement.setAttribute("y", (centers[appearDisappearIdx][1] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
+            newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("href", getImageSource(pieces[appearingChar].image));
+            newElement.setAttribute("opacity", "0.001");
+            g.appendChild(newElement);
             gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
         }
 
         if (fromIdx != null && toIdx != null) { // Play sliding animation
-            const toCoords = centers.value[toIdx];
-            const fromCoords = centers.value[fromIdx];
+            const toCoords = centers[toIdx];
+            const fromCoords = centers[fromIdx];
             gsap.fromTo("#piece" + fromIdx, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
 
             var movingChar = currBoard[fromIdx];
             var svg = document.getElementById('image-autogui'); //Get svg element
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
             newElement.setAttribute("class", "movingPiece");
-            newElement.setAttribute("x", (centers.value[fromIdx][0] - 0.5 * pieces.value[movingChar].scale * widthFactor.value).toString());
-            newElement.setAttribute("y", (centers.value[fromIdx][1] - 0.5 * pieces.value[movingChar].scale * widthFactor.value).toString());
-            newElement.setAttribute("width", (pieces.value[movingChar].scale * widthFactor.value).toString()); //Set path's data
-            newElement.setAttribute("height", (pieces.value[movingChar].scale * widthFactor.value).toString()); //Set path's data
-            newElement.setAttribute("href", getImageSource(pieces.value[movingChar].image));
-            g!.appendChild(newElement);
+            newElement.setAttribute("x", (centers[fromIdx][0] - 0.5 * pieces[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("y", (centers[fromIdx][1] - 0.5 * pieces[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("width", (pieces[movingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("height", (pieces[movingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("href", getImageSource(pieces[movingChar].image));
+            g.appendChild(newElement);
             gsap.to(".movingPiece", {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
         }
         return 500;
-    } else if (animationType.value === "naiveInterpolate") {
+    } else if (animationType === "naiveInterpolate") {
         for (i = animationWindow[0]; i < animationWindow[1]; i++) {
             if (currBoard[i] != nextBoard[i]) {
                 if (currBoard[i] != '-') { // Piece originally at i shall fade out
@@ -199,19 +230,19 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                     var appearingChar = nextBoard[i];
                     var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
                     newElement.setAttribute("class", "appearingPiece");
-                    newElement.setAttribute("x", (centers.value[i][0] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
-                    newElement.setAttribute("y", (centers.value[i][1] - 0.5 * pieces.value[appearingChar].scale * widthFactor.value).toString());
-                    newElement.setAttribute("width", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
-                    newElement.setAttribute("height", (pieces.value[appearingChar].scale * widthFactor.value).toString()); //Set path's data
-                    newElement.setAttribute("href", getImageSource(pieces.value[appearingChar].image));
-                    newElement.setAttribute("opacity", (0.001).toString());
-                    g!.appendChild(newElement);
+                    newElement.setAttribute("x", (centers[i][0] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
+                    newElement.setAttribute("y", (centers[i][1] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
+                    newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+                    newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+                    newElement.setAttribute("href", getImageSource(pieces[appearingChar].image));
+                    newElement.setAttribute("opacity", "0.001");
+                    g.appendChild(newElement);
                 }
             }
         }
         gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
         return 500;
-    } else if (animationType.value === "custom") {
+    } else if (animationType === "custom") {
         console.log("Custom");
     }
     return 0;
@@ -230,12 +261,11 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         const store = useStore();
         const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
             store.getters.currentGameId, store.getters.currentVariantId));
-        if (autoguiV2Data.value != null) {
+        if (autoguiV2Data != null) {
             return animateImageAutoGUI(volume, currPosition, nextPosition, moveObj);
         }
         return 0;
     }
-    return 0;
 }
 
 /*
@@ -254,18 +284,21 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         return;
     } else if (currentMatch.gameId === 'quarto') {
         if (document.getElementById("toPlace")) {
-            gsap.set("#toPlace", {x: 58, y: 113});
+            gsap.to("#toPlace", {duration: 0.001, x: 58, y: 113});
+        }
+        if (document.getElementById("appearingPieces")) {
+            document.getElementById("appearingPieces")!.remove();
         }
     } else {
         const store = useStore();
         const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
             store.getters.currentGameId, store.getters.currentVariantId));
-        if (autoguiV2Data.value != null) {
+        if (autoguiV2Data != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 
             gsap.to(".entity", {duration: 0.001, opacity: 1});
             if (document.getElementById("appearingPieces")) {
-                document.getElementById("appearingPieces")?.remove();
+                document.getElementById("appearingPieces")!.remove();
             }
         }
     }
