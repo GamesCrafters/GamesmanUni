@@ -1,7 +1,6 @@
 import type * as Types from "./types";
 import gsap from "gsap";
-const sfx = import.meta.globEager("../../models/sounds/*");
-import { computed } from "vue";
+const sfx = import.meta.globEager("../../models/sounds/**/*");
 import { useStore } from "../../scripts/plugins/store";
 const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
@@ -18,11 +17,11 @@ const animateTTT = (volume: number, moveObj: Types.Move): number => {
     const xOff = (diffIdx % 3) * 22;
     const yOff = Math.floor(diffIdx / 3) * 22;
     if (turn === 'x') {
-        playAudio('X.mp3', volume);
+        playAudio('ttt/X.mp3', volume);
         gsap.to("#xa" + diffIdx, {duration: 0.25, attr: {x2: 19 + xOff, y2: 19 + yOff}});
         gsap.to("#xb" + diffIdx, {delay: 0.25, duration: 0.25, attr: {x2: 3 + xOff, y2: 19 + yOff}});
     } else if (turn === 'o') {
-        playAudio('O.mp3', volume);
+        playAudio('ttt/O.mp3', volume);
         gsap.to("#o" + diffIdx, {duration: 0.5, attr: {"stroke-dashoffset": 0}})
     }
     return 500;
@@ -30,7 +29,7 @@ const animateTTT = (volume: number, moveObj: Types.Move): number => {
 
 const animateSim = (volume: number, moveObj: Types.Move): number => {
     const vertices = [[4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]];
-    playAudio('O.mp3', volume);
+    playAudio('ttt/O.mp3', volume);
     const d = Number(moveObj.moveName[1]) - 1;    
     gsap.to("#simline" + moveObj.moveName, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
     return 500;
@@ -51,6 +50,13 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
         gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
         duration += 500;
         delay = 0.5
+        if (nextPosition[25] != '-') {
+            playAudio('general/slideThenRemove.mp3', volume);
+        } else {
+            playAudio('general/slide.mp3', volume);
+        }
+    } else {
+        playAudio('general/remove.mp3', volume);
     }
     if (nextPosition[25] != '-') { // i.e. if there is a piece-to-place
         const store = useStore();
@@ -259,8 +265,8 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         return animateQuarto(volume, currPosition, nextPosition, moveObj);
     } else {
         const store = useStore();
-        const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId));
+        const autoguiV2Data = store.getters.autoguiV2Data(store.getters.currentGameType, 
+            store.getters.currentGameId, store.getters.currentVariantId);
         if (autoguiV2Data != null) {
             return animateImageAutoGUI(volume, currPosition, nextPosition, moveObj);
         }
@@ -269,19 +275,15 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
 }
 
 /*
-    The purpose of this function is to reset any elements whose styles may have
-    changed due to a gsap action. For example, suppose a chess piece with ID
-    "piece0" captures another piece with ID "piece1". The default animation that
-    would have played is "piece0" sliding and "piece1" fading away. 
-    Then in the new position, that capturing piece's new ID would be "piece1". However,
-    "piece1" would still have opacity 0 due to the fadeaway. This function would set
-    "piece1" back to have opacity 1.
+    Make sure to INSTANTANEOUSLY UNDO all gsap actions and REMOVE any added elements here.
+    This function is important for resetting to the previous position if the next position
+    fails to load.
 */
 export const animationEpilogue = (currentMatch: Types.Match) => {
     if (currentMatch.gameId === 'ttt') {
-        return;
+        return; // todo
     } else if (currentMatch.gameId === 'sim') {
-        return;
+        return; // todo
     } else if (currentMatch.gameId === 'quarto') {
         if (document.getElementById("toPlace")) {
             gsap.to("#toPlace", {duration: 0.001, x: 58, y: 113});
@@ -291,8 +293,8 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         }
     } else {
         const store = useStore();
-        const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId));
+        const autoguiV2Data = store.getters.autoguiV2Data(store.getters.currentGameType, 
+            store.getters.currentGameId, store.getters.currentVariantId);
         if (autoguiV2Data != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 
