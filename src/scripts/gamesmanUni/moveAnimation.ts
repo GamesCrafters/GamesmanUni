@@ -89,11 +89,11 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     return duration;
 }
 
-/* 
-    TODO: FIX FOREGROUND IMAGE STACKING ISSUE WITH
-    INTRODUCED PIECES
-*/
 const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
+    const currBoard = currPosition.split("_")[4];
+    const nextBoard = nextPosition.split("_")[4];
+    if (currBoard.length != nextBoard.length) return 0;
+    
     const store = useStore();
     const autoguiV2Data = store.getters.autoguiV2Data(store.getters.currentGameType, store.getters.currentGameId, store.getters.currentVariantId);
     const currentTheme = store.getters.currentGameTheme;
@@ -101,15 +101,15 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     const scaledWidth = 100;
     const backgroundGeometry = theTheme.backgroundGeometry;
     const widthFactor = scaledWidth / backgroundGeometry[0];
+    const scaledHeight = backgroundGeometry[1] * widthFactor;
     const animationType = theTheme.animationType || "";
     const pieces = theTheme.pieces;
+    const sounds = theTheme.sounds || {} as Record<string, string>;
     const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * widthFactor));
     const getImageSource = (imagePath: string) => gimages["../../models/images/svg/" + imagePath].default;
-    
-    const currBoard = currPosition.split("_")[4];
-    const nextBoard = nextPosition.split("_")[4];
-    if (currBoard.length != nextBoard.length) return 0;
+    const foregroundImagePath = theTheme.foregroundImage || "";
     const animationWindow = theTheme.animationWindow || [0, currBoard.length];
+
     var diffIdxs = [];
     var i, j;
 
@@ -195,13 +195,12 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             gsap.fromTo("#piece" + appearDisappearIdx, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
         } else if (appearing === true && appearDisappearIdx != null) { // Play appearing animation
             var appearingChar = nextBoard[appearDisappearIdx];
-            var svg = document.getElementById('image-autogui'); //Get svg element
-            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
             newElement.setAttribute("class", "appearingPiece");
             newElement.setAttribute("x", (centers[appearDisappearIdx][0] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
             newElement.setAttribute("y", (centers[appearDisappearIdx][1] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
-            newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
-            newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString());
+            newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString());
             newElement.setAttribute("href", getImageSource(pieces[appearingChar].image));
             newElement.setAttribute("opacity", "0.001");
             g.appendChild(newElement);
@@ -214,16 +213,29 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             gsap.fromTo("#piece" + fromIdx, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
 
             var movingChar = currBoard[fromIdx];
-            var svg = document.getElementById('image-autogui'); //Get svg element
-            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
             newElement.setAttribute("class", "movingPiece");
             newElement.setAttribute("x", (centers[fromIdx][0] - 0.5 * pieces[movingChar].scale * widthFactor).toString());
             newElement.setAttribute("y", (centers[fromIdx][1] - 0.5 * pieces[movingChar].scale * widthFactor).toString());
-            newElement.setAttribute("width", (pieces[movingChar].scale * widthFactor).toString()); //Set path's data
-            newElement.setAttribute("height", (pieces[movingChar].scale * widthFactor).toString()); //Set path's data
+            newElement.setAttribute("width", (pieces[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("height", (pieces[movingChar].scale * widthFactor).toString());
             newElement.setAttribute("href", getImageSource(pieces[movingChar].image));
             g.appendChild(newElement);
             gsap.to(".movingPiece", {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+        }
+        if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced pieces
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+            newElement.setAttribute("class", "appearingPiece");
+            newElement.setAttribute("width", scaledWidth.toString());
+            newElement.setAttribute("height", scaledHeight.toString());
+            newElement.setAttribute("href", getImageSource(foregroundImagePath));
+            g.appendChild(newElement);
+        }
+        let matches;
+        if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
+            if (Object.keys(sounds).includes(matches[4])) {
+                playAudio(sounds[matches[4]], volume);
+            }
         }
         return 500;
     } else if (animationType === "naiveInterpolate") {
@@ -234,19 +246,33 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                 } 
                 if (nextBoard[i] != '-') { // Piece that will be at i shall fade in
                     var appearingChar = nextBoard[i];
-                    var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image'); //Create a path in SVG's namespace
+                    var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                     newElement.setAttribute("class", "appearingPiece");
                     newElement.setAttribute("x", (centers[i][0] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
                     newElement.setAttribute("y", (centers[i][1] - 0.5 * pieces[appearingChar].scale * widthFactor).toString());
-                    newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
-                    newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString()); //Set path's data
+                    newElement.setAttribute("width", (pieces[appearingChar].scale * widthFactor).toString());
+                    newElement.setAttribute("height", (pieces[appearingChar].scale * widthFactor).toString());
                     newElement.setAttribute("href", getImageSource(pieces[appearingChar].image));
                     newElement.setAttribute("opacity", "0.001");
                     g.appendChild(newElement);
                 }
             }
         }
+        if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced pieces
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+            newElement.setAttribute("class", "appearingPiece");
+            newElement.setAttribute("width", scaledWidth.toString());
+            newElement.setAttribute("height", scaledHeight.toString());
+            newElement.setAttribute("href", getImageSource(foregroundImagePath));
+            g.appendChild(newElement);
+        }
         gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
+        let matches;
+        if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
+            if (Object.keys(sounds).includes(matches[4])) {
+                playAudio(sounds[matches[4]], volume);
+            }
+        }
         return 500;
     } else if (animationType === "custom") {
         console.log("Custom");

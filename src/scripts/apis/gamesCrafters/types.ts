@@ -79,7 +79,7 @@ export type AutoGUIv2Theme = {
     lineWidth: number;
     defaultMoveTokenRadius: number;
     centers: Array<AutoGUIv2Coordinate>;
-    piecesToBeIntroduced: string;
+    sounds: Record<string, string>;
     animationType: string;
     animationWindow: Array<number>;
     pieces: Record<string, AutoGUIv2Token>;
