@@ -41,7 +41,7 @@
 
         <g v-if="isInitial">
             <g v-if="!animationPlaying">
-                <rect x="2.5" y="2.5" width="95" height="95" rx="4" ry="4" opacity="0.99" fill="#FFFFFF"/>
+                <rect x="2.5" y="2.5" width="95" height="95" rx="4" ry="4" fill="#FFFFFF"/>
                 <text x="25" y="10" fill="black" class="small">Choose a Piece for the</text>
                 <text x="24.5" y="15" fill="black" class="small">Second Player to Place</text>
                 
@@ -107,7 +107,7 @@
         </g>
 
         <g v-if="isPlacing && !animationPlaying">
-            <text x="0" y="116.5" style="stroke:black;stroke-width:0.5;fill:black" class="big">Placing:</text>
+            <text x="0" y="116.5" style="font: 12px sans-serif;stroke:black;stroke-width:0.5;fill:black">Placing:</text>
         </g>
     </svg>
 </template>
@@ -209,10 +209,6 @@
 
     .small {
         font: 5px sans-serif;
-    }
-
-    .big {
-        font: 12px sans-serif;
     }
 
     @keyframes pulsing-token {

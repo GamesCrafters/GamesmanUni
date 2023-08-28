@@ -187,7 +187,7 @@
         };
 
         let matches;
-        if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
+        if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
           tokens.push({
             token: matches[1],
             to: parseInt(matches[2]),

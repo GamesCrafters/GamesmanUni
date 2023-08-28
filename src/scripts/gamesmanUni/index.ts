@@ -333,14 +333,23 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     );
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
     var updatedApp = null;
-    while (!updatedApp) {
+    for (var attempts = 0; attempts < 5; attempts++) {
         updatedApp = await loadPosition(app, {
             gameType: app.currentMatch.gameType,
             gameId: app.currentMatch.gameId,
             variantId: app.currentMatch.variantId,
             position: moveObj.position
         });
-    };
+        if (updatedApp) break;
+    }
+    await new Promise(r => setTimeout(r, animationDuration));
+    app.currentMatch.animationPlaying = false;
+    animationEpilogue(app.currentMatch);
+    if (!updatedApp) {
+        alert("Failed to load next position after 5 attempts. Resetting to previous position.");
+        return app;
+    }
+
     const updatedPosition = { 
         ...updatedApp.
         gameTypes[app.currentMatch.gameType].
@@ -356,9 +365,6 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
             position
         ]
     };
-    await new Promise(r => setTimeout(r, animationDuration));
-    app.currentMatch.animationPlaying = false;
-    animationEpilogue(app.currentMatch);
     app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.moveName ? moveObj.moveName : moveObj.move);
     let posArr = updatedPosition.position.split('_');
     if (posArr.length === 5 && posArr[0] === 'R') {
