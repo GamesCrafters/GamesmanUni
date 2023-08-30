@@ -13,4 +13,7 @@
     <circle cx="5" cy="25" r="1" fill="black"/>
     <circle cx="15" cy="25" r="1" fill="black"/>
     <circle cx="25" cy="25" r="1" fill="black"/>
+
+    <rect x="1" y="32" width="8" height="6" fill="#5a70ff"/>
+    <rect x="21" y="32" width="8" height="6" fill="#f26464"/>
 </svg>
