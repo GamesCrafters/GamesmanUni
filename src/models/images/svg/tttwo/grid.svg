@@ -32,4 +32,6 @@
     <rect x="64" y="84" width="16" height="16"  fill="#BBBBBB"/>
     <rect x="84" y="84" width="16" height="16"  fill="#BBBBBB"/>
 
+    <rect x="4" y="104" width="96" height="16"  fill="#888888"/>
+
 </svg>
