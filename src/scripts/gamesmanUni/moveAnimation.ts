@@ -204,7 +204,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             newElement.setAttribute("href", getImageSource(pieces[appearingChar].image));
             newElement.setAttribute("opacity", "0.001");
             g.appendChild(newElement);
-            gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
+            gsap.fromTo(".appearingPiece", {opacity: 0.001}, {duration: 0.5, opacity: 1});
         }
 
         if (fromIdx != null && toIdx != null) { // Play sliding animation
@@ -225,7 +225,6 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced pieces
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-            newElement.setAttribute("class", "appearingPiece");
             newElement.setAttribute("width", scaledWidth.toString());
             newElement.setAttribute("height", scaledHeight.toString());
             newElement.setAttribute("href", getImageSource(foregroundImagePath));
@@ -260,13 +259,12 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced pieces
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-            newElement.setAttribute("class", "appearingPiece");
             newElement.setAttribute("width", scaledWidth.toString());
             newElement.setAttribute("height", scaledHeight.toString());
             newElement.setAttribute("href", getImageSource(foregroundImagePath));
             g.appendChild(newElement);
         }
-        gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, opacity: 1});
+        gsap.fromTo(".appearingPiece", {opacity: 0.001}, {duration: 0.5, opacity: 1});
         let matches;
         if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
             if (Object.keys(sounds).includes(matches[4])) {
