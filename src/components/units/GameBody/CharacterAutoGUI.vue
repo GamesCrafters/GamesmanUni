@@ -91,7 +91,7 @@
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;
-      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
+      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
       const validRichPosition = matches && matches.length >= 5;
 
       if (validRichPosition) {
@@ -110,7 +110,7 @@
                 hintOpacity: nextMoveData.moveValueOpacity,
             };
             let matches;
-            if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)$/))) {
+            if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)$/))) {
                 // Add a piece to the board
                 const to = parseInt(matches[2]);
                 if (matches[1] == '-') {

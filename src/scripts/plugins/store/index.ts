@@ -1,6 +1,6 @@
 import * as Vuex from "vuex";
 import * as Defaults from "../../../models/datas/defaultApp";
-import { AutoGUIv2Data } from "../../apis/gamesCrafters/types";
+import { ImageAutoGUIData } from "../../apis/gamesCrafters/types";
 import * as GMU from "../../gamesmanUni";
 import * as GMUTypes from "../../gamesmanUni/types";
 
@@ -13,9 +13,6 @@ const preFetchEnabled: boolean = false;
 
 type Getters = {
     animationPlaying(state: State): boolean;
-    autoguiV2Data(state: State):
-        (gameType: string, gameId: string, variantId: string) =>
-            AutoGUIv2Data;
     availableMove(state: State):
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             GMUTypes.Move;
@@ -54,6 +51,8 @@ type Getters = {
     game(state: State): (gameType: string, gameId: string) => GMUTypes.Game;
     games(state: State): (gameType: string) => GMUTypes.Games;
     gitHubRepositoryAPI(state: State): string;
+    imageAutoGUIData(state: State): 
+        (gameType: string, gameId: string, variantId: string) => ImageAutoGUIData;
     isEndOfMatch(state: State): boolean;
     locale(state: State): string;
     maximumRemoteness(state: State): (from: number, to: number) => number;
@@ -82,9 +81,6 @@ type Getters = {
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
     animationPlaying: (state: State) => state.app.currentMatch.animationPlaying,
-    autoguiV2Data: (state: State)  =>
-        (gameType: string, gameId: string, variantId: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].autogui_v2_data,
     availableMove: (state: State) =>
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
             state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
@@ -165,6 +161,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.gameTypes[gameType],
     gitHubRepositoryAPI: (state: State) =>
         state.app.dataSources.gitHubRepositoryAPI,
+    imageAutoGUIData: (state: State)  =>
+        (gameType: string, gameId: string, variantId: string) =>
+            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].imageAutoGUIData,
     isEndOfMatch: (state: State) =>
         GMU.isEndOfMatch(state.app),
     locale: (state: State) =>

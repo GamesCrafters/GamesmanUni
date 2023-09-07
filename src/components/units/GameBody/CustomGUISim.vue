@@ -74,7 +74,7 @@
     
     const richPositionData = computed(() => {
         const position: string = currentPosition.value;
-        const matches = position.match(/^C_([a-zA-Z0-9-\*]+)*/)!;
+        const matches = position.match(/^C_([a-zA-Z0-9-]+)*/)!;
         const validRichPosition = matches && matches.length >= 2;
         let moves: GSimMove[] = [];
         if (validRichPosition) {

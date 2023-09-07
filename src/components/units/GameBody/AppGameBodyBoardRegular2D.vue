@@ -1,6 +1,6 @@
 <template>
     <component v-if="customGameBoardExists" :is="regular2DGameBoards[gameBoard]" />
-    <component v-else-if="autoguiV2DataExists" :is="ImageAutoGUI" />
+    <component v-else-if="imageAutoGUIDataExists" :is="ImageAutoGUI" />
     <component v-else :is="CharacterAutoGUI" />
 </template>
 
@@ -18,7 +18,7 @@
     const gameId = computed(() => (currentMatch.value ? currentMatch.value.gameId : ""));
     const variantId = computed(() => (currentMatch.value ? currentMatch.value.variantId : ""));
     const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
-    const autoguiV2Data = computed(() => store.getters.autoguiV2Data(gameType.value, gameId.value, variantId.value));
+    const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(gameType.value, gameId.value, variantId.value));
     const regular2DGameBoards: Record<string, any> = {
         "ttt-misere": CustomGUITicTacToe,
         "ttt-regular": CustomGUITicTacToe,
@@ -27,5 +27,5 @@
     };
     const gameBoard = computed(() => `${gameId.value}-${variantId.value}`);
     const customGameBoardExists = computed(() => gameBoard.value in regular2DGameBoards);
-    const autoguiV2DataExists = (autoguiV2Data.value != null);
+    const imageAutoGUIDataExists = (imageAutoGUIData.value != null);
 </script>
