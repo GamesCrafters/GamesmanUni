@@ -170,8 +170,8 @@
         return gameVariant.value.description;
     });
     const gameThemes = computed(() =>
-        gameVariant.value.autogui_v2_data ?
-        Object.keys(gameVariant.value.autogui_v2_data.themes) :
+        gameVariant.value.imageAutoGUIData ?
+        Object.keys(gameVariant.value.imageAutoGUIData.themes) :
         []
     );
     const currentGameTheme = computed(() => store.getters.currentGameTheme);

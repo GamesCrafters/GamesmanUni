@@ -26,7 +26,7 @@ export type OnePlayerGameVariants = Status & {
             description: string;
             startPosition: string;
             variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
+            imageAutoGUIData: ImageAutoGUIData;
         }>;
         custom: string;
     };
@@ -48,7 +48,7 @@ export type TwoPlayerGameVariants = Status & {
             description: string;
             startPosition: string;
             variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
+            imageAutoGUIData: ImageAutoGUIData;
         }>;
         custom: string;
     };
@@ -60,35 +60,35 @@ export type GameVariant = Status & {
             description: string;
             startPosition: string;
             variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
+            imageAutoGUIData: ImageAutoGUIData;
         }>;
     };
 };
 
-export type AutoGUIv2Data = {
+export type ImageAutoGUIData = {
     defaultTheme: string;
-    themes: Record<string, AutoGUIv2Theme>;
+    themes: Record<string, ImageAutoGUITheme>;
 };
 
-export type AutoGUIv2Theme = {
-    backgroundGeometry: AutoGUIv2Coordinate;
-    backgroundImage: string;
-    foregroundImage: string;
-    piecesOverArrows: boolean;
-    arrowWidth: number;
+export type ImageAutoGUITheme = {
+    space: ImageAutoGUICoordinate;
+    centers: Array<ImageAutoGUICoordinate>;
+    background: string;
+    foreground: string;
+    entities: Record<string, ImageAutoGUIEntity>;
+    circleButtonRadius: number;
     lineWidth: number;
-    defaultMoveTokenRadius: number;
-    centers: Array<AutoGUIv2Coordinate>;
+    arrowWidth: number;
+    entitiesOverArrows: boolean;
     sounds: Record<string, string>;
     animationType: string;
-    animationWindow: Array<number>;
-    pieces: Record<string, AutoGUIv2Token>;
+    defaultAnimationWindow: Array<number>;
 };
 
-export type AutoGUIv2Coordinate =
+export type ImageAutoGUICoordinate =
     [x: number, y: number];
 
-export type AutoGUIv2Token = {
+export type ImageAutoGUIEntity = {
     image: string;
     scale: number;
 };

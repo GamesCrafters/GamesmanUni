@@ -55,7 +55,7 @@ export const defaultVariant: Types.Variant = {
     description: "",
     startPosition: "",
     positions: {},
-    autogui_v2_data: null as any,
+    imageAutoGUIData: null as any,
     status: "",
     gui_status: "v0"
 };

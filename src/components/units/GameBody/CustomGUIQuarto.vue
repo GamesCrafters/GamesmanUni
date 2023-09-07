@@ -139,7 +139,7 @@
     const animationPlaying = computed(() => store.getters.animationPlaying);
     const isInitial = computed(() => currentPosition.value === "R_A_17_1_-----------------");
     const richPositionData = computed(() => {
-        const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
+        const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
         const validRichPosition = matches && matches.length >= 5 && matches[4].length == 17;
         if (validRichPosition) {
             const turn = matches[1];
@@ -148,7 +148,7 @@
             const nextPiece = matches[4].slice(-1);
             for (let nextMoveData of Object.values(availableMoves.value)) {        
                 let matches;
-                if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-\*])_([0-9]+)*/))) {
+                if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
                     tokens.push({
                         token: matches[1],
                         to: parseInt(matches[2]),

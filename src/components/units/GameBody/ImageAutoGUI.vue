@@ -11,8 +11,8 @@
       :height="scaledHeight"
       :href="getImageSource(backgroundImagePath)"/>
 
-    <!-- Draw M-type (arrow) move buttons below pieces. -->
-    <g v-if="!animationPlaying && piecesOverArrows"> 
+    <!-- Draw M-type (arrow) move buttons below entities -->
+    <g v-if="!animationPlaying && entitiesOverArrows"> 
       <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
         <polyline
           :points="formatArrowPolylinePoints(arrow, arrowWidth)"
@@ -22,15 +22,15 @@
       </g>
     </g>
 
-    <!-- Draw Pieces. -->
+    <!-- Draw Entities -->
     <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
-      <image class="entity" v-if="cell != '-' && Object.keys(pieces).includes(cell)"
-        :id="'piece' + i"
-        :x="centers[i][0] - 0.5 * pieces[cell].scale * widthFactor"
-        :y="centers[i][1] - 0.5 * pieces[cell].scale * widthFactor"
-        :width="pieces[cell].scale * widthFactor"
-        :height="pieces[cell].scale * widthFactor"
-        :href="getImageSource(pieces[cell].image)"/>
+      <image class="entity" v-if="cell != '-' && Object.keys(entities).includes(cell)"
+        :id="'entity' + i"
+        :x="centers[i][0] - 0.5 * entities[cell].scale * widthFactor"
+        :y="centers[i][1] - 0.5 * entities[cell].scale * widthFactor"
+        :width="entities[cell].scale * widthFactor"
+        :height="entities[cell].scale * widthFactor"
+        :href="getImageSource(entities[cell].image)"/>
     </g>
  
     <!-- Draw Foreground Image -->
@@ -54,20 +54,20 @@
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           
           <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-          <g v-else-if="Object.keys(pieces).includes(token.token)">
+          <g v-else-if="Object.keys(entities).includes(token.token)">
             <mask :id="'svgmask' + i">
               <image
-                :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * widthFactor"
-                :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * widthFactor"
-                :width="pieces[token.token].scale * widthFactor"
-                :height="pieces[token.token].scale * widthFactor"
-                :href="getImageSource(pieces[token.token].image)"/>
+                :x="centers[token.to][0] - 0.5 * entities[token.token].scale * widthFactor"
+                :y="centers[token.to][1] - 0.5 * entities[token.token].scale * widthFactor"
+                :width="entities[token.token].scale * widthFactor"
+                :height="entities[token.token].scale * widthFactor"
+                :href="getImageSource(entities[token.token].image)"/>
             </mask>
             <rect
-              :x="centers[token.to][0] - 0.5 * pieces[token.token].scale * widthFactor"
-              :y="centers[token.to][1] - 0.5 * pieces[token.token].scale * widthFactor"
-              :width="pieces[token.token].scale * widthFactor" 
-              :height="pieces[token.token].scale * widthFactor"
+              :x="centers[token.to][0] - 0.5 * entities[token.token].scale * widthFactor"
+              :y="centers[token.to][1] - 0.5 * entities[token.token].scale * widthFactor"
+              :width="entities[token.token].scale * widthFactor" 
+              :height="entities[token.token].scale * widthFactor"
               :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
@@ -76,8 +76,8 @@
         </g>
       </g>
 
-      <!-- Draw M-type (arrow) move buttons on top of pieces. -->
-      <g v-if="!piecesOverArrows"> 
+      <!-- Draw M-type (arrow) move buttons on top of entities -->
+      <g v-if="!entitiesOverArrows"> 
         <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
           <polyline
             :points="formatArrowPolylinePoints(arrow, arrowWidth)"
@@ -142,35 +142,35 @@
   const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
 
   /* Code Cleanup Required Here */
-  const autoguiV2Data = computed(() => store.getters.autoguiV2Data(store.getters.currentGameType, 
+  const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameType, 
     store.getters.currentGameId, store.getters.currentVariantId));
   const currentTheme = computed(() => store.getters.currentGameTheme);
-  const theTheme = computed(() => autoguiV2Data.value.themes[currentTheme.value]);
+  const theTheme = computed(() => imageAutoGUIData.value.themes[currentTheme.value]);
   const scaledWidth = 100;
-  const backgroundGeometry = computed(() => theTheme.value.backgroundGeometry);
-  const widthFactor = computed(() => scaledWidth / backgroundGeometry.value[0]);
-  const scaledHeight = computed(() => backgroundGeometry.value[1] * widthFactor.value);
+  const space = computed(() => theTheme.value.space);
+  const widthFactor = computed(() => scaledWidth / space.value[0]);
+  const scaledHeight = computed(() => space.value[1] * widthFactor.value);
   const animationType = computed(() => theTheme.value.animationType || "");
-  const pieces = computed(() => theTheme.value.pieces);
+  const entities = computed(() => theTheme.value.entities);
   const centers = computed(() =>
     theTheme.value.centers.map((a: [number, number]) =>
       a.map((b: number) => b * widthFactor.value)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
 
   const animationPlaying = computed(() => store.getters.animationPlaying);
-  const backgroundImagePath = computed(() => theTheme.value.backgroundImage || "");
-  const foregroundImagePath = computed(() => theTheme.value.foregroundImage || "");
+  const backgroundImagePath = computed(() => theTheme.value.background || "");
+  const foregroundImagePath = computed(() => theTheme.value.foreground || "");
   const arrowWidth = computed(() =>
     (theTheme.value.arrowWidth * widthFactor.value / 2) || 1.5);
   const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
   const defaultMoveTokenRadius = computed(() =>
-    (theTheme.value.defaultMoveTokenRadius * widthFactor.value) || 2);
-  const piecesOverArrows = computed(() => theTheme.value.piecesOverArrows || false);
+    (theTheme.value.circleButtonRadius * widthFactor.value) || 2);
+  const entitiesOverArrows = computed(() => theTheme.value.entitiesOverArrows || false);
 
   /* End Code Cleanup Required Here */
 
   const richPositionData = computed(() => {
-    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
+    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
     const validRichPosition = matches && matches.length >= 5;
     if (validRichPosition) {
       const turn = matches[1];

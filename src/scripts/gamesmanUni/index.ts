@@ -54,7 +54,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             description: variant.description,
             startPosition: variant.startPosition,
             positions: { ...Defaults.defaultPositions },
-            autogui_v2_data: variant.autogui_v2_data,
+            imageAutoGUIData: variant.imageAutoGUIData,
             status: variant.status,
             gui_status: variant.gui_status
         };
@@ -188,7 +188,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    app.currentMatch.gameTheme = gameVariant.autogui_v2_data ? gameVariant.autogui_v2_data.defaultTheme : "";
+    app.currentMatch.gameTheme = gameVariant.imageAutoGUIData ? gameVariant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     app.currentMatch.created = new Date().getTime();
@@ -255,7 +255,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: "",
         startPosition: "",
         positions: {},
-        autogui_v2_data: {} as GCTAPITypes.AutoGUIv2Data,
+        imageAutoGUIData: {} as GCTAPITypes.ImageAutoGUIData,
         status: "",
         gui_status: "v0"
     };
@@ -265,7 +265,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         description: variant_response.response.variant[0].description,
         startPosition: variant_response.response.variant[0].startPosition,
         positions: { ...Defaults.defaultPositions },
-        autogui_v2_data: variant_response.response.variant[0].autogui_v2_data,
+        imageAutoGUIData: variant_response.response.variant[0].imageAutoGUIData,
         status: variant_response.status,
         gui_status: variant_response.gui_status
     };
