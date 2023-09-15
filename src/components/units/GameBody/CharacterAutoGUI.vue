@@ -12,7 +12,7 @@
           :y="yOffset + centers[i][1] * scaledHeight / richPositionData.rows"
           :width="scaledWidth / richPositionData.columns"
           :height="scaledHeight / richPositionData.rows" />
-        <text v-if="cell.token != '-'"
+        <text v-if="cell.token != '-' && cell.token != '*'"
           :x="xOffset + (centers[i][0] + 0.5) * scaledWidth / richPositionData.columns"
           :y="yOffset + (centers[i][1] + 0.5) * scaledHeight / richPositionData.rows"
           :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
@@ -91,7 +91,7 @@
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;
-      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
+      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
       const validRichPosition = matches && matches.length >= 5;
 
       if (validRichPosition) {
