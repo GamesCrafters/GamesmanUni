@@ -5,20 +5,20 @@
       <g
         v-for="(cell, i) in richPositionData.board"
         :key="'cell' + i"
-        @click="!isComputerTurn && cell.move && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
+        @click="cell.move && !isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
         <rect
           :class="'app-game-board-default-cell ' + (cell.move ? 'move ' : '') + (cell.token != '-' && !cell.move ? 'placed ' : '')"
           :x="xOffset + centers[i][0] * scaledWidth / richPositionData.columns"
           :y="yOffset + centers[i][1] * scaledHeight / richPositionData.rows"
           :width="scaledWidth / richPositionData.columns"
           :height="scaledHeight / richPositionData.rows" />
-        <text v-if="cell.token != '-'"
+        <text v-if="cell.token != '-' && cell.token != '*'"
           :x="xOffset + (centers[i][0] + 0.5) * scaledWidth / richPositionData.columns"
           :y="yOffset + (centers[i][1] + 0.5) * scaledHeight / richPositionData.rows"
           :class="'app-game-board-default-token ' + (cell.move ? 'move ' : '') + getBoardMoveElementHintClass(cell.move)"
           :style="{ 
             opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses && cell.move ? cell.move.hintOpacity : 1,
-            font: boxSize * 3 / 4 + 'px arial'
+            font: (boxSize * 3 / 4) + 'px arial'
           }">
                 {{ cell.token }}
         </text>
@@ -91,7 +91,7 @@
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;
-      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
+      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
       const validRichPosition = matches && matches.length >= 5;
 
       if (validRichPosition) {
@@ -164,12 +164,12 @@
       }
     });
 
-    const prop = richPositionData.value.rows * 100 / richPositionData.value.columns;
-    const scaledWidth = (prop >= 100 ? (100 * 100 / prop) : 100);
-    const scaledHeight = (prop >= 100 ? 100 : prop);
-    const xOffset = (100 - scaledWidth) / 2;
-    const yOffset = (100 - scaledHeight) / 2;
-    const boxSize = (richPositionData.value.rows > richPositionData.value.columns ? 100 / richPositionData.value.rows : 100 / richPositionData.value.columns);
+    const prop = computed(() => richPositionData.value.rows * 100 / richPositionData.value.columns);
+    const scaledWidth = computed(() => (prop.value >= 100 ? (100 * 100 / prop.value) : 100));
+    const scaledHeight = computed(() => (prop.value >= 100 ? 100 : prop.value));
+    const xOffset = computed(() => (100 - scaledWidth.value) / 2);
+    const yOffset = computed(() => (100 - scaledHeight.value) / 2);
+    const boxSize = computed(() => 100 / Math.max(richPositionData.value.rows, richPositionData.value.columns));
 
     const calcRegular2DBoardTopLeftCoords = (i: number): [number, number] => {
         return [i % richPositionData.value.columns, Math.floor(i / richPositionData.value.columns)];
@@ -186,12 +186,12 @@
   const formatArrowPolylinePoints = (arrow: GDefaultRegular2DBoardArrow, thickness: number = 0.75, startOffset: number = 3, endOffset: number = 3): string => {
     let q = calcRegular2DBoardTopLeftCoords(arrow.from);
     let r = calcRegular2DBoardTopLeftCoords(arrow.to);
-    let fromCoords = [((q[0] + 0.5) * scaledWidth / richPositionData.value.columns), ((q[1] + 0.5) * scaledHeight / richPositionData.value.rows)];
-    let coords3 = [((r[0] + 0.5) * scaledWidth / richPositionData.value.columns), ((r[1] + 0.5) * scaledHeight / richPositionData.value.rows)];
-    fromCoords[0] += xOffset;
-    fromCoords[1] += yOffset;
-    coords3[0] += xOffset;
-    coords3[1] += yOffset;
+    let fromCoords = [((q[0] + 0.5) * scaledWidth.value / richPositionData.value.columns), ((q[1] + 0.5) * scaledHeight.value / richPositionData.value.rows)];
+    let coords3 = [((r[0] + 0.5) * scaledWidth.value / richPositionData.value.columns), ((r[1] + 0.5) * scaledHeight.value / richPositionData.value.rows)];
+    fromCoords[0] += xOffset.value;
+    fromCoords[1] += yOffset.value;
+    coords3[0] += xOffset.value;
+    coords3[1] += yOffset.value;
     const dir = [coords3[0] - fromCoords[0], coords3[1] - fromCoords[1]];
     const perpdir = [dir[1], -dir[0]];
     const length = Math.sqrt(Math.pow(dir[0], 2) + Math.pow(dir[1], 2));
