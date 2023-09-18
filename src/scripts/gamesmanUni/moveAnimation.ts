@@ -320,7 +320,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             }
         }
 
-        for (const slide of slides) {
+        for (const slide of slides) { // Play sliding animations
             fromIdx = slide[0];
             toIdx = slide[1];
             const toCoords = centers[toIdx];
