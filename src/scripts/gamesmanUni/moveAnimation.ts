@@ -272,6 +272,88 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             }
         }
         return 500;
+    } else if (animationType === "multipleSlides") {
+        for (i = animationWindow[0]; i < animationWindow[1]; i++) {
+            if (currBoard[i] != nextBoard[i]) {
+                diffIdxs.push(i);
+            }
+        }
+
+        var slides = [];
+        var slideIdxs = [];
+        for (const idx1 of diffIdxs) {
+            if (currBoard[idx1] != '-') {
+                for (const idx2 of diffIdxs) {
+                    if (currBoard[idx1] == nextBoard[idx2]) {
+                        slides.push([idx1, idx2]);
+                        slideIdxs.push(idx1);
+                        slideIdxs.push(idx2);
+                        break;
+                    }
+                }
+            }
+        }
+
+        var interpolateIdxs = [];
+        for (const idx1 of diffIdxs) {
+            if (!slideIdxs.includes(idx1)) {
+                interpolateIdxs.push(idx1);
+            }
+        }
+
+        // Interpolate animation
+        for (const i of interpolateIdxs) {
+            if (currBoard[i] != '-') { // Entity originally at i shall fade out
+                gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+            } 
+            if (nextBoard[i] != '-') { // Entity that will be at i shall fade in
+                var appearingChar = nextBoard[i];
+                var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+                newElement.setAttribute("class", "appearingEntity");
+                newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("y", (centers[i][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
+                newElement.setAttribute("opacity", "0.001");
+                g.appendChild(newElement);
+            }
+        }
+
+        for (const slide of slides) { // Play sliding animations
+            fromIdx = slide[0];
+            toIdx = slide[1];
+            const toCoords = centers[toIdx];
+            const fromCoords = centers[fromIdx];
+            gsap.fromTo("#entity" + fromIdx, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
+
+            var movingChar = currBoard[fromIdx];
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+            newElement.setAttribute("id", "movingEntity" + fromIdx);
+            newElement.setAttribute("x", (centers[fromIdx][0] - 0.5 * entities[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("y", (centers[fromIdx][1] - 0.5 * entities[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("width", (entities[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("height", (entities[movingChar].scale * widthFactor).toString());
+            newElement.setAttribute("href", getImageSource(entities[movingChar].image));
+            g.appendChild(newElement);
+            gsap.to("#movingEntity" + fromIdx, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+        }
+
+        if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced entities
+            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+            newElement.setAttribute("width", scaledWidth.toString());
+            newElement.setAttribute("height", scaledHeight.toString());
+            newElement.setAttribute("href", getImageSource(foregroundImagePath));
+            g.appendChild(newElement);
+        }
+        gsap.fromTo(".appearingEntity", {opacity: 0.001}, {duration: 0.5, opacity: 1});
+        let matches;
+        if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
+            if (Object.keys(sounds).includes(matches[4])) {
+                playAudio(sounds[matches[4]], volume);
+            }
+        }
+        return 500
     } else if (animationType === "custom") {
         console.log("Custom");
     }

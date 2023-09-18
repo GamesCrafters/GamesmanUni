@@ -14,8 +14,8 @@
     <!-- Draw M-type (arrow) move buttons below entities -->
     <g v-if="!animationPlaying && entitiesOverArrows"> 
       <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
-        <polyline
-          :points="formatArrowPolylinePoints(arrow, arrowWidth)"
+        <path
+          :d="formatArrowPolylinePoints(arrow, arrowWidth)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
@@ -79,8 +79,8 @@
       <!-- Draw M-type (arrow) move buttons on top of entities -->
       <g v-if="!entitiesOverArrows"> 
         <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
-          <polyline
-            :points="formatArrowPolylinePoints(arrow, arrowWidth)"
+          <path
+            :d="formatArrowPolylinePoints(arrow, arrowWidth)"
             :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
@@ -241,11 +241,19 @@
 
   /* An arrow move button is a concave heptagon. We've decided that all arrowheads must be 55-55-70 
   triangles. Given the arrow's endpoint and thickness (and other parameters `startOffset` and 
-  `endOffset`), return the vertex coordinates of the arrow move button as a string. */
+  `endOffset`), return the vertex coordinates of the arrow move button as a string. 
+             2
+             | \
+  0----------1  \
+  |              3
+  6----------4  /
+             | /
+             5
+  */
   const formatArrowPolylinePoints = 
       (arrow: GDefaultRegular2DBoardArrow,
       thickness: number = 0.75,
-      startOffset: number = 2,
+      startOffset: number = 3,
       endOffset: number = 2): string => {
     let fromCoords = centers.value[arrow.from].map((a: number) => (a));
     let coords3 = centers.value[arrow.to].map((a: number) => (a));
@@ -269,14 +277,16 @@
     const coords5 = [midCoords[0] + perpdir[0] * thickNorm, midCoords[1] + perpdir[1] * thickNorm];
     const coords4 = [midCoords[0] + 3 * perpdir[0] * thickNorm, midCoords[1] + 3 * perpdir[1] * thickNorm];
 
-    return `${coords0[0]},${coords0[1]}
-            ${coords1[0]},${coords1[1]}
-            ${coords2[0]},${coords2[1]}
-            ${coords3[0]},${coords3[1]}
-            ${coords4[0]},${coords4[1]}
-            ${coords5[0]},${coords5[1]}
-            ${coords6[0]},${coords6[1]}`;
-  };
+    return `M ${coords0[0]},${coords0[1]}
+            L ${coords1[0]},${coords1[1]}
+            L ${coords2[0]},${coords2[1]}
+            L ${coords3[0]},${coords3[1]}
+            L ${coords4[0]},${coords4[1]}
+            L ${coords5[0]},${coords5[1]}
+            L ${coords6[0]},${coords6[1]}
+            A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}
+            Z`;
+  };//A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}
 
   const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  

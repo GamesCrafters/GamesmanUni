@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px"
-     viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
-    <rect x="0" y="0" width="100" height="100" fill="none"/>
-
-    <polygon points="25,97 35,77 65,77 75,97" style="fill:#ffe599;stroke:black;stroke-width:1" />
-    <polygon points="40,77 45,62 55,62 60,77" style="fill:red;stroke:black;stroke-width:1" />
-</svg>
