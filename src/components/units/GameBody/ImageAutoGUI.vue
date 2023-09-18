@@ -6,7 +6,7 @@
     :data-turn="richPositionData.turn">
 
     <!-- Draw Background Image -->
-    <image v-if="backgroundImagePath != ''"
+    <image v-if="backgroundImagePath != ''" x="0" y="0"
       :width="scaledWidth"
       :height="scaledHeight"
       :href="getImageSource(backgroundImagePath)"/>
@@ -34,7 +34,7 @@
     </g>
  
     <!-- Draw Foreground Image -->
-    <image v-if="foregroundImagePath != ''"
+    <image v-if="foregroundImagePath != ''" x="0" y="0"
       :width="scaledWidth"
       :height="scaledHeight"
       :href="getImageSource(foregroundImagePath)"/>
@@ -286,7 +286,7 @@
             L ${coords6[0]},${coords6[1]}
             A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}
             Z`;
-  };//A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}
+  };
 
   const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
