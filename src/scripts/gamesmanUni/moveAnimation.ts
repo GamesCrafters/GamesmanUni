@@ -237,13 +237,15 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             }
         }
         return 500;
-    } else if (animationType === "naiveInterpolate") {
+    } else if (animationType === "entityFade") {
+        var entitiesAppear = false;
         for (i = animationWindow[0]; i < animationWindow[1]; i++) {
             if (currBoard[i] != nextBoard[i]) {
-                if (currBoard[i] != '-') { // Entity originally at i shall fade out
+                if (currBoard[i] != '-') { // Entity originally at center i shall fade out
                     gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
                 } 
-                if (nextBoard[i] != '-') { // Entity that will be at i shall fade in
+                if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
+                    entitiesAppear = true;
                     var appearingChar = nextBoard[i];
                     var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                     newElement.setAttribute("class", "appearingEntity");
@@ -264,7 +266,9 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             newElement.setAttribute("href", getImageSource(foregroundImagePath));
             g.appendChild(newElement);
         }
-        gsap.fromTo(".appearingEntity", {opacity: 0.001}, {duration: 0.5, opacity: 1});
+        if (entitiesAppear) {
+            gsap.fromTo(".appearingEntity", {opacity: 0.001}, {duration: 0.5, opacity: 1});
+        }
         let matches;
         if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
             if (Object.keys(sounds).includes(matches[4])) {
