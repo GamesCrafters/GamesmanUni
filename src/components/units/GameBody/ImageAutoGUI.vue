@@ -182,7 +182,7 @@
         const move = {
           str: nextMoveData.move,
           hint: nextMoveData.moveValue,
-          hintOpacity: nextMoveData.moveValueOpacity,
+          hintOpacity: !options.value.showNextMoves ? 0.001 : nextMoveData.moveValueOpacity,
           nextPosition: nextMoveData.position
         };
 
@@ -330,6 +330,7 @@
     }
 
     &:hover {
+      cursor: pointer;
       animation-name: pulsing-token;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
@@ -375,6 +376,7 @@
     }
 
     &:hover {
+      cursor: pointer;
       animation-name: pulsing-arrow;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
@@ -398,6 +400,7 @@
     }
 
     &:hover {
+      cursor: pointer;
       animation-name: pulsing-line;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
