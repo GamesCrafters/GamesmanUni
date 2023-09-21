@@ -115,6 +115,7 @@
         }
 
         &:hover {
+            cursor: pointer;
             animation-name: pulsing-line;
             animation-duration: 0.3s;
             animation-iteration-count: infinite;

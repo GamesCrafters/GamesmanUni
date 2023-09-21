@@ -287,14 +287,15 @@
 
       // Highlight move cells on hover
       g:hover > &.move {
+        cursor: pointer;
         fill: var(--neutralColor);
       }
     }
 
     .app-game-board-default-token {
-      alignment-baseline: middle;
       text-anchor: middle;
-      cursor: default;
+      alignment-baseline: middle;
+      cursor: pointer;
 
       [data-turn="A"] &.move {
         fill: var(--turn1Color);
@@ -361,6 +362,7 @@
     }
 
     &:hover {
+      cursor: pointer;
       animation-name: pulsing-arrow;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;

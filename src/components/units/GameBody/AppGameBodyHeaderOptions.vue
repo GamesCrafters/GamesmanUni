@@ -115,7 +115,7 @@
                                 aria-label="toggle"
                                 type="checkbox"
                                 v-model="options.showNextMoves" />
-                            <label for="checkbox">Available Move Predictions</label>
+                            <label for="checkbox">Available Move Buttons</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves">
                             <input class="uni-toggle-button"
@@ -161,6 +161,7 @@
     const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
+    //const animationSpeeds = ["None", "Very Fast (2.0x)", "Fast (1.5x)", "Normal (1.0x)"]
 
     const game = computed(() => store.getters.game(gameType, gameId));
     const gameVariant = computed(() => store.getters.variant(gameType, gameId, variantId));
