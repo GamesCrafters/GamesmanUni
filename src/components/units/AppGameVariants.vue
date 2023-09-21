@@ -59,7 +59,7 @@
         return logo[appLogoFilePath].default;
     };
     const customBoardRoute = () => {
-        let boardStr = window.prompt('Enter a valid board string:');
+        let boardStr = window.prompt('Enter a valid variant:');
         if (boardStr !== null) {
             router.push({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: boardStr } })
         }
