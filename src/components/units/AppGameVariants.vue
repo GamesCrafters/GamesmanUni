@@ -10,7 +10,6 @@
             <div v-if="gameCustom" v-on:click="customBoardRoute">
                 <img :src="getLogoSource('custom')" :alt="game.name + ' ' + 'Custom Logo'" style="width: 8rem" />
                 <p>Custom</p>
-                <i>Data Status: N/A</i>
             </div>
         </div>
     </div>

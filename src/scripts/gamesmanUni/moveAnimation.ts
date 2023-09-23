@@ -135,15 +135,17 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                 if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
                     entitiesAppear = true;
                     var appearingChar = nextBoard[i];
-                    var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-                    newElement.setAttribute("class", "appearingEntity");
-                    newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
-                    newElement.setAttribute("y", (centers[i][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
-                    newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
-                    newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
-                    newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
-                    newElement.setAttribute("opacity", "0.001");
-                    g.appendChild(newElement);
+                    if (appearingChar in entities) {
+                        var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+                        newElement.setAttribute("class", "appearingEntity");
+                        newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("y", (centers[i][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
+                        newElement.setAttribute("opacity", "0.001");
+                        g.appendChild(newElement);
+                    }
                 }
             }
         }
@@ -159,7 +161,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         let matches;
         if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
-            if (Object.keys(sounds).includes(matches[4])) {
+            if (matches[4] in sounds) {
                 playAudio(sounds[matches[4]], volume);
             }
         }
@@ -194,15 +196,17 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         for (i of fadeInIdxs) {
             var appearingChar = nextBoard[i];
-            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-            newElement.setAttribute("class", "appearingEntity");
-            newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
-            newElement.setAttribute("y", (centers[i][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
-            newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
-            newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
-            newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
-            newElement.setAttribute("opacity", "0.001");
-            g.appendChild(newElement);
+            if (appearingChar in entities) {
+                var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+                newElement.setAttribute("class", "appearingEntity");
+                newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("y", (centers[i][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
+                newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
+                newElement.setAttribute("opacity", "0.001");
+                g.appendChild(newElement);
+            }
         }
 
         for (const slide of slides) { // Play sliding animations
@@ -213,15 +217,17 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
 
             var movingChar = currBoard[idxFrom];
+            if (movingChar in entities) {
             var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-            newElement.setAttribute("id", "movingEntity" + idxFrom);
-            newElement.setAttribute("x", (fromCoords[0] - 0.5 * entities[movingChar].scale * widthFactor).toString());
-            newElement.setAttribute("y", (fromCoords[1] - 0.5 * entities[movingChar].scale * widthFactor).toString());
-            newElement.setAttribute("width", (entities[movingChar].scale * widthFactor).toString());
-            newElement.setAttribute("height", (entities[movingChar].scale * widthFactor).toString());
-            newElement.setAttribute("href", getImageSource(entities[movingChar].image));
-            g.appendChild(newElement);
-            gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+                newElement.setAttribute("id", "movingEntity" + idxFrom);
+                newElement.setAttribute("x", (fromCoords[0] - 0.5 * entities[movingChar].scale * widthFactor).toString());
+                newElement.setAttribute("y", (fromCoords[1] - 0.5 * entities[movingChar].scale * widthFactor).toString());
+                newElement.setAttribute("width", (entities[movingChar].scale * widthFactor).toString());
+                newElement.setAttribute("height", (entities[movingChar].scale * widthFactor).toString());
+                newElement.setAttribute("href", getImageSource(entities[movingChar].image));
+                g.appendChild(newElement);
+                gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+            }
         }
 
         if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced entities
@@ -236,7 +242,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         let matches;
         if (matches = moveObj.move.match(/^([AML])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
-            if (Object.keys(sounds).includes(matches[4])) {
+            if (matches[4] in sounds) {
                 playAudio(sounds[matches[4]], volume);
             }
         }
