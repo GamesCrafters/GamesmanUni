@@ -119,6 +119,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
 
     var diffIdxs = [];
     var i;
+    var entitiesAppear = false;
 
     var svg = document.getElementById('image-autogui'); //Get svg element
     var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -126,16 +127,15 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     svg!.appendChild(g);
 
     if (animationType === "entityFade") {
-        var entitiesAppear = false;
         for (i = animationWindow[0]; i < animationWindow[1]; i++) {
             if (currBoard[i] != nextBoard[i]) {
-                if (currBoard[i] != '-') { // Entity originally at center i shall fade out
+                if (currBoard[i] != '-' && currBoard[i] in entities) { // Entity originally at center i shall fade out
                     gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
                 } 
                 if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
-                    entitiesAppear = true;
                     var appearingChar = nextBoard[i];
                     if (appearingChar in entities) {
+                        entitiesAppear = true;
                         var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                         newElement.setAttribute("class", "appearingEntity");
                         newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
@@ -192,11 +192,14 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
 
         for (i of fadeOutIdxs) {
-            gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+            if (currBoard[i] in entities) {
+                gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+            }
         }
         for (i of fadeInIdxs) {
             var appearingChar = nextBoard[i];
             if (appearingChar in entities) {
+                entitiesAppear = true;
                 var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                 newElement.setAttribute("class", "appearingEntity");
                 newElement.setAttribute("x", (centers[i][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
@@ -214,11 +217,11 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             const idxTo = slide[1];
             const toCoords = centers[idxTo];
             const fromCoords = centers[idxFrom];
-            gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
 
             var movingChar = currBoard[idxFrom];
             if (movingChar in entities) {
-            var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+                gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
+                var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                 newElement.setAttribute("id", "movingEntity" + idxFrom);
                 newElement.setAttribute("x", (fromCoords[0] - 0.5 * entities[movingChar].scale * widthFactor).toString());
                 newElement.setAttribute("y", (fromCoords[1] - 0.5 * entities[movingChar].scale * widthFactor).toString());
@@ -297,7 +300,10 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         if (imageAutoGUIData != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 
-            gsap.to(".entity", {duration: 0.001, opacity: 1});
+            var entities = document.getElementsByClassName('entity');
+            if (entities.length > 0) {
+                gsap.to(".entity", {duration: 0.001, opacity: 1});
+            }
             if (document.getElementById("animationForeground")) {
                 document.getElementById("animationForeground")!.remove();
             }
