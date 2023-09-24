@@ -24,7 +24,7 @@
 
     <!-- Draw Entities -->
     <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
-      <image class="entity" v-if="cell != '-' && Object.keys(entities).includes(cell)"
+      <image class="entity" v-if="cell != '-' && cell in entities"
         :id="'entity' + i"
         :x="centers[i][0] - 0.5 * entities[cell].scale * widthFactor"
         :y="centers[i][1] - 0.5 * entities[cell].scale * widthFactor"
@@ -54,7 +54,7 @@
             @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
           
           <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-          <g v-else-if="Object.keys(entities).includes(token.token)">
+          <g v-else-if="token.token in entities">
             <mask :id="'svgmask' + i">
               <image
                 :x="centers[token.to][0] - 0.5 * entities[token.token].scale * widthFactor"
@@ -95,8 +95,8 @@
           :x2="centers[line.to][0]"
           :y2="centers[line.to][1]"
           :stroke-linecap="'round'"
-          :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
-          :stroke-width="lineWidth"
+          :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
+          :stroke-width="lineWidth * widthFactor"
           :class="'app-game-board-default-line ' + getBoardMoveElementHintClass(line.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
           @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"/>
@@ -162,7 +162,7 @@
   const foregroundImagePath = computed(() => theTheme.value.foreground || "");
   const arrowWidth = computed(() =>
     (theTheme.value.arrowWidth * widthFactor.value / 2) || 1.5);
-  const lineWidth = computed(() => theTheme.value.lineWidth || 0.9);
+  const lineWidth = computed(() => theTheme.value.lineWidth || 0.04);
   const defaultMoveTokenRadius = computed(() =>
     (theTheme.value.circleButtonRadius * widthFactor.value) || 2);
   const entitiesOverArrows = computed(() => theTheme.value.entitiesOverArrows || false);
