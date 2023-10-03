@@ -120,6 +120,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     var diffIdxs = [];
     var i;
     var entitiesAppear = false;
+    var appearingChar, movingChar;
 
     var svg = document.getElementById('image-autogui'); //Get svg element
     var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -133,7 +134,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                     gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
                 } 
                 if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
-                    var appearingChar = nextBoard[i];
+                    appearingChar = nextBoard[i];
                     if (appearingChar in entities) {
                         entitiesAppear = true;
                         var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
@@ -197,7 +198,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             }
         }
         for (i of fadeInIdxs) {
-            var appearingChar = nextBoard[i];
+            appearingChar = nextBoard[i];
             if (appearingChar in entities) {
                 entitiesAppear = true;
                 var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
@@ -207,7 +208,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                 newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
                 newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
                 newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
-                newElement.setAttribute("opacity", "0.001");
+                newElement.setAttribute("opacity", "0");
                 g.appendChild(newElement);
             }
         }
@@ -218,9 +219,9 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             const toCoords = centers[idxTo];
             const fromCoords = centers[idxFrom];
 
-            var movingChar = currBoard[idxFrom];
+            movingChar = currBoard[idxFrom];
             if (movingChar in entities) {
-                gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0.001});
+                gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0});
                 var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
                 newElement.setAttribute("id", "movingEntity" + idxFrom);
                 newElement.setAttribute("x", (fromCoords[0] - 0.5 * entities[movingChar].scale * widthFactor).toString());
