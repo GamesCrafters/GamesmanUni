@@ -131,7 +131,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         for (i = animationWindow[0]; i < animationWindow[1]; i++) {
             if (currBoard[i] != nextBoard[i]) {
                 if (currBoard[i] != '-' && currBoard[i] in entities) { // Entity originally at center i shall fade out
-                    gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+                    gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0});
                 } 
                 if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
                     appearingChar = nextBoard[i];
@@ -194,7 +194,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
 
         for (i of fadeOutIdxs) {
             if (currBoard[i] in entities) {
-                gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0.001});
+                gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0});
             }
         }
         for (i of fadeInIdxs) {
@@ -303,7 +303,7 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
             // 50% of the time for some reason) so we use fromTo instead 
             var entities = document.getElementsByClassName('entity');
             if (entities.length > 0) {
-                gsap.to(".entity", {duration: 0.001, opacity: 1});
+                gsap.fromTo(".entity", {autoAlpha: 0}, {duration: 0.001, autoAlpha: 1});
             }
             if (document.getElementById("animationForeground")) {
                 document.getElementById("animationForeground")!.remove();
