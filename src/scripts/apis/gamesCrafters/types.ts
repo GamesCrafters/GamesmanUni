@@ -11,6 +11,7 @@ export type OnePlayerGames = Status & {
     response: Array<Status & {
         gameId: string;
         name: string;
+        supportsWinBy: 0;
     }>;
 };
 
@@ -29,13 +30,15 @@ export type OnePlayerGameVariants = Status & {
             imageAutoGUIData: ImageAutoGUIData;
         }>;
         custom: string;
+        
     };
 };
 
 export type TwoPlayerGames = Status & {
     response: Array<Status & {
-            gameId: string;
+        gameId: string;
         name: string;
+        supportsWinBy: number;
     }>;
 };
 

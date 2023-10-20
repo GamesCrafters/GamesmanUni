@@ -25,6 +25,7 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
             status: game.status,
             gui_status: game.gui_status,
             variants: { ...Defaults.defaultVariants },
+            supportsWinBy: game.supportsWinBy
         };
     }
     app.gameTypes[payload.gameType].lastUpdated = new Date().getTime();

@@ -77,6 +77,7 @@ type Getters = {
         GMUTypes.Variants;
     version(state: State): string;
     volume(state: State): number;
+    supportsWinBy(state: State): number;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -206,7 +207,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     version: (state: State) =>
         state.app.version,
     volume: (state: State) =>
-        state.app.preferences.volume
+        state.app.preferences.volume,
+    supportsWinBy: (state: State) =>
+        state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].supportsWinBy,
 };
 
 export enum mutationTypes {
@@ -225,6 +228,8 @@ export enum mutationTypes {
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
     toggleVvhScrolling = "toggleVvhScrolling",
+
+    setVvhView = "setVvhView"
 }
 
 type Mutations = {
@@ -243,6 +248,8 @@ type Mutations = {
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
+
+    [mutationTypes.setVvhView](state: State, vvhView: string): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -278,6 +285,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhMeters = showVvhMeters),
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
+    setVvhView: (state: State, vvhView: string) =>
+        (state.app.vvhView = vvhView),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

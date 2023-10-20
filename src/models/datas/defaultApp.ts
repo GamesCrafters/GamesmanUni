@@ -17,8 +17,8 @@ export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
     onePlayerGameAPI: "https://nyc.cs.berkeley.edu/puzzles",
     //onePlayerGameAPI: "http://localhost:9001/",
-    twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
-    //twoPlayerGameAPI: "http://localhost:8082/games"
+    //twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
+    twoPlayerGameAPI: "http://localhost:8082/games"
 };
 
 export const defaultAvailableMove: Types.Move = {
@@ -76,7 +76,8 @@ export const defaultGame: Types.Game = {
     variants: { ...defaultVariants, variants: {} },
     status: "",
     custom: false,
-    gui_status: "v0"
+    gui_status: "v0",
+    supportsWinBy: 0
 };
 
 export const defaultGames: Types.Games = {
@@ -115,7 +116,7 @@ export const defaultOptions: Types.Options = {
     showMenu: true,
     showVvhGuides: true,
     showVvhMeters: false,
-    vvhScrolling: false
+    vvhScrolling: false,
 };
 
 export const defaultMatches: Types.Matches = {};

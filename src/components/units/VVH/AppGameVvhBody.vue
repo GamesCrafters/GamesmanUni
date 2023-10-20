@@ -7,7 +7,16 @@
             <mark class="uni-lose color">lose</mark>
         </p>
         <p class="top x-axis-label" v-if="showVvhGuides">
-            <b>Remoteness</b>
+            <div class="view-dropdown">
+            <div class="view-dropdown-selection">{{ vvhView }} ▼</div>
+            <div class="view-dropdown-menu">
+                <div class="view-dropdown-menu-option" v-for="vvhViewOption in appVvhViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
+                    <div class="view-dropdown-menu-option inactive" v-if="vvhViewOption != vvhView">
+                        {{ vvhViewOption }}
+                    </div>
+                </div>
+            </div>
+        </div>
         </p>
         <div id="body">
             <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
@@ -729,7 +738,7 @@
             </p>
         </div>
         <p class="bottom x-axis-label" v-if="showVvhGuides">
-            <b>Remoteness</b>
+            <b>{{ vvhView }}</b>
         </p>
         <div id="meters" v-if="showVvhMeters">
             <div class="meter">
@@ -778,7 +787,7 @@
 
 <script lang="ts" setup>
     import { computed, ref } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
 
@@ -835,6 +844,21 @@
 
     const turn = (roundID: number) => {
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
+    };
+
+    /*
+    const supportsWinBy = ref(0);
+    supportsWinBy.value = store.getters.supportsWinBy;
+    */
+
+    const appVvhViews = ["Remoteness", "Win By"]
+    const vvhView = ref("");
+
+    vvhView.value = appVvhViews[0];
+
+    const setVvhView = (newVvhView: string) => {
+        vvhView.value = newVvhView;
+        store.commit(mutationTypes.setVvhView, newVvhView);
     };
 </script>
 
@@ -974,4 +998,6 @@
             }
         }
     }
+
+
 </style>
