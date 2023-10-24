@@ -7,16 +7,21 @@
             <mark class="uni-lose color">lose</mark>
         </p>
         <p class="top x-axis-label" v-if="showVvhGuides">
-            <div class="view-dropdown">
-            <div class="view-dropdown-selection">{{ vvhView }} ▼</div>
-            <div class="view-dropdown-menu">
-                <div class="view-dropdown-menu-option" v-for="vvhViewOption in appVvhViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
-                    <div class="view-dropdown-menu-option inactive" v-if="vvhViewOption != vvhView">
-                        {{ vvhViewOption }}
+            <div class="view-dropdown" v-if="supportsWinBy">
+                <div class="view-dropdown-selection">
+                    <b>{{ vvhView }} ▼</b>
+                </div>
+                <div class="view-dropdown-options">
+                    <div class="view-dropdown-option" :class="{active: vvhViewOption === vvhView}" v-for="vvhViewOption in appVvhViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
+                        <div v-if="vvhViewOption != vvhView">
+                            <b>{{ vvhViewOption }}</b>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div v-else>
+                <b>Remoteness</b>
+            </div>
         </p>
         <div id="body">
             <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
@@ -25,7 +30,7 @@
             
             <!-- Chart -->
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
-                             xmlns="http://www.w3.org/2000/svg">
+                             xmlns="http://www.w3.org/2000/svg" v-if="vvhView === appVvhViews[0]">
                 <!-- Winning Directions -->
                 <template v-if="showVvhGuides">
                     <template v-if="isPuzzleGame">
@@ -733,6 +738,170 @@
                     </template>
                 </template>
             </svg>
+            <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
+                             xmlns="http://www.w3.org/2000/svg" v-else>
+                             <template v-if="showVvhGuides">
+                                <text class="left-player-winning-direction" 
+                                :x="gridLeft"
+                                :y="winningDirectionHeight / 2"
+                                dominant-baseline="middle"
+                                text-anchor="start">
+                            |⬅
+                            <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
+                            Winning
+                        </text>
+                        <text class="right-player-winning-direction"
+                                :x="gridRight"
+                                :y="winningDirectionHeight / 2"
+                                dominant-baseline="middle"
+                                text-anchor="end">
+                            <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
+                            Winning ⮕|
+                        </text>
+                        <text class="left-player-winning-direction"
+                                :x="gridLeft"
+                                :y="chartHeight - winningDirectionHeight / 2"
+                                dominant-baseline="middle"
+                                text-anchor="start">
+                            |⬅
+                            <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
+                            Winning
+                        </text>
+                        <text class="right-player-winning-direction"
+                                :x="gridRight"
+                                :y="chartHeight - winningDirectionHeight / 2"
+                                dominant-baseline="middle"
+                                text-anchor="end">
+                            <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
+                            Winning ⮕|
+                        </text>
+                            </template>
+                            <template v-if="isEndOfMatch">
+                        <template v-if="isPuzzleGame">
+                            <text class="move-coordinate"
+                                    :x="gridRight + yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    dominant-baseline="middle"
+                                    text-anchor="middle">
+                                🥳
+                            </text>
+                        </template>
+                        <template v-else-if="currentPositionValue === 'tie'">
+                            <text class="move-coordinate"
+                                    :x="yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    dominant-baseline="middle"
+                                    text-anchor="middle">
+                                🤔
+                            </text>
+                            <text class="move-coordinate"
+                                    :x="gridRight + yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    dominant-baseline="middle"
+                                    text-anchor="middle">
+                                🤔
+                            </text>
+                        </template>
+                        <template v-else>
+                            <text class="move-coordinate"
+                                    :x="yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    dominant-baseline="middle"
+                                    text-anchor="middle"> {{ 
+                                (currentFirstPlayerTurn && currentPositionValue === "win") ||
+                                (!currentFirstPlayerTurn && currentPositionValue === "lose") ?
+                                "🥳" : "😢"
+                            }} </text>
+                            <text class="move-coordinate"
+                                    :x="gridRight + yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    dominant-baseline="middle"
+                                    text-anchor="middle"> {{
+                                (!currentFirstPlayerTurn && currentPositionValue === "win") ||
+                                (currentFirstPlayerTurn && currentPositionValue === "lose") ?
+                                "🥳" : "😢" 
+                            }}</text>
+                        </template>
+                    </template>
+
+                <!-- Grid Base -->
+                <rect id="grid-base" :x="gridLeft" :y="gridTop" :width="gridWidth" :height="gridHeight" />
+
+                <!-- Round Rows -->
+                <template v-if="currentValuedRoundId >= 1">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
+                            :x="gridLeft"
+                            :y="gridTop + (roundNumber - 1) * rowHeight"
+                            :width="gridWidth"
+                            :height="rowHeight" />
+                    </template>
+                </template>
+                <rect v-if="!isEndOfMatch"
+                    :class="`turn-0`"
+                    class="round-row"
+                    :x="gridLeft"
+                    :y="gridBottom - rowHeight"
+                    :width="gridWidth"
+                    :height="rowHeight" />
+
+                <!-- Win By Bars -->
+                <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 2" :key="remoteness">
+                    <line v-if="!isPuzzleGame"
+                        :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                            'remoteness-bar' : 'remoteness-interval-bar'"
+                        :x1="gridLeft + remoteness * columnWidth"
+                        :y1="gridTop"
+                        :x2="gridLeft + remoteness * columnWidth"
+                        :y2="gridBottom"
+                        :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                            xBarWidth : xIntervalBarWidth" />
+                    <line :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                              'remoteness-bar' : 'remoteness-interval-bar'"
+                          :x1="gridRight - remoteness * columnWidth"
+                          :y1="gridTop"
+                          :x2="gridRight - remoteness * columnWidth"
+                          :y2="gridBottom"
+                          :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                              xBarWidth : xIntervalBarWidth" />
+                </template>
+                            <!-- Win By Coordinates -->
+                <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 1"
+                        :key="remoteness">
+                    <text class="remoteness-coordinate"
+                            v-if="!isPuzzleGame &&remoteness % xInterval === 0"
+                            :x="gridLeft + remoteness * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ remoteness }}
+                    </text>
+                    <text class="remoteness-coordinate"
+                            v-if="remoteness % xInterval === 0"
+                            :x="gridRight - remoteness * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ remoteness }}
+                    </text>
+                    <text class="remoteness-coordinate"
+                            v-if="!isPuzzleGame && remoteness % xInterval === 0"
+                            :x="gridLeft + remoteness * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ remoteness }}
+                    </text>
+                    <text class="remoteness-coordinate"
+                            v-if="remoteness % xInterval === 0"
+                            :x="gridRight - remoteness * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ remoteness }}
+                    </text>
+                </template>
+                            </svg>
             <p id="right-y-axis-label" v-if="showVvhGuides">
                 <b>Moves</b>
             </p>
@@ -804,6 +973,9 @@
     const currentLeftPlayerName = computed(() => (store.getters.currentLeftPlayer ? store.getters.currentLeftPlayer.name : ""));
     const currentRightPlayerName = computed(() => (store.getters.currentRightPlayer ? store.getters.currentRightPlayer.name : ""));
 
+    const currentGameType = computed(() => store.getters.currentGameType);
+    const currentGameId = computed(() => store.getters.currentGameId); 
+
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
     const currentRounds = computed(() => store.getters.currentRounds);
@@ -845,16 +1017,13 @@
     const turn = (roundID: number) => {
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
     };
-
-    /*
-    const supportsWinBy = ref(0);
-    supportsWinBy.value = store.getters.supportsWinBy;
-    */
-
+    
+    const supportsWinBy = computed(() =>
+    store.getters.supportsWinBy(currentGameType.value, currentGameId.value)
+    );
+    
     const appVvhViews = ["Remoteness", "Win By"]
-    const vvhView = ref("");
-
-    vvhView.value = appVvhViews[0];
+    const vvhView = ref("Remoteness");
 
     const setVvhView = (newVvhView: string) => {
         vvhView.value = newVvhView;
@@ -999,5 +1168,23 @@
         }
     }
 
+    div.view-dropdown {
+        min-width: 192px;
+        position: relative;
+        display: inline-block;
+    }
 
+    .view-dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 6px 8px;
+        z-index: 1;
+    }
+
+    .view-dropdown:hover .view-dropdown-options {
+        display: block;
+    }
 </style>

@@ -77,7 +77,7 @@ export const defaultGame: Types.Game = {
     status: "",
     custom: false,
     gui_status: "v0",
-    supportsWinBy: 0
+    supportsWinBy: 0,
 };
 
 export const defaultGames: Types.Games = {
@@ -160,6 +160,7 @@ export const defaultApp: Types.App = {
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
+    vvhView: "",
     currentMatch: {
         id: 0, gameType: "",
         gameId: "",

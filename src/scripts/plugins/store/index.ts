@@ -77,7 +77,7 @@ type Getters = {
         GMUTypes.Variants;
     version(state: State): string;
     volume(state: State): number;
-    supportsWinBy(state: State): number;
+    supportsWinBy(state: State): (gameType: string, gameId: string) => boolean;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -209,7 +209,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     volume: (state: State) =>
         state.app.preferences.volume,
     supportsWinBy: (state: State) =>
-        state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].supportsWinBy,
+        (gameType: string, gameId: string) => 
+            state.app.gameTypes[gameType] && state.app.gameTypes[gameType].games[gameId].supportsWinBy === 1 ? true : false,
 };
 
 export enum mutationTypes {

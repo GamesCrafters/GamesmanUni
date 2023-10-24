@@ -11,7 +11,6 @@ export type OnePlayerGames = Status & {
     response: Array<Status & {
         gameId: string;
         name: string;
-        supportsWinBy: 0;
     }>;
 };
 
@@ -38,7 +37,6 @@ export type TwoPlayerGames = Status & {
     response: Array<Status & {
         gameId: string;
         name: string;
-        supportsWinBy: number;
     }>;
 };
 
@@ -47,6 +45,7 @@ export type TwoPlayerGameVariants = Status & {
         gameId: string;
         instructions: string;
         name: string;
+        supportsWinBy: number;
         variants: Array<Status & {
             description: string;
             startPosition: string;

@@ -25,7 +25,6 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
             status: game.status,
             gui_status: game.gui_status,
             variants: { ...Defaults.defaultVariants },
-            supportsWinBy: game.supportsWinBy
         };
     }
     app.gameTypes[payload.gameType].lastUpdated = new Date().getTime();
@@ -60,6 +59,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             gui_status: variant.gui_status
         };
     }
+    app.gameTypes[payload.gameType].games[payload.gameId].supportsWinBy = payload.gameType === "games" ? (<GCTAPITypes.TwoPlayerGameVariants>variants).response.supportsWinBy : Defaults.defaultGame.supportsWinBy;
     return app;
 };
 
