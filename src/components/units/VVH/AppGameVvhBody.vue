@@ -963,23 +963,6 @@
                     </template>
                 </template>
 
-                <!-- Position Nodes -->
-                <template v-if="currentValuedRoundId">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <circle 
-                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
-                            class="position-value"
-                            :cx="winByNodeGridXPosition(roundNumber)"
-                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            :r="positionValueSize"
-                            :stroke-width="4 * positionValueSize"
-                            @click="roundNumber !== currentValuedRoundId &&
-                                store.dispatch(actionTypes.undoMove, {
-                                    toRoundId: currentValuedRounds[roundNumber].id
-                                })" />
-                    </template>
-                </template>
-
                 <!-- Move Nodes -->
                 <template v-if="showNextMoves && currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
@@ -994,6 +977,23 @@
                                 @click="roundNumber === currentValuedRoundId &&
                                     store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
                         </template>
+                    </template>
+                </template>
+
+                <!-- Position Nodes -->
+                <template v-if="currentValuedRoundId">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <circle 
+                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
+                            class="position-value"
+                            :cx="winByNodeGridXPosition(roundNumber)"
+                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                            :r="positionValueSize"
+                            :stroke-width="4 * positionValueSize"
+                            @click="roundNumber !== currentValuedRoundId &&
+                                store.dispatch(actionTypes.undoMove, {
+                                    toRoundId: currentValuedRounds[roundNumber].id
+                                })" />
                     </template>
                 </template>
             </svg>
