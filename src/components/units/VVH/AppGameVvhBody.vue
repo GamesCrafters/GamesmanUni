@@ -249,58 +249,6 @@
                               xBarWidth : xIntervalBarWidth" />
                 </template>
 
-                <!-- Next Moves' Position Values -->
-                <template v-if="showNextMoves && currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
-                                :key="nextMove.move">
-                            <template v-if="nextMove.moveValue === 'draw'">
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, draw: showNextMoveHints }"
-                                    class="next-move-position-value"
-                                    :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                            </template>
-                            <template v-else-if="nextMove.moveValue === 'tie'">
-                                <circle v-if="!isPuzzleGame"
-                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
-                                    class="next-move-position-value"
-                                    :cx="gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
-                                    class="next-move-position-value"
-                                    :cx="gridRight - nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                            </template>
-                            <template v-else>
-                                <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
-                                                 showNextMoveHints ? nextMove.positionValue : '']"
-                                    class="next-move-position-value"
-                                    :cx="isPuzzleGame ? gridRight - nextMove.remoteness * columnWidth : nextMove.moveValue === 'win' ?
-                                        (turn(roundNumber) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ? gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                            </template>
-                        </template>
-                    </template>
-                </template>
-
                 <!-- Position Value Links -->
                 <template v-if="currentValuedRoundId >= 2">
                     <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
@@ -664,6 +612,58 @@
                     </template>
                 </template>
 
+                <!-- Next Moves' Position Values -->
+                <template v-if="showNextMoves && currentValuedRoundId >= 1">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
+                                :key="nextMove.move">
+                            <template v-if="nextMove.moveValue === 'draw'">
+                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, draw: showNextMoveHints }"
+                                    class="next-move-position-value"
+                                    :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
+                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
+                                    :r="nextMovePositionValueSize"
+                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    @click="roundNumber === currentValuedRoundId &&
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                            </template>
+                            <template v-else-if="nextMove.moveValue === 'tie'">
+                                <circle v-if="!isPuzzleGame"
+                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
+                                    class="next-move-position-value"
+                                    :cx="gridLeft + nextMove.remoteness * columnWidth"
+                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
+                                    :r="nextMovePositionValueSize"
+                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    @click="roundNumber === currentValuedRoundId &&
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
+                                    class="next-move-position-value"
+                                    :cx="gridRight - nextMove.remoteness * columnWidth"
+                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
+                                    :r="nextMovePositionValueSize"
+                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    @click="roundNumber === currentValuedRoundId &&
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                            </template>
+                            <template v-else>
+                                <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
+                                                 showNextMoveHints ? nextMove.positionValue : '']"
+                                    class="next-move-position-value"
+                                    :cx="isPuzzleGame ? gridRight - nextMove.remoteness * columnWidth : nextMove.moveValue === 'win' ?
+                                        (turn(roundNumber) === 1 ?
+                                        gridLeft + nextMove.remoteness * columnWidth :
+                                        gridRight - nextMove.remoteness * columnWidth) :
+                                        turn(roundNumber) === 1 ? gridRight - nextMove.remoteness * columnWidth :
+                                        gridLeft + nextMove.remoteness * columnWidth"
+                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
+                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                            </template>
+                        </template>
+                    </template>
+                </template>
+                
                 <!-- Position Values -->
                 <template v-if="currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
