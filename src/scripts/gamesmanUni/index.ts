@@ -87,6 +87,7 @@ const formatMoves = (source: Array<{
         position: string;
         positionValue: string;
         remoteness: number;
+        winby: number;
         mex: string;
         animationPhases: Array<Array<string>>;
     }>) => {
@@ -120,6 +121,7 @@ const loadPosition = async (app: Types.App, payload: { gameType: string; gameId:
         position: updatedPosition.response.position,
         positionValue: updatedPosition.response.positionValue,
         remoteness: updatedPosition.response.remoteness,
+        winby: updatedPosition.response.winby,
         mex: updatedPosition.response["mex"] || "",
     };
     return app;
@@ -287,6 +289,23 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
         }
     }
     return Math.max(...remotenesses);
+};
+
+export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: number }) => {
+    const winbys = new Set<number>();
+    winbys.add(5); // In case all involved positions are draw, 0 shall be the default maximum winby
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        if (round.position.positionValue !== "draw") winbys.add(round.position.winby);
+        if (app.options.showNextMoves) {
+            for (const availableMove in round.position.availableMoves) {
+                if (round.position.availableMoves[availableMove].positionValue !== "draw") {
+                    winbys.add(round.position.availableMoves[availableMove].winby);
+                }
+            }
+        }
+    }
+    return Math.max(...winbys);
 };
 
 export const isEndOfMatch = (app: Types.App) =>

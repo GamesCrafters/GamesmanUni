@@ -79,6 +79,7 @@ export type Position = Update & {
     position: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
 };
 
@@ -95,6 +96,7 @@ export type Move = {
     position: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
     animationPhases: Array<Array<string>>;
 };

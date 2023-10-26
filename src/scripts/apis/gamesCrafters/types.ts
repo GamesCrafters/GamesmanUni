@@ -105,12 +105,14 @@ export type Position = Status & {
             position: string;
             positionValue: string;
             remoteness: number;
+            winby: number;
             mex: string;
             animationPhases: Array<Array<string>>;
         }>;
         position: string;
         positionValue: string;
         remoteness: number;
+        winby: number;
         mex: string;
     };
 };
