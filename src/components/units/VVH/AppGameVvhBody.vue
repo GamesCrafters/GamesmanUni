@@ -938,6 +938,31 @@
                     </template>
                 </template>
 
+                <!-- Position Value Links -->
+                <template v-if="currentValuedRoundId >= 2">
+                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
+                        <line
+                            :class="`${currentValuedRounds[roundNumber].moveValue} link`"
+                            :x1="winByNodeGridXPosition(roundNumber)"
+                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                            :x2="winByNodeGridXPosition(roundNumber + 1)"
+                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
+                            :stroke-width="linkWidth" />
+                    </template>
+                </template>
+
+                <!-- Link from Current Position Value to Next Moves' Position Value -->
+                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
+                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves">
+                        <line :class="`${nextMove.moveValue} link`"
+                                    :x1="winByNodeGridXPosition(currentValuedRoundId)"
+                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x2="winByNextNodeGridXPosition(currentValuedRoundId, nextMove)"
+                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
+                                    :stroke-width="linkWidth" />
+                    </template>
+                </template>
+
                 <!-- Position Nodes -->
                 <template v-if="currentValuedRoundId">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
@@ -969,31 +994,6 @@
                                 @click="roundNumber === currentValuedRoundId &&
                                     store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
                         </template>
-                    </template>
-                </template>
-
-                <!-- Position Value Links -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <line
-                            :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                            :x1="winByNodeGridXPosition(roundNumber)"
-                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            :x2="winByNodeGridXPosition(roundNumber + 1)"
-                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                            :stroke-width="linkWidth" />
-                    </template>
-                </template>
-
-                <!-- Link from Current Position Value to Next Moves' Position Value -->
-                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves">
-                        <line :class="`${nextMove.moveValue} link`"
-                                    :x1="winByNodeGridXPosition(currentValuedRoundId)"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="winByNextNodeGridXPosition(currentValuedRoundId, nextMove)"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
                     </template>
                 </template>
             </svg>
