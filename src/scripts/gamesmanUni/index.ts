@@ -274,6 +274,14 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
     };
 };
 
+/** 
+ * Determines the maximum Remoteness value between rounds payload.from to payload.to. If there is no Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Remoteness value.
+ * @param {number} payload.to - round id to end calculating the maximum Remoteness value.
+ * @returns the maximum Remoteness value when it is greater than the threshold, else returns the threshold.
+*/
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
     const remotenesses = new Set<number>();
     remotenesses.add(5); // In case all involved positions are draw, 5 shall be the default maximum remoteness.
@@ -291,9 +299,17 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
     return Math.max(...remotenesses);
 };
 
+/** 
+ * Determines the maximum Win By value between rounds payload.from to payload.to. If there is no Win By value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
 export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: number }) => {
     const winbys = new Set<number>();
-    winbys.add(5); // In case all involved positions are draw, 0 shall be the default maximum winby
+    winbys.add(5); // In case all involved positions are draw, 5 shall be the default maximum winby
     for (let roundId = payload.from; roundId <= payload.to; roundId++) {
         const round = app.currentMatch.rounds[roundId];
         if (round.position.positionValue !== "draw") winbys.add(round.position.winby);

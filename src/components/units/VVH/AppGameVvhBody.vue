@@ -1112,28 +1112,53 @@
     const xBarWidth = ref(0.1);
     const xIntervalBarWidth = ref(0.2);
 
+    /** 
+     * Determines whether it is the first player's turn or the second player's turn based on the current round id.
+     * @param {number} roundID - current round id.
+     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
+    */
     const turn = (roundID: number) => {
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
     };
     
+    /** 
+     * Determines whether it will be the first player's turn or the second player's turn on the next turn based on the current round id.
+     * @param {number} roundID - current round id.
+     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
+    */
     const nextTurn = (roundID: number) => {
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
     }
 
-    // Win By
+    // Array of the available VVH views. Possible to add extra views E.g. Game Tree, Move Table.
+    const appVvhViews = ["Remoteness", "Win By"]
+
+    // Default VVH View.
+    const vvhView = ref(appVvhViews[0]); 
+
+    // Stores the maximum between the maximum 'Win By' value or the default value.
     const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
+    
+    // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
         store.getters.supportsWinBy(currentGameType.value, currentGameId.value)
     );
-    
-    const appVvhViews = ["Remoteness", "Win By"]
-    const vvhView = ref("Remoteness");
 
+    /** 
+     * Changes the Visual Value History's (VVH) view to a new VVH view.
+     * @param {string} newVvhView - new VVH view.
+     * @returns none.
+    */
     const setVvhView = (newVvhView: string) => {
         vvhView.value = newVvhView;
         store.commit(mutationTypes.setVvhView, newVvhView);
     };
 
+    /** 
+     * Determines the x-position of the current position's node in the 'Win By' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns x position in the Graph's grid.
+    */
     const winByNodeGridXPosition = (roundID: number) => {
         // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
         if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
@@ -1151,6 +1176,12 @@
         }
     }
 
+    /** 
+     * Determines the x-position of the next move's node in the 'Win By' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @param {Move} nextMove - a next move of the current position.
+     * @returns x position in the Graph's grid.
+    */
     const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
         // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
         if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'win') 
