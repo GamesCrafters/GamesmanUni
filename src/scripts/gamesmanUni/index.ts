@@ -4,6 +4,7 @@ import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
 import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
+import { useStore } from "../plugins/store";
 const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
@@ -339,16 +340,45 @@ export const exitMatch = (app: Types.App) => {
 };
 
 export const generateComputerMove = (round: Types.Round) => {
+    const store = useStore();
+    const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
+    const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
+    console.log(CPUStrategy);
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
+
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
-    if (currentPositionValue === "win" || currentPositionValue === "tie") {
-        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-    } else if (currentPositionValue === "lose") {
-        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-        bestMoves = availableMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    
+    if (CPUStrategy === "Remoteness") {
+        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+
+            const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+        } else if (currentPositionValue === "lose") {
+            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+
+            const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+        }
+    } else if (CPUStrategy === "Win By"){
+        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+            const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+
+            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+        } else if (currentPositionValue === "lose") {
+            const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+
+            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+        }
     }
+    console.log(bestMoves);
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };
 

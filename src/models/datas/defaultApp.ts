@@ -30,6 +30,7 @@ export const defaultAvailableMove: Types.Move = {
     position: "",
     positionValue: "",
     remoteness: 0,
+    winby: 0,
     mex: "",
     animationPhases: []
 };
@@ -45,7 +46,8 @@ export const defaultPosition: Types.Position = {
     position: "",
     positionValue: "",
     remoteness: 0,
-    mex: ""
+    mex: "",
+    winby: 0,
 };
 
 export const defaultPositions: Types.Positions = {};
@@ -180,4 +182,5 @@ export const defaultApp: Types.App = {
             backgroundLoading: false,
             computerMoving: false
     },
+    CPUsStrategy: ["Remoteness", "Remoteness"],
 };

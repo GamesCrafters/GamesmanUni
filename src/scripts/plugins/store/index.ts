@@ -82,6 +82,8 @@ type Getters = {
     currentWinBy(state: State): number;
     maximumWinBy(state: State): 
         (from: number, to: number) => number;
+    currentCPUStrategy(state: State):
+        (CPUID: number) => string;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -220,6 +222,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     maximumWinBy: (state: State) =>
         (from: number, to: number) =>
             GMU.getMaximumWinBy(state.app, { from, to }),
+    currentCPUStrategy: (state: State) =>
+        (CPUID: number) =>
+            state.app.CPUsStrategy[CPUID],
 };
 
 export enum mutationTypes {
@@ -238,7 +243,6 @@ export enum mutationTypes {
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
     toggleVvhScrolling = "toggleVvhScrolling",
-
     setVvhView = "setVvhView",
     setCPUsStrategy = "setCPUsStrategy"
 }
@@ -259,7 +263,6 @@ type Mutations = {
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
-
     [mutationTypes.setVvhView](state: State, vvhView: string): void;
     [mutationTypes.setCPUsStrategy](state: State, CPUsStrategy: string[]): void;
 };
