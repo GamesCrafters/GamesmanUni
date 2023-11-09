@@ -375,6 +375,7 @@
         min-width: 192px;
         position: relative;
         display: inline-block;
+        cursor: pointer;
     }
     .strategy-dropdown-options {
         display: none;

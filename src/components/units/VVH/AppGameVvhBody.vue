@@ -1341,6 +1341,7 @@
         min-width: 192px;
         position: relative;
         display: inline-block;
+        cursor: pointer;
     }
 
     .view-dropdown-options {
