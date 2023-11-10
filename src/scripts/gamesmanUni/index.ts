@@ -339,11 +339,24 @@ export const exitMatch = (app: Types.App) => {
     return app;
 };
 
+/** 
+ * Determines the CPU player's next move. If the CPU strategy is set to 'Remoteness' and the CPU player is winning on the current position, returns
+ * the move with the lowest remoteness value; if there are multiple moves with the lowest remoteness value and the current game supports win by, returns 
+ * the move with the highest win by value. If the CPU player is loosing on the current position, returns the move with the highest remoteness value; if 
+ * there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the CPU strategy is set to 'Win By'
+ * and the CPU player is winning on the current position, returns the move with the highest win by value; if there are multiple moves with the highest win 
+ * by value, returns the move with the lowest remoteness value. If the CPU player is loosing on the current position, returns the move with the lowest win 
+ * by value; if there are multiple moves with the lowest win by value, returns the move with the highest remoteness.
+ * @param {Types.Round} round - current round.
+ * @returns CPU player's next move.
+*/
 export const generateComputerMove = (round: Types.Round) => {
     const store = useStore();
     const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
     const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
-    console.log(CPUStrategy);
+    const gameType = store.getters.currentGameType;
+    const gameId = store.getters.currentGameId;
+    const supportsWinBy = store.getters.supportsWinBy(gameType, gameId);
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
 
@@ -353,15 +366,19 @@ export const generateComputerMove = (round: Types.Round) => {
         if (currentPositionValue === "win" || currentPositionValue === "tie") {
             const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
             bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-
-            const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+            
+            if (supportsWinBy) {
+                const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+            }
         } else if (currentPositionValue === "lose") {
             const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
             bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
 
-            const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+            if (supportsWinBy) {
+                const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+            }
         }
     } else if (CPUStrategy === "Win By"){
         if (currentPositionValue === "win" || currentPositionValue === "tie") {
@@ -378,7 +395,6 @@ export const generateComputerMove = (round: Types.Round) => {
             bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
         }
     }
-    console.log(bestMoves);
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };
 
