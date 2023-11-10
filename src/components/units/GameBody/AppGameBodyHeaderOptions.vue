@@ -267,7 +267,6 @@
     const setCPUStrategy = (CPUID: number, newCPUStrategy: string) => {
         CPUsStrategy.value[CPUID] = newCPUStrategy;
         store.commit(mutationTypes.setCPUsStrategy, CPUsStrategy.value);
-        console.log(CPUsStrategy);
         
     };
 </script>
