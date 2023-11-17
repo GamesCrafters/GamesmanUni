@@ -4,6 +4,7 @@ import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
 import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
+import { useStore } from "../plugins/store";
 const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
@@ -59,6 +60,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
             gui_status: variant.gui_status
         };
     }
+    app.gameTypes[payload.gameType].games[payload.gameId].supportsWinBy = payload.gameType === "games" ? (<GCTAPITypes.TwoPlayerGameVariants>variants).response.supportsWinBy : Defaults.defaultGame.supportsWinBy;
     return app;
 };
 
@@ -86,6 +88,7 @@ const formatMoves = (source: Array<{
         position: string;
         positionValue: string;
         remoteness: number;
+        winby: number;
         mex: string;
         animationPhases: Array<Array<string>>;
     }>) => {
@@ -119,6 +122,7 @@ const loadPosition = async (app: Types.App, payload: { gameType: string; gameId:
         position: updatedPosition.response.position,
         positionValue: updatedPosition.response.positionValue,
         remoteness: updatedPosition.response.remoteness,
+        winby: updatedPosition.response.winby,
         mex: updatedPosition.response["mex"] || "",
     };
     return app;
@@ -271,6 +275,14 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
     };
 };
 
+/** 
+ * Determines the maximum Remoteness value between rounds payload.from to payload.to. If there is no Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Remoteness value.
+ * @param {number} payload.to - round id to end calculating the maximum Remoteness value.
+ * @returns the maximum Remoteness value when it is greater than the threshold, else returns the threshold.
+*/
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
     const remotenesses = new Set<number>();
     remotenesses.add(5); // In case all involved positions are draw, 5 shall be the default maximum remoteness.
@@ -288,6 +300,31 @@ export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to
     return Math.max(...remotenesses);
 };
 
+/** 
+ * Determines the maximum Win By value between rounds payload.from to payload.to. If there is no Win By value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
+export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: number }) => {
+    const winbys = new Set<number>();
+    winbys.add(5); // In case all involved positions are draw, 5 shall be the default maximum winby
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        if (round.position.positionValue !== "draw") winbys.add(round.position.winby);
+        if (app.options.showNextMoves) {
+            for (const availableMove in round.position.availableMoves) {
+                if (round.position.availableMoves[availableMove].positionValue !== "draw") {
+                    winbys.add(round.position.availableMoves[availableMove].winby);
+                }
+            }
+        }
+    }
+    return Math.max(...winbys);
+};
+
 export const isEndOfMatch = (app: Types.App) =>
     !app.currentMatch.round.position.remoteness ||
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
@@ -302,16 +339,61 @@ export const exitMatch = (app: Types.App) => {
     return app;
 };
 
+/** 
+ * Determines the CPU player's next move. If the CPU strategy is set to 'Remoteness' and the CPU player is winning on the current position, returns
+ * the move with the lowest remoteness value; if there are multiple moves with the lowest remoteness value and the current game supports win by, returns 
+ * the move with the highest win by value. If the CPU player is loosing on the current position, returns the move with the highest remoteness value; if 
+ * there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the CPU strategy is set to 'Win By'
+ * and the CPU player is winning on the current position, returns the move with the highest win by value; if there are multiple moves with the highest win 
+ * by value, returns the move with the lowest remoteness value. If the CPU player is loosing on the current position, returns the move with the lowest win 
+ * by value; if there are multiple moves with the lowest win by value, returns the move with the highest remoteness.
+ * @param {Types.Round} round - current round.
+ * @returns CPU player's next move.
+*/
 export const generateComputerMove = (round: Types.Round) => {
+    const store = useStore();
+    const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
+    const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
+    const gameType = store.getters.currentGameType;
+    const gameId = store.getters.currentGameId;
+    const supportsWinBy = store.getters.supportsWinBy(gameType, gameId);
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
+
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
-    if (currentPositionValue === "win" || currentPositionValue === "tie") {
-        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-    } else if (currentPositionValue === "lose") {
-        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-        bestMoves = availableMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    
+    if (CPUStrategy === "Remoteness") {
+        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+            
+            if (supportsWinBy) {
+                const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+            }
+        } else if (currentPositionValue === "lose") {
+            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+
+            if (supportsWinBy) {
+                const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+            }
+        }
+    } else if (CPUStrategy === "Win By"){
+        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+            const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+
+            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+        } else if (currentPositionValue === "lose") {
+            const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+
+            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+        }
     }
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };

@@ -77,6 +77,13 @@ type Getters = {
         GMUTypes.Variants;
     version(state: State): string;
     volume(state: State): number;
+    supportsWinBy(state: State): 
+        (gameType: string, gameId: string) => boolean;
+    currentWinBy(state: State): number;
+    maximumWinBy(state: State): 
+        (from: number, to: number) => number;
+    currentCPUStrategy(state: State):
+        (CPUID: number) => string;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -206,7 +213,18 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     version: (state: State) =>
         state.app.version,
     volume: (state: State) =>
-        state.app.preferences.volume
+        state.app.preferences.volume,
+    supportsWinBy: (state: State) =>
+        (gameType: string, gameId: string) => 
+            state.app.gameTypes[gameType] && state.app.gameTypes[gameType].games[gameId].supportsWinBy === 1 ? true : false,
+    currentWinBy: (state: State) =>
+        state.app.currentMatch.round.position.winby,
+    maximumWinBy: (state: State) =>
+        (from: number, to: number) =>
+            GMU.getMaximumWinBy(state.app, { from, to }),
+    currentCPUStrategy: (state: State) =>
+        (CPUID: number) =>
+            state.app.CPUsStrategy[CPUID],
 };
 
 export enum mutationTypes {
@@ -225,6 +243,8 @@ export enum mutationTypes {
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
     toggleVvhScrolling = "toggleVvhScrolling",
+    setVvhView = "setVvhView",
+    setCPUsStrategy = "setCPUsStrategy"
 }
 
 type Mutations = {
@@ -243,6 +263,8 @@ type Mutations = {
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
+    [mutationTypes.setVvhView](state: State, vvhView: string): void;
+    [mutationTypes.setCPUsStrategy](state: State, CPUsStrategy: string[]): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -278,6 +300,10 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhMeters = showVvhMeters),
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
+    setVvhView: (state: State, vvhView: string) =>
+        (state.app.vvhView = vvhView),
+    setCPUsStrategy: (state: State, CPUsStrategy: string[]) =>
+        (state.app.CPUsStrategy = CPUsStrategy),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

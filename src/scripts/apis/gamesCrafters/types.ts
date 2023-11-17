@@ -29,12 +29,13 @@ export type OnePlayerGameVariants = Status & {
             imageAutoGUIData: ImageAutoGUIData;
         }>;
         custom: string;
+        
     };
 };
 
 export type TwoPlayerGames = Status & {
     response: Array<Status & {
-            gameId: string;
+        gameId: string;
         name: string;
     }>;
 };
@@ -44,6 +45,7 @@ export type TwoPlayerGameVariants = Status & {
         gameId: string;
         instructions: string;
         name: string;
+        supportsWinBy: number;
         variants: Array<Status & {
             description: string;
             startPosition: string;
@@ -103,12 +105,14 @@ export type Position = Status & {
             position: string;
             positionValue: string;
             remoteness: number;
+            winby: number;
             mex: string;
             animationPhases: Array<Array<string>>;
         }>;
         position: string;
         positionValue: string;
         remoteness: number;
+        winby: number;
         mex: string;
     };
 };
