@@ -5,6 +5,13 @@
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and 
                 <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a 
                 <mark :class="`uni-${currentPositionValue}`">draw</mark>!
+                <br/>
+                The current position is a 
+                <mark :class="`uni-${currentPositionValue}`"> draw  </mark>
+                <mark :class="`uni-${currentDrawValue}`"> {{currentDrawValue}}  </mark>
+                <br/>
+                    <strong> Draw Level: </strong> <mark :class="`uni-${currentPositionValue}`">{{ currentDrawLevel }}  </mark> ;
+                    Draw Remoteness: <mark :class="`uni-${currentPositionValue}`"> {{currentDrawRemoteness}}</mark>
             </p>
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'unsolved'">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>'s
@@ -63,6 +70,12 @@
     const currentPlayerName = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.name : ""));
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
+    // const currentDrawValue = computed(() => store.getters.currentDrawRemoteness % 2 == 0 ? "win": "lose");
+    // const currentDrawRemoteness = computed(() => store.getters.currentDrawRemoteness);
+    // const currentDrawLevel = computed(() => store.getters.currentDrawLevel)
+    const currentDrawValue = computed(() => 5 % 2 == 0 ? "win": "lose");
+    const currentDrawRemoteness = computed(() => 5);
+    const currentDrawLevel = computed(() => 1)
     const mexStr = computed(() => (store.getters.currentPositionMex !== "") ? "[Grundy #: " + store.getters.currentPositionMex + "]" : "");
 </script>
 
@@ -77,6 +90,8 @@
                 border-radius: 1rem;
                 padding: 0.25rem 0.5rem;
             }
+         }
         }
+        
     }
 </style>
