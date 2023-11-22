@@ -18,7 +18,21 @@
           :d="formatArrowPolylinePoints(arrow, arrowWidth)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+          <title>
+            {{
+                !options.showNextMoveHints ? "" : (
+                  arrow.move.value + (
+                    arrow.move.value === "draw" || arrow.move.value === "unsolved" ? "" : (
+                      " in " + arrow.move.remoteness + (
+                        !arrow.move.winby ? "" : " by " + arrow.move.winby
+                      )
+                    )
+                  )
+                )
+            }}
+          </title>
+        </path>
       </g>
     </g>
 
@@ -51,7 +65,21 @@
             :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
             :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+            <title>
+              {{
+                !options.showNextMoveHints ? "" : (
+                  token.move.value + (
+                    token.move.value === "draw" || token.move.value === "unsolved" ? "" : (
+                      " in " + token.move.remoteness + (
+                        !token.move.winby ? "" : " by " + token.move.winby
+                      )
+                    )
+                  )
+                )
+              }}
+            </title>
+          </circle>
           
           <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
           <g v-else-if="token.token in entities">
@@ -71,7 +99,21 @@
               :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
-              @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })"/>
+              @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+              <title>
+                {{
+                !options.showNextMoveHints ? "" : (
+                  token.move.value + (
+                    token.move.value === "draw" || token.move.value === "unsolved" ? "" : (
+                      " in " + token.move.remoteness + (
+                        !token.move.winby ? "" : " by " + token.move.winby
+                      )
+                    )
+                  )
+                )
+                }}
+              </title>
+            </rect>
           </g>
         </g>
       </g>
@@ -83,7 +125,21 @@
             :d="formatArrowPolylinePoints(arrow, arrowWidth)"
             :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"/>
+            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+            <title>
+              {{
+                !options.showNextMoveHints ? "" : (
+                  arrow.move.value + (
+                    arrow.move.value === "draw" || arrow.move.value === "unsolved" ? "" : (
+                      " in " + arrow.move.remoteness + (
+                        !arrow.move.winby ? "" : " by " + arrow.move.winby
+                      )
+                    )
+                  )
+                )
+              }}
+            </title>
+          </path>
         </g>
       </g>
 
@@ -99,7 +155,21 @@
           :stroke-width="lineWidth * widthFactor"
           :class="'app-game-board-default-line ' + getBoardMoveElementHintClass(line.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })"/>
+          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })">
+            <title>
+              {{
+                !options.showNextMoveHints ? "" : (
+                  line.move.value + (
+                    line.move.value === "draw" || line.move.value === "unsolved" ? "" : (
+                      " in " + line.move.remoteness + (
+                        !line.move.winby ? "" : " by " + line.move.winby
+                      )
+                    )
+                  )
+                )
+              }}
+            </title>
+        </line>
       </g>
     </g>
   </svg>
@@ -112,6 +182,9 @@
 
   interface GDefaultRegular2DMove {
     str: string; // UWAPI move string
+    value: string;
+    remoteness: number;
+    winby: number;
     hint: string;
     hintOpacity: number;
     nextPosition: string;
@@ -181,7 +254,10 @@
       for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
         const move = {
           str: nextMoveData.move,
+          value: nextMoveData.moveValue,
           hint: nextMoveData.moveValue,
+          remoteness: nextMoveData.remoteness,
+          winby: nextMoveData.winby,
           hintOpacity: !options.value.showNextMoves ? 0.001 : nextMoveData.moveValueOpacity,
           nextPosition: nextMoveData.position
         };

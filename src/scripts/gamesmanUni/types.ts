@@ -14,6 +14,8 @@ export type App = Update & {
     options: Options;
     matches: Matches;
     currentMatch: Match;
+    vvhView: string;
+    CPUsStrategy: string[];
 };
 
 export type Player = {
@@ -53,6 +55,7 @@ export type Game = {
     status: string;
     gui_status: string;
     custom: boolean;
+    supportsWinBy: number;
 };
 
 export type Variants = Update & {
@@ -77,6 +80,7 @@ export type Position = Update & {
     position: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
 };
 
@@ -93,6 +97,7 @@ export type Move = {
     position: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
     animationPhases: Array<Array<string>>;
 };
