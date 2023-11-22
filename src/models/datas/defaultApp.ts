@@ -153,6 +153,8 @@ export const defaultMatch: Types.Match = {
     animationPlaying: false
 };
 
+export const defaultCPUsStrategy: Array<string> = ["Remoteness", "Remoteness"];
+
 export const defaultApp: Types.App = {
     ...defaultUpdate,
     version: <string>import.meta.env.PACKAGE_VERSION || "",
@@ -182,5 +184,5 @@ export const defaultApp: Types.App = {
             backgroundLoading: false,
             computerMoving: false
     },
-    CPUsStrategy: ["Remoteness", "Remoteness"],
+    CPUsStrategy: defaultCPUsStrategy,
 };
