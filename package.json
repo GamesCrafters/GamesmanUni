@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "axios": "0.27.2",
+        "axios": "1.6.0",
         "gsap": "^3.11.3",
         "lodash": "4.17.21",
         "markdown-it-link-attributes": "4.0.0",
@@ -48,5 +48,5 @@
         "preview:https": "serve dist",
         "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
     },
-    "version": "5.0.0-alpha.273"
+    "version": "5.0.0-alpha.274"
 }
