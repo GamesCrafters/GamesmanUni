@@ -32,7 +32,8 @@ export const defaultAvailableMove: Types.Move = {
     remoteness: 0,
     winby: 0,
     mex: "",
-    animationPhases: []
+    drawLevel: -1,
+    drawRemoteness: -1
 };
 
 export const defaultAvailableMoveNames: Types.MoveNames = {};
@@ -48,6 +49,8 @@ export const defaultPosition: Types.Position = {
     remoteness: 0,
     mex: "",
     winby: 0,
+    drawLevel: -1,
+    drawRemoteness: -1
 };
 
 export const defaultPositions: Types.Positions = {};
