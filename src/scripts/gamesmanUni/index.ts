@@ -195,6 +195,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
+    if (!game.supportsWinBy) app.CPUsStrategy = Defaults.defaultCPUsStrategy;
     app.currentMatch.gameTheme = gameVariant.imageAutoGUIData ? gameVariant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;

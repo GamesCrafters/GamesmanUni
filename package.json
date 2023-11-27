@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "axios": "0.27.2",
+        "axios": "1.6.0",
         "gsap": "^3.11.3",
         "lodash": "4.17.21",
         "markdown-it-link-attributes": "4.0.0",

@@ -1,6 +1,8 @@
 <template>
     <div id="app-game-body-statistics-message" v-if="showNextMoveHints">
+        <!-- Game not over -->
         <template v-if="currentRemoteness != 0">
+            <!-- Games: Special handling if current position is drawing -->
             <p v-if="!isPuzzleGame && currentPositionValue === 'draw'">
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and 
                 <b class="uni-turn-2">{{ currentRightPlayerName }}</b> are in a 
@@ -15,26 +17,35 @@
                         Draw Remoteness: <mark :class="`uni-${currentPositionValue}`"> {{currentDrawRemoteness}}</mark>
                 </span>
             </p>
+            <!-- Games: Special handling if current position is unsolved -->
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'unsolved'">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>'s
                 turn. {{ mexStr }}
             </p>
+            <!-- Games: win/lose/tie in <remoteness> moves -->
             <p v-else-if="!isPuzzleGame">
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should 
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>
+                {{ currentPlayerIsComputer ? "will" : "should" }} 
                 <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> 
                 the game in {{ currentRemoteness }} 
-                move<span v-if="currentRemoteness !== 1">s</span>. {{ mexStr }}
+                {{ currentRemoteness == 1 ? "move" : "moves" }}{{ currentWinBy ? " or by " + currentWinBy : "" }}.
+                {{ mexStr }}
             </p>
+            <!-- Puzzles: solve the puzzle in <remoteness> moves -->
             <p v-else>
-                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should 
+                <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>
+                {{ currentPlayerIsComputer ? "will" : "should" }} 
                 <mark :class="`uni-win`">solve</mark> the puzzle in {{ currentRemoteness }} 
-                move<span v-if="currentRemoteness !== 1">s</span>.
-            </p>
+                {{ currentRemoteness == 1 ? "move" : "moves" }}.
+            </p> 
         </template>
+
+        <!-- Game over -->
         <template v-else>
             <p v-if="!isPuzzleGame && currentPositionValue === 'win'">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
-                <mark :class="`uni-${currentPositionValue}`">won</mark> the game! {{ mexStr }}
+                <mark :class="`uni-${currentPositionValue}`">won</mark>
+                the game{{ currentWinBy ? " by " + currentWinBy : "" }}! {{ mexStr }}
             </p>
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'tie'">
                 <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and 
@@ -43,7 +54,8 @@
             </p>
             <p v-else-if="!isPuzzleGame && currentPositionValue === 'lose'">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
-                <mark :class="`uni-${currentPositionValue}`">lost</mark> the game! {{ mexStr }}
+                <mark :class="`uni-${currentPositionValue}`">lost</mark>
+                the game{{ currentWinBy ? " by " + currentWinBy : "" }}! {{ mexStr }}
             </p>
             <p v-else-if="isPuzzleGame">
                 <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
@@ -70,11 +82,13 @@
     const currentLeftPlayerName = computed(() => store.getters.currentLeftPlayer.name);
     const currentRightPlayerName = computed(() => store.getters.currentRightPlayer.name);
     const currentPlayerName = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.name : ""));
+    const currentPlayerIsComputer = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.isComputer : false));
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
     const currentDrawValue = computed(() => store.getters.currentPositionDrawRemoteness % 2 == 0 ? "lose": "win");
     const currentDrawRemoteness = computed(() => store.getters.currentPositionDrawRemoteness);
     const currentDrawLevel = computed(() => store.getters.currentPositionDrawLevel);
+    const currentWinBy = computed(() => store.getters.currentWinBy);
     const mexStr = computed(() => (store.getters.currentPositionMex !== "") ? "[Grundy #: " + store.getters.currentPositionMex + "]" : "");
 </script>
 
