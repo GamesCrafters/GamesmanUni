@@ -18,6 +18,12 @@
     #app-game-body-statistics-status {
         border-radius: 1rem;
         border: 0.1rem solid var(--neutralColor);
+        align-content: stretch;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-around;
         > p {
             padding: 1rem;
             text-align: center;

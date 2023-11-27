@@ -82,6 +82,8 @@ export type Position = Update & {
     remoteness: number;
     winby: number;
     mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
 export type Moves = Record<string, Move>;
@@ -99,7 +101,8 @@ export type Move = {
     remoteness: number;
     winby: number;
     mex: string;
-    animationPhases: Array<Array<string>>;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
 export type Commits = Update & {

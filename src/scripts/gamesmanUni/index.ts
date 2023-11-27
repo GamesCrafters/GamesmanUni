@@ -90,7 +90,8 @@ const formatMoves = (source: Array<{
         remoteness: number;
         winby: number;
         mex: string;
-        animationPhases: Array<Array<string>>;
+        drawLevel: number;
+        drawRemoteness: number;
     }>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
     if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
@@ -124,6 +125,8 @@ const loadPosition = async (app: Types.App, payload: { gameType: string; gameId:
         remoteness: updatedPosition.response.remoteness,
         winby: updatedPosition.response.winby,
         mex: updatedPosition.response["mex"] || "",
+        drawLevel: "drawLevel" in updatedPosition.response ? updatedPosition.response["drawLevel"] : -1,
+        drawRemoteness: "drawRemoteness" in updatedPosition.response ? updatedPosition.response["drawRemoteness"] : -1
     };
     return app;
 };
