@@ -36,8 +36,6 @@ type Getters = {
     currentMoveValue(state: State): string;
     currentPlayer(state: State): GMUTypes.Player;
     currentPosition(state: State): string;
-    currentPositionDrawLevel(state: State): number;
-    currentPositionDrawRemoteness(state: State): number;
     currentPositionMex(state: State): string;
     currentPositionValue(state: State): string;
     currentRemoteness(state: State): number;
@@ -135,10 +133,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.currentMatch.secondPlayer,
     currentPosition: (state: State) =>
         state.app.currentMatch.round.position.position,
-    currentPositionDrawLevel: (state: State) =>
-        state.app.currentMatch.round.position.drawLevel,
-    currentPositionDrawRemoteness: (state: State) =>
-        state.app.currentMatch.round.position.drawRemoteness,
     currentPositionMex: (state: State) =>
         state.app.currentMatch.round.position.mex,
     currentPositionValue: (state: State) =>

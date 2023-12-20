@@ -1,7 +1,9 @@
 import type * as Types from "./types";
 import gsap from "gsap";
+
 const sfx = import.meta.globEager("../../models/sounds/**/*");
-import { useStore } from "../../scripts/plugins/store";
+import {useStore} from "../../scripts/plugins/store";
+
 const gimages = import.meta.globEager("../../models/images/svg/**/*");
 
 const playAudio = (path: string, volume: number) => {
@@ -30,7 +32,7 @@ const animateTTT = (volume: number, moveObj: Types.Move): number => {
 const animateSim = (volume: number, moveObj: Types.Move): number => {
     const vertices = [[4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]];
     playAudio('ttt/O.mp3', volume);
-    const d = Number(moveObj.moveName[1]) - 1;    
+    const d = Number(moveObj.moveName[1]) - 1;
     gsap.to("#simline" + moveObj.moveName, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
     return 500;
 }
@@ -81,7 +83,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
         newText.setAttribute("opacity", "0.001");
         newText.appendChild(document.createTextNode("Placing:"));
         g.appendChild(newText);
-        
+
         duration += 500;
         gsap.fromTo(".appearingPiece", {opacity: 0}, {duration: 0.5, delay: delay, opacity: 1});
         gsap.fromTo("#textIntermediate", {opacity: 0}, {duration: 0.5, delay: delay, opacity: 1});
@@ -92,6 +94,9 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition: string, moveObj: Types.Move): number => {
     var currBoard = currPosition.split("_")[4];
     var nextBoard = nextPosition.split("_")[4];
+    console.log("currBoard: " + currBoard)
+    console.log(currBoard.length)
+    console.log("nextBoard: " + nextBoard)
 
     // Append dashes to make currBoard and nextBoard have same length, if one of them is shorter
     var lengthDiff = currBoard.length - nextBoard.length;
@@ -121,6 +126,13 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
     var i;
     var entitiesAppear = false;
     var appearingChar, movingChar;
+    var dictList: Types.Dict[]
+    dictList = [
+        {tag: "m", time: 0.5},
+        {tag: "s", time: 0.5, a: 0.1},
+        {tag: "r", time: 0.5, a: 360},
+        {tag: 'o', time: 0.5, a: 2}
+    ];
 
     var svg = document.getElementById('image-autogui'); //Get svg element
     var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -132,7 +144,7 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
             if (currBoard[i] != nextBoard[i]) {
                 if (currBoard[i] != '-' && currBoard[i] in entities) { // Entity originally at center i shall fade out
                     gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0});
-                } 
+                }
                 if (nextBoard[i] != '-') { // Entity that will be at center i shall fade in
                     appearingChar = nextBoard[i];
                     if (appearingChar in entities) {
@@ -230,7 +242,11 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
                 newElement.setAttribute("height", (entities[movingChar].scale * widthFactor).toString());
                 newElement.setAttribute("href", getImageSource(entities[movingChar].image));
                 g.appendChild(newElement);
-                gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+                gsap.to("#movingEntity" + idxFrom, {
+                    duration: 0.5,
+                    x: toCoords[0] - fromCoords[0],
+                    y: toCoords[1] - fromCoords[1]
+                });
             }
         }
 
@@ -252,7 +268,106 @@ const animateImageAutoGUI = (volume: number, currPosition: string, nextPosition:
         }
         return 500
     } else if (animationType === "custom") {
-        console.log("Custom");
+        for (i = animationWindow[0]; i < animationWindow[1]; i++) {
+            if (currBoard[i] != nextBoard[i]) {
+                diffIdxs.push(i);
+            }
+        }
+
+        var slidesIdxs: [number, number][] = [];
+        var fadeOutIdxs = diffIdxs.filter((idx) => currBoard[idx] != '-'); //渐出
+        var fadeInIdxs = diffIdxs.filter((idx) => nextBoard[idx] != '-'); //渐进
+        for (const idxFrom of diffIdxs) {
+            if (currBoard[idxFrom] != '-') {
+                for (const idxTo of diffIdxs) {
+                    if (currBoard[idxFrom] == nextBoard[idxTo]) {
+                        slidesIdxs.push([idxFrom, idxTo]);
+                        i = fadeOutIdxs.indexOf(idxFrom);
+                        if (i !== -1) fadeOutIdxs.splice(i, 1);
+                        i = fadeInIdxs.indexOf(idxTo);
+                        if (i !== -1) fadeInIdxs.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        var idxFrom = -1;
+        var idxTo = -1;
+        if (slidesIdxs.length > 0) {
+            idxFrom = slidesIdxs[0][0];
+            idxTo = slidesIdxs[0][1];
+        } else if (fadeOutIdxs.length > 0) {
+            idxFrom = fadeOutIdxs[0];
+        } else if (fadeInIdxs.length > 0) {
+            idxFrom = fadeInIdxs[0];
+        }
+
+        dictList.forEach((item) => {
+            switch (item.tag) {
+                case "m":
+                    const toCoords = centers[idxTo];
+                    const fromCoords = centers[idxFrom];
+                    console.log(idxFrom)
+                    console.log(idxTo)
+                    movingChar = currBoard[idxFrom];
+                    if (movingChar in entities) {
+                        if (item.a === undefined || item.b === undefined) {
+                            if (fadeOutIdxs.length > 0) {
+                                if (movingChar == 'x') {
+                                    gsap.to("#entity" + idxFrom, {duration: item.time, x: 20});
+                                } else if (movingChar == 'o') {
+                                    gsap.to("#entity" + idxFrom, {duration: item.time, y: -20});
+                                }
+                            }else {
+                                gsap.to("#entity" + idxFrom, {
+                                    duration: item.time,
+                                    x: toCoords[0] - fromCoords[0],
+                                    y: toCoords[1] - fromCoords[1]
+                                });
+                            }
+                        } else {
+                            gsap.to("#entity" + idxFrom, {duration: item.time, x: item.a, y: item.b});
+                        }
+
+                    }
+                    break
+                case "r":
+                    gsap.to("#entity" + idxFrom, {duration: item.time, rotation: item.a});
+                    break
+                case "s":
+                    gsap.to("#entity" + idxFrom, {
+                        duration: item.time,
+                        scale: item.a,
+                        transformOrigin: "center center"
+                    });
+                    break
+                case "o":
+                    gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: item.time, autoAlpha: 0});
+                    break
+                case "i":
+                    appearingChar = nextBoard[idxTo];
+                    console.log(appearingChar)
+                    if (appearingChar in entities) {
+                        console.log("appearingChar" + appearingChar)
+                        entitiesAppear = true;
+                        var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
+                        newElement.setAttribute("class", "appearingEntity");
+                        newElement.setAttribute("x", (centers[idxTo][0] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("y", (centers[idxTo][1] - 0.5 * entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("width", (entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("height", (entities[appearingChar].scale * widthFactor).toString());
+                        newElement.setAttribute("href", getImageSource(entities[appearingChar].image));
+                        newElement.setAttribute("opacity", "0");
+                        g.appendChild(newElement);
+                        gsap.fromTo(".appearingEntity", {autoAlpha: 0}, {duration: item.time, autoAlpha: 1});
+                    }
+                    break
+                default:
+                    console.error(`Unsupported tag: ${item.tag}`);
+            }
+        });
+        return 1500;
     }
     return 0;
 }
@@ -268,7 +383,7 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         return animateQuarto(volume, currPosition, nextPosition, moveObj);
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType,
             store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             return animateImageAutoGUI(volume, currPosition, nextPosition, moveObj);
@@ -296,7 +411,7 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         }
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType,
             store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended

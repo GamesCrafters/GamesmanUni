@@ -82,8 +82,6 @@ export type Position = Update & {
     remoteness: number;
     winby: number;
     mex: string;
-    drawLevel: number;
-    drawRemoteness: number;
 };
 
 export type Moves = Record<string, Move>;
@@ -101,8 +99,7 @@ export type Move = {
     remoteness: number;
     winby: number;
     mex: string;
-    drawLevel: number;
-    drawRemoteness: number;
+    animationPhases: Array<Array<string>>;
 };
 
 export type Commits = Update & {
@@ -164,3 +161,10 @@ export type Round = {
     moveValue: string;
     position: Position;
 };
+
+export interface Dict {
+    tag: string;
+    time: number;
+    a?: number; //the angle for rotation / the x distance for movement / the scale factor for scaling
+    b?: number; //the y distance for movement
+}

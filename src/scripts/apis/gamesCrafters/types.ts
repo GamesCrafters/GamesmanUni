@@ -107,16 +107,13 @@ export type Position = Status & {
             remoteness: number;
             winby: number;
             mex: string;
-            drawLevel: number;
-            drawRemoteness: number;
+            animationPhases: Array<Array<string>>;
         }>;
         position: string;
         positionValue: string;
         remoteness: number;
         winby: number;
         mex: string;
-        drawLevel: number;
-        drawRemoteness: number;
     };
 };
 
