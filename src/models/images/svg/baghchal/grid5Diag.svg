@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px"
-     viewBox="0 0 50 60" style="enable-background:new 0 0 50 60;" xml:space="preserve">
-
+ <svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 50 60">
     <style>
-    .small { font: 3px monospace; }
+        .small {
+            font: 3px monospace;
+        }
     </style>
-    <rect x="5" y="5" width="40" height="40" stroke="black" stroke-width="0.5" fill="#a1cfab"/>
-
-    <line x1="15" y1="5" x2="15" y2="45" stroke="black" stroke-width="0.5"/>
-    <line x1="25" y1="5" x2="25" y2="45" stroke="black" stroke-width="0.5"/>
-    <line x1="35" y1="5" x2="35" y2="45" stroke="black" stroke-width="0.5"/>
-
-    <line x1="5" y1="15" x2="45" y2="15" stroke="black" stroke-width="0.5"/>
-    <line x1="5" y1="25" x2="45" y2="25" stroke="black" stroke-width="0.5"/>
-    <line x1="5" y1="35" x2="45" y2="35" stroke="black" stroke-width="0.5"/>
-
-    <line x1="5" y1="5" x2="45" y2="45" stroke="black" stroke-width="0.5"/>
-    <line x1="45" y1="5" x2="5" y2="45" stroke="black" stroke-width="0.5"/>
-
-    <line x1="5" y1="25" x2="25" y2="5" stroke="black" stroke-width="0.5"/>
-    <line x1="45" y1="25" x2="25" y2="5" stroke="black" stroke-width="0.5"/>
-    <line x1="45" y1="25" x2="25" y2="45" stroke="black" stroke-width="0.5"/>
-    <line x1="5" y1="25" x2="25" y2="45" stroke="black" stroke-width="0.5"/>
-
-    <text x="8.5" y="53" class="small">Goats To Place:</text>
-    <text x="8.5" y="56.5" class="small">Goats Captured:</text>
+    <path d="M0,0h50v60h-50z" fill="#93c59f" />
+    <path d="M5,5h40v40h-40z" stroke="#000" fill="#c8efd1" stroke-width="0.4" />
+    <path d="M5,5l40,40M45,5l-40,40M15,5v40M25,5v40M35,5v40M5,15h40M5,25h40M5,35h40M25,5l20,20l-20,20l-20,-20l20,-20"
+        stroke="#000" stroke-width="0.25" fill="none" /> <text x="8.5" y="53" class="small">Goats To Place:</text> <text
+        x="8.5" y="56.5" class="small">Goats Captured:</text>
 </svg>

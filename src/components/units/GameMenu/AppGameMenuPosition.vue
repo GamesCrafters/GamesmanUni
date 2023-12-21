@@ -70,6 +70,15 @@
             errorMsg.value = error.message;
         } else {
             errorMsg.value = "";
+            if (store.getters.currentGameId === "chopsticks") {
+                // Easter egg. You can remove this entire if statement if you wish.
+                for (var p = 8; p < 28; p += 4) {
+                    if (inputPos.value.substring(p, p + 4) === "-f--") {
+                        errorMsg.value = "Woah, there. Be careful with that gesture..."
+                        break;
+                    }
+                }
+            }
             inputPos.value = "";
         }
     };

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+<path d="M0,0h50v50h-50z" fill="#b3a68e"/><path d="M5,5 h40 M5,15 h40 M5,25 h40 M5,35 h40 M5,45 h40 M5,5 v40 M15,5 v40 M25,5 v40 M35,5 v40 M45,5 v40" stroke="black" stroke-width="0.5" stroke-linecap="round"/>
+</svg>

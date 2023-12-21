@@ -120,6 +120,17 @@
                         </div>
                     </div>
                 </div>
+                <div id="visibility-options" v-if="atLeastOnePlayerIsntComputer">
+                    <div id="options">
+                        <div class="option">
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="options.automoveIfSingleMove" />
+                            <label for="checkbox">Automove if Only One Legal Move Available</label>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- computer move settings -->
                 <div id="computer-move-duration" v-show="computerInLoop">
@@ -197,11 +208,11 @@
 
     const updatedLeftPlayer = ref({ name: "", isComputer: false });
     const updatedRightPlayer = ref({ name: "", isComputer: false });
+    const atLeastOnePlayerIsntComputer = computed(() => !updatedLeftPlayer.value.isComputer || (!updatedRightPlayer.value.isComputer && !isPuzzleGame.value));
 
     const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
-    //const animationSpeeds = ["None", "Very Fast (2.0x)", "Fast (1.5x)", "Normal (1.0x)"]
 
     const game = computed(() => store.getters.game(gameType, gameId));
     const gameVariant = computed(() => store.getters.variant(gameType, gameId, variantId));
@@ -232,7 +243,7 @@
         store.commit(mutationTypes.setLeftPlayerIsComputer, updatedLeftPlayer.value.isComputer);
         store.commit(mutationTypes.setRightPlayerIsComputer, updatedRightPlayer.value.isComputer);
         options.value && store.commit(mutationTypes.setOptions, options.value);
-        if (currentPlayer.value.isComputer) store.dispatch(actionTypes.runComputerMove);
+        if (currentPlayer.value.isComputer || options.value.automoveIfSingleMove) store.dispatch(actionTypes.runComputerMove);
     };
 
     watch(

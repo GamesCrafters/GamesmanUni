@@ -15,36 +15,32 @@
     <g v-if="!animationPlaying && entitiesOverArrows"> 
       <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
         <path
-          :d="formatArrowPolylinePoints(arrow, arrowWidth)"
-          :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          :d="formatArrowPathPoints(arrow, arrowWidth)"
+          :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
-          <title>
-            {{
-                !options.showNextMoveHints ? "" : (
-                  arrow.move.value + (
-                    arrow.move.value === "draw" || arrow.move.value === "unsolved" ? "" : (
-                      " in " + arrow.move.remoteness + (
-                        !arrow.move.winby ? "" : " by " + arrow.move.winby
-                      )
-                    )
-                  )
-                )
-            }}
-          </title>
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+          <title>{{ moveButtonTitle(arrow.move.str) }}</title>
         </path>
       </g>
     </g>
 
-    <!-- Draw Entities -->
-    <g v-for="(cell, i) in richPositionData.board" :key="'cell' + i">
-      <image class="entity" v-if="cell != '-' && cell in entities"
+    <!-- Draw Regular (Image) Entities -->
+    <g v-for="(entity, i) in richPositionData.board" :key="'entity' + i">
+      <image class="entity" v-if="entity != '-' && entity in entities"
         :id="'entity' + i"
-        :x="centers[i][0] - 0.5 * entities[cell].scale * widthFactor"
-        :y="centers[i][1] - 0.5 * entities[cell].scale * widthFactor"
-        :width="entities[cell].scale * widthFactor"
-        :height="entities[cell].scale * widthFactor"
-        :href="getImageSource(entities[cell].image)"/>
+        :x="centers[i][0] - 0.5 * entities[entity].scale * widthFactor"
+        :y="centers[i][1] - 0.5 * entities[entity].scale * widthFactor"
+        :width="entities[entity].scale * widthFactor"
+        :height="entities[entity].scale * widthFactor"
+        :href="getImageSource(entities[entity].image)"/>
+    </g>
+
+    <!-- Draw Text Entities -->
+    <g v-for="(value, key) of richPositionData.textEntities" :key="'entity' + key">
+      <text class="entity" :id="'entity' + key" :x="centers[key][0]" :y="centers[key][1]" 
+        :style="'font-size:' + textEntityFontSize + 'px;'">
+        {{ value }}
+      </text>
     </g>
  
     <!-- Draw Foreground Image -->
@@ -56,89 +52,57 @@
     <g v-if="!animationPlaying">
       <!-- Draw A-type move buttons. -->
       <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i">
-        <g v-if="token.move">
-          <!-- If no move token specified, use default move button (a circle). -->
-          <circle v-if="token.token == '-'"
-            :cx="centers[token.to][0]"
-            :cy="centers[token.to][1]"
-            :r="defaultMoveTokenRadius"
-            :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
-            :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
-            :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;'"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
-            <title>
-              {{
-                !options.showNextMoveHints ? "" : (
-                  token.move.value + (
-                    token.move.value === "draw" || token.move.value === "unsolved" ? "" : (
-                      " in " + token.move.remoteness + (
-                        !token.move.winby ? "" : " by " + token.move.winby
-                      )
-                    )
-                  )
-                )
-              }}
-            </title>
-          </circle>
-          
-          <!-- Else use the svg corresponding to the move token. If no svg is mapped to the character, skip. -->
-          <g v-else-if="token.token in entities">
-            <mask :id="'svgmask' + i">
-              <image
-                :x="centers[token.to][0] - 0.5 * entities[token.token].scale * widthFactor"
-                :y="centers[token.to][1] - 0.5 * entities[token.token].scale * widthFactor"
-                :width="entities[token.token].scale * widthFactor"
-                :height="entities[token.token].scale * widthFactor"
-                :href="getImageSource(entities[token.token].image)"/>
-            </mask>
-            <rect
-              :x="centers[token.to][0] - 0.5 * entities[token.token].scale * widthFactor"
-              :y="centers[token.to][1] - 0.5 * entities[token.token].scale * widthFactor"
+        <g v-if="token.move">  
+          <!-- Use svg corresponding to move token. If no svg is mapped to the character, skip. -->
+          <g v-if="token.token in entities">
+            <use 
+              :x="centers[token.center][0] - 0.5 * entities[token.token].scale * widthFactor"
+              :y="centers[token.center][1] - 0.5 * entities[token.token].scale * widthFactor"
               :width="entities[token.token].scale * widthFactor" 
               :height="entities[token.token].scale * widthFactor"
-              :class="'app-game-board-default-button ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+              :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
-              :style="'--tOrigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px;mask: url(#svgmask' + i + ');'"
-              @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
-              <title>
-                {{
-                !options.showNextMoveHints ? "" : (
-                  token.move.value + (
-                    token.move.value === "draw" || token.move.value === "unsolved" ? "" : (
-                      " in " + token.move.remoteness + (
-                        !token.move.winby ? "" : " by " + token.move.winby
-                      )
-                    )
-                  )
-                )
-                }}
-              </title>
-            </rect>
+              :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
+              :href="getImageSource(entities[token.token].image) + '#MoveButtonSVG'"
+              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+              <title>{{ moveButtonTitle(token.move.str) }}</title>
+            </use>
           </g>
+
+          <!-- If no move token specified, use default move button (a circle). -->
+          <circle v-else
+            :cx="centers[token.center][0]" :cy="centers[token.center][1]"
+            :stroke-width="0" :r="defaultMoveTokenRadius"
+            :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
+            :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px;'"
+            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+            <title>{{ moveButtonTitle(token.move.str) }}</title>
+          </circle>
         </g>
+      </g>
+
+      <!-- Draw T-type (text) move buttons -->
+      <g v-for="(textButton, i) in richPositionData.textButtons" :key="'textButton' + i">
+        <text
+          :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
+          :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
+          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
+          :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })">
+          {{ textButton.text }}
+        </text>
       </g>
 
       <!-- Draw M-type (arrow) move buttons on top of entities -->
       <g v-if="!entitiesOverArrows"> 
         <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
           <path
-            :d="formatArrowPolylinePoints(arrow, arrowWidth)"
-            :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+            :d="formatArrowPathPoints(arrow, arrowWidth)"
+            :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-            @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
-            <title>
-              {{
-                !options.showNextMoveHints ? "" : (
-                  arrow.move.value + (
-                    arrow.move.value === "draw" || arrow.move.value === "unsolved" ? "" : (
-                      " in " + arrow.move.remoteness + (
-                        !arrow.move.winby ? "" : " by " + arrow.move.winby
-                      )
-                    )
-                  )
-                )
-              }}
-            </title>
+            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+            <title>{{ moveButtonTitle(arrow.move.str) }}</title>
           </path>
         </g>
       </g>
@@ -146,29 +110,17 @@
       <!-- Draw L-type (line) move buttons. -->
       <g v-for="(line, i) in richPositionData.lines" :key="'line' + i">
         <line
-          :x1="centers[line.from][0]"
-          :y1="centers[line.from][1]"
-          :x2="centers[line.to][0]"
-          :y2="centers[line.to][1]"
+          :x1="centers[line.p1][0]"
+          :y1="centers[line.p1][1]"
+          :x2="centers[line.p2][0]"
+          :y2="centers[line.p2][1]"
           :stroke-linecap="'round'"
           :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
           :stroke-width="lineWidth * widthFactor"
-          :class="'app-game-board-default-line ' + getBoardMoveElementHintClass(line.move)"
+          :class="'iag-button-line ' + getBoardMoveElementHintClass(line.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: line.move.str })">
-            <title>
-              {{
-                !options.showNextMoveHints ? "" : (
-                  line.move.value + (
-                    line.move.value === "draw" || line.move.value === "unsolved" ? "" : (
-                      " in " + line.move.remoteness + (
-                        !line.move.winby ? "" : " by " + line.move.winby
-                      )
-                    )
-                  )
-                )
-              }}
-            </title>
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })">
+          <title>{{ moveButtonTitle(line.move.str) }}</title>
         </line>
       </g>
     </g>
@@ -180,39 +132,42 @@
   import { actionTypes, useStore } from "../../../scripts/plugins/store";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
-  interface GDefaultRegular2DMove {
+  interface IAGMove {
     str: string; // UWAPI move string
-    value: string;
-    remoteness: number;
-    winby: number;
     hint: string;
     hintOpacity: number;
     nextPosition: string;
   }
 
-  interface GDefaultRegular2DBoardToken {
+  interface IAGPointButton {
     token: string;
-    to: number;
-    move: GDefaultRegular2DMove;
+    center: number;
+    move: IAGMove;
   }
 
-  interface GDefaultRegular2DBoardArrow {
+  interface IAGArrowButton {
     from: number;
     to: number;
-    move: GDefaultRegular2DMove;
+    move: IAGMove;
   }
 
-  interface GDefaultRegular2DBoardLine {
-    from: number;
-    to: number;
-    move: GDefaultRegular2DMove;
+  interface IAGLineButton {
+    p1: number;
+    p2: number;
+    move: IAGMove;
+  }
+
+  interface IAGTextButton {
+    text: string;
+    center: number;
+    move: IAGMove;
   }
 
   const store = useStore();
   const options = computed(() => store.getters.options);
   const currentPosition = computed(() => store.getters.currentPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
-  const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
+  const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
 
   /* Code Cleanup Required Here */
   const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameType, 
@@ -223,13 +178,11 @@
   const space = computed(() => theTheme.value.space);
   const widthFactor = computed(() => scaledWidth / space.value[0]);
   const scaledHeight = computed(() => space.value[1] * widthFactor.value);
-  const animationType = computed(() => theTheme.value.animationType || "");
   const entities = computed(() => theTheme.value.entities);
   const centers = computed(() =>
     theTheme.value.centers.map((a: [number, number]) =>
       a.map((b: number) => b * widthFactor.value)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
-
   const animationPlaying = computed(() => store.getters.animationPlaying);
   const backgroundImagePath = computed(() => theTheme.value.background || "");
   const foregroundImagePath = computed(() => theTheme.value.foreground || "");
@@ -239,48 +192,48 @@
   const defaultMoveTokenRadius = computed(() =>
     (theTheme.value.circleButtonRadius * widthFactor.value) || 2);
   const entitiesOverArrows = computed(() => theTheme.value.entitiesOverArrows || false);
+  const textEntityFontSize = computed(() => theTheme.value.textEntityFontSize * widthFactor.value || 10);
+  const textButtonFontSize = computed(() => theTheme.value.textButtonFontSize * widthFactor.value || 10);
 
   /* End Code Cleanup Required Here */
 
   const richPositionData = computed(() => {
-    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-]+)*/)!;
+    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\.~]+)*/)!;
     const validRichPosition = matches && matches.length >= 5;
     if (validRichPosition) {
       const turn = matches[1];
-      const board = matches[4];
-      let tokens: GDefaultRegular2DBoardToken[] = [];
-      let arrows: GDefaultRegular2DBoardArrow[] = [];
-      let lines: GDefaultRegular2DBoardLine[] = [];
+      const entityStringParts = matches[4].split("~");
+      const board = entityStringParts[0];
+      let tokens: IAGPointButton[] = [];
+      let arrows: IAGArrowButton[] = [];
+      let lines: IAGLineButton[] = [];
+      let textButtons: IAGTextButton[] = [];
+      let textIndices = []
+      for (var i = 0; i < board.length; i++) {
+        if (board[i] === ".") textIndices.push(i);
+      }
+      let textEntities: Record<number, string> = {};
+      for (var i = 1; i < entityStringParts.length && i <= textIndices.length; i++) {
+        textEntities[textIndices[i - 1]] = entityStringParts[i];
+      }
+
       for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
         const move = {
           str: nextMoveData.move,
-          value: nextMoveData.moveValue,
           hint: nextMoveData.moveValue,
-          remoteness: nextMoveData.remoteness,
-          winby: nextMoveData.winby,
           hintOpacity: !options.value.showNextMoves ? 0.001 : nextMoveData.moveValueOpacity,
           nextPosition: nextMoveData.position
         };
 
         let matches;
         if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
-          tokens.push({
-            token: matches[1],
-            to: parseInt(matches[2]),
-            move,
-          })
+          tokens.push({token: matches[1], center: parseInt(matches[2]), move})
         } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
-          arrows.push({
-            from: parseInt(matches[1]),
-            to: parseInt(matches[2]),
-            move,
-          });
+          arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
         } else if ((matches = nextMoveData.move.match(/^L_([0-9]+)_([0-9]+)*/))) {
-          lines.push({
-            from: parseInt(matches[1]),
-            to: parseInt(matches[2]),
-            move,
-          });
+          lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move });
+        } else if ((matches = nextMoveData.move.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
+          textButtons.push({text: matches[1], center: parseInt(matches[2]), move})
         }
       }
       
@@ -289,7 +242,7 @@
       };
 
       const compareArrowSquaredLength = 
-          (a: GDefaultRegular2DBoardArrow, b: GDefaultRegular2DBoardArrow): number => {
+          (a: IAGArrowButton, b: IAGArrowButton): number => {
         const aFromCoords = centers.value[a.from];
         const aToCoords = centers.value[a.to];
         const bFromCoords = centers.value[b.from];
@@ -306,6 +259,8 @@
         tokens,
         arrows,
         lines,
+        textEntities,
+        textButtons,
         validRichPosition,
       };
     }
@@ -326,8 +281,8 @@
              | /
              5
   */
-  const formatArrowPolylinePoints = 
-      (arrow: GDefaultRegular2DBoardArrow,
+  const formatArrowPathPoints = 
+      (arrow: IAGArrowButton,
       thickness: number = 0.75,
       startOffset: number = 3,
       endOffset: number = 2): string => {
@@ -343,28 +298,28 @@
     fromCoords[1] += dir[1] * startOffsetPct;
     coords3[0] -= dir[0] * endOffsetPct;
     coords3[1] -= dir[1] * endOffsetPct;
-    const arrowheadHeight = 3 * thickNorm * Math.tan(0.959931); // 55 degrees
+    const arrowheadHeight = 4.284444 * thickNorm; // = 3tan(55 degrees) * thickNorm
     const midCoords = [coords3[0] - dir[0] * arrowheadHeight, coords3[1] - dir[1] * arrowheadHeight];
     const coords0 = [fromCoords[0] - perpdir[0] * thickNorm, fromCoords[1] - perpdir[1] * thickNorm];
     const coords6 = [fromCoords[0] + perpdir[0] * thickNorm, fromCoords[1] + perpdir[1] * thickNorm];
-
     const coords1 = [midCoords[0] - perpdir[0] * thickNorm, midCoords[1] - perpdir[1] * thickNorm];
     const coords2 = [midCoords[0] - 3 * perpdir[0] * thickNorm, midCoords[1] - 3 * perpdir[1] * thickNorm];
     const coords5 = [midCoords[0] + perpdir[0] * thickNorm, midCoords[1] + perpdir[1] * thickNorm];
     const coords4 = [midCoords[0] + 3 * perpdir[0] * thickNorm, midCoords[1] + 3 * perpdir[1] * thickNorm];
 
-    return `M ${coords0[0]},${coords0[1]}
-            L ${coords1[0]},${coords1[1]}
-            L ${coords2[0]},${coords2[1]}
-            L ${coords3[0]},${coords3[1]}
-            L ${coords4[0]},${coords4[1]}
-            L ${coords5[0]},${coords5[1]}
-            L ${coords6[0]},${coords6[1]}
-            A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}
-            Z`;
+    return `M${coords0[0]},${coords0[1]}L${coords1[0]},${coords1[1]}L${coords2[0]},${coords2[1]}
+            L${coords3[0]},${coords3[1]}L${coords4[0]},${coords4[1]}L${coords5[0]},${coords5[1]}
+            L${coords6[0]},${coords6[1]}A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}Z`;
   };
 
-  const getBoardMoveElementHintClass = (move?: GDefaultRegular2DMove): string => 
+  const moveButtonTitle = (uwapi_move_str: string): string => {
+    var moveObj = currentAvailableMoves.value[uwapi_move_str];
+    var value = moveObj.moveValue[0].toUpperCase() + moveObj.moveValue.substring(1);
+    return options.value.showNextMoveHints ? (value + (value === "Draw" || value === "Unsolved" || moveObj.remoteness < 0 ? ""
+     : (" in " + moveObj.remoteness + (!moveObj.winby ? "" : " or by " + moveObj.winby)))) : "";
+  }
+
+  const getBoardMoveElementHintClass = (move?: IAGMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
 </script>
 
@@ -373,6 +328,11 @@
   #image-autogui {
     height: 100%;
     width: 100%;
+  }
+
+  @keyframes pulsing-point {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.2); }
   }
 
   @keyframes pulsing-arrow {
@@ -385,29 +345,29 @@
     100% { stroke-width: var(--w2); }
   }
 
-  @keyframes pulsing-token {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.2); }
+  text {
+    text-anchor: middle;
+    alignment-baseline: middle;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
-  .app-game-board-default-button {
-    cursor: default;
+  .iag-button-point {
     transform-origin: var(--tOrigin);
     
-    [data-turn="A"] &.move { fill: var(--turn1Color); }
-    [data-turn="B"] &.move { fill: var(--turn2Color); }
+    [data-turn="A"] &.move { fill: var(--turn1Color); stroke: var(--turn1Color); }
+    [data-turn="B"] &.move { fill: var(--turn2Color); stroke: var(--turn1Color); }
 
     &.move.hint- {
-      &win      { fill: var(--winColor); }
-      &draw     { fill: var(--drawColor); }
-      &tie      { fill: var(--tieColor); }
-      &lose     { fill: var(--loseColor); }
-      &unsolved { fill: var(--unsolvedColor); }
+      &win      { fill: var(--winColor); stroke: var(--winColor); }
+      &draw     { fill: var(--drawColor); stroke: var(--drawColor); }
+      &tie      { fill: var(--tieColor); stroke: var(--tieColor); }
+      &lose     { fill: var(--loseColor); stroke: var(--loseColor); }
+      &unsolved { fill: var(--unsolvedColor); stroke: var(--unsolvedColor); }
     }
 
     &:hover {
       cursor: pointer;
-      animation-name: pulsing-token;
+      animation-name: pulsing-point;
       animation-duration: 0.3s;
       animation-iteration-count: infinite;
       animation-timing-function: ease-in-out;
@@ -415,7 +375,7 @@
     }
   }
 
-  .app-game-board-default-arrow {
+  .iag-button-arrow {
     stroke: var(--primaryColor);
     fill: var(--primaryColor);
 
@@ -461,7 +421,7 @@
     }
   }
 
-  .app-game-board-default-line {
+  .iag-button-line {
     stroke: var(--primaryColor);
 
     [data-turn="A"] & { stroke: var(--turn1Color); }

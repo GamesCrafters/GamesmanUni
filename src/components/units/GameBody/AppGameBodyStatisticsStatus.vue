@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-statistics-status">
-        <p :class="`uni-turn-${currentTurn}`">{{ status }}</p>
+        <p>{{ status }}</p>
     </div>
 </template>
 
@@ -10,8 +10,7 @@
 
     const store = useStore();
     const backgroundLoading = computed(() => store.getters.backgroundLoading);
-    const currentTurn = computed(() => backgroundLoading.value ? "2" : "1");
-    const status = computed(() => backgroundLoading.value ? "Loading" : " Ready ");
+    const status = computed(() => backgroundLoading.value ? "Loading..." : " Ready ");
 </script>
 
 <style lang="scss" scoped>

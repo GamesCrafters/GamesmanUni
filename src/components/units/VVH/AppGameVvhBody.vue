@@ -6,7 +6,7 @@
             <mark class="uni-tie color">tie</mark>
             <mark class="uni-lose color">lose</mark>
         </p>
-        <p class="top x-axis-label" v-if="showVvhGuides">
+        <div class="top x-axis-label" v-if="showVvhGuides">
             <div class="view-dropdown" v-if="supportsWinBy">
                 <div class="view-dropdown-selection">
                     <b>{{ vvhView }} ▼</b>
@@ -22,7 +22,7 @@
             <div v-else>
                 <b>Remoteness</b>
             </div>
-        </p>
+        </div>
         <div id="body">
             <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
                 <b>Moves</b>
@@ -89,18 +89,18 @@
                     </template>
                 </template>
 
-                <!-- D Symbols -->
+                <!-- D Symbols for Games and F Symbols for Puzzles -->
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : chartWidth / 2"
                                           :y="gridTop - xCoordinateHeight / 2"
                                           dominant-baseline="middle"
-                                          text-anchor="middle">D</text>
+                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : chartWidth / 2"
                                           :y="gridBottom + xCoordinateHeight / 2"
                                           dominant-baseline="middle"
-                                          text-anchor="middle">D</text>
+                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
 
                 <!-- Remoteness Coordinates -->
-                <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 1"
+                <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + 1"
                         :key="remoteness">
                     <text class="view-coordinate"
                             v-if="!isPuzzleGame &&remoteness % xInterval === 0"
@@ -136,7 +136,33 @@
                     </text>
                 </template>
 
-                <!-- Move Coordinates -->
+                <!-- Unknown Remoteness Remoteness Coordinates -->
+                <template v-if="finiteUnknownRemotenessExists">
+                    <text class="view-coordinate"
+                            v-if="!isPuzzleGame"
+                            :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">?</text>
+                    <text class="view-coordinate"
+                            :x="gridRight - (maximumRemoteness + 1) * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">?</text>
+                    <text class="view-coordinate"
+                            v-if="!isPuzzleGame"
+                            :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">?</text>
+                    <text class="view-coordinate"
+                            :x="gridRight - (maximumRemoteness + 1) * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">?</text>
+                </template>
+
+                <!-- Move Coordinates (Move Names) -->
                 <template v-if="currentValuedRoundId >= 2">
                     <template v-for="roundNumber in currentValuedRoundId - 1"
                             :key="roundNumber">
@@ -165,7 +191,7 @@
                                     :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle">
-                                🥳
+                                {{ currentPositionValue === "win" ? "🥳" : "😢" }}
                             </text>
                         </template>
                         <template v-else-if="currentPositionValue === 'tie'">
@@ -229,31 +255,31 @@
                     :height="rowHeight" />
 
                 <!-- Remoteness Bars -->
-                <template v-for="(_, remoteness) in Math.max(5, maximumRemoteness) + 2" :key="remoteness">
+                <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + (finiteUnknownRemotenessExists ? 3 : 2)" :key="remoteness">
                     <line v-if="!isPuzzleGame"
-                        :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                        :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                             'view-bar' : 'view-interval-bar'"
                         :x1="gridLeft + remoteness * columnWidth"
                         :y1="gridTop"
                         :x2="gridLeft + remoteness * columnWidth"
                         :y2="gridBottom"
-                        :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                        :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                             xBarWidth : xIntervalBarWidth" />
-                    <line :class="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                    <line :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                               'view-bar' : 'view-interval-bar'"
                           :x1="gridRight - remoteness * columnWidth"
                           :y1="gridTop"
                           :x2="gridRight - remoteness * columnWidth"
                           :y2="gridBottom"
-                          :stroke-width="remoteness % xInterval !== 0 && remoteness !== Math.max(5, maximumRemoteness) + 1 ?
+                          :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                               xBarWidth : xIntervalBarWidth" />
                 </template>
 
                 <!-- Position Value Links -->
                 <template v-if="currentValuedRoundId >= 2">
                     <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw'">
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw'">
+                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
+                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
@@ -294,7 +320,7 @@
                             </template>
                         </template>
                         <template v-else-if="currentValuedRounds[roundNumber].position.positionValue === 'tie'">
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw'">
+                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
@@ -355,7 +381,7 @@
                             </template>
                         </template>
                         <template v-else>
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw'">
+                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="isPuzzleGame ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
@@ -431,13 +457,13 @@
 
                 <!-- Link from Current Position Value to Next Moves' Position Value -->
                 <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves">
-                        <template v-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'draw'">
-                            <template v-if="nextMove.moveValue === 'draw'">
+                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" :key="nextMove">
+                        <template v-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'draw' || currentValuedRounds[currentValuedRoundId].position.remoteness == Remoteness.INFINITY">
+                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <line :class="`${nextMove.moveValue} link`"
-                                    :x1="chartWidth / 2"
+                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="chartWidth / 2"
+                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
                                     :stroke-width="linkWidth" />
                             </template>
@@ -474,7 +500,7 @@
                             </template>
                         </template>
                         <template v-else-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'tie'">
-                            <template v-if="nextMove.moveValue === 'draw'">
+                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${nextMove.moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
@@ -537,7 +563,7 @@
                             </template>
                         </template>
                         <template v-else>
-                            <template v-if="nextMove.moveValue === 'draw'">
+                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <line :class="`${nextMove.moveValue} link`"
                                     :x1="isPuzzleGame ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
@@ -617,8 +643,9 @@
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
                         <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
                                 :key="nextMove.move">
-                            <template v-if="nextMove.moveValue === 'draw'">
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, draw: showNextMoveHints }"
+                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
+                                <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
+                                                 showNextMoveHints ? nextMove.positionValue : '']"
                                     class="next-move-position-value"
                                     :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
@@ -667,9 +694,8 @@
                 <!-- Position Values -->
                 <template v-if="currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw'">
-                            <circle :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
-                                class="draw position-value"
+                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
+                            <circle :class="(roundNumber !== currentValuedRoundId ? 'clickable' : '') + ' ' + currentValuedRounds[roundNumber].position.positionValue + ' position-value'"
                                 :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
                                 :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 :r="positionValueSize"
@@ -953,7 +979,7 @@
 
                 <!-- Link from Current Position Value to Next Moves' Position Value -->
                 <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves">
+                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" :key="nextMove">
                         <line :class="`${nextMove.moveValue} link`"
                                     :x1="winByNodeGridXPosition(currentValuedRoundId)"
                                     :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
@@ -1055,10 +1081,10 @@
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
-    import { Move } from "../../../scripts/gamesmanUni/types";
+    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
+    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
     const store = useStore();
-
     const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
@@ -1076,15 +1102,45 @@
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentPositionValue = computed(() => store.getters.currentPositionValue);
     const currentRounds = computed(() => store.getters.currentRounds);
-    const currentValuedRounds = computed(() => 
-        currentRounds.value.filter(round => round.position.positionValue !== "unsolved")
-    );
+
+    const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
+
+    /** 
+     * Iterate through the rounds and see if any visited positions or any child positions of
+     * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
+     * to be a dummy value of 1 greater than the maximum known finite remoteness,
+     * which is where on the VVH finite unknown remoteness positions will go.
+     * @returns [0]: A copy of the match's rounds, with the remotenesses of FUR positions set to max known remoteness + 1
+     * @returns [1]: A boolean indicating whether there are FUR positions.
+    */
+    const detectFiniteUnknownRemoteness = computed((): [Rounds, boolean] => {
+        var roundsCopy = JSON.parse(JSON.stringify(currentRounds.value)) as Rounds;
+        var finiteUnknownRemotenessExists = false;
+        for (const round of roundsCopy) {
+            if (round.position.positionValue !== "unsolved") {
+                if (round.position.remoteness == Remoteness.FINITE_UNKNOWN) {
+                    round.position.remoteness = maximumRemoteness.value + 1;
+                    finiteUnknownRemotenessExists = true;
+                }
+                for (const move in round.position.availableMoves) {
+                    const moveObj = round.position.availableMoves[move]
+                    if (moveObj.remoteness == Remoteness.FINITE_UNKNOWN) {
+                        moveObj.remoteness = maximumRemoteness.value + 1;
+                        finiteUnknownRemotenessExists = true;
+                    }
+                }
+            }
+        }
+        return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
+    });
+    const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
+    const finiteUnknownRemotenessExists = computed(() => detectFiniteUnknownRemoteness.value[1]);
+
     const currentValuedRoundId = computed(() =>
         Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
     );
     const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
 
-    const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
     const winningDirectionHeight = ref(2);
@@ -1098,7 +1154,7 @@
 
     const yCoordinateWidth = ref(5);
     const chartWidth = ref(50);
-    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (vvhView.value === appVvhViews[0] ? Math.max(5, maximumRemoteness.value) + 1 : Math.max(5, maximumWinBy.value) + 1));
+    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (vvhView.value === appVvhViews[0] ? (maximumRemoteness.value + (finiteUnknownRemotenessExists.value ? 1 : 0) + 1) : Math.max(5, maximumWinBy.value) + 1));
     const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
     const gridLeft = computed(() => yCoordinateWidth.value);

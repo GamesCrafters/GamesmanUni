@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="EntitySVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+    <path d="M0.125,0.125 h9.75 v9.75 h-9.75 z" fill="#99df99"/>
+    <path d="M0.5,8.897 L9.5,8.897 L5,1.103 z" fill="blue"/>
+</svg>

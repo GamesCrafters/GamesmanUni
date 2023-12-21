@@ -24,14 +24,14 @@
             <line :id="'xb' + cell" stroke="var(--turn1Color)" :x1="19 + xOffset(cell)" :y1="3 + yOffset(cell)" :x2="19 + xOffset(cell) - b16(board[cell].mark === 'x')" :y2="3 + yOffset(cell) + b16(board[cell].mark === 'x')"/>
             <circle :id="'o' + cell" :transform="'rotate(-90 ' + (11 + xOffset(cell)) + ' ' + (11 + yOffset(cell)) + ')'" stroke="var(--turn2Color)" r="8" :cx="11 + xOffset(cell)" :cy="11 + yOffset(cell)" :stroke-dasharray="51" :stroke-dashoffset="board[cell].mark === 'o' ? 0 : 51"/>
 
-            <g :class="isComputerTurn ? '' : 'button'" v-if="!animationPlaying && board[cell].mark === '-'">
+            <g :class="movesAreClickable ? 'button' : ''" v-if="!animationPlaying && board[cell].mark === '-'">
                 <circle v-if="showNextMoves && board[cell].hint"
                     r="3" :cx="11 + xOffset(cell)" :cy="11 + yOffset(cell)"
                     :class="getHintClass(board[cell].hint)"
                     :opacity="showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1"/>
-                <rect v-if="currentRemoteness && !isComputerTurn"
+                <rect v-if="currentRemoteness && movesAreClickable"
                     cursor="pointer" fill="var(--backgroundColor)"
-                    @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: board[cell].move })"
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: board[cell].move })"
                     width="20" height="20" fill-opacity="0" stroke-opacity="0"
                     :x="1 + xOffset(cell)" :y="1 + yOffset(cell)"
                 />
@@ -54,8 +54,8 @@
     const currentPosition = computed(() => store.getters.currentPosition);
     const currentValue = computed(() => store.getters.currentPositionValue);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
+    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(availableMoves.value).length == 1)));
     const turn = computed(() => currentPosition.value[2]);
     const animationPlaying = computed(() => store.getters.animationPlaying);
     const isMisere = computed(() => store.getters.currentVariantId === "misere" ? "misere" : "");

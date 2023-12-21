@@ -7,6 +7,12 @@ export type Error = Status & {
     error: string;
 };
 
+export type Instructions = Status & {
+    response: Status & {
+        instructions: string;
+    };
+}
+
 export type OnePlayerGames = Status & {
     response: Array<Status & {
         gameId: string;
@@ -63,6 +69,7 @@ export type GameVariant = Status & {
             startPosition: string;
             variantId: string;
             imageAutoGUIData: ImageAutoGUIData;
+            gui_status: string;
         }>;
     };
 };
@@ -78,9 +85,11 @@ export type ImageAutoGUITheme = {
     background: string;
     foreground: string;
     entities: Record<string, ImageAutoGUIEntity>;
+    textEntityFontSize: number;
     circleButtonRadius: number;
     lineWidth: number;
     arrowWidth: number;
+    textButtonFontSize: number;
     entitiesOverArrows: boolean;
     sounds: Record<string, string>;
     animationType: string;

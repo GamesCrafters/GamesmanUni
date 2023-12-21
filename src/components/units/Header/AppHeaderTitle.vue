@@ -11,6 +11,7 @@
 
 <style lang="scss" scoped>
     #app-header-title {
+        width: 30%;
         align-content: center;
         align-items: center;
         display: flex;

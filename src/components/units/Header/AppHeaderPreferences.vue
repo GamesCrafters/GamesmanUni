@@ -2,14 +2,22 @@
     <div id="app-header-preferences">
         <div class="uni-dropdown">
             <div class="uni-dropdown-selection">
-                <img alt="Volume" v-if="preferences.volume" src='../../../models/images/sfxon.svg' style="width: 1.5rem" />
-                <img alt="Volume" v-else src='../../../models/images/sfxoff.svg' style="width: 1.5rem"/>
+                <img alt="Volume" src='../../../models/images/sfxon.svg' style="width: 1.5rem" />
             </div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" style="background:var(--neutralColor)">
-                    Sound Effects
+                    Moves
                     <VueSlider id="slider"
                             v-model="preferences.volume"
+                            :min="0"
+                            :max="1"
+                            :interval="0.1"
+                            :tooltip="'none'"/>
+                </div>
+                <div class="uni-dropdown-menu-option" style="background:var(--neutralColor)">
+                    Ambience
+                    <VueSlider id="slider"
+                            v-model="preferences.ambienceVolume"
                             :min="0"
                             :max="1"
                             :interval="0.1"
@@ -18,10 +26,10 @@
             </div>
         </div>
         <div class="uni-dropdown">
-            <div class="uni-dropdown-selection">{{ t(`appThemes.${appTheme}`) }} {{ t("themeTitle") }} ▼</div>
+            <div class="uni-dropdown-selection">{{ appTheme[0].toUpperCase() + appTheme.slice(1) }} ▼</div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" v-for="themeOption in appThemes" :key="themeOption" :style="setActiveThemeOptionStyle(themeOption)" @click="setAppTheme(themeOption)">
-                    {{ t(`appThemes.${themeOption}`) }}
+                    {{ themeOption[0].toUpperCase() + themeOption.slice(1) }}
                 </div>
             </div>
         </div>
@@ -34,10 +42,10 @@
             </div>
         </div>
         <div class="uni-dropdown">
-            <div class="uni-dropdown-selection">{{ t(`appRootFontSizes.${appRootFontSize}`) }} {{ t("fontSizeUnit") }} ▼</div>
+            <div class="uni-dropdown-selection">{{ appRootFontSize + "px" }} ▼</div>
             <div class="uni-dropdown-menu">
                 <div class="uni-dropdown-menu-option" v-for="fontSizeOption in appRootFontSizes" :key="fontSizeOption" :style="setActiveFontSizeOptionStyle(fontSizeOption)" @click="setAppRootFontSize(fontSizeOption)">
-                    {{ t(`appRootFontSizes.${fontSizeOption}`) }}
+                    {{ fontSizeOption }}
                 </div>
             </div>
         </div>
@@ -45,13 +53,14 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed, ref, watch } from "vue";
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { useI18n } from "vue-i18n";
     import VueSlider from "vue-slider-component";
+    import { setMoveSFXVolume, setAmbienceVolume } from "../../../scripts/gamesmanUni/audio";
 
     const store = useStore();
-    const preferences = computed(() => (store.getters.preferences));
+    const preferences = computed(() => store.getters.preferences);
     const { t } = useI18n();
     const { locale } = useI18n({ useScope: "global" });
     const appLocales = ["cn", "en-US", "es", "hi"];
@@ -74,21 +83,30 @@
         document.documentElement.style.backgroundColor = getComputedStyle(document.getElementById("app")!).getPropertyValue("--backgroundColor");
         appTheme.value = newAppTheme;
     };
-    const appRootFontSizes = ["05px", "06px", "07px", "08px", "09px", "10px", "11px", "12px", "13px", "14px", "15px", "16px", "17px", "18px", "19px", "20px", "21px", "22px", "23px", "24px", "25px"];
+    const appRootFontSizes = ["05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"];
     const appRootFontSize = ref("");
     const setActiveFontSizeOptionStyle = (fontSizeOption: string) => (fontSizeOption === appRootFontSize.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
     const setAppRootFontSize = (newAppFontSize: string) => {
         store.commit(mutationTypes.setRootFontSize, newAppFontSize);
-        document.documentElement.style.fontSize = newAppFontSize;
+        document.documentElement.style.fontSize = newAppFontSize + "px";
         appRootFontSize.value = newAppFontSize;
     };
     setAppLocale(store.getters.locale);
     setAppTheme(store.getters.theme);
     setAppRootFontSize(store.getters.rootFontSize);
+
+    watch(
+        () => [preferences.value.ambienceVolume, preferences.value.volume],
+        () => {
+            setMoveSFXVolume(preferences.value.volume);
+            setAmbienceVolume(preferences.value.ambienceVolume);
+        }
+    );
 </script>
 
 <style lang="scss" scoped>
     #app-header-preferences {
+        width: 30%;
         align-content: center;
         align-items: center;
         display: flex;

@@ -20,8 +20,8 @@
     const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
     const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(gameType.value, gameId.value, variantId.value));
     const regular2DGameBoards: Record<string, any> = {
-        "ttt-misere": CustomGUITicTacToe,
-        "ttt-regular": CustomGUITicTacToe,
+        "tictactoe-misere": CustomGUITicTacToe,
+        "tictactoe-regular": CustomGUITicTacToe,
         "quarto-regular": CustomGUIQuarto,
         "sim-regular": CustomGUISim
     };

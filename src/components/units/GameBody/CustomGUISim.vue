@@ -1,14 +1,14 @@
 <template>
     <svg id="custom-gui-sim" viewBox="-4.5 -4.5 9 9" xmlns="http://www.w3.org/2000/svg">
         
-        <!-- Available move buttons (i.e., lines left to draw). -->
+        <!-- Available move buttons (lines left to draw). -->
         <g v-if="!animationPlaying">
             <line v-for="(move, i) in richPositionData.moves" :key="'move' + i"
                 :x1="vertices[move.from][0]" :y1="vertices[move.from][1]"
                 :x2="vertices[move.to][0]" :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :opacity="showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1"
-                @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: move.str })"/>
+                @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: move.str })"/>
         </g>
 
         <!-- Already-drawn lines. -->
@@ -44,7 +44,7 @@
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => options.value ? options.value.showNextMoveDeltaRemotenesses : true);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
+    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
     const currentPosition = computed(() => store.getters.currentPosition);
     const animationPlaying = computed(() => store.getters.animationPlaying);
 

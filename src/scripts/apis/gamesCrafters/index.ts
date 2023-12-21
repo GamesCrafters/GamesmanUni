@@ -19,6 +19,8 @@ export const loadData = async <DataType extends Types.Status>(dataSource: string
     return <DataType>data;
 };
 
+export const loadInstructions = async (dataSource: string): Promise<Types.Instructions | undefined> => await loadData<Types.Instructions>(dataSource);
+
 export const loadGames = async (dataSource: string, payload: { gameType: string }): Promise<Types.OnePlayerGames | Types.TwoPlayerGames | undefined> => (payload.gameType === "puzzles" ? await loadData<Types.OnePlayerGames>(dataSource) : await loadData<Types.TwoPlayerGames>(dataSource));
 
 export const loadVariants = async (dataSource: string, payload: { gameType: string }): Promise<Types.OnePlayerGameVariants | Types.TwoPlayerGameVariants | undefined> => (payload.gameType === "puzzles" ? await loadData<Types.OnePlayerGameVariants>(dataSource) : await loadData<Types.TwoPlayerGameVariants>(dataSource));

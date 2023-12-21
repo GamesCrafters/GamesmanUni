@@ -1,7 +1,7 @@
 <template>
     <nav id="app-header-navigations">
         <router-link v-for="route in routes" :key="route.name" :to="route.path">
-            <h2>{{ t(route.name) }}</h2>
+            {{ t(route.name) }}
         </router-link>
     </nav>
 </template>
@@ -21,21 +21,37 @@
 
 <style lang="scss" scoped>
     #app-header-navigations {
+        width: 40%;
         align-content: center;
         align-items: center;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        > a > h2 {
-            color: var(--primaryColor);
-            margin: 0 0.5rem;
-        }
-        > a.router-link-exact-active {
-            color: var(--themeColor);
+        > a {
+            font-size: 1.5em;
+            text-decoration: none;
+            padding-left: 0.7em;
+            padding-right: 0.7em;
             > h2 {
-                color: var(--themeColor);
+                font-weight: 500;
+                color: var(--primaryColor);
+                margin: 0 0.5rem;
             }
+        }
+
+        > a:hover {
+            color: var(--backgroundColor);
+        }
+
+        > a.router-link-exact-active {
+            color: var(--primaryColor);
+            text-decoration: solid underline var(--primaryColor) 10%;
+        }
+
+        > a.router-link-exact-active:hover {
+            color: var(--backgroundColor);
+            text-decoration: solid underline var(--backgroundColor) 10%;
         }
     }
 </style>

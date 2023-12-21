@@ -15,6 +15,7 @@
     --neutralColor: #{blackboard.$neutralColor};
     --primaryColor: #{blackboard.$primaryColor};
     --regularFontFamily: #{blackboard.$regularFontFamily};
+    --secondaryColor: #{blackboard.$secondaryColor};
 }
 
 #app.uni-theme-cal {
@@ -23,6 +24,7 @@
     --neutralColor: #{cal.$neutralColor};
     --primaryColor: #{cal.$primaryColor};
     --regularFontFamily: #{cal.$regularFontFamily};
+    --secondaryColor: #{cal.$secondaryColor};
 }
 
 #app.uni-theme-classic {
@@ -31,6 +33,7 @@
     --neutralColor: #{classic.$neutralColor};
     --primaryColor: #{classic.$primaryColor};
     --regularFontFamily: #{classic.$regularFontFamily};
+    --secondaryColor: #{classic.$secondaryColor};
 }
 
 #app.uni-theme-dark {
@@ -39,6 +42,7 @@
     --neutralColor: #{dark.$neutralColor};
     --primaryColor: #{dark.$primaryColor};
     --regularFontFamily: #{dark.$regularFontFamily};
+    --secondaryColor: #{dark.$secondaryColor};
 }
 
 #app.uni-theme-greenboard {
@@ -47,6 +51,7 @@
     --neutralColor: #{greenboard.$neutralColor};
     --primaryColor: #{greenboard.$primaryColor};
     --regularFontFamily: #{greenboard.$regularFontFamily};
+    --secondaryColor: #{greenboard.$secondaryColor};
 }
 
 #app.uni-theme-light {
@@ -55,6 +60,7 @@
     --neutralColor: #{light.$neutralColor};
     --primaryColor: #{light.$primaryColor};
     --regularFontFamily: #{light.$regularFontFamily};
+    --secondaryColor: #{light.$secondaryColor};
 }
 
 #app.uni-theme-rose {
@@ -63,6 +69,7 @@
     --neutralColor: #{rose.$neutralColor};
     --primaryColor: #{rose.$primaryColor};
     --regularFontFamily: #{rose.$regularFontFamily};
+    --secondaryColor: #{rose.$secondaryColor};
 }
 
 #app.uni-theme-sepia {
@@ -71,6 +78,7 @@
     --neutralColor: #{sepia.$neutralColor};
     --primaryColor: #{sepia.$primaryColor};
     --regularFontFamily: #{sepia.$regularFontFamily};
+    --secondaryColor: #{sepia.$secondaryColor};
 }
 
 #app.uni-theme-terminal {
@@ -79,6 +87,7 @@
     --neutralColor: #{terminal.$neutralColor};
     --primaryColor: #{terminal.$primaryColor};
     --regularFontFamily: #{terminal.$regularFontFamily};
+    --secondaryColor: #{terminal.$secondaryColor};
 }
 
 #app.uni-theme-space {
@@ -87,4 +96,5 @@
     --neutralColor: #{space.$neutralColor};
     --primaryColor: #{space.$primaryColor};
     --regularFontFamily: #{space.$regularFontFamily};
+    --secondaryColor: #{space.$secondaryColor};
 }

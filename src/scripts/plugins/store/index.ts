@@ -12,6 +12,7 @@ const state: State = { app: Defaults.defaultApp };
 const preFetchEnabled: boolean = false;
 
 type Getters = {
+    ambienceVolume(state: State): number;
     animationPlaying(state: State): boolean;
     availableMove(state: State):
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
@@ -89,6 +90,7 @@ type Getters = {
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
+    ambienceVolume: (state: State) => state.app.preferences.ambienceVolume,
     animationPlaying: (state: State) => state.app.currentMatch.animationPlaying,
     availableMove: (state: State) =>
         (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
@@ -320,6 +322,7 @@ type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
 };
 
 export enum actionTypes {
+    addInstructions = "addInstructions",
     loadGames = "loadGames",
     loadVariants = "loadVariants",
     initiateMatch = "initiateMatch",
@@ -337,6 +340,7 @@ export enum actionTypes {
 }
 
 type Actions = {
+    [actionTypes.addInstructions](context: ActionContext, payload: {gameType: string, gameId: string}): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, payload: {
         type: string
     }): Promise<void>;
@@ -376,6 +380,10 @@ type Actions = {
 };
 
 const actions: Vuex.ActionTree<State, State> & Actions = {
+    addInstructions: async (context: ActionContext, payload: {gameType: string, gameId: string}) => {
+        const updatedApp = await GMU.addInstructions(context.state.app, {gameType: payload.gameType, gameId: payload.gameId})
+        if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
+    },
     loadGames: async (context: ActionContext, payload: { type: string }) => {
         const updatedApp = await GMU.loadGames(context.state.app, { gameType: payload.type });
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
@@ -425,7 +433,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
     runComputerMove: async (context: ActionContext) => {
         context.state.app.currentMatch.computerMoving = true;
         /* Keep moving until it becomes a human player's turn or the match is over. */
-        while (context.getters.currentPlayer.isComputer && !GMU.isEndOfMatch(context.state.app)) {
+        var onlyOneLegalMove = context.getters.options.automoveIfSingleMove && Object.keys(context.getters.currentAvailableMoves).length == 1;
+        while ((context.getters.currentPlayer.isComputer || onlyOneLegalMove) && !GMU.isEndOfMatch(context.state.app)) {
             await new Promise((resolve) => setTimeout(resolve, store.getters.options.computerMoveDuration));
             /* If user leaves the game page during timeout, abort. */
             if (!context.state.app.currentMatch.gameType) return;
@@ -438,6 +447,7 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
                 context.commit(mutationTypes.setApp, updatedApp);
                 if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
             }
+            onlyOneLegalMove = context.getters.options.automoveIfSingleMove && Object.keys(context.getters.currentAvailableMoves).length == 1;
         }
         context.state.app.currentMatch.computerMoving = false;
     },

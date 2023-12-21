@@ -4,6 +4,7 @@ import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
 import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
+import { playGameAmbience, pauseAllGameSounds } from "./audio"
 import { useStore } from "../plugins/store";
 const moveHistoryDelim = ':';
 
@@ -32,6 +33,12 @@ export const loadGames = async (app: Types.App, payload: { gameType: string; for
     return app;
 };
 
+export const addInstructions = async (app: Types.App, payload: {gameType: string, gameId: string}) => {
+    const instructions = await GCTAPI.loadInstructions(app.dataSources.twoPlayerGameAPI + `/instructions/${app.currentMatch.gameType}/${app.currentMatch.gameId}/${app.preferences.locale}`);
+    app.gameTypes[payload.gameType].games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.response.instructions : "";
+    return app;
+}
+
 export const loadVariants = async (app: Types.App, payload: { gameType: string; gameId: string; force?: boolean }) => {
     if (!Object.keys(app.gameTypes[payload.gameType].games).length) {
         const updatedApp = await loadGames(app, payload);
@@ -39,6 +46,7 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     }
     if (!payload.force && app.gameTypes[payload.gameType].games[payload.gameId] && Object.keys(app.gameTypes[payload.gameType].games[payload.gameId].variants.variants).length && (new Date().getTime() - app.gameTypes[payload.gameType].games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
+    const instructions = await GCTAPI.loadInstructions(app.dataSources.twoPlayerGameAPI + `/instructions/${payload.gameType}/${payload.gameId}/${app.preferences.locale}`);
     const variants = await GCTAPI.loadVariants(baseDataSource + `/${payload.gameId}`, payload);
     if (!variants) return undefined;
     app.gameTypes[payload.gameType].games[payload.gameId].variants.status = variants.status;
@@ -46,7 +54,8 @@ export const loadVariants = async (app: Types.App, payload: { gameType: string; 
     if (payload.gameType === "puzzles") app.gameTypes[payload.gameType].games[payload.gameId].author = (<GCTAPITypes.OnePlayerGameVariants>variants).response.author;
     app.gameTypes[payload.gameType].games[payload.gameId].dateCreated = (<GCTAPITypes.OnePlayerGameVariants>variants).response.dateCreated;
     app.gameTypes[payload.gameType].games[payload.gameId].description = (<GCTAPITypes.OnePlayerGameVariants>variants).response.description;
-    app.gameTypes[payload.gameType].games[payload.gameId].instructions = variants.response.instructions;
+    app.gameTypes[payload.gameType].games[payload.gameId].instructions = {};
+    app.gameTypes[payload.gameType].games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.response.instructions : "";
     app.gameTypes[payload.gameType].games[payload.gameId].custom = variants.response.custom === "true";
     app.gameTypes[payload.gameType].games[payload.gameId].variants.variants = {};
     for (const variant of variants.response.variants) {
@@ -221,6 +230,7 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(Defaults.defaultRound),
         deepcopy(app.currentMatch.round)
     ];
+    playGameAmbience();
     app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
@@ -275,7 +285,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
         positions: { ...Defaults.defaultPositions },
         imageAutoGUIData: variant_response.response.variant[0].imageAutoGUIData,
         status: variant_response.status,
-        gui_status: variant_response.gui_status
+        gui_status: variant_response.response.variant[0].gui_status
     };
 };
 
@@ -289,7 +299,7 @@ const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: 
 */
 export const getMaximumRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
     const remotenesses = new Set<number>();
-    remotenesses.add(5); // In case all involved positions are draw, 5 shall be the default maximum remoteness.
+    remotenesses.add(0); // In case all involved positions are draw or have finite unknown remotenesses, 0 shall be the default maximum remoteness.
     for (let roundId = payload.from; roundId <= payload.to; roundId++) {
         const round = app.currentMatch.rounds[roundId];
         if (round.position.positionValue !== "draw") remotenesses.add(round.position.remoteness);
@@ -334,6 +344,7 @@ export const isEndOfMatch = (app: Types.App) =>
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
+    pauseAllGameSounds();
     if (app.currentMatch.rounds.length > 2) { 
         app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
@@ -346,11 +357,13 @@ export const exitMatch = (app: Types.App) => {
 /** 
  * Determines the CPU player's next move. If the CPU strategy is set to 'Remoteness' and the CPU player is winning on the current position, returns
  * the move with the lowest remoteness value; if there are multiple moves with the lowest remoteness value and the current game supports win by, returns 
- * the move with the highest win by value. If the CPU player is loosing on the current position, returns the move with the highest remoteness value; if 
+ * the move with the highest win by value. If the CPU player is losing on the current position, returns the move with the highest remoteness value; if 
  * there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the CPU strategy is set to 'Win By'
  * and the CPU player is winning on the current position, returns the move with the highest win by value; if there are multiple moves with the highest win 
- * by value, returns the move with the lowest remoteness value. If the CPU player is loosing on the current position, returns the move with the lowest win 
+ * by value, returns the move with the lowest remoteness value. If the CPU player is losing on the current position, returns the move with the lowest win 
  * by value; if there are multiple moves with the lowest win by value, returns the move with the highest remoteness.
+ * Regardless of CPU strategy, if the current position is a known pure draw: if the current position is a draw-win, then return the 
+ * lowest-draw-remoteness same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
  * @param {Types.Round} round - current round.
  * @returns CPU player's next move.
 */
@@ -398,6 +411,12 @@ export const generateComputerMove = (round: Types.Round) => {
             const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
             bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
         }
+    }
+    if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
+        var isDrawWin = round.position.drawRemoteness & 1; // Bit indicating whether current position is a draw-win
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawLevel === round.position.drawLevel && isDrawWin != (availableMove.drawRemoteness & 1));
+        var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 };

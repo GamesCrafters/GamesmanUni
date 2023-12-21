@@ -8,13 +8,9 @@
     import { computed } from "vue";
     import VueMarkdownIt from "vue3-markdown-it";
     import MarkdownItLinkAttributes from "markdown-it-link-attributes";
-    import AppAboutCnSource from "../../models/docs/cn/AppAbout.md?raw";
-    import AppAboutEnSource from "../../models/docs/en/AppAbout.md?raw";
-    import { useStore } from "../../scripts/plugins/store";
-
-    const store = useStore();
+    import AppAboutEnSource from "../../models/docs/AppAbout.md?raw";
     const plugins = [{ plugin: MarkdownItLinkAttributes, options: { attrs: { target: "_blank", rel: "noopener noreferrer nofollow" } } }];
-    const source = computed(() => (store.getters.locale === "cn" ? AppAboutCnSource : AppAboutEnSource));
+    const source = computed(() => AppAboutEnSource);
 </script>
 
 <style lang="scss" scoped>

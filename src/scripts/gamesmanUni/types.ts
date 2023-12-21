@@ -29,6 +29,7 @@ export type Preferences = {
     fallbackLocale: string;
     rootFontSize: string;
     volume: number;
+    ambienceVolume: number;
 };
 
 export type DataSources = {
@@ -49,7 +50,7 @@ export type Game = {
     author: string;
     description: string;
     dateCreated: string;
-    instructions: string;
+    instructions: Record<string, string>;
     type: string;
     variants: Variants;
     status: string;
@@ -121,6 +122,7 @@ export type Commit = {
 };
 
 export type Options = {
+    automoveIfSingleMove: boolean;
     computerMoveDuration: number;
     showInstructions: boolean;
     showNextMoveDeltaRemotenesses: boolean;

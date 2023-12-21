@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="9 9 82 82" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <marker id="arrow"
+      viewBox="0 0 10 10"
+      refX="5" refY="5"
+      markerWidth="4" markerHeight="3" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#000"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="100" height="100" fill="none"/>
+  <g stroke-width="0.6" stroke="#000">
+    <line x1="39.362392978533386" y1="17.093257707214715" x2="34.339438602095164" y2="26.58106041826469" marker-end="url(#arrow)" />
+<line x1="42.637607021466614" y1="17.093257707214715" x2="47.660561397904836" y2="26.58106041826469" marker-end="url(#arrow)" />
+<line x1="35.5" y1="31.0" x2="45.0" y2="31.0" marker-end="url(#arrow)" />
+<line x1="29.59289373231226" y1="33.540834393670394" x2="17.438723239553916" y2="46.370236580470866" marker-end="url(#arrow)" />
+<line x1="32.0" y1="34.5" x2="32.0" y2="45.0" marker-end="url(#arrow)" />
+<line x1="52.40710626768774" y1="33.540834393670394" x2="64.56127676044609" y2="46.370236580470866" marker-end="url(#arrow)" />
+<line x1="14.0" y1="53.5" x2="14.0" y2="63.0" marker-end="url(#arrow)" />
+<line x1="16.474873734152915" y1="52.474873734152915" x2="28.464466094067262" y2="64.46446609406726" marker-end="url(#arrow)" />
+<line x1="32.0" y1="53.5" x2="32.0" y2="63.0" marker-end="url(#arrow)" />
+<line x1="34.474873734152915" y1="52.474873734152915" x2="46.46446609406726" y2="64.46446609406726" marker-end="url(#arrow)" />
+<line x1="73.0" y1="50.0" x2="81.0" y2="50.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="65.52512626584708" y1="52.474873734152915" x2="53.53553390593274" y2="64.46446609406726" marker-end="url(#arrow)" />
+<line x1="68.0" y1="53.5" x2="68.0" y2="63.0" marker-end="url(#arrow)" />
+<line x1="83.52512626584708" y1="52.474873734152915" x2="71.53553390593274" y2="64.46446609406726" marker-end="url(#arrow)" />
+<line x1="86.0" y1="53.5" x2="86.0" y2="63.0" marker-end="url(#arrow)" />
+<line x1="19.0" y1="68.0" x2="27.0" y2="68.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="14.0" y1="71.5" x2="14.0" y2="81.0" marker-end="url(#arrow)" />
+<line x1="32.0" y1="71.5" x2="32.0" y2="81.0" marker-end="url(#arrow)" />
+<line x1="47.525126265847085" y1="70.47487373415292" x2="35.53553390593274" y2="82.46446609406726" marker-end="url(#arrow)" />
+<line x1="50.0" y1="71.5" x2="50.0" y2="81.0" marker-end="url(#arrow)" />
+<line x1="68.0" y1="71.5" x2="68.0" y2="81.0" marker-end="url(#arrow)" />
+</g>
+<g stroke="black" stroke-width="0.25">
+  <circle cx="41" cy="14" r="4" fill="#008000"/>
+  <circle cx="32" cy="31" r="4" fill="#008000"/>
+  <circle cx="50" cy="31" r="4" fill="#880000"/>
+  <circle cx="14" cy="50" r="4" fill="#ffff00"/>
+  <circle cx="32" cy="50" r="4" fill="#008000"/>
+  <circle cx="68" cy="50" r="4" fill="#008000"/>
+  <circle cx="86" cy="50" r="4" fill="#008000"/>
+  <circle cx="14" cy="68" r="4" fill="#ffff00"/>
+  <circle cx="32" cy="68" r="4" fill="#ffff00"/>
+  <circle cx="50" cy="68" r="4" fill="#880000"/>
+  <circle cx="68" cy="68" r="4" fill="#ffff00"/>
+  <circle cx="86" cy="68" r="4" fill="#880000"/>
+  <circle cx="14" cy="86" r="4" fill="#008000"/>
+  <circle cx="32" cy="86" r="4" fill="#008000"/>
+  <circle cx="50" cy="86" r="4" fill="#008000"/>
+  <circle cx="68" cy="86" r="4" fill="#ffff00"/>
+</g>
+</svg>

@@ -49,7 +49,7 @@
                 <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i"
                     :class="'quarto-move'"
                     :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px'"
-                    @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
                     <rect width="16" height="16" rx="2" ry="2"
                         :x="centers[token.to][0] - 8" :y="centers[token.to][1] - 8" 
                         :class="'quarto-hint ' + getBoardMoveElementHintClass(token.move)"
@@ -73,7 +73,7 @@
                 <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i"
                     :class="'quarto-move'"
                     :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px'"
-                    @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
                     <g v-if="token.token != '-'">
                         <rect width="5" height="5" rx="0.5" ry="0.5"
                             :x="centers[token.to][0] - 2.5" :y="centers[token.to][1] - 2.5"
@@ -131,8 +131,8 @@
     const store = useStore();
     const options = computed(() => store.getters.options);
     const currentPosition = computed(() => store.getters.currentPosition);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
+    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(availableMoves.value).length == 1)));
     const isPlacing = computed(() => currentPosition.value.slice(-1) != "-");
     const gameTheme = computed(() => store.getters.currentGameTheme || "r");
     const otherGameTheme = computed(() => gameTheme.value === "r" ? "b" : "r");

@@ -1,7 +1,10 @@
 <template>
     <div id="app-game-body-statistics-data">
         <p id="roundId">Move #{{ roundId }}</p>
-        <p id="turn">{{ currentPlayerName }}'s Turn</p>
+        <p id="turn">
+            <span :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</span>'s Turn
+            <span v-if="automovingSingleMove" style="font-weight:800;"> [Autoselecting Only Move]</span>
+        </p>
     </div>
 </template>
 
@@ -12,6 +15,11 @@
     const store = useStore();
     const roundId = computed(() => store.getters.currentRoundId);
     const currentPlayerName = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.name : ""));
+    const currentTurn = computed(() => (store.getters.currentMatch.round.firstPlayerTurn ? 1 : 2));
+    const currentPlayerIsComputer = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.isComputer : false));
+    const automovingSingleMove = computed(() => (
+        !currentPlayerIsComputer.value && store.getters.options.automoveIfSingleMove && 
+        Object.keys(store.getters.currentAvailableMoves).length == 1));
 </script>
 
 <style lang="scss" scoped>

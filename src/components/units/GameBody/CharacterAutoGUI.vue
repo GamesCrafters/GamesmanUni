@@ -5,7 +5,7 @@
       <g
         v-for="(cell, i) in richPositionData.board"
         :key="'cell' + i"
-        @click="cell.move && !isComputerTurn && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
+        @click="cell.move && movesAreClickable && store.dispatch(actionTypes.runMove, { move: cell.move.str })">
         <rect
           :class="'app-game-board-default-cell ' + (cell.move ? 'move ' : '') + (cell.token != '-' && !cell.move ? 'placed ' : '')"
           :x="xOffset + centers[i][0] * scaledWidth / richPositionData.columns"
@@ -28,7 +28,7 @@
         <polyline
           :points="formatArrowPolylinePoints(arrow, boxSize / 14)"
           :class="'app-game-board-default-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-          @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
           :style="{
             opacity: options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1,
           }"/>
@@ -47,9 +47,9 @@
                       class="move"
                       v-for="availableMove in currentAvailableMoves"
                       :key="availableMove.move"
-                      :class="[showNextMoveHints ? `uni-${availableMove.moveValue}` : '', !isComputerTurn ? 'moveIndicator' : '']"
+                      :class="[showNextMoveHints ? `uni-${availableMove.moveValue}` : '', movesAreClickable ? 'moveIndicator' : '']"
                       :style="{ opacity: showNextMoveDeltaRemotenesses ? availableMove.moveValueOpacity : 1 }"
-                      @click="!isComputerTurn && store.dispatch(actionTypes.runMove, { move: availableMove.move })">{{ availableMove.move }}</div>
+                      @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: availableMove.move })">{{ availableMove.move }}</div>
                 </template>
             </div>
         </div>
@@ -87,11 +87,11 @@
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition.replace(/^;/, "").replace(/;$/, "").replace(/;/g, "\n").replace(/=/g, " = "));
     const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
-    const isComputerTurn = computed(() => store.getters.currentPlayer.isComputer);
+    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
 
     const richPositionData = computed(() => {
       const position: string = currentPosition.value;
-      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\*]+)*/)!;
+      const matches = position.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\.~\*]+)*/)!;
       const validRichPosition = matches && matches.length >= 5;
 
       if (validRichPosition) {

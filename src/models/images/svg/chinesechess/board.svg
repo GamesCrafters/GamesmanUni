@@ -1,116 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Author: Jiachun Li -->
-<svg viewBox="0 0 900 1000" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="900" height="1000" fill="#f1cb9d" />
-    <rect x="45" y="45" width="810" height="910" fill="#f1cb9d" stroke="black" stroke-width="3"/>
-    <rect x="50" y="50" width="800" height="900" fill="#f1cb9d" stroke="black" stroke-width="4" />
-    <!-- horizontal line -->
-    <line x1="50" y1="150" x2="850" y2="150" stroke="black" stroke-width="4" />
-    <line x1="50" y1="250" x2="850" y2="250" stroke="black" stroke-width="4" />
-    <line x1="50" y1="350" x2="850" y2="350" stroke="black" stroke-width="4" />
-    <line x1="50" y1="450" x2="850" y2="450" stroke="black" stroke-width="4" />
-    <line x1="50" y1="550" x2="850" y2="550" stroke="black" stroke-width="4" />
-    <line x1="50" y1="650" x2="850" y2="650" stroke="black" stroke-width="4" />
-    <line x1="50" y1="750" x2="850" y2="750" stroke="black" stroke-width="4" />
-    <line x1="50" y1="850" x2="850" y2="850" stroke="black" stroke-width="4" />
-    <!-- vertical line -->
-    <line x1="150" y1="50" x2="150" y2="450" stroke="black" stroke-width="4" />
-    <line x1="150" y1="550" x2="150" y2="950" stroke="black" stroke-width="4" />
-    <line x1="250" y1="50" x2="250" y2="450" stroke="black" stroke-width="4" />
-    <line x1="250" y1="550" x2="250" y2="950" stroke="black" stroke-width="4" />
-    <line x1="350" y1="50" x2="350" y2="450" stroke="black" stroke-width="4" />
-    <line x1="350" y1="550" x2="350" y2="950" stroke="black" stroke-width="4" />
-    <line x1="450" y1="50" x2="450" y2="450" stroke="black" stroke-width="4" />
-    <line x1="450" y1="550" x2="450" y2="950" stroke="black" stroke-width="4" />
-    <line x1="550" y1="50" x2="550" y2="450" stroke="black" stroke-width="4" />
-    <line x1="550" y1="550" x2="550" y2="950" stroke="black" stroke-width="4" />
-    <line x1="650" y1="50" x2="650" y2="450" stroke="black" stroke-width="4" />
-    <line x1="650" y1="550" x2="650" y2="950" stroke="black" stroke-width="4" />
-    <line x1="750" y1="50" x2="750" y2="450" stroke="black" stroke-width="4" />
-    <line x1="750" y1="550" x2="750" y2="950" stroke="black" stroke-width="4" />
-    <!-- diagonal -->
-    <line x1="350" y1="50" x2="550" y2="250" stroke="black" stroke-width="4" />
-    <line x1="550" y1="50" x2="350" y2="250" stroke="black" stroke-width="4" />
-    <line x1="350" y1="750" x2="550" y2="950" stroke="black" stroke-width="4" />
-    <line x1="550" y1="750" x2="350" y2="950" stroke="black" stroke-width="4" />
-    <!-- star -->
-    <g transform="translate(150 250)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(750 250)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(250 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(450 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(650 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(150 750)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(750 750)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(250 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(450 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(650 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(50 350)">
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(50 650)">
-      <path d="M 7 -35 L 7 -7 L 35 -7" stroke="black" stroke-width="4" fill="none" />
-      <path d="M 35 7 L 7 7 L 7 35" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(850 350)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <g transform="translate(850 650)">
-      <path d="M -35 -7 L -7 -7 L -7 -35" stroke="black" stroke-width="4" fill="none" />
-      <path d="M -7 35 L -7 7 L -35 7" stroke="black" stroke-width="4" fill="none" />
-    </g>
-    <!-- text -->
+<svg id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000">
+    <defs>
+      <path id="s" fill="none" stroke="#000" stroke-width="4" d="M-35,-7h28v-28m14,0v28h28m0,14h-28v28m-14,0v-28h-28"/>
+      <path id="r" fill="none" stroke="#000" stroke-width="4" d="M-7,-35v28h-28m0,14h28v28"/>
+      <path id="l" fill="none" stroke="#000" stroke-width="4" d="M7,-35v28h28m0,14h-28v28"/>
+    </defs>
+    <path d="M0,0h900v1000h-900z" fill="#f1cb9d" />
+    <path d="M45,45h810v910h-810z" fill="none" stroke="black" stroke-width="3"/>
+    <path d="M50,50h800v900h-800zM50,150h800M50,250h800M50,350h800M50,450h800M50,550h800M50,650h800M50,750h800M50,850h800
+    M150,50v400M250,50v400M350,50v400M450,50v400M550,50v400M650,50v400M750,50v400
+    M150,550v400M250,550v400M350,550v400M450,550v400M550,550v400M650,550v400M750,550v400
+    M350,50l200,200M550,50l-200,200M350,750l200,200M550,750l-200,200" fill="none" stroke="#000" stroke-width="4"/>
+    <use href="#s" x="150" y="250"/>
+    <use href="#s" x="750" y="250"/>
+    <use href="#s" x="150" y="750"/>
+    <use href="#s" x="750" y="750"/>
+    <use href="#s" x="250" y="350"/>
+    <use href="#s" x="450" y="350"/>
+    <use href="#s" x="650" y="350"/>
+    <use href="#s" x="250" y="650"/>
+    <use href="#s" x="450" y="650"/>
+    <use href="#s" x="650" y="650"/>
+    <use href="#l" x="50" y="350"/>
+    <use href="#l" x="50" y="650"/>
+    <use href="#r" x="850" y="350"/>
+    <use href="#r" x="850" y="650"/>
     <text x="250" y="500" font-size="80" font-family="LiSu" text-anchor="middle" dominant-baseline="central" fill="#000000">楚 河</text>
     <text x="650" y="500" font-size="80" font-family="LiSu" text-anchor="middle" dominant-baseline="central" fill="#000000">汉 界</text>
 </svg>

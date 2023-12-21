@@ -9,8 +9,9 @@ export const defaultPreferences: Types.Preferences = {
     theme: "light",
     locale: "en-US",
     fallbackLocale: "en-US",
-    rootFontSize: "11px",
-    volume: 1
+    rootFontSize: "11",
+    volume: 1,
+    ambienceVolume: 1
 };
 
 export const defaultDataSources: Types.DataSources = {
@@ -76,7 +77,7 @@ export const defaultGame: Types.Game = {
     author: "",
     description: "",
     dateCreated: "",
-    instructions: "",
+    instructions: {},
     type: "",
     variants: { ...defaultVariants, variants: {} },
     status: "",
@@ -112,6 +113,7 @@ export const defaultCommits: Types.Commits = {
 };
 
 export const defaultOptions: Types.Options = {
+    automoveIfSingleMove: false,
     computerMoveDuration: 1000,
     showInstructions: false,
     showNextMoveDeltaRemotenesses: true,
