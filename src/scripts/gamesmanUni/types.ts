@@ -154,3 +154,10 @@ export type Round = {
     moveValue: string;
     position: Position;
 };
+
+export interface Dict {
+    tag: string;
+    time: number;
+    a?: number; //the angle for rotation / the x distance for movement / the scale factor for scaling
+    b?: number; //the y distance for movement
+}
