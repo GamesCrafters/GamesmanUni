@@ -3,11 +3,11 @@
         <h2>{{ gameName }}</h2>
         <h3>{{ t("gameVariantsTitle") }}</h3>
         <div id="variants" v-if="game">
-            <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui_status" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
-                <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.description + ' Logo'" style="width: 8rem" />
-                <p>{{ variant.description }}</p>
+            <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
+                <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.name + ' Logo'" style="width: 8rem" />
+                <p>{{ variant.name }}</p>
             </router-link>
-            <div v-if="gameCustom" v-on:click="customBoardRoute" :class="game.gui_status">
+            <div v-if="gameCustom" v-on:click="customBoardRoute" :class="game.gui">
                 <img :src="getLogoSource('custom')" :alt="game.name + ' ' + 'Custom Logo'" style="width: 8rem" />
                 <p>Custom</p>
             </div>
@@ -28,7 +28,7 @@
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
     const game = computed(() => store.getters.game(gameType.value, gameId.value));
-    const gameCustom = computed(() => (game.value ? game.value.custom : false));
+    const gameCustom = computed(() => (game.value ? game.value.allowCustomVariantCreation : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const gameVariants = computed(() => {
         let total = game.value.variants.variants;

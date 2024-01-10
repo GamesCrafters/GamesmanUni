@@ -9,7 +9,7 @@ export type App = Update & {
     version: string;
     preferences: Preferences;
     dataSources: DataSources;
-    gameTypes: GameTypes;
+    games: Record<string, Game>;
     commits: Commits;
     options: Options;
     matches: Matches;
@@ -34,29 +34,18 @@ export type Preferences = {
 
 export type DataSources = {
     gitHubRepositoryAPI: string;
-    onePlayerGameAPI: string;
-    twoPlayerGameAPI: string;
-};
-
-export type GameTypes = Record<string, Games>;
-
-export type Games = Update & {
-    games: Record<string, Game>;
+    gameAPI: string;
 };
 
 export type Game = {
     id: string;
     name: string;
-    author: string;
-    description: string;
-    dateCreated: string;
     instructions: Record<string, string>;
     type: string;
     variants: Variants;
-    status: string;
-    gui_status: string;
-    custom: boolean;
-    supportsWinBy: number;
+    gui: string;
+    allowCustomVariantCreation: boolean;
+    supportsWinBy: boolean;
 };
 
 export type Variants = Update & {
@@ -65,12 +54,12 @@ export type Variants = Update & {
 
 export type Variant = {
     id: string;
-    description: string;
+    name: string;
     startPosition: string;
+    autoguiStartPosition: string;
     positions: Positions;
     imageAutoGUIData: ImageAutoGUIData;
-    status: string;
-    gui_status: string;
+    gui: string;
 };
 
 export type Positions = Record<string, Position>;
@@ -79,6 +68,7 @@ export type Position = Update & {
     availableMoveNames: MoveNames;
     availableMoves: Moves;
     position: string;
+    autoguiPosition: string;
     positionValue: string;
     remoteness: number;
     winby: number;
@@ -94,10 +84,11 @@ export type MoveNames = Record<string, string>;
 export type Move = {
     deltaRemoteness: number;
     move: string;
-    moveName: string;
+    autoguiMove: string;
     moveValue: string;
     moveValueOpacity: number;
     position: string;
+    autoguiPosition: string;
     positionValue: string;
     remoteness: number;
     winby: number;
@@ -144,6 +135,7 @@ export type Match = {
     gameTheme: string;
     variantId: string;
     startPosition: string;
+    autoguiStartPosition: string;
     firstPlayer: Player;
     secondPlayer: Player;
     rounds: Rounds;
@@ -162,7 +154,7 @@ export type Round = {
     id: number;
     firstPlayerTurn: boolean;
     move: string;
-    moveName: string;
+    autoguiMove: string;
     moveValue: string;
     position: Position;
 };
