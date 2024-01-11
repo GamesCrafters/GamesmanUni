@@ -28,5 +28,3 @@ export const loadGame = async (dataSource: string): Promise<Types.Game | undefin
 export const loadVariant = async (dataSource: string): Promise<Types.Variant | undefined> => await loadData<Types.Variant>(dataSource);
 
 export const loadPosition = async (dataSource: string) => await loadData<Types.Position>(dataSource);
-
-// export const loadRandomPosition = async (dataSource: string) => await loadData<Types.RandomPosition>(dataSource);

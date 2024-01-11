@@ -32,14 +32,12 @@ export type Game = {
 };
 
 export type Variant = {
-    variant: {
-        id: string;
-        name: string;
-        startPosition: string;
-        autoguiStartPosition: string;
-        imageAutoGUIData: ImageAutoGUIData;
-        gui: string;
-    };
+    id: string;
+    name: string;
+    startPosition: string;
+    autoguiStartPosition: string;
+    imageAutoGUIData: ImageAutoGUIData;
+    gui: string;
 };
 
 export type ImageAutoGUIData = {
@@ -48,7 +46,7 @@ export type ImageAutoGUIData = {
 };
 
 export type ImageAutoGUITheme = {
-    space: Array<Array<number>>;
+    space: Array<number>;
     centers: Array<Array<number>>;
     background: string;
     foreground: string;
@@ -69,21 +67,23 @@ export type ImageAutoGUIEntity = {
     scale: number;
 };
 
+export type Move = {
+    move: string;
+    autoguiMove: string;
+    position: string;
+    autoguiPosition: string;
+    deltaRemoteness: number;
+    moveValue: string;
+    positionValue: string;
+    remoteness: number;
+    winby: number;
+    mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
+};
+
 export type Position = {
-    moves: Array<{
-        move: string;
-        autoguiMove: string;
-        position: string;
-        autoguiPosition: string;
-        deltaRemoteness: number;
-        moveValue: string;
-        positionValue: string;
-        remoteness: number;
-        winby: number;
-        mex: string;
-        drawLevel: number;
-        drawRemoteness: number;
-    }>;
+    moves: Array<Move>;
     position: string;
     autoguiPosition: string;
     positionValue: string;

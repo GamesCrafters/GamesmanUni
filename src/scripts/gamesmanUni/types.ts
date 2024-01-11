@@ -42,14 +42,10 @@ export type Game = {
     name: string;
     instructions: Record<string, string>;
     type: string;
-    variants: Variants;
+    variants: Record<string, Variant>;
     gui: string;
     allowCustomVariantCreation: boolean;
     supportsWinBy: boolean;
-};
-
-export type Variants = Update & {
-    variants: Record<string, Variant>;
 };
 
 export type Variant = {
@@ -64,7 +60,7 @@ export type Variant = {
 
 export type Positions = Record<string, Position>;
 
-export type Position = Update & {
+export type Position = {
     availableMoveNames: MoveNames;
     availableMoves: Moves;
     position: string;
@@ -141,8 +137,8 @@ export type Match = {
     rounds: Rounds;
     moveHistory: string;
     round: Round;
-    created: number;
-    lastPlayed: number;
+    // created: number;
+    // lastPlayed: number;
     backgroundLoading: boolean;
     computerMoving: boolean;
     animationPlaying: boolean;

@@ -13,7 +13,7 @@ const deepcopy = (obj: Object) => {
 };
 
 export const loadGames = async (app: Types.App) => {
-    // if (!payload.force && Object.keys(app.gameTypes[payload.gameType].games).length && (new Date().getTime() - app.gameTypes[payload.gameType].lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
+    // if (Object.keys(app.games).length && (new Date().getTime() - app.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
     if (!games) return undefined;
     for (const game of games) {
@@ -23,7 +23,7 @@ export const loadGames = async (app: Types.App) => {
             name: game.name,
             type: game.type,
             gui: game.gui,
-            variants: { ...Defaults.defaultVariants },
+            variants: {},
         };
     }
     //app.gameTypes[payload.gameType].lastUpdated = new Date().getTime();
@@ -43,89 +43,140 @@ export const loadGame = async (app: Types.App, payload: { gameId: string; force?
     }
     // if (!payload.force && app.games[payload.gameId] && Object.keys(app.games[payload.gameId].variants.variants).length && (new Date().getTime() - app.games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     //const instructions = await GCTAPI.loadInstructions(app.dataSources.gameAPI + `/instructions/${payload.gameType}/${payload.gameId}/${app.preferences.locale}`);
-    const game = await GCTAPI.loadGame(app.dataSources.gameAPI + `/${payload.gameId}`);
+    const game = await GCTAPI.loadGame(`${app.dataSources.gameAPI}/${payload.gameId}`);
     if (!game) return undefined;
     // app.games[payload.gameId].variants.lastUpdated = new Date().getTime();
     app.games[payload.gameId].instructions = {};
     //app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     app.games[payload.gameId].allowCustomVariantCreation = game.allowCustomVariantCreation;
-    app.games[payload.gameId].variants.variants = {};
+    app.games[payload.gameId].variants = {};
     app.games[payload.gameId].supportsWinBy = game.supportsWinBy;
     for (const variant of game.variants) {
-        app.games[payload.gameId].variants.variants[variant.id] = {
+        app.games[payload.gameId].variants[variant.id] = {
             id: variant.id,
             name: variant.name,
             gui: variant.gui,
             startPosition: '',
             autoguiStartPosition: '',
+            imageAutoGUIData: {} as GCTAPITypes.ImageAutoGUIData,
             positions: {},
-            imageAutoGUIData: null as any
         };
     }
     return app;
 };
 
 // This function is for custom variants.
-const loadVariant = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; force?: boolean }) => {
-    // const baseDataSource = payload.gameType === "puzzles" ? app.dataSources.onePlayerGameAPI : app.dataSources.twoPlayerGameAPI;
-    // const variant_response = await GCTAPI.loadVariant(baseDataSource + `/${payload.gameId}/variants/${payload.variantId}`, payload);
-    // if (!variant_response) return {
-    //     id: "",
-    //     description: "",
-    //     startPosition: "",
-    //     positions: {},
-    //     imageAutoGUIData: {} as GCTAPITypes.ImageAutoGUIData,
-    //     status: "",
-    //     gui_status: "v0"
-    // };
+const loadVariant = async (app: Types.App, payload: { gameId: string; variantId: string; force?: boolean }) => {
+    const variant = await GCTAPI.loadVariant(`${app.dataSources.gameAPI}/${payload.gameId}/${payload.variantId}`);
+    if (!variant) return Defaults.defaultVariant;
 
-    // return {
-    //     id: payload.variantId,
-    //     description: variant_response.response.variant[0].description,
-    //     startPosition: variant_response.response.variant[0].startPosition,
-    //     positions: { ...Defaults.defaultPositions },
-    //     imageAutoGUIData: variant_response.response.variant[0].imageAutoGUIData,
-    //     status: variant_response.status,
-    //     gui_status: variant_response.response.variant[0].gui_status
-    // };
+    return {
+        id: variant.id,
+        name: variant.name,
+        gui: variant.gui,
+        startPosition: variant.startPosition,
+        autoguiStartPosition: variant.autoguiStartPosition,
+        imageAutoGUIData: variant.imageAutoGUIData,
+        positions: {},
+    };
 };
 
-const formatMoveNames = (source: Array<{
-    deltaRemoteness: number;
-    move: string;
-    moveName: string;
-    moveValue: string;
-    position: string;
-    positionValue: string;
-    remoteness: number
-}>) => {
+const loadPosition = async (app: Types.App, payload: { gameId: string; variantId: string; position: string; force?: boolean }) => {
+    const positions = app.games[payload.gameId].variants[payload.variantId].positions;
+    // if (!payload.force && positions[payload.position] && (new Date().getTime() - positions[payload.position].lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
+    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}/${payload.gameId}/${payload.variantId}/positions/${payload.position}`);
+    if (!updatedPosition) {
+        return undefined;
+    }
+    positions[payload.position] = {
+        // lastUpdated: new Date().getTime(),
+        position: updatedPosition.position,
+        autoguiPosition: updatedPosition.autoguiPosition,
+        availableMoves: formatMoves(updatedPosition.moves),
+        availableMoveNames: formatMoveNames(updatedPosition.moves),
+        positionValue: updatedPosition.positionValue,
+        remoteness: updatedPosition.remoteness,
+        winby: updatedPosition.winby,
+        mex: updatedPosition["mex"] || "",
+        drawLevel: "drawLevel" in updatedPosition ? updatedPosition["drawLevel"] : -1,
+        drawRemoteness: "drawRemoteness" in updatedPosition ? updatedPosition["drawRemoteness"] : -1
+    };
+    return app;
+};
+
+export const initiateMatch = async (app: Types.App, payload: {
+    gameId: string;
+    variantId: string;
+    startPosition?: string;
+    firstPlayerIsComputer?: boolean;
+    secondPlayerIsComputer?: boolean;
+}) => {
+    const cachedGames = app.games;
+    if (!Object.keys(cachedGames).length || !Object.keys(cachedGames[payload.gameId].variants).length) {
+        /* Load available variants if not found in cache. */
+        const updatedApp = await loadGame(app, payload);
+        if (!updatedApp) return undefined;
+    }
+
+    const game = cachedGames[payload.gameId];
+    let variant = game.variants[payload.variantId];
+    //if (!variant) { // Request variant from gameAPI if variant not found in cache
+    variant = await loadVariant(app, payload);
+    game.variants[payload.variantId] = variant;
+    //}
+
+    // need instructions to load
+
+    const startPosition = payload.startPosition ? payload.startPosition : variant.startPosition;
+
+    const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
+    if (!updatedApp) return undefined;
+
+    if (!game.supportsWinBy) app.CPUsStrategy = Defaults.defaultCPUsStrategy;
+    app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
+    app.currentMatch.startPosition = startPosition;
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
+    // app.currentMatch.created = new Date().getTime();
+    app.currentMatch.gameType = game.type === "onePlayer" ? "puzzles" : "games";
+    app.currentMatch.gameId = payload.gameId;
+    app.currentMatch.variantId = payload.variantId;
+    app.currentMatch.id = generateMatchId(app);
+    if (!(payload.firstPlayerIsComputer === undefined)) app.currentMatch.firstPlayer.isComputer = payload.firstPlayerIsComputer;
+    if (!(payload.secondPlayerIsComputer === undefined)) app.currentMatch.secondPlayer.isComputer = payload.secondPlayerIsComputer;
+    
+    const autoguiStartPosition = app.games[payload.gameId].variants[payload.variantId].positions[startPosition].autoguiPosition;
+    app.currentMatch.round = {
+        id: 1,
+        firstPlayerTurn: autoguiStartPosition.charAt(0) == '1',
+        move: "",
+        autoguiMove: "",
+        moveValue: "",
+        position: deepcopy(variant.positions[startPosition]),
+    };
+    app.currentMatch.rounds = [
+        deepcopy(Defaults.defaultRound),
+        deepcopy(app.currentMatch.round)
+    ];
+    playGameAmbience();
+    // app.currentMatch.lastPlayed = new Date().getTime();
+    return app;
+};
+
+const formatMoveNames = (moves: Array<GCTAPITypes.Move>) => {
     const target: Types.MoveNames = { ...Defaults.defaultAvailableMoveNames };
-    for (let i = 0; i < source.length; i++) {
-        target[source[i].moveName ? source[i].moveName : source[i].move] = source[i].move;
+    for (const move in moves) {
+        target[moves[move].move] = moves[move].move;
     }
     return target;
 };
 
-const formatMoves = (source: Array<{
-        deltaRemoteness: number;
-        move: string;
-        autoguiMove: string;
-        moveValue: string;
-        position: string;
-        autoguiPosition: string;
-        positionValue: string;
-        remoteness: number;
-        winby: number;
-        mex: string;
-        drawLevel: number;
-        drawRemoteness: number;
-    }>) => {
+const formatMoves = (moves: Array<GCTAPITypes.Move>) => {
     const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
-    if (source.length) target[source[0].move] = { ...source[0], moveValueOpacity: 1 };
-    for (let i = 1; i < source.length; i++) {
-        target[source[i].move] = { ...source[i], moveValueOpacity: 1 };
-        const previousMove = target[source[i - 1].move];
-        const currentMove = target[source[i].move];
+    if (moves.length) target[moves[0].move] = { ...moves[0], moveValueOpacity: 1 };
+    for (let i = 1; i < moves.length; i++) {
+        target[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
+        const previousMove = target[moves[i - 1].move];
+        const currentMove = target[moves[i].move];
         if (previousMove.moveValue !== currentMove.moveValue) continue;
         if (previousMove.moveValueOpacity === 0.5) currentMove.moveValueOpacity = 0.5;
         else if (previousMove.deltaRemoteness !== currentMove.deltaRemoteness) currentMove.moveValueOpacity = previousMove.moveValueOpacity - 0.25;
@@ -134,37 +185,13 @@ const formatMoves = (source: Array<{
     return target;
 };
 
-const loadPosition = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; position: string; force?: boolean }) => {
-    // const positions = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId].positions;
-    // if (!payload.force && positions[payload.position] && (new Date().getTime() - positions[payload.position].lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
-    // const dataSource = payload.gameType === "puzzles" ? `${app.dataSources.onePlayerGameAPI}/${payload.gameId}/${payload.variantId}/${payload.position}` : `${app.dataSources.twoPlayerGameAPI}/${payload.gameId}/variants/${payload.variantId}/positions/${payload.position}`;
-    // const updatedPosition = await GCTAPI.loadPosition(dataSource);
-    // if (!updatedPosition || updatedPosition.response.positionValue === "undecided") {
-    //     return undefined;
-    // }
-    // positions[payload.position] = {
-    //     status: updatedPosition.status,
-    //     lastUpdated: new Date().getTime(),
-    //     availableMoveNames: formatMoveNames(updatedPosition.response.moves),
-    //     availableMoves: formatMoves(updatedPosition.response.moves),
-    //     position: updatedPosition.response.position,
-    //     positionValue: updatedPosition.response.positionValue,
-    //     remoteness: updatedPosition.response.remoteness,
-    //     winby: updatedPosition.response.winby,
-    //     mex: updatedPosition.response["mex"] || "",
-    //     drawLevel: "drawLevel" in updatedPosition.response ? updatedPosition.response["drawLevel"] : -1,
-    //     drawRemoteness: "drawRemoteness" in updatedPosition.response ? updatedPosition.response["drawRemoteness"] : -1
-    // };
-    return app;
-};
-
 export const preFetchNextPositions = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; position: string }) => {
-    // const positions = app.gameTypes[payload.gameType].games[payload.gameId].variants.variants[payload.variantId].positions;
-    // for (const move of Object.values(positions[payload.position].availableMoves)) {
-    //     if (!(move.position in positions)) {
-    //         await loadPosition(app, { ...payload, position: move.position });
-    //     }
-    // }
+    const positions = app.games[payload.gameId].variants[payload.variantId].positions;
+    for (const move of Object.values(positions[payload.position].availableMoves)) {
+        if (!(move.position in positions)) {
+            await loadPosition(app, { ...payload, position: move.position });
+        }
+    }
     return app;
 };
 
@@ -177,107 +204,32 @@ const generateMatchId = (app: Types.App) => {
     return newId;
 };
 
-export const initiateMatch = async (app: Types.App, payload: {
-        gameType: string;
-        gameId: string;
-        variantId: string;
-        startPosition?: string;
-        firstPlayerIsComputer?: boolean;
-        secondPlayerIsComputer?: boolean;
-}) => {
-    // const cachedGames = app.gameTypes[payload.gameType].games;
-    // if (!Object.keys(cachedGames).length ||
-    //     !Object.keys(cachedGames[payload.gameId].variants.variants).length) {
-    //     /* Load available variants if not found in cache. */
-    //     const updatedApp = await loadVariants(app, payload);
-    //     if (!updatedApp) return undefined;
-    // }
-
-    // const game = cachedGames[payload.gameId];
-    // let gameVariant = game.variants.variants[payload.variantId];
-    // const hasCustom = game.custom;
-    // if (!gameVariant && hasCustom) {
-    //     /* Load the selected custom variant if not found in cache. */
-    //     gameVariant = await loadVariant(app, payload);
-    //     game.variants.variants[payload.variantId] = gameVariant;
-    // }
-
-    // let startPosition: string;
-    // if (!payload.startPosition) {
-    //     /* Start Position not specified in payload, use default. */
-    //     startPosition = gameVariant.startPosition;
-    // } else if (payload.startPosition === "random") {
-    //     /* Requesting a random start position for puzzles. */
-    //     const ds = (payload.gameType == "puzzles") ? `${app.dataSources.onePlayerGameAPI}` : `${app.dataSources.twoPlayerGameAPI}`
-    //     const loaded = await GCTAPI.loadRandomPosition(
-    //         `${ds}/${payload.gameId}/${payload.variantId}/randpos`
-    //     );
-    //     startPosition = loaded ? loaded.response.position : gameVariant.startPosition;
-    // } else {
-    //     /* Start position specified and assumed to be valid. */
-    //     startPosition = payload.startPosition;
-    // }
-    // const posArr = startPosition.split('_');
-
-    // const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
-    // if (!updatedApp) return undefined;
-
-    // if (!game.supportsWinBy) app.CPUsStrategy = Defaults.defaultCPUsStrategy;
-    // app.currentMatch.gameTheme = gameVariant.imageAutoGUIData ? gameVariant.imageAutoGUIData.defaultTheme : "";
-    // app.currentMatch.startPosition = startPosition;
-    // app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
-    // app.currentMatch.created = new Date().getTime();
-    // app.currentMatch.gameType = payload.gameType;
-    // app.currentMatch.gameId = payload.gameId;
-    // app.currentMatch.variantId = payload.variantId;
-    // app.currentMatch.id = generateMatchId(app);
-    // if (!(payload.firstPlayerIsComputer === undefined)) app.currentMatch.firstPlayer.isComputer = payload.firstPlayerIsComputer;
-    // if (!(payload.secondPlayerIsComputer === undefined)) app.currentMatch.secondPlayer.isComputer = payload.secondPlayerIsComputer;
-    // app.currentMatch.round = {
-    //     id: 1,
-    //     /* Unfortunately, there is no generic way to determine whose 
-    //        turn it is from an AutoGUI v0 position string.
-    //        In this case we always assume it's the first player's turn. */
-    //     firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
-    //     move: "",
-    //     moveName: "",
-    //     moveValue: "",
-    //     position: deepcopy(gameVariant.positions[startPosition])
-    // };
-    // app.currentMatch.rounds = [
-    //     deepcopy(Defaults.defaultRound),
-    //     deepcopy(app.currentMatch.round)
-    // ];
-    // playGameAmbience();
-    // app.currentMatch.lastPlayed = new Date().getTime();
-    return app;
-};
-
 export const restartMatch = async (app: Types.App) => {
-    // const posArr = app.currentMatch.startPosition.split('_');
-    // const gameType = app.currentMatch.gameType;
-    // const gameId = app.currentMatch.gameId;
-    // const variantId = app.currentMatch.variantId
-    // const game = app.gameTypes[gameType].games[gameId];
-    // const startPosition = app.currentMatch.startPosition;
+    const posArr = app.currentMatch.startPosition.split('_');
+    const gameId = app.currentMatch.gameId;
+    const variantId = app.currentMatch.variantId
+    const game = app.games[gameId];
+    const startPosition = app.currentMatch.startPosition;
 
-    // /* Reset round id to 1 and delete all existing rounds. */
-    // app.currentMatch.round = {
-    //     id: 1,
-    //     firstPlayerTurn: (posArr.length >= 5 ? posArr[1] === 'A' : true),
-    //     move: "",
-    //     moveName: "",
-    //     moveValue: "",
-    //     position: deepcopy(game.variants.variants[variantId].positions[startPosition])
-    // };
-    // app.currentMatch.round.move = "";
-    // app.currentMatch.round.moveName = "";
-    // app.currentMatch.round.moveValue = "";
-    // app.currentMatch.rounds = [
-    //     deepcopy(Defaults.defaultRound),
-    //     deepcopy(app.currentMatch.round)
-    // ];
-    // app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
+    /* Reset round id to 1 and delete all existing rounds. */
+    const autoguiStartPosition = app.games[gameId].variants[variantId].positions[startPosition].autoguiPosition;
+
+    app.currentMatch.round = {
+        id: 1,
+        firstPlayerTurn: autoguiStartPosition.charAt(0) == '1',
+        move: "",
+        autoguiMove: "",
+        moveValue: "",
+        position: deepcopy(game.variants[variantId].positions[startPosition])
+    };
+    app.currentMatch.round.move = "";
+    app.currentMatch.round.autoguiMove = "";
+    app.currentMatch.round.moveValue = "";
+    app.currentMatch.rounds = [
+        deepcopy(Defaults.defaultRound),
+        deepcopy(app.currentMatch.round)
+    ];
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
     // app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
@@ -333,13 +285,13 @@ export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: num
 };
 
 export const isEndOfMatch = (app: Types.App) =>
-    !app.currentMatch.round.position.remoteness ||
+    app.currentMatch.round.position.remoteness == 0 ||
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
 
 export const exitMatch = (app: Types.App) => {
     pauseAllGameSounds();
     if (app.currentMatch.rounds.length > 2) { 
-        app.currentMatch.lastPlayed = new Date().getTime();
+        // app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
         app.matches[app.currentMatch.id] = deepcopy(app.currentMatch);
     }
@@ -364,9 +316,8 @@ export const generateComputerMove = (round: Types.Round) => {
     const store = useStore();
     const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
     const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
-    const gameType = store.getters.currentGameType;
     const gameId = store.getters.currentGameId;
-    const supportsWinBy = store.getters.supportsWinBy(gameType, gameId);
+    const supportsWinBy = store.getters.supportsWinBy(gameId);
     const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
 
@@ -524,7 +475,7 @@ const gotoRoundId = (app: Types.App, roundId: number) => {
     app.currentMatch.round = deepcopy(app.currentMatch.rounds[roundId]);
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    app.currentMatch.lastPlayed = new Date().getTime();
+    // app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
@@ -599,18 +550,17 @@ export const updateGameTheme = (app: Types.App, payload: { gameTheme : string })
 
 export const updateMatchStartPosition = async (app: Types.App, payload: { position: string }) => {
     // // Check if position is valid
-    // payload.position = payload.position.replace(/(\r\n|\n|\r)/gm, "");
-    // const updatedApp = await loadPosition(app, {
-    //     gameType: app.currentMatch.gameType,
-    //     gameId: app.currentMatch.gameId,
-    //     variantId: app.currentMatch.variantId,
-    //     position: payload.position
-    // });
-    // if (!updatedApp) {
-    //     return Error("invalid position [" + payload.position + "]");
-    // }
-    // // Position is valid, update app.
-    // app.currentMatch.startPosition = payload.position;
+    payload.position = payload.position.replace(/(\r\n|\n|\r)/gm, "");
+    const updatedApp = await loadPosition(app, {
+        gameId: app.currentMatch.gameId,
+        variantId: app.currentMatch.variantId,
+        position: payload.position
+    });
+    if (!updatedApp) {
+        return Error("invalid position [" + payload.position + "]");
+    }
+    // Position is valid, update app.
+    app.currentMatch.startPosition = payload.position;
     return app;
 };
 
@@ -648,7 +598,6 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
     }
     exitMatch(newApp);
     let updatedApp = await initiateMatch(newApp, {
-        gameType: app.currentMatch.gameType,
         gameId: app.currentMatch.gameId,
         variantId: app.currentMatch.variantId,
         startPosition: parsed[1]

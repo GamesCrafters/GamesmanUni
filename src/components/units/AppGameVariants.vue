@@ -4,11 +4,11 @@
         <h3>{{ t("gameVariantsTitle") }}</h3>
         <div id="variants" v-if="game">
             <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
-                <img :src="getLogoSource(variant.id)" :alt="game.name + ' ' + variant.name + ' Logo'" style="width: 8rem" />
+                <img :src="getLogoSource(variant.id)" :alt="'Logo'" style="width: 8rem" />
                 <p>{{ variant.name }}</p>
             </router-link>
             <div v-if="gameCustom" v-on:click="customBoardRoute" :class="game.gui">
-                <img :src="getLogoSource('custom')" :alt="game.name + ' ' + 'Custom Logo'" style="width: 8rem" />
+                <img :src="getLogoSource('custom')" :alt="'Logo'" style="width: 8rem" />
                 <p>Custom</p>
             </div>
         </div>
@@ -27,11 +27,13 @@
     const { t } = useI18n();
     const gameType = computed(() => route.params.type as string);
     const gameId = computed(() => route.params.gameId as string);
-    const game = computed(() => store.getters.game(gameType.value, gameId.value));
+    store.dispatch(actionTypes.loadVariants, { gameId: gameId.value });
+
+    const game = computed(() => store.getters.game(gameId.value));
     const gameCustom = computed(() => (game.value ? game.value.allowCustomVariantCreation : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const gameVariants = computed(() => {
-        let total = game.value.variants.variants;
+        let total = game.value.variants;
         const asArray = Object.entries(total);
         if (asArray.length == 1 && !gameCustom.value) {
             router.replace({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: asArray[0][0] } });
@@ -67,12 +69,11 @@
         return logo[appLogoFilePath].default;
     };
     const customBoardRoute = () => {
-        let boardStr = window.prompt('Enter a valid variant:');
-        if (boardStr !== null) {
-            router.push({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: boardStr } })
+        let variantId = window.prompt('Enter a Valid Variant ID:');
+        if (variantId !== null) {
+            router.push({ name: 'game', params: { type: gameType.value, gameId: gameId.value, variantId: variantId } })
         }
     }
-    store.dispatch(actionTypes.loadVariants, { type: gameType.value, gameId: gameId.value });
 </script>
 
 <style lang="scss" scoped>

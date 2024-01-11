@@ -172,7 +172,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].moveName }}
+                            {{ currentValuedRounds[roundNumber].move }}
                         </text>
                         <text class="move-coordinate"
                                 v-else
@@ -180,7 +180,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].moveName }}
+                            {{ currentValuedRounds[roundNumber].move }}
                         </text>
                     </template>
 
@@ -903,7 +903,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].moveName }}
+                            {{ currentValuedRounds[roundNumber].move }}
                         </text>
                         <text class="move-coordinate"
                                 v-else
@@ -911,7 +911,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].moveName }}
+                            {{ currentValuedRounds[roundNumber].move }}
                         </text>
                     </template>
 
@@ -1197,7 +1197,7 @@
     
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
-        store.getters.supportsWinBy(currentGameType.value, currentGameId.value)
+        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
     );
 
     /** 

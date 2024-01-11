@@ -41,8 +41,8 @@ const animateTTT = (volume: number, moveObj: Types.Move): number => {
 const animateSim = (volume: number, moveObj: Types.Move): number => {
     const vertices = [[4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]];
     playMoveSFX('ttt/O.mp3');
-    const d = Number(moveObj.moveName[1]) - 1;    
-    gsap.to("#simline" + moveObj.moveName, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
+    const d = Number(moveObj.move[1]) - 1;    
+    gsap.to("#simline" + moveObj.move, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
     return 500;
 }
 
@@ -115,7 +115,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     }
 
     const store = useStore();
-    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, store.getters.currentGameId, store.getters.currentVariantId);
+    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
     const theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
     const scaledWidth = 100;
     const backgroundGeometry = theTheme.space;
@@ -123,7 +123,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     const scaledHeight = backgroundGeometry[1] * widthFactor;
     const animationType = theTheme.animationType || "";
     const entities = theTheme.entities;
-    const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * widthFactor));
+    const centers = theTheme.centers.map((a: Array<number>) => a.map((b: number) => b * widthFactor));
     const foregroundImagePath = theTheme.foreground || "";
     const animationWindow = theTheme.defaultAnimationWindow || [0, currBoard.length];
     const textEntityFontSize = theTheme.textEntityFontSize * widthFactor || 10;
@@ -265,8 +265,7 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         return animateQuarto(volume, currPosition, nextPosition);
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId);
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             var theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
             const sounds = theTheme.sounds || {} as Record<string, string>;
@@ -302,8 +301,7 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         }
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId);
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 

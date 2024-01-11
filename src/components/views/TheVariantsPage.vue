@@ -11,7 +11,7 @@
 
     const route = useRoute();
     const store = useStore();
-    const game = computed(() => store.getters.games(route.params.type as string) ? store.getters.games(route.params.type as string).games[route.params.gameId as string] : undefined);
+    const game = computed(() => store.getters.games ? store.getters.games[route.params.gameId as string] : undefined);
     const gameName = computed(() => (game.value ? game.value.name : ""));
     useMeta(computed(() => ({ title: `${gameName.value} Variants` })));
 </script>

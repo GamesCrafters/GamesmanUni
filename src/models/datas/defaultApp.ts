@@ -59,24 +59,24 @@ export const defaultPositions: Types.Positions = {};
 export const defaultVariant: Types.Variant = {
     id: "",
     name: "",
+    gui: "v0",
     startPosition: "",
     autoguiStartPosition: "",
-    positions: {},
     imageAutoGUIData: null as any,
-    gui: "v0"
+    positions: {},
 };
 
-export const defaultVariants: Types.Variants = {
-    ...defaultUpdate,
-    variants: {},
-};
+// export const defaultVariants: Types.Variants = {
+//     ...defaultUpdate,
+//     variants: {},
+// };
 
 export const defaultGame: Types.Game = {
     id: "",
     name: "",
     instructions: {},
     type: "",
-    variants: { ...defaultVariants, variants: {} },
+    variants: {},
     allowCustomVariantCreation: false,
     gui: "v0",
     supportsWinBy: false,
@@ -138,8 +138,8 @@ export const defaultMatch: Types.Match = {
     rounds: [],
     moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
-    created: 0,
-    lastPlayed: 0,
+    // created: 0,
+    // lastPlayed: 0,
     backgroundLoading: false,
     computerMoving: false,
     animationPlaying: false
@@ -172,8 +172,8 @@ export const defaultApp: Types.App = {
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },
-            created: 0,
-            lastPlayed: 0,
+            // created: 0,
+            // lastPlayed: 0,
             backgroundLoading: false,
             computerMoving: false
     },

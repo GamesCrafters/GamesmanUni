@@ -11,8 +11,8 @@
 
     const route = useRoute();
     const store = useStore();
-    const game = computed(() => store.getters.games(route.params.type as string) ? store.getters.games(route.params.type as string).games[route.params.gameId as string] : undefined);
+    const game = computed(() => store.getters.games ? store.getters.games[route.params.gameId as string] : undefined);
     const gameName = computed(() => (game.value ? game.value.name : ""));
-    const variantDescription = computed(() => (game.value && game.value.variants.variants[route.params.variantId as string] ? game.value.variants.variants[route.params.variantId as string].description : ""));
-    useMeta(computed(() => ({ title: `${variantDescription.value} ${gameName.value}` })));
+    const variantName = computed(() => (game.value && game.value.variants[route.params.variantId as string] ? game.value.variants[route.params.variantId as string].name : ""));
+    useMeta(computed(() => ({ title: `${variantName.value} ${gameName.value}` })));
 </script>
