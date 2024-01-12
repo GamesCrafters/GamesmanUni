@@ -24,6 +24,7 @@ type Getters = {
     commit(state: State): (sha: string) => GMUTypes.Commit;
     commits(state: State): GMUTypes.Commits;
     computerMoving(state: State): boolean;
+    currentAutoguiPosition(state: State): string;
     currentAvailableMove(state: State): (move: string) => GMUTypes.Move;
     currentAvailableMoves(state: State): GMUTypes.Moves;
     currentGameId(state: State): string;
@@ -102,6 +103,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.commits,
     computerMoving: (state: State) =>
         state.app.currentMatch.computerMoving,
+    currentAutoguiPosition: (state: State) => state.app.currentMatch.round.position.autoguiPosition,
     currentAvailableMove: (state: State) =>
         (move: string) =>
             state.app.currentMatch.round.position.availableMoves[move],

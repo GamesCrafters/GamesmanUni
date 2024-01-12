@@ -366,69 +366,66 @@ export const generateComputerMove = (round: Types.Round) => {
 };
 
 export const runMove = async (app: Types.App, payload: { move: string }) => {
-    // app.currentMatch.round.move = payload.move;
-    // const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
-    // const animationDuration = handleMoveAnimation(app.preferences.volume, app.currentMatch, moveObj);
-    // if (animationDuration != 0) {
-    //     app.currentMatch.animationPlaying = true;
-    // }
-    // app.currentMatch.round.moveValue = moveObj.moveValue;
-    // app.currentMatch.round.moveName = moveObj.moveName !== undefined ? moveObj.moveName : moveObj.move;
+    app.currentMatch.round.move = payload.move;
+    const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
+    const animationDuration = handleMoveAnimation(app.preferences.volume, app.currentMatch, moveObj);
+    if (animationDuration > 0) {
+        app.currentMatch.animationPlaying = true;
+    }
+    app.currentMatch.round.moveValue = moveObj.moveValue;
+    app.currentMatch.round.autoguiMove = moveObj.autoguiMove;
 
-    // // Rewrite history by deleting all subsequent moves made earlier.
-    // app.currentMatch.rounds.splice(
-    //     app.currentMatch.round.id, 
-    //     app.currentMatch.rounds.length - app.currentMatch.round.id
-    // );
-    // app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
-    // var updatedApp = null;
-    // for (var attempts = 0; attempts < 5; attempts++) {
-    //     updatedApp = await loadPosition(app, {
-    //         gameType: app.currentMatch.gameType,
-    //         gameId: app.currentMatch.gameId,
-    //         variantId: app.currentMatch.variantId,
-    //         position: moveObj.position
-    //     });
-    //     if (updatedApp) break;
-    // }
-    // await new Promise(r => setTimeout(r, animationDuration));
-    // app.currentMatch.animationPlaying = false;
-    // animationEpilogue(app.currentMatch);
-    // if (!updatedApp) {
-    //     alert("Failed to load next position after 5 attempts. Resetting to previous position.");
-    //     return app;
-    // }
+    // Rewrite history by deleting all subsequent moves made earlier.
+    app.currentMatch.rounds.splice(
+        app.currentMatch.round.id, 
+        app.currentMatch.rounds.length - app.currentMatch.round.id
+    );
+    app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
+    var updatedApp = null;
+    for (var attempts = 0; attempts < 5; attempts++) {
+        updatedApp = await loadPosition(app, {
+            gameId: app.currentMatch.gameId,
+            variantId: app.currentMatch.variantId,
+            position: moveObj.position
+        });
+        if (updatedApp) break;
+    }
+    await new Promise(r => setTimeout(r, animationDuration));
+    app.currentMatch.animationPlaying = false;
+    animationEpilogue(app.currentMatch);
+    if (!updatedApp) {
+        alert("Failed to load next position after 5 attempts. Resetting to previous position.");
+        return app;
+    }
 
-    // const updatedPosition = { 
-    //     ...updatedApp.
-    //     gameTypes[app.currentMatch.gameType].
-    //     games[app.currentMatch.gameId].
-    //     variants.
-    //     variants[app.currentMatch.variantId].
-    //     positions[
-    //         app.
-    //         currentMatch.
-    //         round.
-    //         position.
-    //         availableMoves[payload.move].
-    //         position
-    //     ]
-    // };
-    // app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.moveName ? moveObj.moveName : moveObj.move);
-    // let posArr = updatedPosition.position.split('_');
-    // if (posArr.length === 5 && posArr[0] === 'R') {
-    //     app.currentMatch.round.firstPlayerTurn = posArr[1] === 'A'
-    // } else if (app.currentMatch.gameType === "puzzles") {
-    //     app.currentMatch.round.firstPlayerTurn = true;
-    // } else {
-    //     app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
-    // }
-    // app.currentMatch.round.move = "";
-    // app.currentMatch.round.moveValue = "";
+    const updatedPosition = { 
+        ...updatedApp
+        .games[app.currentMatch.gameId]
+        .variants[app.currentMatch.variantId].
+        positions[
+            app.
+            currentMatch.
+            round.
+            position.
+            availableMoves[payload.move].
+            position
+        ]
+    };
+    app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.move ? moveObj.move : moveObj.move);
+    let posArr = updatedPosition.position.split('_');
+    if (posArr.length === 2) { // in proper autogui format
+        app.currentMatch.round.firstPlayerTurn = posArr[0] === '1'
+    } else if (app.currentMatch.gameType === "puzzles") {
+        app.currentMatch.round.firstPlayerTurn = true;
+    } else { // not in proper autogui format
+        app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
+    }
+    app.currentMatch.round.move = "";
+    app.currentMatch.round.moveValue = "";
     // app.currentMatch.lastPlayed = new Date().getTime();
-    // app.currentMatch.round.id += 1;
-    // app.currentMatch.round.position = updatedPosition;
-    // app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
+    app.currentMatch.round.id += 1;
+    app.currentMatch.round.position = updatedPosition;
+    app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
     return app;
 };
 

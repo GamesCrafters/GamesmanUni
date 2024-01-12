@@ -101,9 +101,9 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 }
 
 const animateImageAutoGUI = (currPosition: string, nextPosition: string): number => {
-    const currEntityStringParts = currPosition.split("_")[4].split("~");
+    const currEntityStringParts = currPosition.split("_")[1].split("~");
     var currBoard = currEntityStringParts[0];
-    const nextEntityStringParts = nextPosition.split("_")[4].split("~");
+    const nextEntityStringParts = nextPosition.split("_")[1].split("~");
     var nextBoard = nextEntityStringParts[0];
 
     // Append dashes to make currBoard and nextBoard have same length, if one of them is shorter
@@ -255,8 +255,8 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
 }
 
 export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, moveObj: Types.Move) => {
-    const currPosition = currentMatch.round.position.position;
-    const nextPosition = moveObj.position;
+    const currPosition = currentMatch.round.position.autoguiPosition;
+    const nextPosition = moveObj.autoguiPosition;
     if (currentMatch.gameId === 'tictactoe') {
         return animateTTT(volume, moveObj);
     } else if (currentMatch.gameId === 'sim') {
@@ -271,7 +271,7 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
             const sounds = theTheme.sounds || {} as Record<string, string>;
             var duration = animateImageAutoGUI(currPosition, nextPosition);
             let matches;
-            if (matches = moveObj.move.match(/^([AMLT])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
+            if (matches = moveObj.autoguiMove.match(/^([AMLT])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
                 if (matches[4] in sounds) {
                     playMoveSFX(sounds[matches[4]]);
                 }
