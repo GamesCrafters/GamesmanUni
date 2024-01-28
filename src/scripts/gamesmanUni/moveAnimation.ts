@@ -23,8 +23,8 @@ const spawnImageEntity = (char: string, i: number, centers: number[][], entities
 
 /* All animation functions should return the animation duration in milliseconds. */
 const animateTTT = (volume: number, moveObj: Types.Move): number => {
-    const diffIdx = Number(moveObj.move[4]);
-    const turn = moveObj.move[2];
+    const diffIdx = Number(moveObj.autoguiMove[4]);
+    const turn = moveObj.autoguiMove[2];
     const xOff = (diffIdx % 3) * 22;
     const yOff = Math.floor(diffIdx / 3) * 22;
     if (turn === 'x') {
@@ -49,10 +49,10 @@ const animateSim = (volume: number, moveObj: Types.Move): number => {
 const animateQuarto = (volume: number, currPosition: string, nextPosition: string): number => {
     var duration = 0;
     var delay = 0;
-    if (currPosition !== "R_A_17_1_-----------------") { // If currPosition is not the initial position
+    if (currPosition !== "1_-----------------") { // If currPosition is not the initial position
         var to = -1;
         for (var i = 0; i < 16; i++) {
-            if (currPosition.split("_")[4][i] != nextPosition.split("_")[4][i]) {
+            if (currPosition.split("_")[1][i] != nextPosition.split("_")[1][i]) {
                 to = i;
                 break;
             }
@@ -61,7 +61,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
         gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
         duration += 500;
         delay = 0.5
-        if (nextPosition[25] != '-') {
+        if (nextPosition[18] != '-') {
             playMoveSFX('general/slideThenRemove.mp3');
         } else {
             playMoveSFX('general/slide.mp3');
@@ -69,7 +69,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     } else {
         playMoveSFX('general/remove.mp3');
     }
-    if (nextPosition[25] != '-') { // i.e. if there is a piece-to-place
+    if (nextPosition[18] != '-') { // i.e. if there is a piece-to-place
         const store = useStore();
         var svg = document.getElementById('custom-gui-quarto'); //Get svg element
         var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -79,7 +79,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 
         var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'use'); //Create a path in SVG's namespace
         newElement.setAttribute("class", "appearingPiece");
-        newElement.setAttribute("href", "#" + gameTheme + nextPosition[25]);
+        newElement.setAttribute("href", "#" + gameTheme + nextPosition[18]);
         newElement.setAttribute("transform", "translate(58 113)");
         newElement.setAttribute("opacity", "0.001");
         g.appendChild(newElement);

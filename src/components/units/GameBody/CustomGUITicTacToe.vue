@@ -41,9 +41,8 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref, watch } from "vue";
+    import { computed } from "vue";
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
-    
     type CellData = { mark: string; move: string; hint: string; hintOpacity: number };
     type BoardData = Record<number, CellData>;
     const store = useStore();
@@ -52,17 +51,16 @@
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => (options.value ? options.value.showNextMoveDeltaRemotenesses : true));
     const currentPosition = computed(() => store.getters.currentPosition);
-    const currentValue = computed(() => store.getters.currentPositionValue);
     const currentRemoteness = computed(() => store.getters.currentRemoteness);
     const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(availableMoves.value).length == 1)));
-    const turn = computed(() => currentPosition.value[2]);
+    const turn = computed(() => currentPosition.value[0]);
     const animationPlaying = computed(() => store.getters.animationPlaying);
     const isMisere = computed(() => store.getters.currentVariantId === "misere" ? "misere" : "");
     const board = computed(() => {
         let board: BoardData = {};
-        for (let cell: number = 0; cell < 9; cell++) board[cell] = { mark: currentPosition.value[8 + cell], move: "", hint: "", hintOpacity: 1 };
-        for (let availableMove in availableMoves.value) Object.assign(board[+availableMoves.value[availableMove].move[4]], { move: availableMoves.value[availableMove].move, hint: availableMoves.value[availableMove].moveValue, hintOpacity: availableMoves.value[availableMove].moveValueOpacity });
+        for (let cell: number = 0; cell < 9; cell++) board[cell] = { mark: currentPosition.value[2 + cell], move: "", hint: "", hintOpacity: 1 };
+        for (let availableMove in availableMoves.value) Object.assign(board[+availableMoves.value[availableMove].autoguiMove[4]], { move: availableMoves.value[availableMove].move, hint: availableMoves.value[availableMove].moveValue, hintOpacity: availableMoves.value[availableMove].moveValueOpacity });
         return board;
     });
     const getHintClass = (hint: string): string => (showNextMoveHints.value ? "hint-" + hint : "hint-" + turn.value);
@@ -70,7 +68,7 @@
     const yOffset = (cell: number): number => Math.floor(cell / 3) * 22;
     const b16 = (cond: boolean): number => cond ? 16 : 0;
     const triplets = computed(() => {
-        const str = currentPosition.value.split('_')[4];
+        const str = currentPosition.value.split('_')[1];
         return [
             str[0] != '-' && str[0] == str[1] && str[1] == str[2],
             str[3] != '-' && str[3] == str[4] && str[4] == str[5],
@@ -94,11 +92,11 @@
             stroke: var(--neutralColor);
         }
         .hint- {
-            &A {
+            &1 {
                 stroke: var(--turn1Color);
                 fill: var(--turn1Color);
             }
-            &B {
+            &2 {
                 stroke: var(--turn2Color);
                 fill: var(--turn2Color);
             }

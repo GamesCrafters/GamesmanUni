@@ -13,7 +13,6 @@ const deepcopy = (obj: Object) => {
 };
 
 export const loadGames = async (app: Types.App) => {
-    // if (Object.keys(app.games).length && (new Date().getTime() - app.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
     const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
     if (!games) return undefined;
     for (const game of games) {
@@ -26,7 +25,6 @@ export const loadGames = async (app: Types.App) => {
             variants: {},
         };
     }
-    //app.gameTypes[payload.gameType].lastUpdated = new Date().getTime();
     return app;
 };
 
@@ -41,13 +39,9 @@ export const loadGame = async (app: Types.App, payload: { gameId: string; force?
         const updatedApp = await loadGames(app);
         if (!updatedApp) return undefined;
     }
-    // if (!payload.force && app.games[payload.gameId] && Object.keys(app.games[payload.gameId].variants.variants).length && (new Date().getTime() - app.games[payload.gameId].variants.lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
-    //const instructions = await GCTAPI.loadInstructions(app.dataSources.gameAPI + `/instructions/${payload.gameType}/${payload.gameId}/${app.preferences.locale}`);
-    const game = await GCTAPI.loadGame(`${app.dataSources.gameAPI}/${payload.gameId}`);
+    const game = await GCTAPI.loadGame(`${app.dataSources.gameAPI}${payload.gameId}/`);
     if (!game) return undefined;
-    // app.games[payload.gameId].variants.lastUpdated = new Date().getTime();
     app.games[payload.gameId].instructions = {};
-    //app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     app.games[payload.gameId].allowCustomVariantCreation = game.allowCustomVariantCreation;
     app.games[payload.gameId].variants = {};
     app.games[payload.gameId].supportsWinBy = game.supportsWinBy;
@@ -67,7 +61,7 @@ export const loadGame = async (app: Types.App, payload: { gameId: string; force?
 
 // This function is for custom variants.
 const loadVariant = async (app: Types.App, payload: { gameId: string; variantId: string; force?: boolean }) => {
-    const variant = await GCTAPI.loadVariant(`${app.dataSources.gameAPI}/${payload.gameId}/${payload.variantId}`);
+    const variant = await GCTAPI.loadVariant(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/`);
     if (!variant) return Defaults.defaultVariant;
 
     return {
@@ -83,13 +77,11 @@ const loadVariant = async (app: Types.App, payload: { gameId: string; variantId:
 
 const loadPosition = async (app: Types.App, payload: { gameId: string; variantId: string; position: string; force?: boolean }) => {
     const positions = app.games[payload.gameId].variants[payload.variantId].positions;
-    // if (!payload.force && positions[payload.position] && (new Date().getTime() - positions[payload.position].lastUpdated) / (1000 * 60 * 60 * 24) < 3 * (1000 * 60 * 60 * 24)) return app;
-    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}/${payload.gameId}/${payload.variantId}/positions/${payload.position}`);
+    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/${payload.position}/`);
     if (!updatedPosition) {
         return undefined;
     }
     positions[payload.position] = {
-        // lastUpdated: new Date().getTime(),
         position: updatedPosition.position,
         autoguiPosition: updatedPosition.autoguiPosition,
         availableMoves: formatMoves(updatedPosition.moves),
@@ -119,11 +111,8 @@ export const initiateMatch = async (app: Types.App, payload: {
     }
 
     const game = cachedGames[payload.gameId];
-    let variant = game.variants[payload.variantId];
-    //if (!variant) { // Request variant from gameAPI if variant not found in cache
-    variant = await loadVariant(app, payload);
+    const variant = await loadVariant(app, payload);
     game.variants[payload.variantId] = variant;
-    //}
 
     // need instructions to load
 
@@ -136,7 +125,6 @@ export const initiateMatch = async (app: Types.App, payload: {
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
-    // app.currentMatch.created = new Date().getTime();
     app.currentMatch.gameType = game.type === "onePlayer" ? "puzzles" : "games";
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
@@ -158,7 +146,6 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(app.currentMatch.round)
     ];
     playGameAmbience();
-    // app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
@@ -205,7 +192,6 @@ const generateMatchId = (app: Types.App) => {
 };
 
 export const restartMatch = async (app: Types.App) => {
-    const posArr = app.currentMatch.startPosition.split('_');
     const gameId = app.currentMatch.gameId;
     const variantId = app.currentMatch.variantId
     const game = app.games[gameId];
@@ -230,7 +216,6 @@ export const restartMatch = async (app: Types.App) => {
         deepcopy(app.currentMatch.round)
     ];
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
-    // app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
@@ -291,7 +276,6 @@ export const isEndOfMatch = (app: Types.App) =>
 export const exitMatch = (app: Types.App) => {
     pauseAllGameSounds();
     if (app.currentMatch.rounds.length > 2) { 
-        // app.currentMatch.lastPlayed = new Date().getTime();
         app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
         app.matches[app.currentMatch.id] = deepcopy(app.currentMatch);
     }
@@ -412,9 +396,9 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
         ]
     };
     app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.move ? moveObj.move : moveObj.move);
-    let posArr = updatedPosition.position.split('_');
-    if (posArr.length === 2) { // in proper autogui format
-        app.currentMatch.round.firstPlayerTurn = posArr[0] === '1'
+    let autoguiPosition = updatedPosition.autoguiPosition;
+    if ((autoguiPosition.charAt(0) == '1' || autoguiPosition.charAt(0) == '2') && autoguiPosition.charAt(1) == '_') { // in proper autogui format
+        app.currentMatch.round.firstPlayerTurn = autoguiPosition.charAt(0) == '1';
     } else if (app.currentMatch.gameType === "puzzles") {
         app.currentMatch.round.firstPlayerTurn = true;
     } else { // not in proper autogui format
@@ -422,7 +406,6 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     }
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    // app.currentMatch.lastPlayed = new Date().getTime();
     app.currentMatch.round.id += 1;
     app.currentMatch.round.position = updatedPosition;
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
@@ -472,7 +455,6 @@ const gotoRoundId = (app: Types.App, roundId: number) => {
     app.currentMatch.round = deepcopy(app.currentMatch.rounds[roundId]);
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
-    // app.currentMatch.lastPlayed = new Date().getTime();
     return app;
 };
 
