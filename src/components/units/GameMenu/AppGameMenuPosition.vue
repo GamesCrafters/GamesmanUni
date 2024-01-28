@@ -42,10 +42,8 @@
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
 
     const store = useStore();
-    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
     const randomize = async () => {
         await store.dispatch(actionTypes.initiateMatch, {
-            gameType: store.getters.currentGameType,
             gameId: store.getters.currentGameId,
             variantId: store.getters.currentVariantId,
             startPosition: "random"

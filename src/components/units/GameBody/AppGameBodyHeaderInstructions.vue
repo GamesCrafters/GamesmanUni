@@ -19,10 +19,10 @@
     const options = computed(() => store.getters.options);
     const preferences = computed(() => store.getters.preferences);
     const instructions = computed(() => {
-        let game = store.getters.game(store.getters.currentGameType, store.getters.currentGameId);
+        let game = store.getters.game(store.getters.currentGameId);
         if (game && game.instructions) {
             if (!(preferences.value.locale in game.instructions)) {
-                store.dispatch(actionTypes.addInstructions, {gameType: store.getters.currentGameType, gameId: store.getters.currentGameId});
+                store.dispatch(actionTypes.addInstructions, {gameId: store.getters.currentGameId, variantId: store.getters.currentVariantId});
             }
             let instructions = game.instructions[preferences.value.locale];
             return instructions ? instructions : "# No Instructions Available"

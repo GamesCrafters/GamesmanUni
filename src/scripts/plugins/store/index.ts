@@ -15,15 +15,16 @@ type Getters = {
     ambienceVolume(state: State): number;
     animationPlaying(state: State): boolean;
     availableMove(state: State):
-        (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
+        (gameId: string, variantId: string, position: string, move: string) =>
             GMUTypes.Move;
     availableMoves(state: State):
-        (gameType: string, gameId: string, variantId: string, position: string) =>
+        (gameId: string, variantId: string, position: string) =>
             GMUTypes.Moves;
     backgroundLoading(state: State): boolean;
     commit(state: State): (sha: string) => GMUTypes.Commit;
     commits(state: State): GMUTypes.Commits;
     computerMoving(state: State): boolean;
+    currentAutoguiPosition(state: State): string;
     currentAvailableMove(state: State): (move: string) => GMUTypes.Move;
     currentAvailableMoves(state: State): GMUTypes.Moves;
     currentGameId(state: State): string;
@@ -51,16 +52,14 @@ type Getters = {
     currentVariantId(state: State): string;
     dataSources(state: State): GMUTypes.DataSources;
     fallbackLocale(state: State): string;
-    game(state: State): (gameType: string, gameId: string) => GMUTypes.Game;
-    games(state: State): (gameType: string) => GMUTypes.Games;
+    game(state: State): (gameId: string) => GMUTypes.Game;
+    games(state: State): Record<string, GMUTypes.Game>;
     gitHubRepositoryAPI(state: State): string;
-    imageAutoGUIData(state: State): 
-        (gameType: string, gameId: string, variantId: string) => ImageAutoGUIData;
+    imageAutoGUIData(state: State): (gameId: string, variantId: string) => ImageAutoGUIData;
     isEndOfMatch(state: State): boolean;
     locale(state: State): string;
     maximumRemoteness(state: State): (from: number, to: number) => number;
     moveHistory(state: State): string;
-    onePlayerGameAPI(state: State): string;
     position(state: State):
         (gameType: string, gameId: string, variantId: string, position: string) =>
             GMUTypes.Position;
@@ -70,18 +69,14 @@ type Getters = {
     redoMoveAvailable(state: State): boolean;
     rootFontSize(state: State): string;
     theme(state: State): string;
-    twoPlayerGameAPI(state: State): string;
+    gameAPI(state: State): string;
     options(state: State): GMUTypes.Options;
     undoMoveAvailable(state: State): boolean;
-    variant(state: State):
-        (gameType: string, gameId: string, variantId: string) =>
-            GMUTypes.Variant;
-    variants(state: State): (gameType: string, gameId: string) =>
-        GMUTypes.Variants;
+    variant(state: State): (gameId: string, variantId: string) => GMUTypes.Variant;
+    variants(state: State): (gameId: string) => Record<string, GMUTypes.Variant>;
     version(state: State): string;
     volume(state: State): number;
-    supportsWinBy(state: State): 
-        (gameType: string, gameId: string) => boolean;
+    supportsWinBy(state: State): (gameId: string) => boolean;
     currentWinBy(state: State): number;
     maximumWinBy(state: State): 
         (from: number, to: number) => number;
@@ -93,12 +88,12 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     ambienceVolume: (state: State) => state.app.preferences.ambienceVolume,
     animationPlaying: (state: State) => state.app.currentMatch.animationPlaying,
     availableMove: (state: State) =>
-        (gameType: string, gameId: string, variantId: string, position: string, move: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
+        (gameId: string, variantId: string, position: string, move: string) =>
+            state.app.games[gameId].variants[variantId].
             positions[position].availableMoves[move],
     availableMoves: (state: State) =>
-        (gameType: string, gameId: string, variantId: string, position: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
+        (gameId: string, variantId: string, position: string) =>
+            state.app.games[gameId].variants[variantId].
             positions[position].availableMoves,
     backgroundLoading: (state: State) =>
         state.app.currentMatch.backgroundLoading,
@@ -108,6 +103,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.commits,
     computerMoving: (state: State) =>
         state.app.currentMatch.computerMoving,
+    currentAutoguiPosition: (state: State) => state.app.currentMatch.round.position.autoguiPosition,
     currentAvailableMove: (state: State) =>
         (move: string) =>
             state.app.currentMatch.round.position.availableMoves[move],
@@ -116,7 +112,7 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     currentGameId: (state: State) =>
         state.app.currentMatch.gameId,
     currentGameName: (state: State) =>
-        state.app.gameTypes[state.app.currentMatch.gameType].games[state.app.currentMatch.gameId].name,
+        state.app.games[state.app.currentMatch.gameId].name,
     currentGameTheme: (state: State) =>
         state.app.currentMatch.gameTheme,
     currentGameType: (state: State) =>
@@ -169,16 +165,15 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     fallbackLocale: (state: State) =>
         state.app.preferences.fallbackLocale,
     game: (state: State) =>
-        (gameType: string, gameId: string) =>
-            state.app.gameTypes[gameType].games[gameId],
-    games: (state: State) =>
-        (gameType: string) =>
-            state.app.gameTypes[gameType],
+        (gameId: string) =>
+            state.app.games[gameId],
+    gameAPI: (state: State) => state.app.dataSources.gameAPI,
+    games: (state: State) => state.app.games,
     gitHubRepositoryAPI: (state: State) =>
         state.app.dataSources.gitHubRepositoryAPI,
     imageAutoGUIData: (state: State)  =>
-        (gameType: string, gameId: string, variantId: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].imageAutoGUIData,
+        (gameId: string, variantId: string) =>
+            state.app.games[gameId].variants[variantId].imageAutoGUIData,
     isEndOfMatch: (state: State) =>
         GMU.isEndOfMatch(state.app),
     locale: (state: State) =>
@@ -188,15 +183,13 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             GMU.getMaximumRemoteness(state.app, { from, to }),
     moveHistory: (state: State) =>
         state.app.currentMatch.moveHistory,
-    onePlayerGameAPI: (state: State) =>
-        state.app.dataSources.onePlayerGameAPI,
     position: (state: State) =>
-        (gameType: string, gameId: string, variantId: string, position: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
+        (gameId: string, variantId: string, position: string) =>
+            state.app.games[gameId].variants[variantId].
             positions[position],
     positions: (state: State) =>
-        (gameType: string, gameId: string, variantId: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId].
+        (gameId: string, variantId: string) =>
+            state.app.games[gameId].variants[variantId].
             positions,
     preferences: (state: State) =>
         state.app.preferences,
@@ -206,25 +199,23 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.preferences.rootFontSize,
     theme: (state: State) =>
         state.app.preferences.theme,
-    twoPlayerGameAPI: (state: State) =>
-        state.app.dataSources.twoPlayerGameAPI,
     options: (state: State) =>
         state.app.options,
     undoMoveAvailable: (state: State) =>
         GMU.undoMoveAvailable(state.app),
     variant: (state: State) =>
-        (gameType: string, gameId: string, variantId: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants.variants[variantId],
+        (gameId: string, variantId: string) =>
+            state.app.games[gameId].variants[variantId],
     variants: (state: State) =>
-        (gameType: string, gameId: string) =>
-            state.app.gameTypes[gameType].games[gameId].variants,
+        (gameId: string) =>
+            state.app.games[gameId].variants,
     version: (state: State) =>
         state.app.version,
     volume: (state: State) =>
         state.app.preferences.volume,
     supportsWinBy: (state: State) =>
-        (gameType: string, gameId: string) => 
-            state.app.gameTypes[gameType] && state.app.gameTypes[gameType].games[gameId].supportsWinBy === 1 ? true : false,
+        (gameId: string) => 
+            state.app.games[gameId].supportsWinBy,
     currentWinBy: (state: State) =>
         state.app.currentMatch.round.position.winby,
     maximumWinBy: (state: State) =>
@@ -340,16 +331,12 @@ export enum actionTypes {
 }
 
 type Actions = {
-    [actionTypes.addInstructions](context: ActionContext, payload: {gameType: string, gameId: string}): Promise<void>;
+    [actionTypes.addInstructions](context: ActionContext, payload: {gameId: string, variantId: string}): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, payload: {
         type: string
     }): Promise<void>;
-    [actionTypes.loadVariants](context: ActionContext, payload: {
-        type: string;
-        gameId: string
-    }): Promise<void>;
+    [actionTypes.loadVariants](context: ActionContext, payload: {gameId: string}): Promise<void>;
     [actionTypes.initiateMatch](context: ActionContext, payload: {
-        gameType: string;
         gameId: string;
         variantId: string;
         startPosition?: string;
@@ -380,23 +367,21 @@ type Actions = {
 };
 
 const actions: Vuex.ActionTree<State, State> & Actions = {
-    addInstructions: async (context: ActionContext, payload: {gameType: string, gameId: string}) => {
-        const updatedApp = await GMU.addInstructions(context.state.app, {gameType: payload.gameType, gameId: payload.gameId})
+    addInstructions: async (context: ActionContext, payload: {gameId: string, variantId: string}) => {
+        const updatedApp = await GMU.addInstructions(context.state.app, {gameId: payload.gameId, variantId: payload.variantId})
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadGames: async (context: ActionContext, payload: { type: string }) => {
-        const updatedApp = await GMU.loadGames(context.state.app, { gameType: payload.type });
+        const updatedApp = await GMU.loadGames(context.state.app);
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
-    loadVariants: async (context: ActionContext, payload: { type: string; gameId: string }) => {
-        const updatedApp = await GMU.loadVariants(context.state.app, {
-            gameType: payload.type,
+    loadVariants: async (context: ActionContext, payload: { gameId: string }) => {
+        const updatedApp = await GMU.loadGame(context.state.app, {
             gameId: payload.gameId
         });
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     initiateMatch: async (context: ActionContext, payload: {
-        gameType: string;
         gameId: string;
         variantId: string;
         startPosition?: string;

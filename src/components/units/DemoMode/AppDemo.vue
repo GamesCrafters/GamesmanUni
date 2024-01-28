@@ -47,7 +47,6 @@
     const currentGameIndex = ref(0);
     const initiateCurrentGame = async () => {
         await store.dispatch(actionTypes.initiateMatch, {
-            gameType: games[currentGameIndex.value].gameType,
             gameId: games[currentGameIndex.value].gameId,
             variantId: games[currentGameIndex.value].variantId,
             startPosition: games[currentGameIndex.value].startPosition || undefined,

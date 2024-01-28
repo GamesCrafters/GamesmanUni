@@ -23,8 +23,8 @@ const spawnImageEntity = (char: string, i: number, centers: number[][], entities
 
 /* All animation functions should return the animation duration in milliseconds. */
 const animateTTT = (volume: number, moveObj: Types.Move): number => {
-    const diffIdx = Number(moveObj.move[4]);
-    const turn = moveObj.move[2];
+    const diffIdx = Number(moveObj.autoguiMove[4]);
+    const turn = moveObj.autoguiMove[2];
     const xOff = (diffIdx % 3) * 22;
     const yOff = Math.floor(diffIdx / 3) * 22;
     if (turn === 'x') {
@@ -41,18 +41,18 @@ const animateTTT = (volume: number, moveObj: Types.Move): number => {
 const animateSim = (volume: number, moveObj: Types.Move): number => {
     const vertices = [[4, 0], [2, 3.4641], [-2, 3.4641], [-4, 0], [-2, -3.4641], [2, -3.4641]];
     playMoveSFX('ttt/O.mp3');
-    const d = Number(moveObj.moveName[1]) - 1;    
-    gsap.to("#simline" + moveObj.moveName, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
+    const d = Number(moveObj.move[1]) - 1;    
+    gsap.to("#simline" + moveObj.move, {duration: 0.5, attr: {"x2": vertices[d][0], "y2": vertices[d][1]}});
     return 500;
 }
 
 const animateQuarto = (volume: number, currPosition: string, nextPosition: string): number => {
     var duration = 0;
     var delay = 0;
-    if (currPosition !== "R_A_17_1_-----------------") { // If currPosition is not the initial position
+    if (currPosition !== "1_-----------------") { // If currPosition is not the initial position
         var to = -1;
         for (var i = 0; i < 16; i++) {
-            if (currPosition.split("_")[4][i] != nextPosition.split("_")[4][i]) {
+            if (currPosition.split("_")[1][i] != nextPosition.split("_")[1][i]) {
                 to = i;
                 break;
             }
@@ -61,7 +61,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
         gsap.fromTo("#toPlace", {x: 58, y: 113}, {duration: 0.5, x: toCoords[0], y: toCoords[1]});
         duration += 500;
         delay = 0.5
-        if (nextPosition[25] != '-') {
+        if (nextPosition[18] != '-') {
             playMoveSFX('general/slideThenRemove.mp3');
         } else {
             playMoveSFX('general/slide.mp3');
@@ -69,7 +69,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     } else {
         playMoveSFX('general/remove.mp3');
     }
-    if (nextPosition[25] != '-') { // i.e. if there is a piece-to-place
+    if (nextPosition[18] != '-') { // i.e. if there is a piece-to-place
         const store = useStore();
         var svg = document.getElementById('custom-gui-quarto'); //Get svg element
         var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -79,7 +79,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 
         var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'use'); //Create a path in SVG's namespace
         newElement.setAttribute("class", "appearingPiece");
-        newElement.setAttribute("href", "#" + gameTheme + nextPosition[25]);
+        newElement.setAttribute("href", "#" + gameTheme + nextPosition[18]);
         newElement.setAttribute("transform", "translate(58 113)");
         newElement.setAttribute("opacity", "0.001");
         g.appendChild(newElement);
@@ -101,9 +101,9 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
 }
 
 const animateImageAutoGUI = (currPosition: string, nextPosition: string): number => {
-    const currEntityStringParts = currPosition.split("_")[4].split("~");
+    const currEntityStringParts = currPosition.split("_")[1].split("~");
     var currBoard = currEntityStringParts[0];
-    const nextEntityStringParts = nextPosition.split("_")[4].split("~");
+    const nextEntityStringParts = nextPosition.split("_")[1].split("~");
     var nextBoard = nextEntityStringParts[0];
 
     // Append dashes to make currBoard and nextBoard have same length, if one of them is shorter
@@ -115,7 +115,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     }
 
     const store = useStore();
-    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, store.getters.currentGameId, store.getters.currentVariantId);
+    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
     const theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
     const scaledWidth = 100;
     const backgroundGeometry = theTheme.space;
@@ -123,7 +123,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     const scaledHeight = backgroundGeometry[1] * widthFactor;
     const animationType = theTheme.animationType || "";
     const entities = theTheme.entities;
-    const centers = theTheme.centers.map((a: [number, number]) => a.map((b: number) => b * widthFactor));
+    const centers = theTheme.centers.map((a: Array<number>) => a.map((b: number) => b * widthFactor));
     const foregroundImagePath = theTheme.foreground || "";
     const animationWindow = theTheme.defaultAnimationWindow || [0, currBoard.length];
     const textEntityFontSize = theTheme.textEntityFontSize * widthFactor || 10;
@@ -255,8 +255,8 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
 }
 
 export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, moveObj: Types.Move) => {
-    const currPosition = currentMatch.round.position.position;
-    const nextPosition = moveObj.position;
+    const currPosition = currentMatch.round.position.autoguiPosition;
+    const nextPosition = moveObj.autoguiPosition;
     if (currentMatch.gameId === 'tictactoe') {
         return animateTTT(volume, moveObj);
     } else if (currentMatch.gameId === 'sim') {
@@ -265,14 +265,13 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         return animateQuarto(volume, currPosition, nextPosition);
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId);
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             var theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
             const sounds = theTheme.sounds || {} as Record<string, string>;
             var duration = animateImageAutoGUI(currPosition, nextPosition);
             let matches;
-            if (matches = moveObj.move.match(/^([AMLT])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
+            if (matches = moveObj.autoguiMove.match(/^([AMLT])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
                 if (matches[4] in sounds) {
                     playMoveSFX(sounds[matches[4]]);
                 }
@@ -302,8 +301,7 @@ export const animationEpilogue = (currentMatch: Types.Match) => {
         }
     } else {
         const store = useStore();
-        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
-            store.getters.currentGameId, store.getters.currentVariantId);
+        const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
         if (imageAutoGUIData != null) {
             // Note: gsap.set() is unreliable (only achieves the reset as intended
             // 50% of the time for some reason) so we use fromTo instead 

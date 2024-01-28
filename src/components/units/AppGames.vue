@@ -7,7 +7,7 @@
                 <h2>{{ gameTypeTitle }} with{{ category.name }}</h2>
                 <div class="games">
                     <g v-for="member in category.members" :key="member.id">
-                        <router-link :class="category.id" v-if="member.gui_status === category.id" :to="{ name: 'variants', params: { type: gameType, gameId: member.id } }">
+                        <router-link :class="category.id" v-if="member.gui === category.id" :to="{ name: 'variants', params: { type: gameType, gameId: member.id } }">
                             <img :src="getLogoSource(member)" style="width: 8rem" />
                             <p :style="member.name.length < 17 ? 'font-size: 100%' : 'font-size: 90%'" >{{ member.name }}</p>
                         </router-link>
@@ -43,6 +43,7 @@ const getLogoSource = (game: Game) => {
     return logo[appLogoFilePath].default;
 }
 const gameType = computed(() => route.params.type as string);
+const gameTypeStr = computed(() => gameType.value === "puzzles" ? "onePlayer" : "twoPlayer");
 const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
 const search = ref("");
 
@@ -54,12 +55,12 @@ interface Category {
 
 const categories = computed(() => {
     let categories: Category[] = [];
-    const asArray = Object.values(store.getters.games(gameType.value).games);
+    const asArray = Object.values(store.getters.games);
     for (const strs of [["v3", " Animated GUIs"], ["v2", " Artisan GUIs"], ["v1", " Standard GUIs"], ["v0", "out GUIs (Still in Development)"]]) {
         categories.push({
             id: strs[0],
             name: strs[1],
-            members: asArray.filter((value) => value.name.toLowerCase().includes(search.value.toLowerCase()) && value.gui_status === strs[0])
+            members: asArray.filter((value) => value.type === gameTypeStr.value && value.name.toLowerCase().includes(search.value.toLowerCase()) && value.gui === strs[0])
         });
     }
     return categories;

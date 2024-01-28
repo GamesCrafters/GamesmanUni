@@ -165,13 +165,12 @@
 
   const store = useStore();
   const options = computed(() => store.getters.options);
-  const currentPosition = computed(() => store.getters.currentPosition);
+  const currentPosition = computed(() => store.getters.currentAutoguiPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
 
   /* Code Cleanup Required Here */
-  const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameType, 
-    store.getters.currentGameId, store.getters.currentVariantId));
+  const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId));
   const currentTheme = computed(() => store.getters.currentGameTheme);
   const theTheme = computed(() => imageAutoGUIData.value.themes[currentTheme.value]);
   const scaledWidth = 100;
@@ -180,7 +179,7 @@
   const scaledHeight = computed(() => space.value[1] * widthFactor.value);
   const entities = computed(() => theTheme.value.entities);
   const centers = computed(() =>
-    theTheme.value.centers.map((a: [number, number]) =>
+    theTheme.value.centers.map((a: Array<number>) =>
       a.map((b: number) => b * widthFactor.value)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
   const animationPlaying = computed(() => store.getters.animationPlaying);
@@ -198,11 +197,11 @@
   /* End Code Cleanup Required Here */
 
   const richPositionData = computed(() => {
-    const matches = currentPosition.value.match(/^R_(A|B)_([0-9]+)_([0-9]+)_([a-zA-Z0-9-\.~]+)*/)!;
-    const validRichPosition = matches && matches.length >= 5;
+    const matches = currentPosition.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)*/)!;
+    const validRichPosition = matches && matches.length >= 3;
     if (validRichPosition) {
       const turn = matches[1];
-      const entityStringParts = matches[4].split("~");
+      const entityStringParts = matches[2].split("~");
       const board = entityStringParts[0];
       let tokens: IAGPointButton[] = [];
       let arrows: IAGArrowButton[] = [];
@@ -226,13 +225,13 @@
         };
 
         let matches;
-        if ((matches = nextMoveData.move.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
+        if ((matches = nextMoveData.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
           tokens.push({token: matches[1], center: parseInt(matches[2]), move})
-        } else if ((matches = nextMoveData.move.match(/^M_([0-9]+)_([0-9]+)*/))) {
+        } else if ((matches = nextMoveData.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
-        } else if ((matches = nextMoveData.move.match(/^L_([0-9]+)_([0-9]+)*/))) {
+        } else if ((matches = nextMoveData.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
           lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move });
-        } else if ((matches = nextMoveData.move.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
+        } else if ((matches = nextMoveData.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move})
         }
       }
@@ -354,8 +353,8 @@
   .iag-button-point {
     transform-origin: var(--tOrigin);
     
-    [data-turn="A"] &.move { fill: var(--turn1Color); stroke: var(--turn1Color); }
-    [data-turn="B"] &.move { fill: var(--turn2Color); stroke: var(--turn1Color); }
+    [data-turn="1"] &.move { fill: var(--turn1Color); stroke: var(--turn1Color); }
+    [data-turn="2"] &.move { fill: var(--turn2Color); stroke: var(--turn1Color); }
 
     &.move.hint- {
       &win      { fill: var(--winColor); stroke: var(--winColor); }
@@ -379,11 +378,11 @@
     stroke: var(--primaryColor);
     fill: var(--primaryColor);
 
-    [data-turn="A"] & {
+    [data-turn="1"] & {
       stroke: var(--turn1Color);
       fill: var(--turn1Color);
     }
-    [data-turn="B"] & {
+    [data-turn="2"] & {
       stroke: var(--turn2Color);
       fill: var(--turn2Color);
     }
@@ -424,8 +423,8 @@
   .iag-button-line {
     stroke: var(--primaryColor);
 
-    [data-turn="A"] & { stroke: var(--turn1Color); }
-    [data-turn="B"] & { stroke: var(--turn2Color); }
+    [data-turn="1"] & { stroke: var(--turn1Color); }
+    [data-turn="2"] & { stroke: var(--turn2Color); }
 
     &.hint- {
       &win { stroke: var(--winColor); }
