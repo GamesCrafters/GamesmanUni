@@ -331,7 +331,7 @@ export enum actionTypes {
 }
 
 type Actions = {
-    [actionTypes.addInstructions](context: ActionContext, payload: {gameType: string, gameId: string}): Promise<void>;
+    [actionTypes.addInstructions](context: ActionContext, payload: {gameId: string, variantId: string}): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, payload: {
         type: string
     }): Promise<void>;
@@ -367,8 +367,8 @@ type Actions = {
 };
 
 const actions: Vuex.ActionTree<State, State> & Actions = {
-    addInstructions: async (context: ActionContext, payload: {gameType: string, gameId: string}) => {
-        const updatedApp = await GMU.addInstructions(context.state.app, {gameType: payload.gameType, gameId: payload.gameId})
+    addInstructions: async (context: ActionContext, payload: {gameId: string, variantId: string}) => {
+        const updatedApp = await GMU.addInstructions(context.state.app, {gameId: payload.gameId, variantId: payload.variantId})
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadGames: async (context: ActionContext, payload: { type: string }) => {

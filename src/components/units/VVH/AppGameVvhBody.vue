@@ -172,7 +172,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
+                            {{ currentValuedRounds[roundNumber].move.substring(0,4) === 'zzzz' ? '' : currentValuedRounds[roundNumber].move }}
                         </text>
                         <text class="move-coordinate"
                                 v-else
@@ -180,7 +180,7 @@
                                 :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
+                            {{ currentValuedRounds[roundNumber].move.substring(0,4) === 'zzzz' ? '' : currentValuedRounds[roundNumber].move }}
                         </text>
                     </template>
 

@@ -28,9 +28,9 @@ export const loadGames = async (app: Types.App) => {
     return app;
 };
 
-export const addInstructions = async (app: Types.App, payload: {gameType: string, gameId: string}) => {
-    // const instructions = await GCTAPI.loadInstructions(app.dataSources.twoPlayerGameAPI + `/instructions/${app.currentMatch.gameType}/${app.currentMatch.gameId}/${app.preferences.locale}`);
-    // app.gameTypes[payload.gameType].games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.response.instructions : "";
+export const addInstructions = async (app: Types.App, payload: {gameId: string, variantId: string}) => {
+    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions?lang=${app.preferences.locale}`);
+    app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     return app;
 }
 
@@ -59,7 +59,6 @@ export const loadGame = async (app: Types.App, payload: { gameId: string; force?
     return app;
 };
 
-// This function is for custom variants.
 const loadVariant = async (app: Types.App, payload: { gameId: string; variantId: string; force?: boolean }) => {
     const variant = await GCTAPI.loadVariant(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/`);
     if (!variant) return Defaults.defaultVariant;
@@ -114,8 +113,6 @@ export const initiateMatch = async (app: Types.App, payload: {
     const variant = await loadVariant(app, payload);
     game.variants[payload.variantId] = variant;
 
-    // need instructions to load
-
     const startPosition = payload.startPosition ? payload.startPosition : variant.startPosition;
 
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
@@ -146,6 +143,7 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(app.currentMatch.round)
     ];
     playGameAmbience();
+    await addInstructions(app, payload);
     return app;
 };
 
