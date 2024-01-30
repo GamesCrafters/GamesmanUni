@@ -13,17 +13,19 @@ const deepcopy = (obj: Object) => {
 };
 
 export const loadGames = async (app: Types.App) => {
-    const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
-    if (!games) return undefined;
-    for (const game of games) {
-        app.games[game.id] = {
-            ...Defaults.defaultGame,
-            id: game.id,
-            name: game.name,
-            type: game.type,
-            gui: game.gui,
-            variants: {},
-        };
+    if (Object.keys(app.games).length == 0) {
+        const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
+        if (!games) return undefined;
+        for (const game of games) {
+            app.games[game.id] = {
+                ...Defaults.defaultGame,
+                id: game.id,
+                name: game.name,
+                type: game.type,
+                gui: game.gui,
+                variants: {},
+            };
+        }
     }
     return app;
 };
