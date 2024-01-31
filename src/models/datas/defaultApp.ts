@@ -66,11 +66,6 @@ export const defaultVariant: Types.Variant = {
     positions: {},
 };
 
-// export const defaultVariants: Types.Variants = {
-//     ...defaultUpdate,
-//     variants: {},
-// };
-
 export const defaultGame: Types.Game = {
     id: "",
     name: "",
@@ -138,8 +133,6 @@ export const defaultMatch: Types.Match = {
     rounds: [],
     moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
-    // created: 0,
-    // lastPlayed: 0,
     backgroundLoading: false,
     computerMoving: false,
     animationPlaying: false
@@ -172,8 +165,6 @@ export const defaultApp: Types.App = {
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },
-            // created: 0,
-            // lastPlayed: 0,
             backgroundLoading: false,
             computerMoving: false
     },

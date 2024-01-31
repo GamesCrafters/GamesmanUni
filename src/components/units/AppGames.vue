@@ -67,11 +67,6 @@ const categories = computed(() => {
 });
 
 store.dispatch(actionTypes.loadGames, { type: gameType.value });
-watch(
-    () => route.params.type as string,
-    () => route.params.type && store.dispatch(actionTypes.loadGames, { type: gameType.value }),
-    { immediate: true }
-);
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <!-- Render board only if the boardstring is valid i.e. is a "validRichPosition". -->
+  <!-- Render position only if the autogui position string is valid. -->
   <svg v-if="richPositionData.validRichPosition"
     id="image-autogui" xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
@@ -7,22 +7,19 @@
 
     <!-- Draw Background Image -->
     <image v-if="backgroundImagePath != ''" x="0" y="0"
-      :width="scaledWidth"
-      :height="scaledHeight"
+      :width="scaledWidth" :height="scaledHeight"
       :href="getImageSource(backgroundImagePath)"/>
 
     <!-- Draw M-type (arrow) move buttons below entities -->
-    <g v-if="!animationPlaying && entitiesOverArrows"> 
-      <g v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i">
-        <path
-          :d="formatArrowPathPoints(arrow, arrowWidth)"
-          :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
-          <title>{{ moveButtonTitle(arrow.move.str) }}</title>
-        </path>
-      </g>
-    </g>
+    <template v-if="!animationPlaying && entitiesOverArrows"> 
+      <path v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i"
+        :d="formatArrowPathPoints(arrow, arrowWidth)"
+        :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+        <title>{{ moveButtonTitle(arrow.move.str) }}</title>
+      </path>
+    </template>
 
     <!-- Draw Regular (Image) Entities -->
     <g v-for="(entity, i) in richPositionData.board" :key="'entity' + i">
@@ -36,20 +33,18 @@
     </g>
 
     <!-- Draw Text Entities -->
-    <g v-for="(value, key) of richPositionData.textEntities" :key="'entity' + key">
-      <text class="entity" :id="'entity' + key" :x="centers[key][0]" :y="centers[key][1]" 
-        :style="'font-size:' + textEntityFontSize + 'px;'">
-        {{ value }}
-      </text>
-    </g>
+    <text v-for="(value, key) of richPositionData.textEntities" :key="'entity' + key"
+      class="entity" :id="'entity' + key" :x="centers[key][0]" :y="centers[key][1]" 
+      :style="'font-size:' + textEntityFontSize + 'px;'">
+      {{ value }}
+    </text>
  
     <!-- Draw Foreground Image -->
     <image v-if="foregroundImagePath != ''" x="0" y="0"
-      :width="scaledWidth"
-      :height="scaledHeight"
+      :width="scaledWidth" :height="scaledHeight"
       :href="getImageSource(foregroundImagePath)"/>
 
-    <g v-if="!animationPlaying">
+    <template v-if="!animationPlaying">
       <!-- Draw A-type move buttons. -->
       <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i">
         <g v-if="token.move">  
@@ -83,47 +78,39 @@
       </g>
 
       <!-- Draw T-type (text) move buttons -->
-      <g v-for="(textButton, i) in richPositionData.textButtons" :key="'textButton' + i">
-        <text
-          :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
-          :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
-          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
-          :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })">
-          {{ textButton.text }}
-        </text>
-      </g>
+      <text v-for="(textButton, i) in richPositionData.textButtons" :key="'textButton' + i"
+        :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
+        :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
+        :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })">
+        {{ textButton.text }}
+      </text>
 
       <!-- Draw M-type (arrow) move buttons on top of entities -->
-      <g v-if="!entitiesOverArrows"> 
-        <g v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i">
-          <path
-            :d="formatArrowPathPoints(arrow, arrowWidth)"
-            :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
-            :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
-            <title>{{ moveButtonTitle(arrow.move.str) }}</title>
-          </path>
-        </g>
-      </g>
+      <template v-if="!entitiesOverArrows"> 
+        <path v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i"
+          :d="formatArrowPathPoints(arrow, arrowWidth)"
+          :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+          <title>{{ moveButtonTitle(arrow.move.str) }}</title>
+        </path>
+      </template>
 
       <!-- Draw L-type (line) move buttons. -->
-      <g v-for="(line, i) in richPositionData.lines" :key="'line' + i">
-        <line
-          :x1="centers[line.p1][0]"
-          :y1="centers[line.p1][1]"
-          :x2="centers[line.p2][0]"
-          :y2="centers[line.p2][1]"
-          :stroke-linecap="'round'"
-          :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
-          :stroke-width="lineWidth * widthFactor"
-          :class="'iag-button-line ' + getBoardMoveElementHintClass(line.move)"
-          :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })">
-          <title>{{ moveButtonTitle(line.move.str) }}</title>
-        </line>
-      </g>
-    </g>
+      <line v-for="(line, i) in richPositionData.lines" :key="'line' + i"
+        :x1="centers[line.p1][0]" :y1="centers[line.p1][1]"
+        :x2="centers[line.p2][0]" :y2="centers[line.p2][1]"
+        :stroke-linecap="'round'"
+        :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
+        :stroke-width="lineWidth * widthFactor"
+        :class="'iag-button-line ' + getBoardMoveElementHintClass(line.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })">
+        <title>{{ moveButtonTitle(line.move.str) }}</title>
+      </line>
+    </template>
   </svg>
 </template>
 

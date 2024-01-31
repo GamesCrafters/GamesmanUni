@@ -2,7 +2,7 @@ import axios from "axios";
 import type * as Types from "./types";
 
 export const loadData = async <DataType>(dataSource: string) => {
-    let data: object;
+    let data;
     try {
         data = (await axios.get(dataSource)).data;
     } catch (errorMessage) {

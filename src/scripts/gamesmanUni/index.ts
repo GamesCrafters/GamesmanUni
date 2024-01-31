@@ -13,23 +13,25 @@ const deepcopy = (obj: Object) => {
 };
 
 export const loadGames = async (app: Types.App) => {
-    const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
-    if (!games) return undefined;
-    for (const game of games) {
-        app.games[game.id] = {
-            ...Defaults.defaultGame,
-            id: game.id,
-            name: game.name,
-            type: game.type,
-            gui: game.gui,
-            variants: {},
-        };
+    if (Object.keys(app.games).length == 0) {
+        const games = await GCTAPI.loadGames(app.dataSources.gameAPI);
+        if (!games) return undefined;
+        for (const game of games) {
+            app.games[game.id] = {
+                ...Defaults.defaultGame,
+                id: game.id,
+                name: game.name,
+                type: game.type,
+                gui: game.gui,
+                variants: {},
+            };
+        }
     }
     return app;
 };
 
 export const addInstructions = async (app: Types.App, payload: {gameId: string, variantId: string}) => {
-    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions?lang=${app.preferences.locale}`);
+    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions/?lang=${app.preferences.locale}`);
     app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     return app;
 }
@@ -76,7 +78,7 @@ const loadVariant = async (app: Types.App, payload: { gameId: string; variantId:
 
 const loadPosition = async (app: Types.App, payload: { gameId: string; variantId: string; position: string; force?: boolean }) => {
     const positions = app.games[payload.gameId].variants[payload.variantId].positions;
-    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/${payload.position}/`);
+    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/?p=${payload.position}`);
     if (!updatedPosition) {
         return undefined;
     }
