@@ -31,7 +31,7 @@ export const loadGames = async (app: Types.App) => {
 };
 
 export const addInstructions = async (app: Types.App, payload: {gameId: string, variantId: string}) => {
-    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions?lang=${app.preferences.locale}`);
+    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions/?lang=${app.preferences.locale}`);
     app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     return app;
 }
@@ -78,7 +78,7 @@ const loadVariant = async (app: Types.App, payload: { gameId: string; variantId:
 
 const loadPosition = async (app: Types.App, payload: { gameId: string; variantId: string; position: string; force?: boolean }) => {
     const positions = app.games[payload.gameId].variants[payload.variantId].positions;
-    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/${payload.position}/`);
+    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/?p=${payload.position}`);
     if (!updatedPosition) {
         return undefined;
     }

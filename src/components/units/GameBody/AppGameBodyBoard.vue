@@ -8,6 +8,7 @@
     import { computed } from "vue";
     import { useRoute } from "vue-router";
     import { useStore } from "../../../scripts/plugins/store";
+    import LoadingScreen from "../LoadingScreen.vue"
     import CharacterAutoGUI from "./CharacterAutoGUI.vue";
     import AppGameBodyBoardRegular2D from "./AppGameBodyBoardRegular2D.vue";
 
@@ -18,6 +19,9 @@
     const position = computed(() => store.getters.currentAutoguiPosition);
     const gameBoards: Record<string, any> = {};
     const getGameBoardComponent = () => {
+        if (position.value === '') {
+            return LoadingScreen
+        }
         if (position.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)(?:_(.*))?$/)) return AppGameBodyBoardRegular2D;
         const gameBoard = `${gameId}-${variantId}`;
         if (gameBoard in gameBoards) return gameBoards[gameBoard];
