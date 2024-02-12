@@ -1,5 +1,5 @@
 <template id="Loading">
-    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="-950 -950 2655 2655">
+    <svg id="Loading" version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="-950 -950 2655 2655">
     <defs>
         <linearGradient id="a2" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stop-color="#F3CC48" />
@@ -25,13 +25,5 @@
       type="rotate" from="0 377.5 377.5" to="720 377.5 377.5"
       dur="3s" repeatCount="indefinite" />
     </circle>
-</svg>
+    </svg>
 </template>
-
-<script lang="ts" setup>
-
-</script>
-
-<style lang="scss" scoped>
-
-</style>
