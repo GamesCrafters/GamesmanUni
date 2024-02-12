@@ -24,7 +24,7 @@
             <line :id="'xb' + cell" stroke="var(--turn1Color)" :x1="19 + xOffset(cell)" :y1="3 + yOffset(cell)" :x2="19 + xOffset(cell) - b16(board[cell].mark === 'x')" :y2="3 + yOffset(cell) + b16(board[cell].mark === 'x')"/>
             <circle :id="'o' + cell" :transform="'rotate(-90 ' + (11 + xOffset(cell)) + ' ' + (11 + yOffset(cell)) + ')'" stroke="var(--turn2Color)" r="8" :cx="11 + xOffset(cell)" :cy="11 + yOffset(cell)" :stroke-dasharray="51" :stroke-dashoffset="board[cell].mark === 'o' ? 0 : 51"/>
 
-            <g :class="movesAreClickable ? 'button' : ''" v-if="!animationPlaying && board[cell].mark === '-'">
+            <g :class="movesAreClickable ? 'button' : ''" v-if="!animationPlaying && currentRemoteness > 0 && board[cell].mark === '-'">
                 <circle v-if="showNextMoves && board[cell].hint"
                     r="3" :cx="11 + xOffset(cell)" :cy="11 + yOffset(cell)"
                     :class="getHintClass(board[cell].hint)"
@@ -35,6 +35,7 @@
                     width="20" height="20" fill-opacity="0" stroke-opacity="0"
                     :x="1 + xOffset(cell)" :y="1 + yOffset(cell)"
                 />
+                <title>{{ moveButtonTitle(board[cell].move) }}</title>
             </g>
         </g>
     </svg>
@@ -80,6 +81,12 @@
             str[2] != '-' && str[2] == str[4] && str[4] == str[6]
         ]
     });
+
+    const moveButtonTitle = (moveStr: string): string => {
+        var moveObj = availableMoves.value[moveStr];
+        var value = moveObj.moveValue[0].toUpperCase() + moveObj.moveValue.substring(1);
+        return options.value.showNextMoveHints ? (value + " in " + moveObj.remoteness) : "";
+    }
 </script>
 
 <style lang="scss" scoped>

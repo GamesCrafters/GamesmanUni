@@ -134,7 +134,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const autoguiStartPosition = app.games[payload.gameId].variants[payload.variantId].positions[startPosition].autoguiPosition;
     app.currentMatch.round = {
         id: 1,
-        firstPlayerTurn: autoguiStartPosition.charAt(0) == '1',
+        firstPlayerTurn: autoguiStartPosition.charAt(0) != '2',
         move: "",
         autoguiMove: "",
         moveValue: "",

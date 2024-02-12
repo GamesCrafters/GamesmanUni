@@ -1,4 +1,5 @@
 import type * as Types from "../../scripts/gamesmanUni/types";
+import { ImageAutoGUITheme } from "../../scripts/apis/gamesCrafters/types";
 
 const defaultUpdate: Types.Update = {
     status: "",
@@ -65,6 +66,23 @@ export const defaultVariant: Types.Variant = {
     imageAutoGUIData: null as any,
     positions: {},
 };
+
+export const defaultImageAutoGUITheme: ImageAutoGUITheme = {
+    space: [1, 1],
+    centers: [[]],
+    background: '',
+    foreground: '',
+    charImages: {},
+    textEntityFontSize: 1,
+    circleButtonRadius: 1,
+    lineWidth: 1,
+    arrowWidth: 1,
+    textButtonFontSize: 1,
+    entitiesOverArrows: false,
+    sounds: {},
+    animationType: '',
+    defaultAnimationWindow: [0, 1]
+}
 
 export const defaultGame: Types.Game = {
     id: "",

@@ -1,18 +1,18 @@
 <template>
   <!-- Render position only if the autogui position string is valid. -->
-  <svg v-if="richPositionData.validRichPosition"
+  <svg v-if="autoguiPositionData.isValidAutoguiPositionString"
     id="image-autogui" xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
-    :data-turn="richPositionData.turn">
+    :data-turn="autoguiPositionData.turn">
 
     <!-- Draw Background Image -->
-    <image v-if="backgroundImagePath != ''" x="0" y="0"
+    <image v-if="'background' in theme" x="0" y="0"
       :width="scaledWidth" :height="scaledHeight"
-      :href="getImageSource(backgroundImagePath)"/>
+      :href="getImageSource(theme.background)"/>
 
     <!-- Draw M-type (arrow) move buttons below entities -->
     <template v-if="!animationPlaying && entitiesOverArrows"> 
-      <path v-for="(arrow, i) in richPositionData.arrows" :key="'arrow' + i"
+      <path v-for="(arrow, i) in autoguiPositionData.arrows" :key="'arrow' + i"
         :d="formatArrowPathPoints(arrow, arrowWidth)"
         :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
@@ -22,43 +22,43 @@
     </template>
 
     <!-- Draw Regular (Image) Entities -->
-    <g v-for="(entity, i) in richPositionData.board" :key="'entity' + i">
-      <image class="entity" v-if="entity != '-' && entity in entities"
+    <g v-for="(entity, i) in autoguiPositionData.board" :key="'entity' + i">
+      <image class="entity" v-if="entity != '-' && entity in charImages"
         :id="'entity' + i"
-        :x="centers[i][0] - 0.5 * entities[entity].scale * widthFactor"
-        :y="centers[i][1] - 0.5 * entities[entity].scale * widthFactor"
-        :width="entities[entity].scale * widthFactor"
-        :height="entities[entity].scale * widthFactor"
-        :href="getImageSource(entities[entity].image)"/>
+        :x="centers[i][0] - 0.5 * charImages[entity].scale * widthFactor"
+        :y="centers[i][1] - 0.5 * charImages[entity].scale * widthFactor"
+        :width="charImages[entity].scale * widthFactor"
+        :height="charImages[entity].scale * widthFactor"
+        :href="getImageSource(charImages[entity].image)"/>
     </g>
 
     <!-- Draw Text Entities -->
-    <text v-for="(value, key) of richPositionData.textEntities" :key="'entity' + key"
-      class="entity" :id="'entity' + key" :x="centers[key][0]" :y="centers[key][1]" 
+    <text v-for="(value, i) of autoguiPositionData.textEntities" :key="'entity' + i"
+      class="entity" :id="'entity' + i" :x="centers[i][0]" :y="centers[i][1]" 
       :style="'font-size:' + textEntityFontSize + 'px;'">
       {{ value }}
     </text>
  
     <!-- Draw Foreground Image -->
-    <image v-if="foregroundImagePath != ''" x="0" y="0"
+    <image v-if="'foreground' in theme" x="0" y="0"
       :width="scaledWidth" :height="scaledHeight"
-      :href="getImageSource(foregroundImagePath)"/>
+      :href="getImageSource(theme.foreground)"/>
 
     <template v-if="!animationPlaying">
       <!-- Draw A-type move buttons. -->
-      <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i">
+      <g v-for="token in autoguiPositionData.tokens" :key="token.move.str">
         <g v-if="token.move">  
           <!-- Use svg corresponding to move token. If no svg is mapped to the character, skip. -->
-          <g v-if="token.token in entities">
+          <g v-if="token.token in charImages">
             <use 
-              :x="centers[token.center][0] - 0.5 * entities[token.token].scale * widthFactor"
-              :y="centers[token.center][1] - 0.5 * entities[token.token].scale * widthFactor"
-              :width="entities[token.token].scale * widthFactor" 
-              :height="entities[token.token].scale * widthFactor"
+              :x="centers[token.center][0] - 0.5 * charImages[token.token].scale * widthFactor"
+              :y="centers[token.center][1] - 0.5 * charImages[token.token].scale * widthFactor"
+              :width="charImages[token.token].scale * widthFactor" 
+              :height="charImages[token.token].scale * widthFactor"
               :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
-              :href="getImageSource(entities[token.token].image) + '#MoveButtonSVG'"
+              :href="getImageSource(charImages[token.token].image) + '#MoveButtonSVG'"
               @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
               <title>{{ moveButtonTitle(token.move.str) }}</title>
             </use>
@@ -78,7 +78,7 @@
       </g>
 
       <!-- Draw T-type (text) move buttons -->
-      <text v-for="(textButton, i) in richPositionData.textButtons" :key="'textButton' + i"
+      <text v-for="textButton in autoguiPositionData.textButtons" :key="textButton.move.str"
         :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
         :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
@@ -89,7 +89,7 @@
 
       <!-- Draw M-type (arrow) move buttons on top of entities -->
       <template v-if="!entitiesOverArrows"> 
-        <path v-for="(arrow, i) in richPositionData.arrows " :key="'arrow' + i"
+        <path v-for="arrow in autoguiPositionData.arrows " :key="arrow.move.str"
           :d="formatArrowPathPoints(arrow, arrowWidth)"
           :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
@@ -99,7 +99,7 @@
       </template>
 
       <!-- Draw L-type (line) move buttons. -->
-      <line v-for="(line, i) in richPositionData.lines" :key="'line' + i"
+      <line v-for="line in autoguiPositionData.lines" :key="line.move.str"
         :x1="centers[line.p1][0]" :y1="centers[line.p1][1]"
         :x2="centers[line.p2][0]" :y2="centers[line.p2][1]"
         :stroke-linecap="'round'"
@@ -112,11 +112,28 @@
       </line>
     </template>
   </svg>
+  <div id="position-string" v-else>
+    <!-- If cannot render position as image, display the position string instead. -->
+    <h3>Current Position</h3>
+    <pre>{{ currentPosition }}</pre>
+  </div>
+  <div id="listed-moves" v-if="options.showNextMoves && listedMoves.length">
+    <!-- List all moves that do not have a proper AutoGUI move button. -->
+    <h3>{{ autoguiPositionData.isValidAutoguiPositionString ? 'Other' : ''}} Available Moves</h3>
+    <div id="moves">
+      <div class="move" v-for="listedMove in listedMoves" :key="listedMove.move"
+        :class="options.showNextMoveHints ? `uni-${listedMove.moveValue}` : ''"
+        :style="{ opacity: options.showNextMoveDeltaRemotenesses ? listedMove.moveValueOpacity : 1 }"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: listedMove.move })">{{ listedMove.move }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
   import { computed } from "vue";
   import { actionTypes, useStore } from "../../../scripts/plugins/store";
+  import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
   interface IAGMove {
@@ -155,38 +172,33 @@
   const currentPosition = computed(() => store.getters.currentAutoguiPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
-
-  /* Code Cleanup Required Here */
-  const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId));
-  const currentTheme = computed(() => store.getters.currentGameTheme);
-  const theTheme = computed(() => imageAutoGUIData.value.themes[currentTheme.value]);
-  const scaledWidth = 100;
-  const space = computed(() => theTheme.value.space);
-  const widthFactor = computed(() => scaledWidth / space.value[0]);
-  const scaledHeight = computed(() => space.value[1] * widthFactor.value);
-  const entities = computed(() => theTheme.value.entities);
-  const centers = computed(() =>
-    theTheme.value.centers.map((a: Array<number>) =>
-      a.map((b: number) => b * widthFactor.value)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
+  const scaledWidth = 100;
   const animationPlaying = computed(() => store.getters.animationPlaying);
-  const backgroundImagePath = computed(() => theTheme.value.background || "");
-  const foregroundImagePath = computed(() => theTheme.value.foreground || "");
-  const arrowWidth = computed(() =>
-    (theTheme.value.arrowWidth * widthFactor.value / 2) || 1.5);
-  const lineWidth = computed(() => theTheme.value.lineWidth || 0.04);
-  const defaultMoveTokenRadius = computed(() =>
-    (theTheme.value.circleButtonRadius * widthFactor.value) || 2);
-  const entitiesOverArrows = computed(() => theTheme.value.entitiesOverArrows || false);
-  const textEntityFontSize = computed(() => theTheme.value.textEntityFontSize * widthFactor.value || 10);
-  const textButtonFontSize = computed(() => theTheme.value.textButtonFontSize * widthFactor.value || 10);
 
-  /* End Code Cleanup Required Here */
+  const theme = computed(() => {
+    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
+    if (imageAutoGUIData != null && store.getters.currentGameTheme in imageAutoGUIData.themes) {
+      return imageAutoGUIData.themes[store.getters.currentGameTheme]
+    } else {
+      return defaultImageAutoGUITheme;
+    }
+  });
+  const widthFactor = computed(() => scaledWidth / theme.value.space[0]);
+  const scaledHeight = computed(() => theme.value.space[1] * widthFactor.value);
+  const charImages = computed(() => theme.value.charImages);
+  const centers = computed(() => theme.value.centers.map((a: Array<number>) => a.map((b: number) => b * widthFactor.value)));
+  const arrowWidth = computed(() => (theme.value.arrowWidth * widthFactor.value / 2) || 1.5);
+  const lineWidth = computed(() => theme.value.lineWidth || 0.04);
+  const defaultMoveTokenRadius = computed(() => (theme.value.circleButtonRadius * widthFactor.value) || 2);
+  const entitiesOverArrows = computed(() => theme.value.entitiesOverArrows || false);
+  const textEntityFontSize = computed(() => theme.value.textEntityFontSize * widthFactor.value || 10);
+  const textButtonFontSize = computed(() => theme.value.textButtonFontSize * widthFactor.value || 10);
 
-  const richPositionData = computed(() => {
+  const autoguiPositionData = computed(() => {
     const matches = currentPosition.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)*/)!;
-    const validRichPosition = matches && matches.length >= 3;
-    if (validRichPosition) {
+    const isValidAutoguiPositionString = matches && matches.length >= 3;
+    if (isValidAutoguiPositionString) {
       const turn = matches[1];
       const entityStringParts = matches[2].split("~");
       const board = entityStringParts[0];
@@ -194,6 +206,7 @@
       let arrows: IAGArrowButton[] = [];
       let lines: IAGLineButton[] = [];
       let textButtons: IAGTextButton[] = [];
+      let listedButtons = [];
       let textIndices = []
       for (var i = 0; i < board.length; i++) {
         if (board[i] === ".") textIndices.push(i);
@@ -203,23 +216,25 @@
         textEntities[textIndices[i - 1]] = entityStringParts[i];
       }
 
-      for (let nextMoveData of Object.values(currentAvailableMoves.value)) {        
+      for (let moveObj of Object.values(currentAvailableMoves.value)) {        
         const move = {
-          str: nextMoveData.move,
-          hint: nextMoveData.moveValue,
-          hintOpacity: !options.value.showNextMoves ? 0.001 : nextMoveData.moveValueOpacity,
-          nextPosition: nextMoveData.position
+          str: moveObj.move,
+          hint: moveObj.moveValue,
+          hintOpacity: !options.value.showNextMoves ? 0.001 : moveObj.moveValueOpacity,
+          nextPosition: moveObj.position
         };
 
         let matches;
-        if ((matches = nextMoveData.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
-          tokens.push({token: matches[1], center: parseInt(matches[2]), move})
-        } else if ((matches = nextMoveData.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
+        if ((matches = moveObj.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
+          tokens.push({token: matches[1], center: parseInt(matches[2]), move});
+        } else if ((matches = moveObj.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
-        } else if ((matches = nextMoveData.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
+        } else if ((matches = moveObj.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
           lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move });
-        } else if ((matches = nextMoveData.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
-          textButtons.push({text: matches[1], center: parseInt(matches[2]), move})
+        } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
+          textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
+        } else {
+          listedButtons.push(moveObj);
         }
       }
       
@@ -247,18 +262,21 @@
         lines,
         textEntities,
         textButtons,
-        validRichPosition,
+        listedButtons,
+        isValidAutoguiPositionString,
       };
     }
 
     return {
-      validRichPosition
+      isValidAutoguiPositionString
     }
   });
 
-  /* An arrow move button is a concave heptagon. We've decided that all arrowheads must be 55-55-70 
-  triangles. Given the arrow's endpoint and thickness (and other parameters `startOffset` and 
-  `endOffset`), return the vertex coordinates of the arrow move button as a string. 
+  const listedMoves = computed(() => autoguiPositionData.value.isValidAutoguiPositionString ? autoguiPositionData.value.listedButtons : Object.values(currentAvailableMoves.value));
+
+  /* An arrow move button is a concave heptagon (see below) except with a curve from point 6 to point 0.
+  All arrowheads must be 55-55-70 triangles. Given the arrow's endpoint and thickness (and other parameters
+  `startOffset` and `endOffset`), return the vertex coordinates of the arrow move button as a string. 
              2
              | \
   0----------1  \
@@ -298,8 +316,8 @@
             L${coords6[0]},${coords6[1]}A ${thickness} ${thickness} 0 0 0 ${coords0[0]} ${coords0[1]}Z`;
   };
 
-  const moveButtonTitle = (uwapi_move_str: string): string => {
-    var moveObj = currentAvailableMoves.value[uwapi_move_str];
+  const moveButtonTitle = (moveStr: string): string => {
+    var moveObj = currentAvailableMoves.value[moveStr];
     var value = moveObj.moveValue[0].toUpperCase() + moveObj.moveValue.substring(1);
     return options.value.showNextMoveHints ? (value + (value === "Draw" || value === "Unsolved" || moveObj.remoteness < 0 ? ""
      : (" in " + moveObj.remoteness + (!moveObj.winby ? "" : " or by " + moveObj.winby)))) : "";
@@ -314,6 +332,44 @@
   #image-autogui {
     height: 100%;
     width: 100%;
+  }
+
+  #position-string {
+    border: 0.1rem solid var(--neutralColor);
+    border-radius: 1rem;
+    > h3 {
+      margin: 1rem;
+    }
+    > pre {
+        display: inline-block;
+        padding-bottom: 1rem;
+    }
+  }
+
+  #listed-moves {
+    border: 0.1rem solid var(--neutralColor);
+    border-radius: 1rem;
+    padding: 1rem;
+    > h3 {
+      margin: 1rem;
+    }
+    > #moves {
+        align-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        > .move {
+            border: 0.1rem solid var(--neutralColor);
+            border-radius: 1rem;
+            margin: 1rem;
+            padding: 1rem;
+            &:hover {
+              cursor: pointer;
+            }
+        }
+    }
   }
 
   @keyframes pulsing-point {
