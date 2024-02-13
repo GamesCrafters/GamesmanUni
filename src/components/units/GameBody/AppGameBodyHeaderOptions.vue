@@ -214,12 +214,12 @@
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
 
-    const game = computed(() => store.getters.game(gameType, gameId));
-    const gameVariant = computed(() => store.getters.variant(gameType, gameId, variantId));
+    const game = computed(() => store.getters.game(gameId));
+    const gameVariant = computed(() => store.getters.variant(gameId, variantId));
     const gameName = computed(() => (game.value ? game.value.name : ""));
     const variantDescription = computed(() => {
         if (!game.value || !gameVariant.value) return "";
-        return gameVariant.value.description;
+        return gameVariant.value.name;
     });
     const gameThemes = computed(() =>
         gameVariant.value.imageAutoGUIData ?
@@ -260,7 +260,7 @@
 
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
-        store.getters.supportsWinBy(currentGameType.value, currentGameId.value)
+        store.getters.supportsWinBy(currentGameId.value)
     );
     
     // Array of the available computer strategies.

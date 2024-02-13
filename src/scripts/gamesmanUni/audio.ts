@@ -29,8 +29,7 @@ export const playMoveSFX = (path: string) => {
 
 export const playGameAmbience = () => {
     const store = useStore();
-    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameType, 
-        store.getters.currentGameId, store.getters.currentVariantId);
+    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
     if (imageAutoGUIData && "ambience" in imageAutoGUIData) {
         ambience = new Audio(sfx['../../models/sounds/kayles/ambience.mp3'].default);
         ambience.volume = ambienceVolume;

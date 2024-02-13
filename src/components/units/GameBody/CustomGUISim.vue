@@ -74,17 +74,17 @@
     
     const richPositionData = computed(() => {
         const position: string = currentPosition.value;
-        const matches = position.match(/^C_([a-zA-Z0-9-]+)*/)!;
-        const validRichPosition = matches && matches.length >= 2;
+        const matches = position.match(/^(1|2)_([a-zA-Z0-9-]+)*/)!;
+        const validRichPosition = matches && matches.length >= 3;
         let moves: GSimMove[] = [];
         if (validRichPosition) {
             for (let nextMoveData of Object.values(currentAvailableMoves.value)) {
                 moves.push({
-                    str: nextMoveData.move,
+                    str: nextMoveData.autoguiMove,
                     hint: nextMoveData.moveValue,
                     hintOpacity: nextMoveData.moveValueOpacity,
-                    from: Number(nextMoveData.moveName[0]) - 1,
-                    to: Number(nextMoveData.moveName[1]) - 1
+                    from: Number(nextMoveData.move[0]) - 1,
+                    to: Number(nextMoveData.move[1]) - 1
                 });
             }
         }

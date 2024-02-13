@@ -7,71 +7,37 @@ export type Error = Status & {
     error: string;
 };
 
-export type Instructions = Status & {
-    response: Status & {
-        instructions: string;
-    };
+export type Instructions = {
+    instructions: string;
 }
 
-export type OnePlayerGames = Status & {
-    response: Array<Status & {
-        gameId: string;
+export type Games = Array<{
+    id: string;
+    name: string;
+    type: string;
+    gui: string;
+}>;
+
+export type Game = {
+    id: string;
+    name: string;
+    variants: Array<{
+        id: string;
         name: string;
+        gui: string;
     }>;
+    allowCustomVariantCreation: boolean;
+    supportsWinBy: boolean;
+    instructions: string;
 };
 
-export type OnePlayerGameVariants = Status & {
-    response: {
-        author: string;
-        dateCreated: string;
-        description: string;
-        gameId: string;
-        instructions: string;
-        name: string;
-        variants: Array<Status & {
-            description: string;
-            startPosition: string;
-            variantId: string;
-            imageAutoGUIData: ImageAutoGUIData;
-        }>;
-        custom: string;
-        
-    };
-};
-
-export type TwoPlayerGames = Status & {
-    response: Array<Status & {
-        gameId: string;
-        name: string;
-    }>;
-};
-
-export type TwoPlayerGameVariants = Status & {
-    response: {
-        gameId: string;
-        instructions: string;
-        name: string;
-        supportsWinBy: number;
-        variants: Array<Status & {
-            description: string;
-            startPosition: string;
-            variantId: string;
-            imageAutoGUIData: ImageAutoGUIData;
-        }>;
-        custom: string;
-    };
-};
-
-export type GameVariant = Status & {
-    response: {
-        variant: Array<{
-            description: string;
-            startPosition: string;
-            variantId: string;
-            imageAutoGUIData: ImageAutoGUIData;
-            gui_status: string;
-        }>;
-    };
+export type Variant = {
+    id: string;
+    name: string;
+    startPosition: string;
+    autoguiStartPosition: string;
+    imageAutoGUIData: ImageAutoGUIData;
+    gui: string;
 };
 
 export type ImageAutoGUIData = {
@@ -80,8 +46,8 @@ export type ImageAutoGUIData = {
 };
 
 export type ImageAutoGUITheme = {
-    space: ImageAutoGUICoordinate;
-    centers: Array<ImageAutoGUICoordinate>;
+    space: Array<number>;
+    centers: Array<Array<number>>;
     background: string;
     foreground: string;
     entities: Record<string, ImageAutoGUIEntity>;
@@ -96,41 +62,34 @@ export type ImageAutoGUITheme = {
     defaultAnimationWindow: Array<number>;
 };
 
-export type ImageAutoGUICoordinate =
-    [x: number, y: number];
-
 export type ImageAutoGUIEntity = {
     image: string;
     scale: number;
 };
 
-export type Position = Status & {
-    response: {
-        moves: Array<{
-            deltaRemoteness: number;
-            move: string;
-            moveName: string;
-            moveValue: string;
-            position: string;
-            positionValue: string;
-            remoteness: number;
-            winby: number;
-            mex: string;
-            drawLevel: number;
-            drawRemoteness: number;
-        }>;
-        position: string;
-        positionValue: string;
-        remoteness: number;
-        winby: number;
-        mex: string;
-        drawLevel: number;
-        drawRemoteness: number;
-    };
+export type Move = {
+    move: string;
+    autoguiMove: string;
+    position: string;
+    autoguiPosition: string;
+    deltaRemoteness: number;
+    moveValue: string;
+    positionValue: string;
+    remoteness: number;
+    winby: number;
+    mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
-export type RandomPosition = Status & {
-    response: {
-        position: string;
-    }
+export type Position = {
+    moves: Array<Move>;
+    position: string;
+    autoguiPosition: string;
+    positionValue: string;
+    remoteness: number;
+    winby: number;
+    mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };

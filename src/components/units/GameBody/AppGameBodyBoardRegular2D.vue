@@ -17,8 +17,7 @@
     const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
     const gameId = computed(() => (currentMatch.value ? currentMatch.value.gameId : ""));
     const variantId = computed(() => (currentMatch.value ? currentMatch.value.variantId : ""));
-    const gameType = computed(() => (currentMatch.value ? currentMatch.value.gameType : ""));
-    const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(gameType.value, gameId.value, variantId.value));
+    const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(gameId.value, variantId.value));
     const regular2DGameBoards: Record<string, any> = {
         "tictactoe-misere": CustomGUITicTacToe,
         "tictactoe-regular": CustomGUITicTacToe,

@@ -16,19 +16,18 @@ export const defaultPreferences: Types.Preferences = {
 
 export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
-    onePlayerGameAPI: "https://nyc.cs.berkeley.edu/puzzles/",
-    //onePlayerGameAPI: "http://localhost:9001/",
-    twoPlayerGameAPI: "https://nyc.cs.berkeley.edu/universal/v1/games",
-    //twoPlayerGameAPI: "http://localhost:8082/games"
+    gameAPI: "https://nyc.cs.berkeley.edu/universal/v1/",
+    //gameAPI: "http://localhost:8082/"
 };
 
 export const defaultAvailableMove: Types.Move = {
-    deltaRemoteness: 0,
     move: "",
-    moveName: "",
+    autoguiMove: "",
+    position: "",
+    autoguiPosition: "",
+    deltaRemoteness: 0,
     moveValue: "",
     moveValueOpacity: 1,
-    position: "",
     positionValue: "",
     remoteness: 0,
     winby: 0,
@@ -46,6 +45,7 @@ export const defaultPosition: Types.Position = {
     availableMoveNames: {},
     availableMoves: {},
     position: "",
+    autoguiPosition: "",
     positionValue: "",
     remoteness: 0,
     mex: "",
@@ -58,42 +58,23 @@ export const defaultPositions: Types.Positions = {};
 
 export const defaultVariant: Types.Variant = {
     id: "",
-    description: "",
+    name: "",
+    gui: "v0",
     startPosition: "",
-    positions: {},
+    autoguiStartPosition: "",
     imageAutoGUIData: null as any,
-    status: "",
-    gui_status: "v0"
-};
-
-export const defaultVariants: Types.Variants = {
-    ...defaultUpdate,
-    variants: {},
+    positions: {},
 };
 
 export const defaultGame: Types.Game = {
     id: "",
     name: "",
-    author: "",
-    description: "",
-    dateCreated: "",
     instructions: {},
     type: "",
-    variants: { ...defaultVariants, variants: {} },
-    status: "",
-    custom: false,
-    gui_status: "v0",
-    supportsWinBy: 0,
-};
-
-export const defaultGames: Types.Games = {
-    ...defaultUpdate,
-    games: {},
-};
-
-export const defaultGameTypes: Types.GameTypes = {
-    puzzles: { ...defaultGames, games: {} },
-    games: { ...defaultGames, games: {} },
+    variants: {},
+    allowCustomVariantCreation: false,
+    gui: "v0",
+    supportsWinBy: false,
 };
 
 export const defaultCommit: Types.Commit = {
@@ -134,7 +115,7 @@ export const defaultRound: Types.Round = {
     id: 0,
     firstPlayerTurn: true,
     move: "",
-    moveName: "",
+    autoguiMove: "",
     moveValue: "",
     position: { ...defaultPosition, availableMoves: {} },
 };
@@ -146,13 +127,12 @@ export const defaultMatch: Types.Match = {
     gameTheme: "",
     variantId: "",
     startPosition: "",
+    autoguiStartPosition: "",
     firstPlayer: {name: "Player 1", isComputer: false},
     secondPlayer: {name: "Player 2", isComputer: false},
     rounds: [],
     moveHistory: "",
     round: { ...defaultRound, position: { ...defaultPosition, availableMoves: {} } },
-    created: 0,
-    lastPlayed: 0,
     backgroundLoading: false,
     computerMoving: false,
     animationPlaying: false
@@ -165,7 +145,7 @@ export const defaultApp: Types.App = {
     version: <string>import.meta.env.PACKAGE_VERSION || "",
     preferences: { ...defaultPreferences },
     dataSources: { ...defaultDataSources },
-    gameTypes: { puzzles: { ...defaultGames, games: {} }, games: { ...defaultGames, games: {} } },
+    games: {},
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
@@ -176,6 +156,7 @@ export const defaultApp: Types.App = {
         variantId: "",
         gameTheme: "",
         startPosition: "",
+        autoguiStartPosition: "",
         firstPlayer: {name: "Player 1", isComputer: false},
         secondPlayer: {name: "Player 2", isComputer: false},
         rounds: [],
@@ -184,8 +165,6 @@ export const defaultApp: Types.App = {
         round: {
             ...defaultRound,
             position: { ...defaultPosition, availableMoves: {} } },
-            created: 0,
-            lastPlayed: 0,
             backgroundLoading: false,
             computerMoving: false
     },

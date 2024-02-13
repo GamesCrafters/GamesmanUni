@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-header-title">
-        <h2>{{ gameName }} ({{ variantDescription }})</h2>
+        <h2>{{ gameName }} ({{ variantName }})</h2>
     </div>
 </template>
 
@@ -11,11 +11,10 @@
 
     const route = useRoute();
     const store = useStore();
-    const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
-    const gameName = computed(() => (store.getters.game(gameType, gameId) ? store.getters.game(gameType, gameId).name : ""));
-    const variantDescription = computed(() => (store.getters.game(gameType, gameId) && store.getters.variant(gameType, gameId, variantId) ? store.getters.variant(gameType, gameId, variantId).description : ""));
+    const gameName = computed(() => (store.getters.game(gameId) ? store.getters.game(gameId).name : ""));
+    const variantName = computed(() => (store.getters.game(gameId) && store.getters.variant(gameId, variantId) ? store.getters.variant(gameId, variantId).name : ""));
 </script>
 
 <style lang="scss" scoped>

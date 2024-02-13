@@ -13,15 +13,15 @@
     const gameId = computed(() => store.getters.currentGameId);
     const variantId = computed(() => store.getters.currentVariantId);
     const gameName = computed(() => {
-        if (!store.getters.games(gameType.value)) return "";
-        if (!store.getters.game(gameType.value, gameId.value)) return "";
-        return store.getters.game(gameType.value, gameId.value).name;
+        if (!store.getters.games) return "";
+        if (!store.getters.game(gameId.value)) return "";
+        return store.getters.game(gameId.value).name;
     });
     const variantDescription = computed(() => {
-        if (!store.getters.games(gameType.value)) return "";
-        if (!store.getters.game(gameType.value, gameId.value)) return "";
-        if (!store.getters.variant(gameType.value, gameId.value, variantId.value)) return "";
-        return store.getters.variant(gameType.value, gameId.value, variantId.value).description;
+        if (!store.getters.games) return "";
+        if (!store.getters.game(gameId.value)) return "";
+        if (!store.getters.variant(gameId.value, variantId.value)) return "";
+        return store.getters.variant(gameId.value, variantId.value).name;
     });
 </script>
 
