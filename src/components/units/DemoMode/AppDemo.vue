@@ -16,7 +16,7 @@
     const games = [
         { gameId: "1dchess", variantId: "regular", isDrawGame: false },
         { gameId: "fivefieldkono", variantId: "delta", isDrawGame: true },
-        { gameId: "chinesechess", variantId: "regular", isDrawGame: false, startPosition: "R_A_10_9_---k---------------------P---------------------------R-------------n------------------K---" },
+        { gameId: "chinesechess", variantId: "regular", isDrawGame: false, startPosition: "1_---k---------------------P---------------------------R-------------n------------------K---" },
         { gameId: "3spot", variantId: "regular", isDrawGame: false },
         { gameId: "achi", variantId: "regular", isDrawGame: false },
         { gameId: "beeline", variantId: "regular", isDrawGame: true },
