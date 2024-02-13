@@ -169,17 +169,19 @@
 
   const store = useStore();
   const options = computed(() => store.getters.options);
-  const currentPosition = computed(() => store.getters.currentAutoguiPosition);
+  const currentPosition = computed(() => store.getters.currentPosition);
+  const currentAutoguiPosition = computed(() => store.getters.currentAutoguiPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
   const scaledWidth = 100;
   const animationPlaying = computed(() => store.getters.animationPlaying);
 
+  const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId));
   const theme = computed(() => {
-    const imageAutoGUIData = store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId);
-    if (imageAutoGUIData != null && store.getters.currentGameTheme in imageAutoGUIData.themes) {
-      return imageAutoGUIData.themes[store.getters.currentGameTheme]
+    const iadata = imageAutoGUIData.value;
+    if (iadata != null && store.getters.currentGameTheme in iadata.themes) {
+      return iadata.themes[store.getters.currentGameTheme]
     } else {
       return defaultImageAutoGUITheme;
     }
@@ -196,8 +198,8 @@
   const textButtonFontSize = computed(() => theme.value.textButtonFontSize * widthFactor.value || 10);
 
   const autoguiPositionData = computed(() => {
-    const matches = currentPosition.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)*/)!;
-    const isValidAutoguiPositionString = matches && matches.length >= 3;
+    const matches = currentAutoguiPosition.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)*/)!;
+    const isValidAutoguiPositionString = matches && matches.length >= 3 && imageAutoGUIData.value != null;
     if (isValidAutoguiPositionString) {
       const turn = matches[1];
       const entityStringParts = matches[2].split("~");
