@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 66 33" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="-16.5" width="66" height="66" fill="white" />
-    <rect x="21.55" y="26.5" width="1" height="10.4" rx="1" fill="#bcbec0" stroke="#bcbec0" />
-    <rect x="43.55" y="26.5" width="1" height="10.4" rx="1" fill="#bcbec0" stroke="#bcbec0" />
-    <path d="M13,36.5 L53,36.5" stroke-width="2" stroke="#bcbec0"/>
-    <rect x="14" y="32" width="16" height="3" rx="2.5" fill="#60C" stroke="#60C" />
-</svg>

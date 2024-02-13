@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg id="app-game-body-board-regular-2d-ttt" viewBox="0 0 66 33" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="-16.5" width="66" height="66" fill="white" />
+<svg viewBox="0 -16.5 66 66" xmlns="http://www.w3.org/2000/svg">
     <rect x="7.8" y="16.5" width="1" height="18.4" rx="1" fill="#bcbec0" stroke="#bcbec0"/>
     <rect x="24.3" y="16.5" width="1" height="18.4" rx="1" fill="#bcbec0" stroke="#bcbec0"/>
     <rect x="40.8" y="16.5" width="1" height="18.4" rx="1" fill="#bcbec0" stroke="#bcbec0"/>

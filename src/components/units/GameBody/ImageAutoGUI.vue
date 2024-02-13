@@ -85,6 +85,7 @@
         :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })">
         {{ textButton.text }}
+        <title>{{ moveButtonTitle(textButton.move.str) }}</title>
       </text>
 
       <!-- Draw M-type (arrow) move buttons on top of entities -->
