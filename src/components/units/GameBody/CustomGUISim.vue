@@ -8,7 +8,9 @@
                 :x2="vertices[move.to][0]" :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :opacity="showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1"
-                @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: move.str })"/>
+                @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: move.str })">
+                <title>{{ moveButtonTitle(move.str) }}</title>
+            </line>
         </g>
 
         <!-- Already-drawn lines. -->
@@ -40,11 +42,11 @@
     }
 
     const store = useStore();
-    const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
+    const availableMoves = computed(() => store.getters.currentAvailableMoves);
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
     const showNextMoveDeltaRemotenesses = computed(() => options.value ? options.value.showNextMoveDeltaRemotenesses : true);
-    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
+    const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(availableMoves.value).length == 1)));
     const currentPosition = computed(() => store.getters.currentPosition);
     const animationPlaying = computed(() => store.getters.animationPlaying);
 
@@ -78,13 +80,13 @@
         const validRichPosition = matches && matches.length >= 3;
         let moves: GSimMove[] = [];
         if (validRichPosition) {
-            for (let nextMoveData of Object.values(currentAvailableMoves.value)) {
+            for (let moveObj of Object.values(availableMoves.value)) {
                 moves.push({
-                    str: nextMoveData.autoguiMove,
-                    hint: nextMoveData.moveValue,
-                    hintOpacity: nextMoveData.moveValueOpacity,
-                    from: Number(nextMoveData.move[0]) - 1,
-                    to: Number(nextMoveData.move[1]) - 1
+                    str: moveObj.autoguiMove,
+                    hint: moveObj.moveValue,
+                    hintOpacity: moveObj.moveValueOpacity,
+                    from: Number(moveObj.move[0]) - 1,
+                    to: Number(moveObj.move[1]) - 1
                 });
             }
         }
@@ -96,6 +98,11 @@
     (move?: GSimMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");
 
+    const moveButtonTitle = (moveStr: string): string => {
+        var moveObj = availableMoves.value[moveStr];
+        var value = moveObj.moveValue[0].toUpperCase() + moveObj.moveValue.substring(1);
+        return options.value.showNextMoveHints ? (value + " in " + moveObj.remoteness) : "";
+    }
 </script>
 
 <style lang="scss" scoped>

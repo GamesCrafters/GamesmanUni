@@ -56,6 +56,7 @@
                         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"/>
                     <use :href="'#' + gameTheme + token.token"
                         :transform="'translate(' + centers[token.to][0] + ' ' + centers[token.to][1] + ') scale(' + centers[token.to][2] + ')'"/>
+                    <title>{{ moveButtonTitle(token.move.str) }}</title>
                 </g>
             </g>
         </g>
@@ -82,10 +83,14 @@
                         <use :href="'#' + gameTheme + token.token"
                             :transform="'translate(' + centers[token.to][0] + ' ' + centers[token.to][1] + ') scale(' + centers[token.to][2] + ')'"/>
                     </g>
-                    <rect v-else width="16" height="16" rx="5" ry="5"
-                        :x="centers[token.to][0] - 8" :y="centers[token.to][1] - 8" 
+                    <g v-else>
+                    <rect :x="centers[token.to][0] - 12.5" :y="centers[token.to][1] - 12.5" width="25" height="25" fill="#fff" opacity="0.001"/>
+                    <circle r="3"
+                        :cx="centers[token.to][0]" :cy="centers[token.to][1]" 
                         :class="'quarto-hint ' + getBoardMoveElementHintClass(token.move)"
                         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"/>
+                    </g>
+                    <title>{{ moveButtonTitle(token.move.str) }}</title>
                 </g>
             </g>
         </g> 
@@ -193,6 +198,12 @@
         }
         return lst;
     });
+
+    const moveButtonTitle = (moveStr: string): string => {
+        var moveObj = availableMoves.value[moveStr];
+        var value = moveObj.moveValue[0].toUpperCase() + moveObj.moveValue.substring(1);
+        return options.value.showNextMoveHints ? (value + " in " + moveObj.remoteness) : "";
+    }
     
 </script>
 

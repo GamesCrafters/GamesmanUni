@@ -1,6 +1,7 @@
 <template>
     <div id="app-demo-body">
-        <AppDemoBodyHeader />
+        <AppGameBodyHeaderTitle />
+        <br/>
         <AppDemoBodyStatistics />
         <h3>Computer Move Duration (milliseconds)</h3>
         <VueSlider id="slider"
@@ -10,20 +11,20 @@
             :interval="100"
             :tooltip="'active'" 
         />
-        <AppDemoBodyBoard />
+        <AppGameBodyBoard />
     </div>
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
     import { useStore } from "../../../scripts/plugins/store";
-    import AppDemoBodyHeader from "./AppDemoBodyHeader.vue";
+    import AppGameBodyHeaderTitle from "../GameBody/AppGameBodyHeaderTitle.vue";
     import AppDemoBodyStatistics from "./AppDemoBodyStatistics.vue";
-    import AppDemoBodyBoard from "./AppDemoBodyBoard.vue";
+    import AppGameBodyBoard from "../GameBody/AppGameBodyBoard.vue";
     import VueSlider from "vue-slider-component";
 
     const store = useStore();
-    const options = computed(() => (store.getters.options));
+    const options = computed(() => store.getters.options);
 </script>
 
 <style lang="scss" scoped>

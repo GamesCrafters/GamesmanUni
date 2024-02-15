@@ -6,15 +6,13 @@
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { useRoute } from "vue-router";
     import { useStore } from "../../../scripts/plugins/store";
 
-    const route = useRoute();
     const store = useStore();
-    const gameId = route.params.gameId as string;
-    const variantId = route.params.variantId as string;
-    const gameName = computed(() => (store.getters.game(gameId) ? store.getters.game(gameId).name : ""));
-    const variantName = computed(() => (store.getters.game(gameId) && store.getters.variant(gameId, variantId) ? store.getters.variant(gameId, variantId).name : ""));
+    const gameId = computed(() => store.getters.currentGameId);
+    const variantId = computed(() => store.getters.currentVariantId);
+    const gameName = computed(() => (store.getters.game(gameId.value) ? store.getters.game(gameId.value).name : ""));
+    const variantName = computed(() => (store.getters.game(gameId.value) && store.getters.variant(gameId.value, variantId.value) ? store.getters.variant(gameId.value, variantId.value).name : ""));
 </script>
 
 <style lang="scss" scoped>

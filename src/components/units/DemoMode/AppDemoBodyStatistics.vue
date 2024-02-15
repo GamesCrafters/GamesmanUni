@@ -1,15 +1,21 @@
 <template>
     <div id="app-demo-body-statistics">
         <div class="row">
-            <AppDemoBodyStatisticsData />
-            <AppDemoBodyStatisticsMessage />
+            <AppGameBodyStatisticsData />
+            <AppDemoV/>
+        </div>
+        <div class="row">
+            <AppGameBodyStatisticsStatus />
+            <AppGameBodyStatisticsMessage />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import AppDemoBodyStatisticsData from "./AppDemoBodyStatisticsData.vue";
-    import AppDemoBodyStatisticsMessage from "./AppDemoBodyStatisticsMessage.vue";
+    import AppGameBodyStatisticsData from "../GameBody/AppGameBodyStatisticsData.vue";
+    import AppDemoV from "./AppDemoV.vue";
+    import AppGameBodyStatisticsStatus from "../GameBody/AppGameBodyStatisticsStatus.vue";
+    import AppGameBodyStatisticsMessage from "../GameBody/AppGameBodyStatisticsMessage.vue";
 </script>
 
 <style lang="scss" scoped>

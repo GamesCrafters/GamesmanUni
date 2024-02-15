@@ -1,30 +1,26 @@
 <template>
-    <div id="app-game-body-board">
-        <component :is="getGameBoardComponent()" />
-    </div>
+    <component v-if="autoguiPosition === ''" :is="LoadingScreen"/>
+    <component v-else-if="customGameBoardExists" :is="customGUIs[gameId]" />
+    <component v-else :is="ImageAutoGUI" />
 </template>
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { useRoute } from "vue-router";
     import { useStore } from "../../../scripts/plugins/store";
     import LoadingScreen from "../LoadingScreen.vue"
-    import CharacterAutoGUI from "./CharacterAutoGUI.vue";
-    import AppGameBodyBoardRegular2D from "./AppGameBodyBoardRegular2D.vue";
+    import ImageAutoGUI from "./ImageAutoGUI.vue";
+    import CustomGUITicTacToe from "./CustomGUITicTacToe.vue";
+    import CustomGUIQuarto from "./CustomGUIQuarto.vue";
+    import CustomGUISim from "./CustomGUISim.vue";
 
-    const route = useRoute();
     const store = useStore();
-    const gameId = route.params.gameId as string;
-    const variantId = route.params.variantId as string;
-    const position = computed(() => store.getters.currentAutoguiPosition);
-    const gameBoards: Record<string, any> = {};
-    const getGameBoardComponent = () => {
-        if (position.value === '') {
-            return LoadingScreen
-        }
-        if (position.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)(?:_(.*))?$/)) return AppGameBodyBoardRegular2D;
-        const gameBoard = `${gameId}-${variantId}`;
-        if (gameBoard in gameBoards) return gameBoards[gameBoard];
-        return CharacterAutoGUI;
+    const autoguiPosition = computed(() => store.getters.currentAutoguiPosition);
+    const currentMatch = computed(() => (store.state.app.currentMatch ? store.state.app.currentMatch : undefined));
+    const gameId = computed(() => (currentMatch.value ? currentMatch.value.gameId : ""));
+    const customGUIs: Record<string, any> = {
+        "tictactoe": CustomGUITicTacToe,
+        "quarto": CustomGUIQuarto,
+        "sim": CustomGUISim
     };
+    const customGameBoardExists = computed(() => gameId.value in customGUIs);
 </script>

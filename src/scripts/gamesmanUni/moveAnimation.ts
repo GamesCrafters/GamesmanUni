@@ -1,5 +1,5 @@
 import type * as Types from "./types";
-import type { ImageAutoGUIEntity } from "../apis/gamesCrafters/types"
+import type { ImageAutoGUICharImage } from "../apis/gamesCrafters/types"
 import gsap from "gsap";
 import { playMoveSFX } from "./audio"
 import { useStore } from "../../scripts/plugins/store";
@@ -8,14 +8,14 @@ const gimages = import.meta.globEager("../../models/images/svg/**/*");
 /* Begin Helper Functions */
 const getImageSource = (imagePath: string) => gimages["../../models/images/svg/" + imagePath].default;
 
-const spawnImageEntity = (char: string, i: number, centers: number[][], entities: Record<string, ImageAutoGUIEntity>, widthFactor: number): SVGImageElement => {
+const spawnImageEntity = (char: string, i: number, centers: number[][], charImages: Record<string, ImageAutoGUICharImage>, widthFactor: number): SVGImageElement => {
     var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    var ews = entities[char].scale * widthFactor;
+    var ews = charImages[char].scale * widthFactor;
     newElement.setAttribute("x", (centers[i][0] - 0.5 * ews).toString());
     newElement.setAttribute("y", (centers[i][1] - 0.5 * ews).toString());
     newElement.setAttribute("width", ews.toString());
     newElement.setAttribute("height", ews.toString());
-    newElement.setAttribute("href", getImageSource(entities[char].image));
+    newElement.setAttribute("href", getImageSource(charImages[char].image));
     return newElement;
 }
 
@@ -122,7 +122,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     const widthFactor = scaledWidth / backgroundGeometry[0];
     const scaledHeight = backgroundGeometry[1] * widthFactor;
     const animationType = theTheme.animationType || "";
-    const entities = theTheme.entities;
+    const charImages = theTheme.charImages;
     const centers = theTheme.centers.map((a: Array<number>) => a.map((b: number) => b * widthFactor));
     const foregroundImagePath = theTheme.foreground || "";
     const animationWindow = theTheme.defaultAnimationWindow || [0, currBoard.length];
@@ -141,8 +141,8 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
             }
         }
 
-        var fadeOutIdxs = diffIdxs.filter((idx) => currBoard[idx] != '-' && currBoard[idx] in entities);
-        var fadeInIdxs = diffIdxs.filter((idx) => nextBoard[idx] != '-' && nextBoard[idx] in entities);
+        var fadeOutIdxs = diffIdxs.filter((idx) => currBoard[idx] != '-' && currBoard[idx] in charImages);
+        var fadeInIdxs = diffIdxs.filter((idx) => nextBoard[idx] != '-' && nextBoard[idx] in charImages);
         var slides = [];
         if (animationType === 'simpleSlides') {
             for (const idxFrom of diffIdxs) {
@@ -208,7 +208,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
 
         var newElement;
         for (i of fadeInIdxs) { // Spawn image entities that'll fade in, but don't play fade-in animation yet
-            newElement = spawnImageEntity(nextBoard[i], i, centers, entities, widthFactor);
+            newElement = spawnImageEntity(nextBoard[i], i, centers, charImages, widthFactor);
             newElement.setAttribute("class", "appearingEntity");
             newElement.setAttribute("opacity", "0");
             g.appendChild(newElement);
@@ -231,7 +231,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
             const toCoords = centers[slide[1]];
             const fromCoords = centers[idxFrom];
             gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0});
-            newElement = spawnImageEntity(currBoard[idxFrom], idxFrom, centers, entities, widthFactor);
+            newElement = spawnImageEntity(currBoard[idxFrom], idxFrom, centers, charImages, widthFactor);
             newElement.setAttribute("id", "movingEntity" + idxFrom);
             g.appendChild(newElement);
             gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});

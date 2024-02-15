@@ -50,7 +50,7 @@ export type ImageAutoGUITheme = {
     centers: Array<Array<number>>;
     background: string;
     foreground: string;
-    entities: Record<string, ImageAutoGUIEntity>;
+    charImages: Record<string, ImageAutoGUICharImage>;
     textEntityFontSize: number;
     circleButtonRadius: number;
     lineWidth: number;
@@ -62,7 +62,7 @@ export type ImageAutoGUITheme = {
     defaultAnimationWindow: Array<number>;
 };
 
-export type ImageAutoGUIEntity = {
+export type ImageAutoGUICharImage = {
     image: string;
     scale: number;
 };
