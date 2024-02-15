@@ -85,7 +85,7 @@ const loadPosition = async (app: Types.App, payload: { gameId: string; variantId
     positions[payload.position] = {
         position: updatedPosition.position,
         autoguiPosition: updatedPosition.autoguiPosition,
-        availableMoves: formatMoves(updatedPosition.moves),
+        availableMoves: calculateMoveButtonOpacities(updatedPosition.moves),
         availableMoveNames: formatMoveNames(updatedPosition.moves),
         positionValue: updatedPosition.positionValue,
         remoteness: updatedPosition.remoteness,
@@ -157,19 +157,42 @@ const formatMoveNames = (moves: Array<GCTAPITypes.Move>) => {
     return target;
 };
 
-const formatMoves = (moves: Array<GCTAPITypes.Move>) => {
-    const target: Types.Moves = { ...Defaults.defaultAvailableMoves };
-    if (moves.length) target[moves[0].move] = { ...moves[0], moveValueOpacity: 1 };
-    for (let i = 1; i < moves.length; i++) {
-        target[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
-        const previousMove = target[moves[i - 1].move];
-        const currentMove = target[moves[i].move];
-        if (previousMove.moveValue !== currentMove.moveValue) continue;
-        if (previousMove.moveValueOpacity === 0.5) currentMove.moveValueOpacity = 0.5;
-        else if (previousMove.deltaRemoteness !== currentMove.deltaRemoteness) currentMove.moveValueOpacity = previousMove.moveValueOpacity - 0.25;
-        else currentMove.moveValueOpacity = previousMove.moveValueOpacity;
+/** 
+ * The input `moves` contains all legal moves from the current position,
+ * sorted from best to worst according to value and remoteness.
+ * 
+ * As a reminder, value/remoteness tuples are listed from best to worst as follows:
+ *   Low-Remoteness Win, High-Remoteness Win, Low-Remoteness Tie, High-Remoteness Tie, 
+ *   Draw, High-Remoteness Lose, Lower Remoteness Lose
+ * 
+ * `moves` contains moves of various moveValues from the set {win, tie, draw, lose}
+ * However, for this function, we treat tie/draw as the same moveValue, so a
+ * draw is just a tie in infinity.
+ * 
+ * For a particular set of moves in `moves` that have a particular moveValue:
+ * - The move(s) with the best remoteness will have an opacity of 1.
+ * - The move(s) with the second best remoteness will have an opacity of 0.75.
+ * - The move(s) with the third best remoteness will have an opacity of 0.5.
+ * - All other moves will have an opacity of 0.25.
+*/
+const calculateMoveButtonOpacities = (moves: Array<GCTAPITypes.Move>) => {
+    const formattedMoves: Types.Moves = {};
+    if (moves.length) {
+        formattedMoves[moves[0].move] = { ...moves[0], moveValueOpacity: 1 };
     }
-    return target;
+    for (let i = 1; i < moves.length; i++) {
+        formattedMoves[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
+        const previousMove = formattedMoves[moves[i - 1].move];
+        const currentMove = formattedMoves[moves[i].move];
+        if ((previousMove.moveValue === currentMove.moveValue) || (previousMove.moveValue === 'tie' && currentMove.moveValue === 'draw')) {
+            if (previousMove.moveValueOpacity < 0.5 || previousMove.deltaRemoteness == currentMove.deltaRemoteness) {
+                currentMove.moveValueOpacity = previousMove.moveValueOpacity;
+            } else {
+                currentMove.moveValueOpacity = previousMove.moveValueOpacity - 0.25;
+            }
+        }
+    }
+    return formattedMoves;
 };
 
 export const preFetchNextPositions = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; position: string }) => {
