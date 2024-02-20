@@ -115,7 +115,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const variant = await loadVariant(app, payload);
     game.variants[payload.variantId] = variant;
 
-    const startPosition = payload.startPosition ? payload.startPosition : variant.startPosition;
+    const startPosition = (payload.startPosition && payload.startPosition !== 'random') ? payload.startPosition : variant.startPosition;
 
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
@@ -145,7 +145,10 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(app.currentMatch.round)
     ];
     playGameAmbience();
-    await addInstructions(app, payload);
+
+    if (payload.startPosition !== 'random') {
+        await addInstructions(app, payload);
+    }
     return app;
 };
 
@@ -181,7 +184,9 @@ const calculateMoveButtonOpacities = (moves: Array<GCTAPITypes.Move>) => {
         formattedMoves[moves[0].move] = { ...moves[0], moveValueOpacity: 1 };
     }
     for (let i = 1; i < moves.length; i++) {
-        formattedMoves[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
+        if (!(moves[i].move in formattedMoves)) {
+            formattedMoves[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
+        }
         const previousMove = formattedMoves[moves[i - 1].move];
         const currentMove = formattedMoves[moves[i].move];
         if ((previousMove.moveValue === currentMove.moveValue) || (previousMove.moveValue === 'tie' && currentMove.moveValue === 'draw')) {
