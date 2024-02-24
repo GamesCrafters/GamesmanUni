@@ -63,20 +63,17 @@
                                 v-model="updatedLeftPlayer.isComputer" />
                             <label for="checkbox">Computer</label>
                             <div v-if="updatedLeftPlayer.isComputer">
-                                <div class="strategy-dropdown" v-if="supportsWinBy">
+                                <div class="strategy-dropdown">
                                     <div class="strategy-dropdown-selection">
-                                        <b>{{ CPUsStrategy[0] }} ▼</b>
+                                        <b>{{ currentCPUsStrategies[0] }} ▼</b>
                                     </div>
                                     <div class="strategy-dropdown-options">
-                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === CPUsStrategy[0]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(0, CPUStrategyOption)">
-                                            <div v-if="CPUStrategyOption != CPUsStrategy[0]">
+                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[0]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(0, CPUStrategyOption)">
+                                            <div v-if="(CPUStrategyOption != 'Win By' && !supportsWinBy && CPUStrategyOption != currentCPUsStrategies[0]) || supportsWinBy && CPUStrategyOption != currentCPUsStrategies[0]">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div v-else>
-                                <b>Remoteness</b>
                                 </div>
                                 <br>
                                 Strategy
@@ -101,11 +98,11 @@
                             <div v-if="updatedRightPlayer.isComputer">
                                 <div class="strategy-dropdown" v-if="supportsWinBy">
                                     <div class="strategy-dropdown-selection">
-                                        <b>{{ CPUsStrategy[1] }} ▼</b>
+                                        <b>{{ currentCPUsStrategies[1] }} ▼</b>
                                     </div>
                                     <div class="strategy-dropdown-options">
-                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === CPUsStrategy[1]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(1, CPUStrategyOption)">
-                                            <div v-if="CPUStrategyOption != CPUsStrategy[1]">
+                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[1]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(1, CPUStrategyOption)">
+                                            <div v-if="(CPUStrategyOption != 'Win By' && !supportsWinBy && CPUStrategyOption != currentCPUsStrategies[1]) || supportsWinBy && CPUStrategyOption != currentCPUsStrategies[1]">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
@@ -193,6 +190,7 @@
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import VueSlider from "vue-slider-component";
     import UniPopupWindow from "../../templates/UniPopupWindow.vue";
+    import { CPUStrategies } from "../../../models/datas/defaultApp";
 
     const route = useRoute();
     const store = useStore();
@@ -231,6 +229,10 @@
         store.commit(mutationTypes.setGameTheme, newGameTheme);
     }
 
+    const currentCPUsStrategies = computed(() =>
+        store.getters.currentCPUsStrategies
+    );
+
     const options = computed(() => (store.getters.options));
     const computerInLoop = computed(() => (updatedLeftPlayer.value.isComputer || updatedRightPlayer.value.isComputer));
 
@@ -262,12 +264,6 @@
     const supportsWinBy = computed(() =>
         store.getters.supportsWinBy(currentGameId.value)
     );
-    
-    // Array of the available computer strategies.
-    const CPUStrategies = ["Remoteness", "Win By"]
-
-    // Default computer strategies [Remoteness, Remoteness].
-    const CPUsStrategy = ref([CPUStrategies[0],CPUStrategies[0]]);
 
     /** 
      * Changes the strategy of play of the CPU player to a new CPU strategy.
@@ -276,9 +272,8 @@
      * @returns none.
     */
     const setCPUStrategy = (CPUID: number, newCPUStrategy: string) => {
-        CPUsStrategy.value[CPUID] = newCPUStrategy;
-        store.commit(mutationTypes.setCPUsStrategy, CPUsStrategy.value);
-        
+        currentCPUsStrategies.value[CPUID] = newCPUStrategy;
+        store.commit(mutationTypes.setCPUsStrategies, currentCPUsStrategies.value);
     };
 </script>
 
@@ -394,7 +389,7 @@
         min-width: 192px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         padding: 6px 0px 6px 0px;
-        z-index: 1;
+        z-index: 9999;
     }
 
     .strategy-dropdown:hover .strategy-dropdown-options {

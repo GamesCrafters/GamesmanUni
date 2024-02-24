@@ -15,7 +15,7 @@ export type App = Update & {
     matches: Matches;
     currentMatch: Match;
     vvhView: string;
-    CPUsStrategy: string[];
+    CPUsStrategies: string[];
 };
 
 export type Player = {

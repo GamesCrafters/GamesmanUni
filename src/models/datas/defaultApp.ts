@@ -154,7 +154,8 @@ export const defaultMatch: Types.Match = {
     animationPlaying: false
 };
 
-export const defaultCPUsStrategy: Array<string> = ["Remoteness", "Remoteness"];
+export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
+export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
 
 export const defaultApp: Types.App = {
     ...defaultUpdate,
@@ -184,5 +185,5 @@ export const defaultApp: Types.App = {
             backgroundLoading: false,
             computerMoving: false
     },
-    CPUsStrategy: defaultCPUsStrategy,
+    CPUsStrategies: [...defaultCPUsStrategies],
 };
