@@ -82,7 +82,10 @@ type Getters = {
         (from: number, to: number) => number;
     currentCPUStrategy(state: State):
         (CPUID: number) => string;
-        currentCPUsStrategies(state: State): string[];
+    currentCPUsStrategies(state: State): string[];
+    currentCPURating(state: State):
+        (CPUID: number) => number;
+        currentCPUsRatings(state: State): number[];
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -227,6 +230,11 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.CPUsStrategies[CPUID],
     currentCPUsStrategies: (state: State) =>
             state.app.CPUsStrategies,
+    currentCPURating: (state: State) =>
+        (CPUID: number) =>
+            state.app.CPUsRatings[CPUID],
+    currentCPUsRatings: (state: State) =>
+            state.app.CPUsRatings,
 };
 
 export enum mutationTypes {
@@ -246,7 +254,8 @@ export enum mutationTypes {
     showVvhMeters = "showVvhMeters",
     toggleVvhScrolling = "toggleVvhScrolling",
     setVvhView = "setVvhView",
-    setCPUsStrategies = "setCPUsStrategies"
+    setCPUsStrategies = "setCPUsStrategies",
+    setCPUsRatings = "setCPUsRatings"
 }
 
 type Mutations = {
@@ -267,6 +276,7 @@ type Mutations = {
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
     [mutationTypes.setVvhView](state: State, vvhView: string): void;
     [mutationTypes.setCPUsStrategies](state: State, CPUsStrategies: string[]): void;
+    [mutationTypes.setCPUsRatings](state: State, CPUsRatings: number[]): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -306,6 +316,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.vvhView = vvhView),
     setCPUsStrategies: (state: State, CPUsStrategies: string[]) =>
         (state.app.CPUsStrategies = CPUsStrategies),
+    setCPUsRatings: (state: State, CPUsRatings: number[]) =>
+        (state.app.CPUsRatings = CPUsRatings),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

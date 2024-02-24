@@ -156,6 +156,7 @@ export const defaultMatch: Types.Match = {
 
 export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
 export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
+export const defaultCPUsRatings: Array<number> = [0, 0];
 
 export const defaultApp: Types.App = {
     ...defaultUpdate,
@@ -186,4 +187,5 @@ export const defaultApp: Types.App = {
             computerMoving: false
     },
     CPUsStrategies: [...defaultCPUsStrategies],
+    CPUsRatings: [...defaultCPUsRatings],
 };

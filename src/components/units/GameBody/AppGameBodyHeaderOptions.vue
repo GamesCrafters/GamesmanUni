@@ -77,6 +77,15 @@
                                 </div>
                                 <br>
                                 Strategy
+                                <div v-if="currentCPUsStrategies[0] === 'Skill Expression'">
+                                    <VueSlider id="slider"
+                                    v-model="currentCPUsRatings[0]"
+                                    :min="0"
+                                    :max="1"
+                                    :interval="0.01"
+                                    :tooltip="'active'" />
+                                </div>
+                                Skill Rating
                             </div>
                         </div>
                         <div class="name">
@@ -96,7 +105,7 @@
                                 v-model="updatedRightPlayer.isComputer" />
                             <label for="checkbox">Computer</label>
                             <div v-if="updatedRightPlayer.isComputer">
-                                <div class="strategy-dropdown" v-if="supportsWinBy">
+                                <div class="strategy-dropdown">
                                     <div class="strategy-dropdown-selection">
                                         <b>{{ currentCPUsStrategies[1] }} ▼</b>
                                     </div>
@@ -108,11 +117,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else>
-                                <b>Remoteness</b>
-                                </div>
                                 <br>
                                 Strategy
+                                <div v-if="currentCPUsStrategies[1] === 'Skill Expression'">
+                                    <VueSlider id="slider"
+                                    v-model="currentCPUsRatings[1]"
+                                    :min="0"
+                                    :max="1"
+                                    :interval="0.01"
+                                    :tooltip="'active'" />
+                                </div>
+                                Skill Rating
                             </div>
                         </div>
                     </div>
@@ -229,10 +244,6 @@
         store.commit(mutationTypes.setGameTheme, newGameTheme);
     }
 
-    const currentCPUsStrategies = computed(() =>
-        store.getters.currentCPUsStrategies
-    );
-
     const options = computed(() => (store.getters.options));
     const computerInLoop = computed(() => (updatedLeftPlayer.value.isComputer || updatedRightPlayer.value.isComputer));
 
@@ -265,6 +276,10 @@
         store.getters.supportsWinBy(currentGameId.value)
     );
 
+    const currentCPUsStrategies = computed(() =>
+        store.getters.currentCPUsStrategies
+    );
+
     /** 
      * Changes the strategy of play of the CPU player to a new CPU strategy.
      * @param {number} CPUID - the id of the CPU player. 0 for the first player, 1 for the second player.
@@ -275,6 +290,10 @@
         currentCPUsStrategies.value[CPUID] = newCPUStrategy;
         store.commit(mutationTypes.setCPUsStrategies, currentCPUsStrategies.value);
     };
+
+    const currentCPUsRatings = computed(() =>
+        store.getters.currentCPUsRatings
+    );
 </script>
 
 <style lang="scss" scoped>
