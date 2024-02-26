@@ -106,7 +106,7 @@ button {
 
 <i18n lang="json">
     {
-        "cn": {
+        "zh": {
             "title": "欢迎！"
         },
         "en": {

@@ -123,7 +123,7 @@
 
 <i18n lang="json">
 {
-    "cn": {
+    "zh": {
         "gameVariantsTitle": "请选择游戏变体"
     },
     "en": {
