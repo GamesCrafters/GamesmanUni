@@ -85,8 +85,8 @@ const loadPosition = async (app: Types.App, payload: { gameId: string; variantId
     positions[payload.position] = {
         position: updatedPosition.position,
         autoguiPosition: updatedPosition.autoguiPosition,
-        availableMoves: calculateMoveButtonOpacities(updatedPosition.moves),
-        availableMoveNames: formatMoveNames(updatedPosition.moves),
+        availableMoves: createAutoguiMoveToMoveObject(updatedPosition.moves),
+        moveToAutoguiMove: createMoveToAutoguiMove(updatedPosition.moves),
         positionValue: updatedPosition.positionValue,
         remoteness: updatedPosition.remoteness,
         winby: updatedPosition.winby,
@@ -152,17 +152,29 @@ export const initiateMatch = async (app: Types.App, payload: {
     return app;
 };
 
-const formatMoveNames = (moves: Array<GCTAPITypes.Move>) => {
-    const target: Types.MoveNames = { ...Defaults.defaultAvailableMoveNames };
+/**
+ * @param moves An array of move objects.
+ * @returns A dictionary such that each move object in the original
+ * input array is a key/value pair (key: moveObj.move, value: moveObj.autoguiMove).
+ * This dictionary is used when processing a user-entered move history. 
+ */
+const createMoveToAutoguiMove = (moves: Array<GCTAPITypes.Move>) => {
+    const target: Types.MoveNames = { ...Defaults.defaultMoveToAutoguiMove };
     for (const move in moves) {
-        target[moves[move].move] = moves[move].move;
+        target[moves[move].move] = moves[move].autoguiMove;
     }
     return target;
 };
 
 /** 
  * The input `moves` contains all legal moves from the current position,
- * sorted from best to worst according to value and remoteness.
+ * as an array of move objects sorted from best to worst according to 
+ * value and remoteness.
+ * 
+ * This function will take each move object and put it in a dictionary
+ * with its autoguiMove as the key and itself as the value.
+ * We also add a `moveValueOpacity` field for each move object.
+ * It will then return the dictionary. 
  * 
  * As a reminder, value/remoteness tuples are listed from best to worst as follows:
  *   Low-Remoteness Win, High-Remoteness Win, Low-Remoteness Tie, High-Remoteness Tie, 
@@ -178,17 +190,17 @@ const formatMoveNames = (moves: Array<GCTAPITypes.Move>) => {
  * - The move(s) with the third best remoteness will have an opacity of 0.5.
  * - All other moves will have an opacity of 0.25.
 */
-const calculateMoveButtonOpacities = (moves: Array<GCTAPITypes.Move>) => {
+const createAutoguiMoveToMoveObject = (moves: Array<GCTAPITypes.Move>) => {
     const formattedMoves: Types.Moves = {};
     if (moves.length) {
-        formattedMoves[moves[0].move] = { ...moves[0], moveValueOpacity: 1 };
+        formattedMoves[moves[0].autoguiMove] = { ...moves[0], moveValueOpacity: 1 };
     }
     for (let i = 1; i < moves.length; i++) {
-        if (!(moves[i].move in formattedMoves)) {
-            formattedMoves[moves[i].move] = { ...moves[i], moveValueOpacity: 1 };
+        if (!(moves[i].autoguiMove in formattedMoves)) {
+            formattedMoves[moves[i].autoguiMove] = { ...moves[i], moveValueOpacity: 1 };
         }
-        const previousMove = formattedMoves[moves[i - 1].move];
-        const currentMove = formattedMoves[moves[i].move];
+        const previousMove = formattedMoves[moves[i - 1].autoguiMove];
+        const currentMove = formattedMoves[moves[i].autoguiMove];
         if ((previousMove.moveValue === currentMove.moveValue) || (previousMove.moveValue === 'tie' && currentMove.moveValue === 'draw')) {
             if (previousMove.moveValueOpacity < 0.5 || previousMove.deltaRemoteness == currentMove.deltaRemoteness) {
                 currentMove.moveValueOpacity = previousMove.moveValueOpacity;
@@ -374,18 +386,18 @@ export const generateComputerMove = (round: Types.Round) => {
         var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
-    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
 };
 
-export const runMove = async (app: Types.App, payload: { move: string }) => {
-    app.currentMatch.round.move = payload.move;
-    const moveObj = app.currentMatch.round.position.availableMoves[payload.move];
+export const runMove = async (app: Types.App, payload: { autoguiMove: string }) => {
+    app.currentMatch.round.autoguiMove = payload.autoguiMove;
+    const moveObj = app.currentMatch.round.position.availableMoves[payload.autoguiMove];
     const animationDuration = handleMoveAnimation(app.preferences.volume, app.currentMatch, moveObj);
     if (animationDuration > 0) {
         app.currentMatch.animationPlaying = true;
     }
     app.currentMatch.round.moveValue = moveObj.moveValue;
-    app.currentMatch.round.autoguiMove = moveObj.autoguiMove;
+    app.currentMatch.round.move = moveObj.move;
 
     // Rewrite history by deleting all subsequent moves made earlier.
     app.currentMatch.rounds.splice(
@@ -419,11 +431,11 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
             currentMatch.
             round.
             position.
-            availableMoves[payload.move].
+            availableMoves[payload.autoguiMove].
             position
         ]
     };
-    app.currentMatch.moveHistory += moveHistoryDelim + (moveObj.move ? moveObj.move : moveObj.move);
+    app.currentMatch.moveHistory += moveHistoryDelim + moveObj.move;
     let autoguiPosition = updatedPosition.autoguiPosition;
     if ((autoguiPosition.charAt(0) == '1' || autoguiPosition.charAt(0) == '2') && autoguiPosition.charAt(1) == '_') { // in proper autogui format
         app.currentMatch.round.firstPlayerTurn = autoguiPosition.charAt(0) == '1';
@@ -432,6 +444,7 @@ export const runMove = async (app: Types.App, payload: { move: string }) => {
     } else { // not in proper autogui format
         app.currentMatch.round.firstPlayerTurn = !app.currentMatch.round.firstPlayerTurn;
     }
+    app.currentMatch.round.autoguiMove = "";
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     app.currentMatch.round.id += 1;
@@ -481,6 +494,7 @@ const undoRedoAvailable = (app: Types.App, roundOffset: number) => {
 
 const gotoRoundId = (app: Types.App, roundId: number) => {
     app.currentMatch.round = deepcopy(app.currentMatch.rounds[roundId]);
+    app.currentMatch.round.autoguiMove = "";
     app.currentMatch.round.move = "";
     app.currentMatch.round.moveValue = "";
     return app;
@@ -509,9 +523,7 @@ export const redoMove = (app: Types.App) => {
     }
     // Modify move history before changing current round id.
     for (let i = currRoundId; i < toRoundId; ++i) {
-        app.currentMatch.moveHistory += moveHistoryDelim + (
-            app.currentMatch.rounds[i].move
-        );
+        app.currentMatch.moveHistory += moveHistoryDelim + app.currentMatch.rounds[i].move;
     }
     return gotoRoundId(app, toRoundId);
 };
@@ -614,11 +626,11 @@ export const loadMoveHistory = async (app: Types.App, payload: { history: string
     }
     // Do move one by one, return undefined if any move is invalid
     for (let i = 2; i < parsed.length; ++i) {
-        const nextMove = newApp.currentMatch.round.position.availableMoveNames[parsed[i]];
+        const nextMove = newApp.currentMatch.round.position.moveToAutoguiMove[parsed[i]];
         if (!nextMove) {
             return Error("invalid move [" + parsed[i] + "]");
         }
-        updatedApp = await runMove(newApp, { move: nextMove });
+        updatedApp = await runMove(newApp, { autoguiMove: nextMove });
         if (!updatedApp) {
             return Error("UNREACHED: runMove returned undefined");
         }

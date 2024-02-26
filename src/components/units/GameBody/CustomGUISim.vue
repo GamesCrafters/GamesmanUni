@@ -8,7 +8,7 @@
                 :x2="vertices[move.to][0]" :y2="vertices[move.to][1]"
                 :class="'app-sim-move ' + getBoardMoveElementHintClass(move)"
                 :opacity="showNextMoveHints && showNextMoveDeltaRemotenesses ? move.hintOpacity : 1"
-                @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: move.str })">
+                @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: move.str })">
                 <title>{{ moveButtonTitle(move.str) }}</title>
             </line>
         </g>
