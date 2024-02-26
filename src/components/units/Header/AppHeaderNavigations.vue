@@ -58,14 +58,14 @@
 
 <i18n lang="json">
 {
-    "cn": {
+    "zh": {
         "Home": "首页",
         "Puzzles": "单人解谜",
         "Games": "双人游戏",
         "About": "关于",
         "Updates": "更新日志"
     },
-    "en-US": {
+    "en": {
         "Home": "Home",
         "Puzzles": "Puzzles",
         "Games": "Games",

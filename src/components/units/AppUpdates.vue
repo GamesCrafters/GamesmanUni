@@ -115,7 +115,7 @@
 
 <i18n lang="json">
 {
-    "cn": {
+    "zh": {
         "title": "又更新了！？",
         "message0": "如果页脚显示的版本号落后于此处",
         "message1": "的最新版本， 请尝试使用",
@@ -124,7 +124,7 @@
         "failureMessage": "获取GitHub提交历史失败。",
         "moreMessage": "点此访问GitHub以获取完整更新历史……"
     },
-    "en-US": {
+    "en": {
         "title": "What's new?",
         "message0": "If latest version listed here does not match",
         "message1": "version in footer, new content is available.",

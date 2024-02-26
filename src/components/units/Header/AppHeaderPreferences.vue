@@ -63,7 +63,7 @@
     const preferences = computed(() => store.getters.preferences);
     const { t } = useI18n();
     const { locale } = useI18n({ useScope: "global" });
-    const appLocales = ["cn", "en-US", "es", "hi"];
+    const appLocales = ["zh", "en", "es", "hi"];
     const appLocale = ref("");
     const setActiveLocaleOptionStyle = (localeOption: string) => (localeOption === appLocale.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
     const setAppLocale = (newAppLocale: string) => {
@@ -124,17 +124,17 @@
 
 <i18n lang="json">
 {
-    "cn": {
+    "zh": {
         "appLocales": {
-            "cn": "🇨🇳 简体中文",
-            "en-US": "🇺🇸 英文",
+            "zh": "🇨🇳 简体中文",
+            "en": "🇺🇸 英文",
             "es": "🇲🇽 西班牙语",
             "hi": "🇮🇳 印地语"
         },
         "themeTitle": "主题",
         "fontSizeUnit": "号字"
     },
-    "en-US": {
+    "en": {
         "appRootFontSizes": {
             "05px": "05",
             "06px": "06",
@@ -159,8 +159,8 @@
             "25px": "25"
         },
         "appLocales": {
-            "cn": "🇨🇳 Simplified Chinese",
-            "en-US": "🇺🇸 English",
+            "zh": "🇨🇳 Simplified Chinese",
+            "en": "🇺🇸 English",
             "es": "🇲🇽 Spanish",
             "hi": "🇮🇳 Hindi"
         },
