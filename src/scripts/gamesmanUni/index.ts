@@ -6,7 +6,7 @@ import * as Defaults from "../../models/datas/defaultApp";
 import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
 import { playGameAmbience, pauseAllGameSounds } from "./audio"
 import { useStore } from "../plugins/store";
-const moveHistoryDelim = ':';
+export const moveHistoryDelim = ':';
 
 const deepcopy = (obj: Object) => {
     return JSON.parse(JSON.stringify(obj));
@@ -601,40 +601,4 @@ export const loadCommits = async (app: Types.App, payload?: { force?: boolean })
         };
     }
     return app;
-};
-
-export const loadMoveHistory = async (app: Types.App, payload: { history: string }) => {
-    // Parse and load initial position, return undefined if initial position is invalid
-    payload.history = payload.history.replace(/(\r\n|\n|\r)/gm, "");
-    let parsed = payload.history.split(moveHistoryDelim);
-    if (parsed.length < 2) {
-        return Error("game name or start position missing");
-    }
-    let newApp: Types.App = deepcopy(app);
-    const updatedAppOrError = await updateMatchStartPosition(newApp, { position: parsed[1] });
-    if (updatedAppOrError instanceof Error) {
-        return updatedAppOrError;
-    }
-    exitMatch(newApp);
-    let updatedApp = await initiateMatch(newApp, {
-        gameId: app.currentMatch.gameId,
-        variantId: app.currentMatch.variantId,
-        startPosition: parsed[1]
-    });
-    if (!updatedApp) {
-        return Error("UNREACHED: initiateMatch failed");
-    }
-    // Do move one by one, return undefined if any move is invalid
-    for (let i = 2; i < parsed.length; ++i) {
-        const nextMove = newApp.currentMatch.round.position.moveToAutoguiMove[parsed[i]];
-        if (!nextMove) {
-            return Error("invalid move [" + parsed[i] + "]");
-        }
-        updatedApp = await runMove(newApp, { autoguiMove: nextMove });
-        if (!updatedApp) {
-            return Error("UNREACHED: runMove returned undefined");
-        }
-    }
-    // Load successful, update app.
-    return newApp;
 };

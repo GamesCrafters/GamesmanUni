@@ -478,11 +478,28 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadMoveHistory: async (context: ActionContext, payload: { history: string }) => {
-        const updatedAppOrError = await GMU.loadMoveHistory(context.state.app, payload);
-        if (updatedAppOrError instanceof Error) {
-            return updatedAppOrError;
-        } else {
-            context.commit(mutationTypes.setApp, updatedAppOrError);
+        // Parse and load initial position, return undefined if initial position is invalid
+        payload.history = payload.history.replace(/(\r\n|\n|\r)/gm, "");
+        let parsed = payload.history.split(GMU.moveHistoryDelim);
+        if (parsed.length < 2) {
+            return Error("Game Name or Start Position Missing");
+        }
+        const gameId = context.state.app.currentMatch.gameId;
+        const variantId = context.state.app.currentMatch.variantId;
+        store.dispatch(actionTypes.exitMatch);
+        await store.dispatch(actionTypes.initiateMatch, {
+            gameId: gameId,
+            variantId: variantId,
+            startPosition: parsed[1]
+        });
+        // Do move one by one, return undefined if any move is invalid
+        for (let i = 2; i < parsed.length; i++) {
+            const nextMove = context.state.app.currentMatch.round.position.moveToAutoguiMove[parsed[i]];
+            if (!nextMove) {
+                return Error("Invalid move [" + parsed[i] + "]");
+            } else {
+                await store.dispatch(actionTypes.runMove, {autoguiMove: nextMove})
+            }
         }
     }
 };
