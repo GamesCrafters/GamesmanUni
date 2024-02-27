@@ -84,8 +84,8 @@
                                     :max="1"
                                     :interval="0.01"
                                     :tooltip="'active'" />
+                                    Skill Rating
                                 </div>
-                                Skill Rating
                             </div>
                         </div>
                         <div class="name">
@@ -126,8 +126,8 @@
                                     :max="1"
                                     :interval="0.01"
                                     :tooltip="'active'" />
+                                    Skill Rating
                                 </div>
-                                Skill Rating
                             </div>
                         </div>
                     </div>
