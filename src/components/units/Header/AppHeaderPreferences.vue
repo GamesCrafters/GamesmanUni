@@ -63,7 +63,7 @@
     const preferences = computed(() => store.getters.preferences);
     const { t } = useI18n();
     const { locale } = useI18n({ useScope: "global" });
-    const appLocales = ["zh", "en", "es", "hi"];
+    const appLocales = ["zh", "en-US", "es", "hi"];
     const appLocale = ref("");
     const setActiveLocaleOptionStyle = (localeOption: string) => (localeOption === appLocale.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
     const setAppLocale = (newAppLocale: string) => {
@@ -127,14 +127,14 @@
     "zh": {
         "appLocales": {
             "zh": "🇨🇳 简体中文",
-            "en": "🇺🇸 英文",
+            "en-US": "🇺🇸 英文",
             "es": "🇲🇽 西班牙语",
             "hi": "🇮🇳 印地语"
         },
         "themeTitle": "主题",
         "fontSizeUnit": "号字"
     },
-    "en": {
+    "en-US": {
         "appRootFontSizes": {
             "05px": "05",
             "06px": "06",
@@ -160,7 +160,7 @@
         },
         "appLocales": {
             "zh": "🇨🇳 Simplified Chinese",
-            "en": "🇺🇸 English",
+            "en-US": "🇺🇸 English",
             "es": "🇲🇽 Spanish",
             "hi": "🇮🇳 Hindi"
         },
@@ -181,11 +181,17 @@
     },
     "es": {
         "appLocales": {
-            "es": "🇲🇽 Español"
+            "zh": "🇨🇳 chino",
+            "en-US": "🇺🇸 inglés",
+            "es": "🇲🇽 español",
+            "hi": "🇮🇳 hindi"
         }
     },
     "hi": {
         "appLocales": {
+            "zh": "🇨🇳 चीनी",
+            "en-US": "🇺🇸 अंग्रेज़ी",
+            "es": "🇲🇽 स्पेनिश",
             "hi": "🇮🇳 हिन्दी"
         }
     }

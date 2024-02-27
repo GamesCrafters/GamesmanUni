@@ -31,7 +31,7 @@ export const loadGames = async (app: Types.App) => {
 };
 
 export const addInstructions = async (app: Types.App, payload: {gameId: string, variantId: string}) => {
-    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions/?lang=${app.preferences.locale}`);
+    const instructions = await GCTAPI.loadInstructions(`${app.dataSources.gameAPI}${app.currentMatch.gameId}/${app.currentMatch.variantId}/instructions/?locale=${app.preferences.locale}`);
     app.games[payload.gameId].instructions[app.preferences.locale] = instructions ? instructions.instructions : "";
     return app;
 }

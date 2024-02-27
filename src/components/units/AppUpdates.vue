@@ -124,7 +124,7 @@
         "failureMessage": "获取GitHub提交历史失败。",
         "moreMessage": "点此访问GitHub以获取完整更新历史……"
     },
-    "en": {
+    "en-US": {
         "title": "What's new?",
         "message0": "If latest version listed here does not match",
         "message1": "version in footer, new content is available.",

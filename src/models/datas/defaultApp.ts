@@ -8,8 +8,8 @@ const defaultUpdate: Types.Update = {
 
 export const defaultPreferences: Types.Preferences = {
     theme: "light",
-    locale: "en",
-    fallbackLocale: "en",
+    locale: "en-US",
+    fallbackLocale: "en-US",
     rootFontSize: "11",
     volume: 1,
     ambienceVolume: 1
