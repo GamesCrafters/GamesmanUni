@@ -340,54 +340,102 @@ export const generateComputerMove = (round: Types.Round) => {
     const store = useStore();
     const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
     const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
+    
+    
+    switch(CPUStrategy) {
+        case "Remoteness":
+            return generateComputerMoveByRemoteness(round);
+            break;
+        case "Win By":
+            return generateComputerMoveByWinBy(round);
+            break;
+        case "Skill Expression":
+            return generateComputerMoveBySkillExpression(round);
+            break;
+    }
+    
+    console.error("noSuchCPUStrategy.");
+    return "";
+};
+
+const generateComputerMoveByRemoteness = (round: Types.Round) => {
+    const store = useStore();
+
     const gameId = store.getters.currentGameId;
-    const supportsWinBy = store.getters.supportsWinBy(gameId);
-    const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
 
-    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
-    
-    if (CPUStrategy === "Remoteness") {
-        if (currentPositionValue === "win" || currentPositionValue === "tie") {
-            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-            
-            if (supportsWinBy) {
-                const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
-                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
-            }
-        } else if (currentPositionValue === "lose") {
-            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    const supportsWinBy = store.getters.supportsWinBy(gameId);
 
-            if (supportsWinBy) {
-                const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
-                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
-            }
-        }
-    } else if (CPUStrategy === "Win By"){
-        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+    const availableMoves = Object.values(round.position.availableMoves);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
+
+    if (currentPositionValue === "win" || currentPositionValue === "tie") {
+        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+        
+        if (supportsWinBy) {
             const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
             bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+        }
+    } else if (currentPositionValue === "lose") {
+        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
 
-            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-        } else if (currentPositionValue === "lose") {
+        if (supportsWinBy) {
             const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
             bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
-
-            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
         }
-    }
-    if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
+    } else if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
         var isDrawWin = round.position.drawRemoteness & 1; // Bit indicating whether current position is a draw-win
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawLevel === round.position.drawLevel && isDrawWin != (availableMove.drawRemoteness & 1));
         var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
-    return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
-};
+
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
+}
+
+const generateComputerMoveByWinBy = (round: Types.Round) => {
+    const store = useStore();
+
+    const gameId = store.getters.currentGameId;
+    const currentPositionValue = round.position.positionValue;
+    
+    const supportsWinBy = store.getters.supportsWinBy(gameId);
+
+    const availableMoves = Object.values(round.position.availableMoves);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
+
+    if (currentPositionValue === "win" || currentPositionValue === "tie") {
+        const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+
+        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+    } else if (currentPositionValue === "lose") {
+        const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+
+        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    } else if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
+        var isDrawWin = round.position.drawRemoteness & 1; // Bit indicating whether current position is a draw-win
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawLevel === round.position.drawLevel && isDrawWin != (availableMove.drawRemoteness & 1));
+        var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
+    }
+
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
+}
+
+const generateComputerMoveBySkillExpression = (round: Types.Round) => {
+    const store = useStore();
+
+    const gameId = store.getters.currentGameId;
+    const currentPositionValue = round.position.positionValue;
+
+    
+}
 
 export const runMove = async (app: Types.App, payload: { autoguiMove: string }) => {
     app.currentMatch.round.autoguiMove = payload.autoguiMove;
