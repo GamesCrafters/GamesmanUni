@@ -324,15 +324,7 @@ export const exitMatch = (app: Types.App) => {
 };
 
 /** 
- * Determines the CPU player's next move. If the CPU strategy is set to 'Remoteness' and the CPU player is winning on the current position, returns
- * the move with the lowest remoteness value; if there are multiple moves with the lowest remoteness value and the current game supports win by, returns 
- * the move with the highest win by value. If the CPU player is losing on the current position, returns the move with the highest remoteness value; if 
- * there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the CPU strategy is set to 'Win By'
- * and the CPU player is winning on the current position, returns the move with the highest win by value; if there are multiple moves with the highest win 
- * by value, returns the move with the lowest remoteness value. If the CPU player is losing on the current position, returns the move with the lowest win 
- * by value; if there are multiple moves with the lowest win by value, returns the move with the highest remoteness.
- * Regardless of CPU strategy, if the current position is a known pure draw: if the current position is a draw-win, then return the 
- * lowest-draw-remoteness same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * Determines the CPU player's next move based if the CPU strategy is set to 'Remoteness', 'Win By', or 'Skill Expression'.
  * @param {Types.Round} round - current round.
  * @returns CPU player's next move.
 */
@@ -358,6 +350,16 @@ export const generateComputerMove = (round: Types.Round) => {
     return "";
 };
 
+/**
+ * If the CPU player is winning on the current position, returns the move  with the lowest remoteness value; if there are 
+ * multiple moves with the lowest remoteness value and the current game supports win by, returns the move with the highest 
+ * win by value. If the CPU player is losing on the current position, returns the move with the highest remoteness value; 
+ * if  there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the 
+ * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
+ * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * @param {Types.Round} round - current round.
+ * @returns CPU player's next move.
+ */
 const generateComputerMoveByRemoteness = (round: Types.Round) => {
     const store = useStore();
 
@@ -395,13 +397,18 @@ const generateComputerMoveByRemoteness = (round: Types.Round) => {
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 }
 
+/**
+ * If the CPU player is winning on the current position, returns the move with the highest win by value; if there are 
+ * multiple moves with the highest win by value, returns the move with the lowest remoteness value. If the CPU player 
+ * is losing on the current position, returns the move with the lowest win  by value; if there are multiple moves with 
+ * the lowest win by value, returns the move with the highest remoteness. If the 
+ * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
+ * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * @param {Types.Round} round - current round.
+ * @returns CPU player's next move.
+ */
 const generateComputerMoveByWinBy = (round: Types.Round) => {
-    const store = useStore();
-
-    const gameId = store.getters.currentGameId;
     const currentPositionValue = round.position.positionValue;
-    
-    const supportsWinBy = store.getters.supportsWinBy(gameId);
 
     const availableMoves = Object.values(round.position.availableMoves);
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
@@ -428,13 +435,27 @@ const generateComputerMoveByWinBy = (round: Types.Round) => {
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
 }
 
+/**
+ * WIP
+ * @param round - current round.
+ * @returns CPU player's next move.
+ */
 const generateComputerMoveBySkillExpression = (round: Types.Round) => {
     const store = useStore();
 
     const gameId = store.getters.currentGameId;
     const currentPositionValue = round.position.positionValue;
+    const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
 
-    
+    const supportsWinBy = store.getters.supportsWinBy(gameId);
+    const CPUSkillRating = store.getters.currentCPUsRatings[currentPlayerTurn - 1];
+    const availableMoves = Object.values(round.position.availableMoves);
+
+    if(Math.random() < CPUSkillRating) {
+        return generateComputerMoveByRemoteness(round);
+    }
+
+    return availableMoves[Math.floor(Math.random() * availableMoves.length)].move;
 }
 
 export const runMove = async (app: Types.App, payload: { autoguiMove: string }) => {
