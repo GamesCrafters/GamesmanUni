@@ -255,7 +255,7 @@ export enum mutationTypes {
     toggleVvhScrolling = "toggleVvhScrolling",
     setVvhView = "setVvhView",
     setCPUsStrategies = "setCPUsStrategies",
-    setCPUsRatings = "setCPUsRatings"
+    setCPUsRatings = "setCPUsRatings",
 }
 
 type Mutations = {

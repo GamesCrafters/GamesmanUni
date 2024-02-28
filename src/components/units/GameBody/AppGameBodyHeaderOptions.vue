@@ -302,7 +302,7 @@
             border-radius: 100%;
             font-size: 2rem;
             height: max(2.5rem, min(5vh, 5vw));
-            margin: 0.5rem 0;
+            margin: 0.5rem;
             width: max(2.5rem, min(5vh, 5vw));
         }
         #popup {
