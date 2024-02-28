@@ -31,7 +31,7 @@
                     :opacity="showNextMoveDeltaRemotenesses ? board[cell].hintOpacity : 1"/>
                 <rect v-if="currentRemoteness && movesAreClickable"
                     cursor="pointer" fill="var(--backgroundColor)"
-                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: board[cell].move })"
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: board[cell].move })"
                     width="20" height="20" fill-opacity="0" stroke-opacity="0"
                     :x="1 + xOffset(cell)" :y="1 + yOffset(cell)"
                 />
@@ -61,7 +61,7 @@
     const board = computed(() => {
         let board: BoardData = {};
         for (let cell: number = 0; cell < 9; cell++) board[cell] = { mark: currentPosition.value[2 + cell], move: "", hint: "", hintOpacity: 1 };
-        for (let availableMove in availableMoves.value) Object.assign(board[+availableMoves.value[availableMove].autoguiMove[4]], { move: availableMoves.value[availableMove].move, hint: availableMoves.value[availableMove].moveValue, hintOpacity: availableMoves.value[availableMove].moveValueOpacity });
+        for (let availableMove in availableMoves.value) Object.assign(board[+availableMoves.value[availableMove].autoguiMove[4]], { move: availableMoves.value[availableMove].autoguiMove, hint: availableMoves.value[availableMove].moveValue, hintOpacity: availableMoves.value[availableMove].moveValueOpacity });
         return board;
     });
     const getHintClass = (hint: string): string => (showNextMoveHints.value ? "hint-" + hint : "hint-" + turn.value);

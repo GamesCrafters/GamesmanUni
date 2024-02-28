@@ -3,6 +3,7 @@
         <AppGameBodyHeaderTitle />
         <br/>
         <AppDemoBodyStatistics />
+        <br/>
         <h3>Computer Move Duration (milliseconds)</h3>
         <VueSlider id="slider"
             v-model="options.computerMoveDuration"

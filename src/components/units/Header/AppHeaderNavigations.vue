@@ -58,7 +58,7 @@
 
 <i18n lang="json">
 {
-    "cn": {
+    "zh": {
         "Home": "首页",
         "Puzzles": "单人解谜",
         "Games": "双人游戏",

@@ -37,11 +37,11 @@ export const defaultAvailableMove: Types.Move = {
     drawRemoteness: -1
 };
 
-export const defaultAvailableMoveNames: Types.MoveNames = {};
+export const defaultMoveToAutoguiMove: Types.MoveNames = {};
 
 export const defaultPosition: Types.Position = {
     ...defaultUpdate,
-    availableMoveNames: {},
+    moveToAutoguiMove: {},
     availableMoves: {},
     position: "",
     autoguiPosition: "",

@@ -61,7 +61,7 @@ export type Variant = {
 export type Positions = Record<string, Position>;
 
 export type Position = {
-    availableMoveNames: MoveNames;
+    moveToAutoguiMove: MoveNames;
     availableMoves: Moves;
     position: string;
     autoguiPosition: string;

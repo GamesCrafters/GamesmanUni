@@ -49,7 +49,7 @@
                 <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i"
                     :class="'quarto-move'"
                     :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px'"
-                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
                     <rect width="16" height="16" rx="2" ry="2"
                         :x="centers[token.to][0] - 8" :y="centers[token.to][1] - 8" 
                         :class="'quarto-hint ' + getBoardMoveElementHintClass(token.move)"
@@ -74,7 +74,7 @@
                 <g v-for="(token, i) in richPositionData.tokens" :key="'token' + i"
                     :class="'quarto-move'"
                     :style="'--xorigin: ' + centers[token.to][0] + 'px ' + centers[token.to][1] + 'px'"
-                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+                    @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
                     <g v-if="token.token != '-'">
                         <rect width="5" height="5" rx="0.5" ry="0.5"
                             :x="centers[token.to][0] - 2.5" :y="centers[token.to][1] - 2.5"
@@ -122,7 +122,7 @@
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
 
     interface GDefaultRegular2DMove {
-        str: string; // UWAPI move string
+        str: string; // Autogui move string
         hint: string;
         hintOpacity: number;
     }
@@ -158,7 +158,7 @@
                         token: matches[1],
                         to: parseInt(matches[2]),
                         move: {
-                            str: nextMoveData.move,
+                            str: nextMoveData.autoguiMove,
                             hint: nextMoveData.moveValue,
                             hintOpacity: nextMoveData.moveValueOpacity
                         },

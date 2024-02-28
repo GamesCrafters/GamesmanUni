@@ -16,7 +16,7 @@
         :d="formatArrowPathPoints(arrow, arrowWidth)"
         :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })">
         <title>{{ moveButtonTitle(arrow.move.str) }}</title>
       </path>
     </template>
@@ -59,7 +59,7 @@
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
               :href="getImageSource(charImages[token.token].image) + '#MoveButtonSVG'"
-              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
               <title>{{ moveButtonTitle(token.move.str) }}</title>
             </use>
           </g>
@@ -71,7 +71,7 @@
             :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
             :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px;'"
-            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })">
+            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
             <title>{{ moveButtonTitle(token.move.str) }}</title>
           </circle>
         </g>
@@ -83,7 +83,7 @@
         :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
         :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: textButton.move.str })">
         {{ textButton.text }}
         <title>{{ moveButtonTitle(textButton.move.str) }}</title>
       </text>
@@ -94,7 +94,7 @@
           :d="formatArrowPathPoints(arrow, arrowWidth)"
           :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })">
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })">
           <title>{{ moveButtonTitle(arrow.move.str) }}</title>
         </path>
       </template>
@@ -108,7 +108,7 @@
         :stroke-width="lineWidth * widthFactor"
         :class="'iag-button-line ' + getBoardMoveElementHintClass(line.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: line.move.str })">
         <title>{{ moveButtonTitle(line.move.str) }}</title>
       </line>
     </template>
@@ -125,7 +125,7 @@
       <div class="move" v-for="listedMove in listedMoves" :key="listedMove.move"
         :class="options.showNextMoveHints ? `uni-${listedMove.moveValue}` : ''"
         :style="{ opacity: options.showNextMoveDeltaRemotenesses ? listedMove.moveValueOpacity : 1 }"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: listedMove.move })">{{ listedMove.move }}
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: listedMove.autoguiMove })">{{ listedMove.move }}
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
   interface IAGMove {
-    str: string; // UWAPI move string
+    str: string; // Autogui move string
     hint: string;
     hintOpacity: number;
     nextPosition: string;
@@ -221,7 +221,7 @@
 
       for (let moveObj of Object.values(currentAvailableMoves.value)) {        
         const move = {
-          str: moveObj.move,
+          str: moveObj.autoguiMove,
           hint: moveObj.moveValue,
           hintOpacity: !options.value.showNextMoves ? 0.001 : moveObj.moveValueOpacity,
           nextPosition: moveObj.position
