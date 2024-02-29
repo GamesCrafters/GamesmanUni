@@ -19,9 +19,10 @@
                         <div> {{ record.variantName }} </div>
                     </td>
                     <td>
-                        <span v-if="record.leftPlayerEndPosition === 'win'">👑</span>
+                        <div v-if="record.leftPlayerEndPosition === 'win'">👑</div>
+                        <span v-if="record.leftPlayer.isComputer">🤖</span>
                          {{ record.leftPlayer.name }}
-                         <span v-if="record.leftPlayer.isComputer">🤖</span>
+                         
                     </td>
                     <td>
                         <div v-if="record.leftPlayer.isComputer"> {{ record.CPUsStrategies[0] }} </div>
@@ -32,9 +33,9 @@
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <span v-if="record.leftPlayerEndPosition === 'lose'">👑</span>
+                        <div v-if="record.leftPlayerEndPosition === 'lose'">👑</div>
+                        <span v-if="record.rightPlayer.isComputer">🤖</span>
                          {{ record.rightPlayer.name }} 
-                         <span v-if="record.rightPlayer.isComputer">🤖</span>
                     </td>
                     <td>
                         <div v-if="record.rightPlayer.isComputer"> {{ record.CPUsStrategies[1] }} </div>
@@ -44,7 +45,11 @@
                         <div v-if="record.rightPlayer.isComputer && record.CPUsStrategies[1] === 'Skill Expression'"> {{ record.CPUsRatings[1] }} </div>
                         <div v-else> - </div>
                     </td>
-                    <td> {{ record.moveHistory }} </td>
+                    <td> 
+                        <span>
+                            <button @click="copyToClipboard(record.moveHistory)">{{ record.moveHistory }} </button>
+                        </span>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -57,6 +62,10 @@
     const store = useStore();
 
     const currentScorecard = computed(() => store.getters.currentScorecard);
+
+    const copyToClipboard = (moveHistory: string) => {
+        navigator.clipboard.writeText(moveHistory);
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -78,6 +87,9 @@
             }
             .records:hover {
                 background-color: aliceblue;
+            }
+            button {
+                padding: 0.2rem;
             }
         }
     }
