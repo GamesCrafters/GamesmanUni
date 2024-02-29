@@ -159,7 +159,7 @@ export type Round = {
 };
 
 export type Scorecard = {
-    gamesPlayed: number;
+    totalWins: number;
     playerWinsMap: Map<string, number>;
     records: Array<ScorecardRecord>;
 };
@@ -169,7 +169,7 @@ export type ScorecardRecord = {
     variantName: string;
     leftPlayer: Player;
     rightPlayer: Player;
-    leftPlayerWon: boolean;
+    leftPlayerEndPosition: string;
     CPUsStrategies: string[];
     CPUsRatings: number[];
     moveHistory: string;

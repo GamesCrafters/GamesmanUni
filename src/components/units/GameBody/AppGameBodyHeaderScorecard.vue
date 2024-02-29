@@ -4,6 +4,7 @@
         <UniPopupWindow v-if="options && options.showScorecard" @close="store.commit(mutationTypes.showScorecard, false)">
             <div id="popup">
                 <h1 id="title">Scorecard</h1>
+                <AppGameBodyHeaderScorecardDonut />
                 <AppGameBodyHeaderScorecardTable />
             </div>
         </UniPopupWindow>

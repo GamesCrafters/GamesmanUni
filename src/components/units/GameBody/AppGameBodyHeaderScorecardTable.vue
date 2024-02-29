@@ -2,7 +2,7 @@
     <div id="app-game-body-header-scorecard-table">
         <div id="table">
             <table>
-                <tr>
+                <tr class="table-headers">
                     <td>Game</td>
                     <td>Variant</td>
                     <td>Left Player</td>
@@ -19,27 +19,29 @@
                         <div> {{ record.variantName }} </div>
                     </td>
                     <td>
-                        <div v-if="record.leftPlayerWon">👑</div>
+                        <span v-if="record.leftPlayerEndPosition === 'win'">👑</span>
                          {{ record.leftPlayer.name }}
+                         <span v-if="record.leftPlayer.isComputer">🤖</span>
                     </td>
                     <td>
                         <div v-if="record.leftPlayer.isComputer"> {{ record.CPUsStrategies[0] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="record.leftPlayer.isComputer"> {{ record.CPUsRatings[0] }} </div>
+                        <div v-if="record.leftPlayer.isComputer && record.CPUsStrategies[0] === 'Skill Expression'"> {{ record.CPUsRatings[0] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="!record.leftPlayerWon">👑</div>
+                        <span v-if="record.leftPlayerEndPosition === 'lose'">👑</span>
                          {{ record.rightPlayer.name }} 
+                         <span v-if="record.rightPlayer.isComputer">🤖</span>
                     </td>
                     <td>
                         <div v-if="record.rightPlayer.isComputer"> {{ record.CPUsStrategies[1] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="record.rightPlayer.isComputer"> {{ record.CPUsRatings[1] }} </div>
+                        <div v-if="record.rightPlayer.isComputer && record.CPUsStrategies[1] === 'Skill Expression'"> {{ record.CPUsRatings[1] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td> {{ record.moveHistory }} </td>
@@ -71,6 +73,9 @@
                 padding: 0.5rem;
             }
 
+            .table-headers {
+                position: sticky;
+            }
             .records:hover {
                 background-color: aliceblue;
             }

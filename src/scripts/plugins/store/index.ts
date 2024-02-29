@@ -87,6 +87,8 @@ type Getters = {
         (CPUID: number) => number;
     currentCPUsRatings(state: State): number[];
     currentScorecard(state: State): GMUTypes.Scorecard;
+    currentGamesPlayed(state: State): number;
+    currentPlayerWinsMap(state: State): Map<String, number>;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -238,6 +240,10 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.CPUsRatings,
     currentScorecard: (state: State) =>
             state.app.scorecard,
+    currentGamesPlayed: (state: State) =>
+            state.app.scorecard.gamesPlayed,
+    currentPlayerWinsMap: (state: State) =>
+            state.app.scorecard.playerWinsMap,
 };
 
 export enum mutationTypes {
@@ -261,6 +267,8 @@ export enum mutationTypes {
     setCPUsStrategies = "setCPUsStrategies",
     setCPUsRatings = "setCPUsRatings",
     addScorecardRecord = "addScorecardRecord",
+    setGamesPlayed = "setGamesPlayed",
+    setPlayerWinsEntry = "setPlayerWinsEntry",
 }
 
 type Mutations = {
@@ -284,6 +292,8 @@ type Mutations = {
     [mutationTypes.setCPUsStrategies](state: State, CPUsStrategies: string[]): void;
     [mutationTypes.setCPUsRatings](state: State, CPUsRatings: number[]): void;
     [mutationTypes.addScorecardRecord](state: State, scorecardRecord: GMUTypes.ScorecardRecord): void;
+    [mutationTypes.setGamesPlayed] (state: State, gamesPlayed: number): void;
+    [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -329,6 +339,10 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.CPUsRatings = CPUsRatings),
     addScorecardRecord: (state: State, scorecardRecord: GMUTypes.ScorecardRecord) =>
         (state.app.scorecard.records.push(scorecardRecord)),
+    setGamesPlayed: (state: State, gamemesPlayed: number) =>
+        (state.app.scorecard.gamesPlayed = gamemesPlayed),
+    setPlayerWinsEntry: (state: State, {player, wins}:{player: string, wins: number}) =>
+        (state.app.scorecard.playerWinsMap.set(player, wins))
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
