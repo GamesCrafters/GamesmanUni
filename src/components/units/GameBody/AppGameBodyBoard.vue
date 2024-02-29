@@ -44,7 +44,7 @@
                 const variantName = computed(() => (store.getters.game(gameId.value) && store.getters.variant(gameId.value, variantId.value) ? store.getters.variant(gameId.value, variantId.value).name : ""));
                 const leftPlayer = computed(() => store.getters.currentLeftPlayer);
                 const rightPlayer = computed(() => store.getters.currentRightPlayer);
-                const leftPlayerEndPosition = determineLeftPlayerWins(currentValuedRound.value, currentRoundId.value, currentPositionValue.value);
+                const leftPlayerEndPosition = determineLeftPlayerEndPosition(currentValuedRound.value, currentRoundId.value, currentPositionValue.value);
                 const moveHistory = computed(() => store.getters.moveHistory);
                 const CPUsStrategies = computed(() => store.getters.currentCPUsStrategies);
                 const CPUsRatings = computed(() => store.getters.currentCPUsRatings);
@@ -83,7 +83,7 @@
             },
     );
 
-    const determineLeftPlayerWins = (currentValuedRounds: Rounds, roundID: number, positionValue: string) => {
+    const determineLeftPlayerEndPosition = (currentValuedRounds: Rounds, roundID: number, positionValue: string) => {
         const playerTurn = currentValuedRounds[roundID].firstPlayerTurn ? 1 : 2;
         if (playerTurn == 1 && positionValue === "win" || playerTurn == 2 && positionValue === "lose") {
             return "win";
