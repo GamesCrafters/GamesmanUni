@@ -158,7 +158,11 @@ export type Round = {
     position: Position;
 };
 
-export type Scorecard = Array<ScorecardRecord>;
+export type Scorecard = {
+    gamesPlayed: number;
+    playerWinsMap: Map<string, number>;
+    records: Array<ScorecardRecord>;
+};
 
 export type ScorecardRecord = {
     gameName: string;

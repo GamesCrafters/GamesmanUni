@@ -54,7 +54,7 @@
                     leftPlayerWon: leftPlayerWins, 
                     CPUsStrategies: [...CPUsStrategies.value],
                     CPUsRatings: [...CPUsRatings.value],
-                    moveHistory: moveHistory.value
+                    moveHistory: moveHistory.value,
                 };
                 
                 store.commit(mutationTypes.addScorecardRecord, scorecardRecord);

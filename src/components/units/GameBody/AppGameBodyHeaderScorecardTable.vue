@@ -13,36 +13,36 @@
                     <td>Rating</td>
                     <td>Move History</td>
                 </tr>
-                <tr v-for="scorecard in currentScorecard" class="records">
-                    <td> {{ scorecard.gameName }} </td>
+                <tr v-for="record in currentScorecard.records" class="records">
+                    <td> {{ record.gameName }} </td>
                     <td>
-                        <div> {{ scorecard.variantName }} </div>
+                        <div> {{ record.variantName }} </div>
                     </td>
                     <td>
-                        <div v-if="scorecard.leftPlayerWon">👑</div>
-                         {{ scorecard.leftPlayer.name }}
+                        <div v-if="record.leftPlayerWon">👑</div>
+                         {{ record.leftPlayer.name }}
                     </td>
                     <td>
-                        <div v-if="scorecard.leftPlayer.isComputer"> {{ scorecard.CPUsStrategies[0] }} </div>
+                        <div v-if="record.leftPlayer.isComputer"> {{ record.CPUsStrategies[0] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="scorecard.leftPlayer.isComputer"> {{ scorecard.CPUsRatings[0] }} </div>
+                        <div v-if="record.leftPlayer.isComputer"> {{ record.CPUsRatings[0] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="!scorecard.leftPlayerWon">👑</div>
-                         {{ scorecard.rightPlayer.name }} 
+                        <div v-if="!record.leftPlayerWon">👑</div>
+                         {{ record.rightPlayer.name }} 
                     </td>
                     <td>
-                        <div v-if="scorecard.rightPlayer.isComputer"> {{ scorecard.CPUsStrategies[1] }} </div>
+                        <div v-if="record.rightPlayer.isComputer"> {{ record.CPUsStrategies[1] }} </div>
                         <div v-else> - </div>
                     </td>
                     <td>
-                        <div v-if="scorecard.rightPlayer.isComputer"> {{ scorecard.CPUsRatings[1] }} </div>
+                        <div v-if="record.rightPlayer.isComputer"> {{ record.CPUsRatings[1] }} </div>
                         <div v-else> - </div>
                     </td>
-                    <td> {{ scorecard.moveHistory }} </td>
+                    <td> {{ record.moveHistory }} </td>
                 </tr>
             </table>
         </div>
