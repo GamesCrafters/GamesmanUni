@@ -37,7 +37,7 @@
                 const currentPositionValue = computed(() => store.getters.currentPositionValue);
                 const variantId = computed(() => store.getters.currentVariantId);
                 
-                const currentTotalWins = computed(() => store.getters.currentGamesPlayed);
+                const currentTotalWins = computed(() => store.getters.currentTotalWins);
                 const currentPlayerWinsMap = computed(() => store.getters.currentPlayerWinsMap);
                 
                 const gameName = computed(() => (store.getters.game(gameId.value) ? store.getters.game(gameId.value).name : ""));

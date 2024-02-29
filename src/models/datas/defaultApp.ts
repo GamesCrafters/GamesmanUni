@@ -190,7 +190,7 @@ export const defaultApp: Types.App = {
     CPUsStrategies: [...defaultCPUsStrategies],
     CPUsRatings: [...defaultCPUsRatings],
     scorecard: {
-        gamesPlayed: 0,
+        totalWins: 0,
         playerWinsMap: new Map(),
         records: [],
     },

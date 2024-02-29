@@ -87,7 +87,7 @@ type Getters = {
         (CPUID: number) => number;
     currentCPUsRatings(state: State): number[];
     currentScorecard(state: State): GMUTypes.Scorecard;
-    currentGamesPlayed(state: State): number;
+    currentTotalWins(state: State): number;
     currentPlayerWinsMap(state: State): Map<String, number>;
 };
 
@@ -240,8 +240,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.CPUsRatings,
     currentScorecard: (state: State) =>
             state.app.scorecard,
-    currentGamesPlayed: (state: State) =>
-            state.app.scorecard.gamesPlayed,
+    currentTotalWins: (state: State) =>
+            state.app.scorecard.totalWins,
     currentPlayerWinsMap: (state: State) =>
             state.app.scorecard.playerWinsMap,
 };
@@ -339,8 +339,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.CPUsRatings = CPUsRatings),
     addScorecardRecord: (state: State, scorecardRecord: GMUTypes.ScorecardRecord) =>
         (state.app.scorecard.records.push(scorecardRecord)),
-    setGamesPlayed: (state: State, gamemesPlayed: number) =>
-        (state.app.scorecard.gamesPlayed = gamemesPlayed),
+    setGamesPlayed: (state: State, totalWins: number) =>
+        (state.app.scorecard.totalWins = totalWins),
     setPlayerWinsEntry: (state: State, {player, wins}:{player: string, wins: number}) =>
         (state.app.scorecard.playerWinsMap.set(player, wins))
 };

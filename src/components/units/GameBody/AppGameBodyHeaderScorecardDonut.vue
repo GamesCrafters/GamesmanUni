@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-body-header-scorecard-donut">
         <div id="donut">
-            <div>{{ currentGamesPlayed }}</div>
+            <div>{{ currentTotalWins }}</div>
             <div> {{ currentPlayerWinsMap }} </div>
             
         </div>
@@ -13,7 +13,7 @@
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
 
     const store = useStore();
-    const currentGamesPlayed = computed(() => store.getters.currentGamesPlayed);
+    const currentTotalWins = computed(() => store.getters.currentTotalWins);
     const currentPlayerWinsMap = computed(() => store.getters.currentPlayerWinsMap);
 
 </script>
