@@ -328,7 +328,7 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     setCPUsRatings: (state: State, CPUsRatings: number[]) =>
         (state.app.CPUsRatings = CPUsRatings),
     addScorecardRecord: (state: State, scorecardRecord: GMUTypes.ScorecardRecord) =>
-        (state.app.scorecard.push(scorecardRecord)),
+        (state.app.scorecard.records.push(scorecardRecord)),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
