@@ -121,6 +121,7 @@ export const defaultOptions: Types.Options = {
     showVvhGuides: true,
     showVvhMeters: false,
     vvhScrolling: false,
+    showScorecard: false,
 };
 
 export const defaultMatches: Types.Matches = {};
@@ -158,6 +159,8 @@ export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expr
 export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
 export const defaultCPUsRatings: Array<number> = [0, 0];
 
+export const defaultScorecard = [];
+
 export const defaultApp: Types.App = {
     ...defaultUpdate,
     version: <string>import.meta.env.PACKAGE_VERSION || "",
@@ -188,4 +191,5 @@ export const defaultApp: Types.App = {
     },
     CPUsStrategies: [...defaultCPUsStrategies],
     CPUsRatings: [...defaultCPUsRatings],
+    scorecard: defaultScorecard,
 };

@@ -85,7 +85,8 @@ type Getters = {
     currentCPUsStrategies(state: State): string[];
     currentCPURating(state: State):
         (CPUID: number) => number;
-        currentCPUsRatings(state: State): number[];
+    currentCPUsRatings(state: State): number[];
+    currentScorecard(state: State): GMUTypes.Scorecard;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -235,6 +236,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
             state.app.CPUsRatings[CPUID],
     currentCPUsRatings: (state: State) =>
             state.app.CPUsRatings,
+    currentScorecard: (state: State) =>
+            state.app.scorecard,
 };
 
 export enum mutationTypes {
@@ -252,10 +255,12 @@ export enum mutationTypes {
     showOptions = "showOptions",
     showVvhGuides = "showVvhGuides",
     showVvhMeters = "showVvhMeters",
+    showScorecard = "showScorecard",
     toggleVvhScrolling = "toggleVvhScrolling",
     setVvhView = "setVvhView",
     setCPUsStrategies = "setCPUsStrategies",
     setCPUsRatings = "setCPUsRatings",
+    addScorecardRecord = "addScorecardRecord",
 }
 
 type Mutations = {
@@ -273,10 +278,12 @@ type Mutations = {
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
     [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
     [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
+    [mutationTypes.showScorecard](state: State, showScorecard: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
     [mutationTypes.setVvhView](state: State, vvhView: string): void;
     [mutationTypes.setCPUsStrategies](state: State, CPUsStrategies: string[]): void;
     [mutationTypes.setCPUsRatings](state: State, CPUsRatings: number[]): void;
+    [mutationTypes.addScorecardRecord](state: State, scorecardRecord: GMUTypes.ScorecardRecord): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -310,6 +317,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showVvhGuides = showVvhGuides),
     showVvhMeters: (state: State, showVvhMeters: boolean) =>
         (state.app.options.showVvhMeters = showVvhMeters),
+    showScorecard: (state: State, showScorecard: boolean) =>
+        (state.app.options.showScorecard = showScorecard),
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
     setVvhView: (state: State, vvhView: string) =>
@@ -318,6 +327,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.CPUsStrategies = CPUsStrategies),
     setCPUsRatings: (state: State, CPUsRatings: number[]) =>
         (state.app.CPUsRatings = CPUsRatings),
+    addScorecardRecord: (state: State, scorecardRecord: GMUTypes.ScorecardRecord) =>
+        (state.app.scorecard.push(scorecardRecord)),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

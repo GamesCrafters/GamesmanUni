@@ -17,6 +17,7 @@ export type App = Update & {
     vvhView: string;
     CPUsStrategies: string[];
     CPUsRatings: number[];
+    scorecard: Scorecard;
 };
 
 export type Player = {
@@ -121,6 +122,7 @@ export type Options = {
     showVvhGuides: boolean;
     showVvhMeters: boolean;
     vvhScrolling: boolean;
+    showScorecard: boolean;
 };
 
 export type Matches = Record<number, Match>;
@@ -154,4 +156,17 @@ export type Round = {
     autoguiMove: string;
     moveValue: string;
     position: Position;
+};
+
+export type Scorecard = Array<ScorecardRecord>;
+
+export type ScorecardRecord = {
+    gameName: string;
+    variantName: string;
+    leftPlayer: Player;
+    rightPlayer: Player;
+    leftPlayerWon: boolean;
+    CPUsStrategies: string[];
+    CPUsRatings: number[];
+    moveHistory: string;
 };
