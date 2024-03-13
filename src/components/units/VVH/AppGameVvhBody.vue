@@ -12,7 +12,7 @@
                     <b>{{ vvhView }} ▼</b>
                 </div>
                 <div class="view-dropdown-options">
-                    <div class="view-dropdown-option" :class="{active: vvhViewOption === vvhView}" v-for="vvhViewOption in appVvhViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
+                    <div class="view-dropdown-option" :class="{active: vvhViewOption === vvhView}" v-for="vvhViewOption in VVHViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
                         <div v-if="vvhViewOption != vvhView">
                             <b>{{ vvhViewOption }}</b>
                         </div>
@@ -30,7 +30,7 @@
             
             <!-- Chart -->
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
-                             xmlns="http://www.w3.org/2000/svg" v-if="vvhView === appVvhViews[0]">
+                             xmlns="http://www.w3.org/2000/svg" v-if="vvhView === 'Remoteness'">
                 <!-- Winning Directions -->
                 <template v-if="showVvhGuides">
                     <template v-if="isPuzzleGame">
@@ -767,7 +767,7 @@
 
             <!-- Win By Chart -->
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
-                xmlns="http://www.w3.org/2000/svg" v-else>
+                xmlns="http://www.w3.org/2000/svg" v-else-if="vvhView === 'Win By'">
                 <template v-if="showVvhGuides">
                     <text class="left-player-winning-direction" 
                         :x="gridLeft"
@@ -1023,6 +1023,28 @@
                     </template>
                 </template>
             </svg>
+            <div v-else-if="vvhView === 'Column'">
+                <div id="table">
+                    <table>
+                        <tr class="table-headers">
+                            <td>Move</td>
+                            <td>Value</td>
+                            <td>Remoteness</td>
+                            <td>Win By</td>
+                        </tr>
+                        <tr v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" 
+                            class="moves"
+                            @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })">
+                            <td>{{ nextMove.move }}</td>
+                            <td 
+                            :class="{ win: nextMove.moveValue === 'win', lose: nextMove.moveValue === 'lose', tie: nextMove.moveValue === 'tie', draw: nextMove.moveValue === 'draw'}"
+                            >{{ nextMove.moveValue }}</td>
+                            <td>{{ nextMove.remoteness }}</td>
+                            <td>{{ nextMove.winby }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
             <p id="right-y-axis-label" v-if="showVvhGuides">
                 <b>Moves</b>
             </p>
@@ -1069,8 +1091,8 @@
             </div>
             <div class="meter">
                 <p class="label">View Interval</p>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumRemoteness" :tooltip="'active'" v-if="vvhView === appVvhViews[0]"/>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumWinBy" :tooltip="'active'" v-else/>
+                <VueSlider v-model="xInterval" :min="1" :max="maximumRemoteness" :tooltip="'active'" v-if="vvhView === 'Remoteness'"/>
+                <VueSlider v-model="xInterval" :min="1" :max="maximumWinBy" :tooltip="'active'" v-else-if="vvhView === 'Win By'"/>
             </div>
         </div>
     </div>
@@ -1083,6 +1105,7 @@
     import "vue-slider-component/theme/default.css";
     import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
+    import { VVHViews } from "../../../models/datas/defaultApp";
 
     const store = useStore();
     const options = computed(() => store.getters.options);
@@ -1104,7 +1127,6 @@
     const currentRounds = computed(() => store.getters.currentRounds);
 
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
-
     /** 
      * Iterate through the rounds and see if any visited positions or any child positions of
      * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
@@ -1154,7 +1176,7 @@
 
     const yCoordinateWidth = ref(5);
     const chartWidth = ref(50);
-    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (vvhView.value === appVvhViews[0] ? (maximumRemoteness.value + (finiteUnknownRemotenessExists.value ? 1 : 0) + 1) : Math.max(5, maximumWinBy.value) + 1));
+    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (vvhView.value === 'Remoteness' ? (maximumRemoteness.value + (finiteUnknownRemotenessExists.value ? 1 : 0) + 1) : Math.max(5, maximumWinBy.value) + 1));
     const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
     const gridLeft = computed(() => yCoordinateWidth.value);
@@ -1186,11 +1208,8 @@
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
     }
 
-    // Array of the available VVH views. Possible to add extra views E.g. Game Tree, Move Table.
-    const appVvhViews = ["Remoteness", "Win By"]
-
     // Default VVH View.
-    const vvhView = ref(appVvhViews[0]); 
+    const vvhView = ref(store.state.app.vvhView);
 
     // Stores the maximum between the maximum 'Win By' value or the default value.
     const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
@@ -1413,4 +1432,43 @@
     .view-dropdown:hover .view-dropdown-options {
         display: block;
     }
+
+    #table {
+            table {
+                width: 100%;
+            }
+            table tr td {
+                border-bottom: 1px solid #ddd;
+                text-align: center;
+            }
+            td {
+                padding: 0.5rem;
+            }
+
+            .table-headers {
+                position: sticky;
+            }
+            .moves:hover {
+                background-color: aliceblue;
+                cursor: pointer;
+            }
+            button {
+                padding: 0.2rem;
+            }
+
+            .draw {
+                background-color: var(--drawColor);
+            }
+            .tie {
+                background-color: var(--tieColor);
+            }
+            .lose {
+                background-color: var(--loseColor);
+                color: white;
+            }
+            .win {
+                background-color: var(--winColor);
+                color: white;
+            }
+        }
 </style>
