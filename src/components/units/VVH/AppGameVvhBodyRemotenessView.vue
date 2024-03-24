@@ -799,6 +799,8 @@
     import { actionTypes, useStore } from "../../../scripts/plugins/store";
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
+    import VueSlider from "vue-slider-component";
+    import "vue-slider-component/theme/default.css";
 
     const store = useStore();
     const options = computed(() => store.getters.options);
@@ -994,6 +996,31 @@
             > #right-y-axis-label {
                 text-align: center;
                 transform: rotate(90deg);
+            }
+        }
+    }
+
+    #meters {
+        padding: 1rem 10%;
+
+        >.meter {
+            align-content: normal;
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            padding: 0.5rem;
+            position: relative;
+
+            >* {
+                flex: 1 1 auto;
+            }
+
+            >.label {
+                line-height: 1rem;
+                max-width: 30%;
+                text-align: left;
             }
         }
     }

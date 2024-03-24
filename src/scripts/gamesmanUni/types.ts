@@ -14,8 +14,8 @@ export type App = Update & {
     options: Options;
     matches: Matches;
     currentMatch: Match;
-    vvhView: string;
-    CPUsStrategies: string[];
+    activeVVHViews: Array<string>;
+    CPUsStrategies: Array<string>;
     CPUsRatings: number[];
     scorecard: Scorecard;
 };

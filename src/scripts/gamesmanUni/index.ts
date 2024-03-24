@@ -120,7 +120,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    if (!game.supportsWinBy) app.CPUsStrategies = [...Defaults.defaultCPUsStrategies];
+    if (!game.supportsWinBy && app.activeVVHViews.includes("Win By")) app.activeVVHViews.splice(app.activeVVHViews.indexOf("Win By"), 1).push("");
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
@@ -443,11 +443,8 @@ const generateComputerMoveByWinBy = (round: Types.Round) => {
 const generateComputerMoveBySkillExpression = (round: Types.Round) => {
     const store = useStore();
 
-    const gameId = store.getters.currentGameId;
-    const currentPositionValue = round.position.positionValue;
     const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
 
-    const supportsWinBy = store.getters.supportsWinBy(gameId);
     const CPUSkillRating = store.getters.currentCPUsRatings[currentPlayerTurn - 1];
     const availableMoves = Object.values(round.position.availableMoves);
 

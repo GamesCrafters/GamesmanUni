@@ -247,10 +247,10 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import { actionTypes, useStore } from "../../../scripts/plugins/store";
-import "vue-slider-component/theme/default.css";
 import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
 import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
 
 const store = useStore();
 const options = computed(() => store.getters.options);
@@ -349,9 +349,6 @@ const nextTurn = (roundID: number) => {
     return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
 }
 
-// Default VVH View.
-const vvhView = ref(store.state.app.vvhView);
-
 // Stores the maximum between the maximum 'Win By' value or the default value.
 const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
 
@@ -403,146 +400,146 @@ const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
 </script>
 
 <style lang="scss" scoped>
-#app-game-vvh-body-winbyview {
-    border-radius: 1rem;
-    border: 0.1rem solid var(--neutralColor);
-    padding: 1 rem;
+    #app-game-vvh-body-winbyview {
+        border-radius: 1rem;
+        border: 0.1rem solid var(--neutralColor);
+        padding: 1 rem;
 
-    >#color-guides {
-        margin: 1rem;
-        text-align: center;
-
-        >.color {
-            border-radius: 1rem;
+        >#color-guides {
             margin: 1rem;
-            padding: 0.25rem 0.5rem;
-        }
-    }
-
-    >.x-axis-label {
-        text-align: center;
-    }
-
-    >#body {
-        align-content: normal;
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: center;
-
-        >* {
-            flex: 1 1 auto;
-        }
-
-        >#left-y-axis-label {
             text-align: center;
-            transform: rotate(-90deg);
+
+            >.color {
+                border-radius: 1rem;
+                margin: 1rem;
+                padding: 0.25rem 0.5rem;
+            }
         }
 
-        >#chart {
+        >.x-axis-label {
+            text-align: center;
+        }
 
-            >.player-winning-direction,
-            >.left-player-winning-direction,
-            >.right-player-winning-direction {
-                fill: var(--primaryColor);
-                font-size: 0.07rem;
-                font-weight: 400;
+        >#body {
+            align-content: normal;
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
 
-                >#player,
-                >#player-1 {
-                    fill: var(--turn1Color);
+            >* {
+                flex: 1 1 auto;
+            }
+
+            >#left-y-axis-label {
+                text-align: center;
+                transform: rotate(-90deg);
+            }
+
+            >#chart {
+
+                >.player-winning-direction,
+                >.left-player-winning-direction,
+                >.right-player-winning-direction {
+                    fill: var(--primaryColor);
                     font-size: 0.07rem;
                     font-weight: 400;
+
+                    >#player,
+                    >#player-1 {
+                        fill: var(--turn1Color);
+                        font-size: 0.07rem;
+                        font-weight: 400;
+                    }
+
+                    >#player-2 {
+                        fill: var(--turn2Color);
+                        font-size: 0.07rem;
+                        font-weight: 400;
+                    }
                 }
 
-                >#player-2 {
-                    fill: var(--turn2Color);
+                >.draw-symbol {
+                    fill: var(--primaryColor);
                     font-size: 0.07rem;
-                    font-weight: 400;
+                }
+
+                >.view-coordinate {
+                    fill: var(--primaryColor);
+                    font-size: 0.07rem;
+                }
+
+                >.move-coordinate {
+                    fill: var(--primaryColor);
+                    font-size: 0.07rem;
+                }
+
+                >#grid-base {
+                    fill: white;
+                }
+
+                >.round-row {
+                    &.turn-0 {
+                        fill: var(--neutralColor);
+                    }
+
+                    &.turn-1 {
+                        fill: var(--turn1Color);
+                        opacity: 30%;
+                    }
+
+                    &.turn-2 {
+                        fill: var(--turn2Color);
+                        opacity: 30%;
+                    }
+                }
+
+                >.view-bar,
+                >.view-interval-bar {
+                    stroke: black;
+                }
+
+                >.position-value,
+                >.next-move-position-value {
+                    &.clickable:hover {
+                        cursor: pointer;
+                    }
+                }
+
+                >.position-value,
+                >.next-move-position-value,
+                >.link {
+                    &.draw {
+                        fill: var(--drawColor);
+                        stroke: var(--drawColor);
+                    }
+
+                    &.tie {
+                        fill: var(--tieColor);
+                        stroke: var(--tieColor);
+                    }
+
+                    &.lose {
+                        fill: var(--loseColor);
+                        stroke: var(--loseColor);
+                    }
+
+                    &.win {
+                        fill: var(--winColor);
+                        stroke: var(--winColor);
+                    }
                 }
             }
 
-            >.draw-symbol {
-                fill: var(--primaryColor);
-                font-size: 0.07rem;
+            >#right-y-axis-label {
+                text-align: center;
+                transform: rotate(90deg);
             }
-
-            >.view-coordinate {
-                fill: var(--primaryColor);
-                font-size: 0.07rem;
-            }
-
-            >.move-coordinate {
-                fill: var(--primaryColor);
-                font-size: 0.07rem;
-            }
-
-            >#grid-base {
-                fill: white;
-            }
-
-            >.round-row {
-                &.turn-0 {
-                    fill: var(--neutralColor);
-                }
-
-                &.turn-1 {
-                    fill: var(--turn1Color);
-                    opacity: 30%;
-                }
-
-                &.turn-2 {
-                    fill: var(--turn2Color);
-                    opacity: 30%;
-                }
-            }
-
-            >.view-bar,
-            >.view-interval-bar {
-                stroke: black;
-            }
-
-            >.position-value,
-            >.next-move-position-value {
-                &.clickable:hover {
-                    cursor: pointer;
-                }
-            }
-
-            >.position-value,
-            >.next-move-position-value,
-            >.link {
-                &.draw {
-                    fill: var(--drawColor);
-                    stroke: var(--drawColor);
-                }
-
-                &.tie {
-                    fill: var(--tieColor);
-                    stroke: var(--tieColor);
-                }
-
-                &.lose {
-                    fill: var(--loseColor);
-                    stroke: var(--loseColor);
-                }
-
-                &.win {
-                    fill: var(--winColor);
-                    stroke: var(--winColor);
-                }
-            }
-        }
-
-        >#right-y-axis-label {
-            text-align: center;
-            transform: rotate(90deg);
         }
     }
-}
 
-#meters {
+    #meters {
         padding: 1rem 10%;
 
         >.meter {
@@ -567,24 +564,24 @@ const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
         }
     }
 
-.view-dropdown {
-    min-width: 192px;
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-}
+    .view-dropdown {
+        min-width: 192px;
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
 
-.view-dropdown-options {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 192px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    padding: 6px 0px 6px 0px;
-    z-index: 1;
-}
+    .view-dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 192px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 6px 0px 6px 0px;
+        z-index: 1;
+    }
 
-.view-dropdown:hover .view-dropdown-options {
-    display: block;
-}
+    .view-dropdown:hover .view-dropdown-options {
+        display: block;
+    }
 </style>

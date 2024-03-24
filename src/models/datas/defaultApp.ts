@@ -156,7 +156,7 @@ export const defaultMatch: Types.Match = {
 };
 
 export const VVHViews: Array<string> = ["Remoteness", "Win By", "Column", "Tree"];
-export const defaultVVHView: string = VVHViews[0];
+export const activeVVHViews: Array<string> = [VVHViews[0],VVHViews[1],VVHViews[2]]; //VVHViews[0] is set as the default view.
 
 export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
 export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
@@ -171,7 +171,7 @@ export const defaultApp: Types.App = {
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
-    vvhView: defaultVVHView,
+    activeVVHViews: activeVVHViews,
     currentMatch: {
         id: 0, gameType: "",
         gameId: "",
