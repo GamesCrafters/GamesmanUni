@@ -1,8 +1,5 @@
 <template>
     <div id="app-game-vvh-body-remotenessview">
-        <p class="top x-axis-label" v-if="showVvhGuides">
-            <b> Remoteness </b>
-        </p>
         <div id="body">
             <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
                 <b>Moves</b>
@@ -746,9 +743,6 @@
                 <b>Moves</b>
             </p>
         </div>
-        <p class="bottom x-axis-label" v-if="showVvhGuides">
-            <b> Remoteness </b>
-        </p>
         <div id="meters" v-if="showVvhMeters">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
@@ -894,13 +888,6 @@
 
 <style lang="scss" scoped>
     #app-game-vvh-body-remotenessview {
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
-        padding: 1 rem;
-        >.x-axis-label {
-            text-align: center;
-        }
-
         > #body {
             align-content: normal;
             align-items: center;

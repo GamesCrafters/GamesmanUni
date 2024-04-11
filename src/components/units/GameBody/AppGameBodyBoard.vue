@@ -31,7 +31,7 @@
     watch(
         () => isEndOfMatch.value,
         async () => {
-            if (isEndOfMatch.value) {
+            if (isEndOfMatch.value && store.state.app.currentMatch.round.position.position != "") {
                 const currentValuedRound = computed(() => store.getters.currentValuedRounds);
                 const currentRoundId = computed(() => store.getters.currentRoundId);
                 const currentPositionValue = computed(() => store.getters.currentPositionValue);
@@ -44,7 +44,7 @@
                 const variantName = computed(() => (store.getters.game(gameId.value) && store.getters.variant(gameId.value, variantId.value) ? store.getters.variant(gameId.value, variantId.value).name : ""));
                 const leftPlayer = computed(() => store.getters.currentLeftPlayer);
                 const rightPlayer = computed(() => store.getters.currentRightPlayer);
-                const leftPlayerEndPosition = determineLeftPlayerPositionValue(currentValuedRound.value, currentRoundId.value, currentPositionValue.value);
+                const leftPlayerEndPosition = computed(() => determineLeftPlayerPositionValue(currentValuedRound.value, currentRoundId.value, currentPositionValue.value));
                 const moveHistory = computed(() => store.getters.moveHistory);
                 const CPUsStrategies = computed(() => store.getters.currentCPUsStrategies);
                 const CPUsRatings = computed(() => store.getters.currentCPUsRatings);
@@ -54,7 +54,7 @@
                     variantName: variantName.value,
                     leftPlayer: deepcopy(leftPlayer.value),
                     rightPlayer: deepcopy(rightPlayer.value), 
-                    leftPlayerEndPosition: leftPlayerEndPosition, 
+                    leftPlayerEndPosition: leftPlayerEndPosition.value, 
                     CPUsStrategies: [...CPUsStrategies.value],
                     CPUsRatings: [...CPUsRatings.value],
                     moveHistory: moveHistory.value,
@@ -67,12 +67,12 @@
                 if(!currentPlayerWinsMap.value.has(rightPlayer.value.name)) {
                     store.commit(mutationTypes.setPlayerWinsEntry, {player: rightPlayer.value.name, wins: 0});
                 }
-                if (leftPlayerEndPosition === "win") {
+                if (leftPlayerEndPosition.value === "win") {
                         store.commit(mutationTypes.setPlayerWinsEntry, {player: leftPlayer.value.name, wins: (currentPlayerWinsMap.value.get(leftPlayer.value.name) || 0) + 1});
                         store.commit(mutationTypes.setGamesPlayed, currentTotalWins.value + 1);
                 }
                 
-                if (leftPlayerEndPosition === "lose") {
+                if (leftPlayerEndPosition.value === "lose") {
                         store.commit(mutationTypes.setPlayerWinsEntry, {player: rightPlayer.value.name, wins: (currentPlayerWinsMap.value.get(rightPlayer.value.name) || 0) + 1});
                         store.commit(mutationTypes.setGamesPlayed, currentTotalWins.value + 1);
                 }

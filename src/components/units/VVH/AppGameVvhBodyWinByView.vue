@@ -1,8 +1,5 @@
 <template>
     <div id="app-game-vvh-body-winbyview">
-        <p class="top x-axis-label" v-if="showVvhGuides">
-            <b> Win By </b>
-        </p>
         <div id="body">
             <!-- Win By Chart -->
             <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
@@ -196,9 +193,6 @@
                 <b>Moves</b>
             </p>
         </div>
-        <p class="bottom x-axis-label" v-if="showVvhGuides">
-            <b> Win By </b>
-        </p>
         <div id="meters" v-if="showVvhMeters">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
@@ -245,165 +239,161 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { actionTypes, useStore } from "../../../scripts/plugins/store";
-import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
-import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
-import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/default.css";
+    import { computed, ref } from "vue";
+    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
+    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
+    import VueSlider from "vue-slider-component";
+    import "vue-slider-component/theme/default.css";
 
-const store = useStore();
-const options = computed(() => store.getters.options);
-const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
-const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
-const showVvhGuides = computed(() => (options.value ? options.value.showVvhGuides : true));
-const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
+    const store = useStore();
+    const options = computed(() => store.getters.options);
+    const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
+    const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
+    const showVvhGuides = computed(() => (options.value ? options.value.showVvhGuides : true));
+    const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
 
-const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
+    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
-const currentLeftPlayerName = computed(() => (store.getters.currentLeftPlayer ? store.getters.currentLeftPlayer.name : ""));
-const currentRightPlayerName = computed(() => (store.getters.currentRightPlayer ? store.getters.currentRightPlayer.name : ""));
-const currentRoundId = computed(() => store.getters.currentRoundId);
-const currentPositionValue = computed(() => store.getters.currentPositionValue);
-const currentRounds = computed(() => store.getters.currentRounds);
+    const currentLeftPlayerName = computed(() => (store.getters.currentLeftPlayer ? store.getters.currentLeftPlayer.name : ""));
+    const currentRightPlayerName = computed(() => (store.getters.currentRightPlayer ? store.getters.currentRightPlayer.name : ""));
+    const currentRoundId = computed(() => store.getters.currentRoundId);
+    const currentPositionValue = computed(() => store.getters.currentPositionValue);
+    const currentRounds = computed(() => store.getters.currentRounds);
 
-const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
+    const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
 
-/** 
- * Iterate through the rounds and see if any visited positions or any child positions of
- * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
- * to be a dummy value of 1 greater than the maximum known finite remoteness,
- * which is where on the VVH finite unknown remoteness positions will go.
- * @returns [0]: A copy of the match's rounds, with the remotenesses of FUR positions set to max known remoteness + 1
- * @returns [1]: A boolean indicating whether there are FUR positions.
-*/
-const detectFiniteUnknownRemoteness = computed((): [Rounds, boolean] => {
-    var roundsCopy = JSON.parse(JSON.stringify(currentRounds.value)) as Rounds;
-    var finiteUnknownRemotenessExists = false;
-    for (const round of roundsCopy) {
-        if (round.position.positionValue !== "unsolved") {
-            if (round.position.remoteness == Remoteness.FINITE_UNKNOWN) {
-                round.position.remoteness = maximumRemoteness.value + 1;
-                finiteUnknownRemotenessExists = true;
-            }
-            for (const move in round.position.availableMoves) {
-                const moveObj = round.position.availableMoves[move]
-                if (moveObj.remoteness == Remoteness.FINITE_UNKNOWN) {
-                    moveObj.remoteness = maximumRemoteness.value + 1;
+    /** 
+     * Iterate through the rounds and see if any visited positions or any child positions of
+     * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
+     * to be a dummy value of 1 greater than the maximum known finite remoteness,
+     * which is where on the VVH finite unknown remoteness positions will go.
+     * @returns [0]: A copy of the match's rounds, with the remotenesses of FUR positions set to max known remoteness + 1
+     * @returns [1]: A boolean indicating whether there are FUR positions.
+    */
+    const detectFiniteUnknownRemoteness = computed((): [Rounds, boolean] => {
+        var roundsCopy = JSON.parse(JSON.stringify(currentRounds.value)) as Rounds;
+        var finiteUnknownRemotenessExists = false;
+        for (const round of roundsCopy) {
+            if (round.position.positionValue !== "unsolved") {
+                if (round.position.remoteness == Remoteness.FINITE_UNKNOWN) {
+                    round.position.remoteness = maximumRemoteness.value + 1;
                     finiteUnknownRemotenessExists = true;
+                }
+                for (const move in round.position.availableMoves) {
+                    const moveObj = round.position.availableMoves[move]
+                    if (moveObj.remoteness == Remoteness.FINITE_UNKNOWN) {
+                        moveObj.remoteness = maximumRemoteness.value + 1;
+                        finiteUnknownRemotenessExists = true;
+                    }
                 }
             }
         }
+        return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
+    });
+    const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
+
+    const currentValuedRoundId = computed(() =>
+        Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
+    );
+    const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
+
+    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
+
+    const winningDirectionHeight = ref(2);
+    const xCoordinateHeight = ref(2);
+    const rowHeight = ref(2);
+    const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
+    const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
+    const gridHeight = computed(() => rowHeight.value * rowCount.value);
+    const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
+    const gridBottom = computed(() => chartHeight.value - gridTop.value);
+
+    const yCoordinateWidth = ref(5);
+    const chartWidth = ref(50);
+    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumWinBy.value) + 1));
+    const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
+    const columnWidth = computed(() => gridWidth.value / columnCount.value);
+    const gridLeft = computed(() => yCoordinateWidth.value);
+    const gridRight = computed(() => chartWidth.value - gridLeft.value);
+    const gridCenter = computed(() => chartWidth.value / 2)
+
+    const positionValueSize = ref(0.2);
+    const nextMovePositionValueSize = ref(0.1);
+    const xInterval = ref(5);
+    const linkWidth = ref(0.2);
+    const xBarWidth = ref(0.1);
+    const xIntervalBarWidth = ref(0.2);
+
+    /** 
+     * Determines whether it is the first player's turn or the second player's turn based on the current round id.
+     * @param {number} roundID - current round id.
+     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
+    */
+    const turn = (roundID: number) => {
+        return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
+    };
+
+    /** 
+     * Determines whether it will be the first player's turn or the second player's turn on the next turn based on the current round id.
+     * @param {number} roundID - current round id.
+     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
+    */
+    const nextTurn = (roundID: number) => {
+        return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
     }
-    return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
-});
-const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
 
-const currentValuedRoundId = computed(() =>
-    Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
-);
-const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
+    // Stores the maximum between the maximum 'Win By' value or the default value.
+    const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
 
-const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-
-const winningDirectionHeight = ref(2);
-const xCoordinateHeight = ref(2);
-const rowHeight = ref(2);
-const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
-const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
-const gridHeight = computed(() => rowHeight.value * rowCount.value);
-const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
-const gridBottom = computed(() => chartHeight.value - gridTop.value);
-
-const yCoordinateWidth = ref(5);
-const chartWidth = ref(50);
-const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumWinBy.value) + 1));
-const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
-const columnWidth = computed(() => gridWidth.value / columnCount.value);
-const gridLeft = computed(() => yCoordinateWidth.value);
-const gridRight = computed(() => chartWidth.value - gridLeft.value);
-const gridCenter = computed(() => chartWidth.value / 2)
-
-const positionValueSize = ref(0.2);
-const nextMovePositionValueSize = ref(0.1);
-const xInterval = ref(5);
-const linkWidth = ref(0.2);
-const xBarWidth = ref(0.1);
-const xIntervalBarWidth = ref(0.2);
-
-/** 
- * Determines whether it is the first player's turn or the second player's turn based on the current round id.
- * @param {number} roundID - current round id.
- * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
-*/
-const turn = (roundID: number) => {
-    return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
-};
-
-/** 
- * Determines whether it will be the first player's turn or the second player's turn on the next turn based on the current round id.
- * @param {number} roundID - current round id.
- * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
-*/
-const nextTurn = (roundID: number) => {
-    return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
-}
-
-// Stores the maximum between the maximum 'Win By' value or the default value.
-const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
-
-/** 
- * Determines the x-position of the current position's node in the 'Win By' view of the Visual Value History (VVH) graph.
- * @param {number} roundID - current round id.
- * @returns x position in the Graph's grid.
-*/
-const winByNodeGridXPosition = (roundID: number) => {
-    // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-    if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-        || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-    ) {
-        return gridCenter.value - currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-        // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-    } else if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-        || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-    ) {
-        return gridCenter.value + currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-        // Tie & Draw Nodes
-    } else {
-        return gridCenter.value;
+    /** 
+     * Determines the x-position of the current position's node in the 'Win By' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns x position in the Graph's grid.
+    */
+    const winByNodeGridXPosition = (roundID: number) => {
+        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
+        if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
+            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
+        ) {
+            return gridCenter.value - currentValuedRounds.value[roundID].position.winby * columnWidth.value;
+            // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
+        } else if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
+            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
+        ) {
+            return gridCenter.value + currentValuedRounds.value[roundID].position.winby * columnWidth.value;
+            // Tie & Draw Nodes
+        } else {
+            return gridCenter.value;
+        }
     }
-}
 
-/** 
- * Determines the x-position of the next move's node in the 'Win By' view of the Visual Value History (VVH) graph.
- * @param {number} roundID - current round id.
- * @param {Move} nextMove - a next move of the current position.
- * @returns x position in the Graph's grid.
-*/
-const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
-    // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-    if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'win')
-        || (nextTurn(roundID) === 2 && nextMove.positionValue === 'lose')
-    ) {
-        return gridCenter.value - nextMove.winby * columnWidth.value;
-        // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-    } else if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'lose')
-        || (nextTurn(roundID) === 2 && nextMove.positionValue === 'win')
-    ) {
-        return gridCenter.value + nextMove.winby * columnWidth.value;
-        // Tie & Draw Nodes
-    } else {
-        return gridCenter.value;
+    /** 
+     * Determines the x-position of the next move's node in the 'Win By' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @param {Move} nextMove - a next move of the current position.
+     * @returns x position in the Graph's grid.
+    */
+    const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
+        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
+        if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'win')
+            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'lose')
+        ) {
+            return gridCenter.value - nextMove.winby * columnWidth.value;
+            // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
+        } else if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'lose')
+            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'win')
+        ) {
+            return gridCenter.value + nextMove.winby * columnWidth.value;
+            // Tie & Draw Nodes
+        } else {
+            return gridCenter.value;
+        }
     }
-}
-
 </script>
 
 <style lang="scss" scoped>
     #app-game-vvh-body-winbyview {
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
-        padding: 1 rem;
 
         >#color-guides {
             margin: 1rem;

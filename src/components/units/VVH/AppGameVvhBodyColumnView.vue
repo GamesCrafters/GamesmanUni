@@ -5,7 +5,7 @@
                 <td>Move</td>
                 <td>Value</td>
                 <td>Remoteness</td>
-                <td>Win By</td>
+                <td v-if="supportsWinBy">Win By</td>
             </tr>
             <template v-if="currentValuedRoundId >= 1">
                 <tr v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" class="moves"
@@ -16,10 +16,13 @@
                     {{ nextMove.moveValue }}
                     </td>
                     <td>{{ nextMove.remoteness }}</td>
-                    <td>{{ nextMove.winby }}</td>
+                    <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
                 </tr>
             </template>
         </table>
+        <template v-if="isEndOfMatch">
+            No moves available.
+        </template>
     </div>
 </template>
 
@@ -32,8 +35,9 @@
     const store = useStore();
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentRounds = computed(() => store.getters.currentRounds);
-
+    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
+    
     /** 
     * Iterate through the rounds and see if any visited positions or any child positions of
     * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
@@ -67,13 +71,14 @@
     const currentValuedRoundId = computed(() =>
         Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
     );
+    const currentGameId = computed(() => store.getters.currentGameId); 
+    const supportsWinBy = computed(() =>
+        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
+    );
 </script>
 
 <style lang="scss" scoped>
 #app-game-vvh-body-columnview {
-    border-radius: 1rem;
-    border: 0.1rem solid var(--neutralColor);
-    padding: 1 rem;
 
     table {
         width: 100%;
