@@ -8,8 +8,8 @@
         </p>
         <div id="body">
             <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view">
-                <div id="header">
-                    Hola
+                <div id="view-header" style="float: right;">
+                    <button v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" class="view-close buttons">x</button>
                 </div>
                 <div class="view-dropdown">
                     <div class="view-dropdown-selection">
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed } from "vue";
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
     import AppGameVvhBodyRemotenessView from "./AppGameVvhBodyRemotenessView.vue";
     import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
