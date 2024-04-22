@@ -32,6 +32,10 @@
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
+    defineProps({
+        showViewOptions: Boolean,
+    });
+
     const store = useStore();
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentRounds = computed(() => store.getters.currentRounds);
@@ -79,7 +83,7 @@
 
 <style lang="scss" scoped>
 #app-game-vvh-body-columnview {
-
+    
     table {
         width: 100%;
     }

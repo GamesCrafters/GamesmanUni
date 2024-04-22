@@ -743,7 +743,7 @@
                 <b>Moves</b>
             </p>
         </div>
-        <div id="meters" v-if="showVvhMeters">
+        <div id="meters" v-if="showViewOptions">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
                 <VueSlider v-model="xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
@@ -795,6 +795,10 @@
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
+
+    defineProps({
+        showViewOptions: Boolean,
+    });
 
     const store = useStore();
     const options = computed(() => store.getters.options);

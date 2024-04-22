@@ -7,34 +7,38 @@
             <mark class="uni-lose color">lose</mark>
         </p>
         <div id="body">
-            <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view">
-                <div id="view-header" style="float: right;">
-                    <button v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" class="view-close buttons">x</button>
-                </div>
-                <div class="view-dropdown">
-                    <div class="view-dropdown-selection">
-                        <b>{{ activeVVHView }} ▼</b>
-                    </div>
-                    <div class="view-dropdown-options">
-                        <div class="view-dropdown-option" :class="{active: vvhViewOption === activeVVHView}" v-for="vvhViewOption in VVHViews" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
-                            <div v-if="(vvhViewOption === 'Win By' && supportsWinBy || vvhViewOption != 'Win By') && vvhViewOption != activeVVHView">
-                                <b>{{ vvhViewOption }}</b>
+            <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view" :class="{scrollable: true}">
+                <div id="view-body">
+                    <div class="view-dropdown">
+                        <div class="view-dropdown-selection">
+                            <b>{{ activeVVHView }} ▼</b>
+                        </div>
+                        <div class="view-dropdown-options">
+                            <div class="view-dropdown-option" v-for="vvhViewOption in VVHViews" :class="{active: vvhViewOption === activeVVHView}" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
+                                <div v-if="(vvhViewOption === 'Win By' && supportsWinBy || vvhViewOption != 'Win By') && vvhViewOption != activeVVHView">
+                                    <b>{{ vvhViewOption }}</b>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div v-if="activeVVHView === 'Remoteness'">
+                        <AppGameVvhBodyRemotenessView :show-view-options="false"/>
+                    </div>
+                    <div v-else-if="activeVVHView === 'Win By'">
+                        <AppGameVvhBodyWinByView />
+                    </div>
+                    <div v-else-if="activeVVHView === 'Column'">
+                        <AppGameVvhBodyColumnView />
+                    </div>
+                    <p class="bottom x-axis-label" v-if="showVvhGuides">
+                        <b> {{ activeVVHView }} </b>
+                    </p>
                 </div>
-                <div v-if="activeVVHView === 'Remoteness'">
-                    <AppGameVvhBodyRemotenessView />
+                <div id="view-buttons">
+                    <button class="buttons" v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" title="Close View">x</button>
+                    <button class="buttons" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)" title="Toggle Options">⚙</button>
+                    <button class="buttons" @click="store.commit(mutationTypes.toggleVvhScrolling, !vvhScrolling)" title="Toggle Scrolling">↕</button>
                 </div>
-                <div v-else-if="activeVVHView === 'Win By'">
-                    <AppGameVvhBodyWinByView />
-                </div>
-                <div v-else-if="activeVVHView === 'Column'">
-                    <AppGameVvhBodyColumnView />
-                </div>
-                <p class="bottom x-axis-label" v-if="showVvhGuides">
-                    <b> {{ activeVVHView }} </b>
-                </p>
             </div>
             <button v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" class="buttons">+</button>
         </div>
@@ -55,7 +59,10 @@
     const currentGameId = computed(() => store.getters.currentGameId);
 
     const activeVVHViews = computed(() => store.getters.currentActiveVVHViews);
-    
+
+    const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
+    const vvhScrolling = computed(() => (options.value ? options.value.vvhScrolling : false));
+
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
@@ -78,7 +85,9 @@
     }
 
     /**
-     * 
+     * Adds an additional view to the VVH Body; loops through all of the VVHViews and until it finds 
+     * a view which is not active.
+     * @returns none.
      */
     const addVVHView = () => {
         if (supportsWinBy.value) {
@@ -96,8 +105,8 @@
                 }
             }
         }
-        
     }
+    
 </script>
 
 <style lang="scss" scoped>
@@ -122,15 +131,19 @@
         border-radius: 1rem;
         border: 0.1rem solid var(--neutralColor);
         padding: 1rem;
-
-        >.x-axis-label {
-            text-align: center;
+        display: flex;
+        >#view-body {
+            flex: 100;
+            >.x-axis-label {
+                text-align: center;
+            }
         }
     }
 
     .view-dropdown {
         min-width: 192px;
         position: static;
+        top: 0;
         display: inline-block;
         cursor: pointer;
     }
@@ -150,10 +163,22 @@
     }
 
     .buttons {
-        margin-right: 0.5rem;
-        margin-left: 0.5rem;
+        margin: 0.5rem 0.5rem 0.5rem 0.5rem;
         border-radius: 100%;
         height: max(1.5rem, min(2.5vh, 2.5vw));
         width: max(1.5rem, min(2.5vh, 2.5vw));
+    }
+
+    #view-buttons {
+        float: right;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+    }
+
+    .scrollable {
+        max-height: 40em;
+        overflow-y:auto;
     }
 </style>

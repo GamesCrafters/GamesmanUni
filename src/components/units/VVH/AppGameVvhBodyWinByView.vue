@@ -246,6 +246,10 @@
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
 
+    defineProps({
+        showViewOptions: Boolean,
+    });
+
     const store = useStore();
     const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
@@ -262,7 +266,7 @@
     const currentRounds = computed(() => store.getters.currentRounds);
 
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
-
+    
     /** 
      * Iterate through the rounds and see if any visited positions or any child positions of
      * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
@@ -292,12 +296,10 @@
         return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
     });
     const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
-
     const currentValuedRoundId = computed(() =>
         Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
     );
     const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
-
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
     const winningDirectionHeight = ref(2);
