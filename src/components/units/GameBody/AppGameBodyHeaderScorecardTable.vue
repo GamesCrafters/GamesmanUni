@@ -13,7 +13,7 @@
                     <td>Rating</td>
                     <td>Move History</td>
                 </tr>
-                <tr v-for="record in currentScorecard.records" class="records">
+                <tr v-for="(record, index) in currentScorecard.records" class="records" :key="index" @click="rowClicked(index)" >
                     <td> {{ record.gameName }} </td>
                     <td>
                         <div> {{ record.variantName }} </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed } from "vue";
+    import { computed, defineEmits } from "vue";
     import { useStore } from "../../../scripts/plugins/store";
     const store = useStore();
 
@@ -66,6 +66,12 @@
     const copyToClipboard = (moveHistory: string) => {
         navigator.clipboard.writeText(moveHistory);
     }
+    
+    const emit = defineEmits(['row-clicked']);
+    const rowClicked = (index: number) => {
+        emit('row-clicked', index);
+    };
+
 </script>
 
 <style lang="scss" scoped>
@@ -87,6 +93,7 @@
             }
             .records:hover {
                 background-color: aliceblue;
+                cursor: pointer;
             }
             button {
                 padding: 0.2rem;

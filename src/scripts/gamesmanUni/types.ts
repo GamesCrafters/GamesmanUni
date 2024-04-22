@@ -152,9 +152,9 @@ export type Rounds = Array<Round>;
 export type Round = {
     id: number;
     firstPlayerTurn: boolean;
-    move: string;
+    move: string; //move name i.e. QC4 (queen to c4)
     autoguiMove: string;
-    moveValue: string;
+    moveValue: string; //'lose, win, tie, etc.'
     position: Position;
 };
 
@@ -173,4 +173,14 @@ export type ScorecardRecord = {
     CPUsStrategies: string[];
     CPUsRatings: number[];
     moveHistory: string;
+    stringMoveHistory: string[];
+    moveHistoryRatings: number[];
+    leftPlayerRatings: Rating;
+    rightPlayerRatings: Rating;
+};
+
+export type Rating = {
+    brilliant: number;
+    good: number;
+    blunder: number;
 };
