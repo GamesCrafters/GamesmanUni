@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-body-header">
         <AppGameBodyHeaderInstructions />
-        <button @click="swapPlayers()" :disabled="!isEndOfMatch || currentGameType === 'puzzles'">⇆</button>
+        <button @click="swapPlayers()" :disabled="!isEndOfMatch || currentGameType === 'puzzles'" title="Swap Players">⇆</button>
         <AppGameBodyHeaderTitle />
         <AppGameBodyHeaderScorecard />
         <AppGameBodyHeaderOptions />

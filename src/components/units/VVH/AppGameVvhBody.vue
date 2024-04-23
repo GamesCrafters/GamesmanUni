@@ -36,11 +36,11 @@
                 </div>
                 <div id="view-buttons">
                     <button class="buttons" v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" title="Close View">x</button>
-                    <button class="buttons" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)" title="Toggle Options">⚙</button>
-                    <button class="buttons" @click="store.commit(mutationTypes.toggleVvhScrolling, !vvhScrolling)" title="Toggle Scrolling">↕</button>
+                    <button class="buttons" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)" title="Toggle View Options">⚙</button>
+                    <button class="buttons" @click="store.commit(mutationTypes.toggleVvhScrolling, !vvhScrolling)" title="Toggle View Scrolling">↕</button>
                 </div>
             </div>
-            <button v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" class="buttons">+</button>
+            <button class="buttons" v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" title="Add View">+</button>
         </div>
     </div>
 </template>
