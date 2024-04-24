@@ -4,6 +4,7 @@
             <tr class="table-headers" v-if="toggleGuides">
                 <td>Move</td>
                 <td>Value</td>
+                <td>Draw Level</td>
                 <td>Remoteness</td>
                 <td v-if="supportsWinBy">Win By</td>
             </tr>
@@ -15,7 +16,10 @@
                         :class="{ win: nextMove.moveValue === 'win', lose: nextMove.moveValue === 'lose', tie: nextMove.moveValue === 'tie', draw: nextMove.moveValue === 'draw' }">
                     {{ nextMove.moveValue }}
                     </td>
-                    <td>{{ nextMove.remoteness }}</td>
+                    <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawLevel }}</td>
+                    <td v-else> - </td>
+                    <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
+                    <td v-else>{{ nextMove.remoteness }}</td>
                     <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
                 </tr>
             </template>
