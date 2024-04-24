@@ -74,8 +74,7 @@
                     const playerMove = round.move;
                     stringMoveHistory.push(playerMove);
                     const playerRatings = playerTurn == 1 ? leftPlayerRatings : rightPlayerRatings;
-                    const winning = (leftValue === "win" && playerTurn == 1) ? true : false;
-                    const tie = (leftValue === "tie");
+                    const winning = (leftValue === "win" && playerTurn == 1 || leftValue === "lose" && playerTurn == 2) ? true : false;
                     const availableMoves = round.position.availableMoves;
                     if (Object.values(availableMoves).length === 0) {
                         break;
@@ -116,7 +115,13 @@
                         moveHistoryRatings.push(2);
                         playerRatings.brilliant++;
                     };
-                    if (winning) {
+                    if (leftValue === "draw") {
+                        // BLUNDER
+                        if (currMove.moveValue != "draw") {blunder();}
+                        // GOOD
+                        else {good();}
+                    }
+                    else if (winning) {
                         // BLUNDER
                         if (currMove.moveValue != "win") {blunder();}
                         // BRILLIANT
@@ -125,7 +130,7 @@
                         // GOOD
                         else {good();}
                         
-                    } else if (tie){
+                    } else if (leftValue === "tie"){
                         // BLUNDER
                         if (currMove.moveValue === "lose") {blunder();}
                         // BRILLIANT
@@ -163,7 +168,6 @@
                     leftPlayerRatings: leftPlayerRatings,
                     rightPlayerRatings: rightPlayerRatings,
                 };
-                console.log(moveHistoryRatings);
 
                 if(!currentPlayerWinsMap.value.has(leftPlayer.value.name)) {
                     store.commit(mutationTypes.setPlayerWinsEntry, {player: leftPlayer.value.name, wins: 0});
@@ -197,6 +201,7 @@
      * @returns the left players position value.
      */
     const determineLeftPlayerPositionValue = (currentValuedRounds: Rounds, roundID: number, positionValue: string) => {
+        if (positionValue === "draw") return "draw";
         const playerTurn = currentValuedRounds[roundID].firstPlayerTurn ? 1 : 2;
         if (playerTurn == 1 && positionValue === "win" || playerTurn == 2 && positionValue === "lose") {
             return "win";
