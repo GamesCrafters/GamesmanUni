@@ -41,7 +41,7 @@
                     <button class="buttons" @click="activeVVHView.toggleScrolling = !activeVVHView.toggleScrolling" title="Toggle View Scrolling">↕</button>
                 </div>
             </div>
-            <button class="buttons" v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" title="Add View">+</button>
+            <button id="add-view-button" class="buttons" v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" title="Add View">+</button>
         </div>
     </div>
 </template>
@@ -166,6 +166,10 @@
         display: block;
     }
 
+    #add-view-button {
+        margin: auto;
+    }
+    
     .buttons {
         margin: 0.5rem;
         border-radius: 100%;
