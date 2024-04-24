@@ -70,9 +70,13 @@
 </script>
 
 <style lang="scss" scoped>
+    ::-webkit-scrollbar {
+        display: none;
+    }
     #ratings-table {
         overflow-y: auto; // Keeps vertical scrolling
-        max-height: 400px; // Adjust as needed for 10 rows
+        overflow-x: hidden;
+        max-height: 300px; // Adjust as needed for 10 rows
         width: 100%; // Ensure the ratings div takes full width
 
         table {
@@ -88,6 +92,11 @@
             }
             td:empty { // Targets empty td elements
                 background-color: #f0f0f0; // Light grey background for empty cells
+            }
+            thead {
+                position: sticky;
+                top: 0;
+                background-color: #f0f0f0;
             }
         }
     }
