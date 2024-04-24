@@ -4,7 +4,7 @@
         <div>
           <canvas ref="chartCanvas" width="200" height="200"></canvas>
         </div>
-        <div>Round {{selectedId}} Player {{playerSide == "left" ? 1: 2}}: Brilliant:{{ playerRatings.brilliant }} | Good: {{ playerRatings.good }} | Blunder: {{ playerRatings.blunder }}</div>
+        <div>Player {{playerSide == "left" ? 1: 2}}: Brilliant{{ playerRatings.brilliant > 1 ? "s" : "" }}:{{ playerRatings.brilliant }} | Good{{ playerRatings.good > 1 ? "s":"" }}: {{ playerRatings.good }} | Blunder{{ playerRatings.blunder > 1 ? "s":"" }}: {{ playerRatings.blunder }}</div>
       </div>
     </div>
   </template>
@@ -28,8 +28,6 @@
     });
 
     const store = useStore();
-    const currentTotalWins = computed(() => store.getters.currentTotalWins);
-    const currentPlayerWinsMap = computed(() => store.getters.currentPlayerWinsMap);
     const currentScorecard = computed(() => store.getters.currentScorecard);
     const currentScorecardRecord = computed(() => {
         const records = currentScorecard.value.records;
