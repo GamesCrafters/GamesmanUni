@@ -4,7 +4,7 @@
         <div>
           <canvas ref="chartCanvas" width="200" height="200"></canvas>
         </div>
-        <div>Player {{playerSide == "left" ? 1: 2}}: Brilliant{{ playerRatings.brilliant > 1 ? "s" : "" }}:{{ playerRatings.brilliant }} | Good{{ playerRatings.good > 1 ? "s":"" }}: {{ playerRatings.good }} | Blunder{{ playerRatings.blunder > 1 ? "s":"" }}: {{ playerRatings.blunder }}</div>
+        <div>Player {{playerSide == "left" ? 1: 2}} - Brilliant{{ playerRatings.brilliant > 1 ? "s" : "" }} :{{ playerRatings.brilliant }} | Good{{ playerRatings.good > 1 ? "s":"" }} : {{ playerRatings.good }} | Blunder{{ playerRatings.blunder > 1 ? "s":"" }} : {{ playerRatings.blunder }}</div>
       </div>
     </div>
   </template>
