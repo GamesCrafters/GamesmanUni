@@ -28,7 +28,6 @@
         const rightPlayerIsComputer = store.getters.currentRightPlayer.isComputer;
         const tempCPUsStrategies = [store.getters.currentCPUStrategy(1), store.getters.currentCPUStrategy(0)]
         const tempCPUsRatings = [store.getters.currentCPURating(1),store.getters.currentCPURating(0)];
-        
         store.commit(mutationTypes.setCPUsRatings, tempCPUsRatings);
         store.commit(mutationTypes.setCPUsStrategies, tempCPUsStrategies);
         store.commit(mutationTypes.setCurrentLeftPlayerName, store.getters.currentRightPlayer.name);

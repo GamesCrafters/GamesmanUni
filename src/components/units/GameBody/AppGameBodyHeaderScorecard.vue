@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-header-scorecard">
-        <button @click="store.commit(mutationTypes.showScorecard, true)" :disabled="currentGameType === 'puzzles'" title="Display Scorecard">📖</button>
+        <button @click="store.commit(mutationTypes.showScorecard, true)" :disabled="currentGameType === 'puzzles' || currentScorecardSize === 0" title="Display Scorecard">📖</button>
         <UniPopupWindow v-if="options && options.showScorecard" @close="store.commit(mutationTypes.showScorecard, false)">
             <div id="popup">
                 <h1 id="title">Scorecard</h1>
@@ -27,6 +27,7 @@
     const selectedId = ref(-1);
     const options = computed(() => store.getters.options);
     const currentGameType = computed(() => store.getters.currentGameType);
+    const currentScorecardSize = computed(() => store.getters.currentScorecard.records.length);
 
     const handleRowClicked = (id: number) => {
         selectedId.value = id;
