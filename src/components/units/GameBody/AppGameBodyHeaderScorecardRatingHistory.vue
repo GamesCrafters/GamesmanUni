@@ -80,13 +80,12 @@
         width: 100%; // Ensure the ratings div takes full width
 
         table {
-            width: 100%; // Ensures the table takes the full width of #ratings
             tr {
                 display: flex;
             }
             td {
                 flex: 1; // Distributes space evenly among cells
-                min-width: 150px; // Ensures each column has a minimum width, adjust as needed
+                min-width: 100px; // Ensures each column has a minimum width, adjust as needed
                 text-align: center; // Centers text within cells
                 padding: 10px; // Adds padding for better readability
             }

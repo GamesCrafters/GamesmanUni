@@ -1,13 +1,21 @@
 <template>
-    <div id="app-game-body-header-scorecard-donut">
-      <div id="donut">
+    <div id="app-game-body-header-scorecard-donut">        
         <div>
-          <canvas ref="chartCanvas" width="200" height="200"></canvas>
+            {{ playerSide == "left" ? "Left" : "Right" }} Player Rating
         </div>
-        <div>Player {{playerSide == "left" ? 1: 2}} - Brilliant{{ playerRatings.brilliant > 1 ? "s" : "" }}: {{ playerRatings.brilliant }} | Good{{ playerRatings.good > 1 ? "s":"" }}: {{ playerRatings.good }} | Blunder{{ playerRatings.blunder > 1 ? "s":"" }}: {{ playerRatings.blunder }}</div>
-      </div>
+        <div id="donut">
+        <div>
+            <canvas ref="chartCanvas" width="200" height="200"></canvas>
+        </div>
+            <div>
+                Accuracy: {{ Math.round(((playerRatings.brilliant + playerRatings.good) / (Object.values(playerRatings).reduce((a, b) => a + b, 0))) * 100)}}%
+            </div>
+            <div>
+                Brilliant: {{ playerRatings.brilliant }} | Good: {{ playerRatings.good }} | Blunder: {{ playerRatings.blunder }}
+            </div>
+        </div>
     </div>
-  </template>
+</template>
 
 <script lang="ts" setup>
     import { computed, watch, ref, onMounted } from "vue";

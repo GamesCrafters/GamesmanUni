@@ -170,10 +170,16 @@
     }
 
     .buttons {
-        margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+        margin: 0.5rem;
         border-radius: 100%;
         height: max(1.5rem, min(2.5vh, 2.5vw));
         width: max(1.5rem, min(2.5vh, 2.5vw));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1;
     }
 
     #view-buttons {
