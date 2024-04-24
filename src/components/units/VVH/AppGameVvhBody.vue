@@ -30,6 +30,9 @@
                     <div v-else-if="activeVVHView.name === 'Column'">
                         <AppGameVvhBodyColumnView :toggle-options="activeVVHView.toggleOptions" :toggle-scrolling="activeVVHView.toggleScrolling" :toggle-guides="activeVVHView.toggleGuides"/>
                     </div>
+                    <div v-else-if="activeVVHView.name === 'Draw Levels'">
+                        <AppGameVvhBodyDrawLevelsView :toggle-options="activeVVHView.toggleOptions" :toggle-scrolling="activeVVHView.toggleScrolling" :toggle-guides="activeVVHView.toggleGuides"/>
+                    </div>
                     <p class="bottom x-axis-label" v-if="activeVVHView.toggleGuides">
                         <b> {{ activeVVHView.name }} </b>
                     </p>
@@ -52,6 +55,7 @@
     import AppGameVvhBodyRemotenessView from "./AppGameVvhBodyRemotenessView.vue";
     import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
     import AppGameVvhBodyColumnView from "./AppGameVvhBodyColumnView.vue";
+    import AppGameVvhBodyDrawLevelsView from "./AppGameVvhBodyDrawLevelsView.vue";
     import { VVHViews } from "../../../models/datas/defaultApp";
 
     const store = useStore();
