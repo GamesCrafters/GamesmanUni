@@ -120,7 +120,8 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    if (!game.supportsWinBy && app.activeVVHViews.includes("Win By")) app.activeVVHViews.splice(app.activeVVHViews.indexOf("Win By"), 1).push("");
+    if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", toggleOptions: false, toggleScrolling: false, toggleGuides: true});
+    if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;

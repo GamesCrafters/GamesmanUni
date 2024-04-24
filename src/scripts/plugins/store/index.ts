@@ -89,7 +89,7 @@ type Getters = {
     currentScorecard(state: State): GMUTypes.Scorecard;
     currentTotalWins(state: State): number;
     currentPlayerWinsMap(state: State): Map<String, number>;
-    currentActiveVVHViews(state: State): Array<string>;
+    currentActiveVVHViews(state: State): Array<GMUTypes.VVHView>;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -337,9 +337,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
     activateVVHView: (state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}) =>
-            (state.app.activeVVHViews[vvhViewId] = vvhView),
+            (state.app.activeVVHViews[vvhViewId] = {name: vvhView, toggleOptions: false, toggleScrolling: false, toggleGuides: true}),
     inactivateVVHView: (state: State, vvhViewId: number) =>
-        (state.app.activeVVHViews.splice(vvhViewId, 1).push("")),
+        (state.app.activeVVHViews.splice(vvhViewId, 1).push({name: "", toggleOptions: false, toggleScrolling: false, toggleGuides: false})),
     setCPUsStrategies: (state: State, CPUsStrategies: string[]) =>
         (state.app.CPUsStrategies = CPUsStrategies),
     setCPUsRatings: (state: State, CPUsRatings: number[]) =>

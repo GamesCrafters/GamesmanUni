@@ -7,37 +7,38 @@
             <mark class="uni-lose color">lose</mark>
         </p>
         <div id="body">
-            <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view" :class="{scrollable: true}">
+            <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view" :class="{scrollable: activeVVHView.toggleScrolling}">
                 <div id="view-body">
                     <div class="view-dropdown">
                         <div class="view-dropdown-selection">
-                            <b>{{ activeVVHView }} ▼</b>
+                            <b>{{ activeVVHView.name }} ▼</b>
                         </div>
                         <div class="view-dropdown-options">
-                            <div class="view-dropdown-option" v-for="vvhViewOption in VVHViews" :class="{active: vvhViewOption === activeVVHView}" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
-                                <div v-if="(vvhViewOption === 'Win By' && supportsWinBy || vvhViewOption != 'Win By') && vvhViewOption != activeVVHView">
+                            <div class="view-dropdown-option" v-for="vvhViewOption in VVHViews" :class="{active: vvhViewOption === activeVVHView.name}" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
+                                <div v-if="(vvhViewOption === 'Win By' && supportsWinBy || vvhViewOption != 'Win By') && vvhViewOption != activeVVHView.name">
                                     <b>{{ vvhViewOption }}</b>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div v-if="activeVVHView === 'Remoteness'">
-                        <AppGameVvhBodyRemotenessView :show-view-options="false"/>
+                    <div v-if="activeVVHView.name === 'Remoteness'">
+                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.toggleOptions" :toggle-scrolling="activeVVHView.toggleScrolling" :toggle-guides="activeVVHView.toggleGuides"/>
                     </div>
-                    <div v-else-if="activeVVHView === 'Win By'">
-                        <AppGameVvhBodyWinByView />
+                    <div v-else-if="activeVVHView.name === 'Win By'">
+                        <AppGameVvhBodyWinByView :toggle-options="activeVVHView.toggleOptions" :toggle-scrolling="activeVVHView.toggleScrolling" :toggle-guides="activeVVHView.toggleGuides"/>
                     </div>
-                    <div v-else-if="activeVVHView === 'Column'">
-                        <AppGameVvhBodyColumnView />
+                    <div v-else-if="activeVVHView.name === 'Column'">
+                        <AppGameVvhBodyColumnView :toggle-options="activeVVHView.toggleOptions" :toggle-scrolling="activeVVHView.toggleScrolling" :toggle-guides="activeVVHView.toggleGuides"/>
                     </div>
-                    <p class="bottom x-axis-label" v-if="showVvhGuides">
-                        <b> {{ activeVVHView }} </b>
+                    <p class="bottom x-axis-label" v-if="activeVVHView.toggleGuides">
+                        <b> {{ activeVVHView.name }} </b>
                     </p>
                 </div>
                 <div id="view-buttons">
                     <button class="buttons" v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" title="Close View">x</button>
-                    <button class="buttons" @click="store.commit(mutationTypes.showVvhMeters, !showVvhMeters)" title="Toggle View Options">⚙</button>
-                    <button class="buttons" @click="store.commit(mutationTypes.toggleVvhScrolling, !vvhScrolling)" title="Toggle View Scrolling">↕</button>
+                    <button class="buttons" @click="activeVVHView.toggleOptions = !activeVVHView.toggleOptions" title="Toggle View Options">⚙</button>
+                    <button class="buttons" @click="activeVVHView.toggleGuides = !activeVVHView.toggleGuides" title="Toggle View Guides">^</button>
+                    <button class="buttons" @click="activeVVHView.toggleScrolling = !activeVVHView.toggleScrolling" title="Toggle View Scrolling">↕</button>
                 </div>
             </div>
             <button class="buttons" v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" title="Add View">+</button>
@@ -76,10 +77,12 @@
      * @returns none.
     */
     const setVVHView = (vvhViewId: number, newVVHView: string) => {
-        if (activeVVHViews.value.includes(newVVHView)) {
-            const vvhViewSwapId = activeVVHViews.value.indexOf(newVVHView);
-            const vvhViewSwap = activeVVHViews.value[vvhViewId];
-            store.commit(mutationTypes.activateVVHView, {vvhViewId: vvhViewSwapId, vvhView: vvhViewSwap});
+        for (let activeVVHViewId = 0; activeVVHViewId < activeVVHViews.value.length; activeVVHViewId++) {
+            if (activeVVHViews.value[activeVVHViewId].name === newVVHView) {
+                const vvhViewNameSwap = activeVVHViews.value[vvhViewId].name;
+                store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViewId, vvhView: vvhViewNameSwap});
+                break;
+            }
         }
         store.commit(mutationTypes.activateVVHView, {vvhViewId: vvhViewId, vvhView: newVVHView});
     }
@@ -92,14 +95,14 @@
     const addVVHView = () => {
         if (supportsWinBy.value) {
             for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
-                if(!activeVVHViews.value.includes(VVHViews[vvhViewId])) {
+                if(!activeVVHViews.value.some(VVHView => VVHView.name === VVHViews[vvhViewId])) {
                     store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
                     break;
                 }
             }
         } else {
             for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
-                if( VVHViews[vvhViewId] != "Win By" && !activeVVHViews.value.includes(VVHViews[vvhViewId])) {
+                if( VVHViews[vvhViewId] != "Win By" && !activeVVHViews.value.some(VVHView => VVHView.name === VVHViews[vvhViewId])) {
                     store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
                     break;
                 }

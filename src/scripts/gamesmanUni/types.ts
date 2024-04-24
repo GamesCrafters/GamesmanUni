@@ -14,7 +14,7 @@ export type App = Update & {
     options: Options;
     matches: Matches;
     currentMatch: Match;
-    activeVVHViews: Array<string>;
+    activeVVHViews: Array<VVHView>;
     CPUsStrategies: Array<string>;
     CPUsRatings: number[];
     scorecard: Scorecard;
@@ -184,3 +184,10 @@ export type Rating = {
     good: number;
     blunder: number;
 };
+
+export type VVHView = {
+    name: string;
+    toggleOptions: boolean;
+    toggleScrolling: boolean;
+    toggleGuides: boolean;
+}

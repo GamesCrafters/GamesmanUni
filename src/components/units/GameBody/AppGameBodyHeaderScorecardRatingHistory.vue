@@ -5,8 +5,8 @@
                 <table>
                     <thead>
                         <tr class="ratings-headers">
-                            <td>P1</td>
-                            <td>P2</td>
+                            <td>Left Player</td>
+                            <td>Right Player</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -16,14 +16,14 @@
                                 :style="{ backgroundColor: getColor(moveRatings[index])}">
                                 {{ move }}
                             </td>
-                            <td v-else style="background-color: lightgrey;"></td>
+                            <td v-else>-</td>
 
                             <td
                                 v-if="index %2 !== 0"
                                 :style="{ backgroundColor: getColor(moveRatings[index])}">
                                 {{ move }}
                             </td>
-                            <td v-else style="background-color: lightgrey;"></td>
+                            <td v-else>-</td>
                         </tr>
                     </tbody>
                 </table>

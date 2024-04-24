@@ -1,13 +1,13 @@
 <template>
     <div id="app-game-vvh-body-remotenessview">
         <div id="body">
-            <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
+            <p id="left-y-axis-label" v-if="toggleGuides && !isPuzzleGame">
                 <b>Moves</b>
             </p>
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
                              xmlns="http://www.w3.org/2000/svg">
                 <!-- Winning Directions -->
-                <template v-if="showVvhGuides">
+                <template v-if="toggleGuides">
                     <template v-if="isPuzzleGame">
                         <text class="player-winning-direction"
                                 :x="gridRight"
@@ -739,11 +739,11 @@
                     </template>
                 </template>
             </svg>
-            <p id="right-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
+            <p id="right-y-axis-label" v-if="toggleGuides && !isPuzzleGame">
                 <b>Moves</b>
             </p>
         </div>
-        <div id="meters" v-if="showViewOptions">
+        <div id="meters" v-if="toggleOptions">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
                 <VueSlider v-model="xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
@@ -797,15 +797,15 @@
     import "vue-slider-component/theme/default.css";
 
     defineProps({
-        showViewOptions: Boolean,
+        toggleOptions: Boolean,
+        toggleScrolling: Boolean,
+        toggleGuides: Boolean,
     });
 
     const store = useStore();
     const options = computed(() => store.getters.options);
     const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
-    const showVvhGuides = computed(() => (options.value ? options.value.showVvhGuides : true));
-    const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
 
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 

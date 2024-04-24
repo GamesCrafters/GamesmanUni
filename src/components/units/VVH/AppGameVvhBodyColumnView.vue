@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-vvh-body-columnview">
         <table>
-            <tr class="table-headers">
+            <tr class="table-headers" v-if="toggleGuides">
                 <td>Move</td>
                 <td>Value</td>
                 <td>Remoteness</td>
@@ -33,7 +33,9 @@
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
     defineProps({
-        showViewOptions: Boolean,
+        toggleOptions: Boolean,
+        toggleScrolling: Boolean,
+        toggleGuides: Boolean,
     });
 
     const store = useStore();
