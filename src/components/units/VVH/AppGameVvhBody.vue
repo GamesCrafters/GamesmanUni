@@ -1,11 +1,5 @@
 <template>
     <div id="app-game-vvh-body">
-        <p id="color-guides" v-if="showVvhGuides">
-            <mark class="uni-win color">win</mark>
-            <mark class="uni-draw color">draw</mark>
-            <mark class="uni-tie color">tie</mark>
-            <mark class="uni-lose color">lose</mark>
-        </p>
         <div id="body">
             <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view" :class="{scrollable: activeVVHView.toggleScrolling}">
                 <div id="view-body">
@@ -57,12 +51,10 @@
 
     const store = useStore();
     const options = computed(() => store.getters.options);
-    const showVvhGuides = computed(() => (options.value ? options.value.showVvhGuides : true));
     const currentGameId = computed(() => store.getters.currentGameId);
 
     const activeVVHViews = computed(() => store.getters.currentActiveVVHViews);
 
-    const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
     const vvhScrolling = computed(() => (options.value ? options.value.vvhScrolling : false));
 
     // Stores true or false, whether the current game supports the Win By view or it does not.

@@ -119,8 +119,7 @@ export type Options = {
     showNextMoves: boolean;
     showOptions: boolean;
     showMenu: boolean;
-    showVvhGuides: boolean;
-    showVvhMeters: boolean;
+    showVvhInstructions: boolean;
     vvhScrolling: boolean;
     showScorecard: boolean;
 };

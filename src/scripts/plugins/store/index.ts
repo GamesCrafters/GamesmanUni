@@ -262,8 +262,7 @@ export enum mutationTypes {
     setTheme = "setTheme",
     showInstructions = "showInstructions",
     showOptions = "showOptions",
-    showVvhGuides = "showVvhGuides",
-    showVvhMeters = "showVvhMeters",
+    showVvhInstructions = "showVvhInstructions",
     showScorecard = "showScorecard",
     toggleVvhScrolling = "toggleVvhScrolling",
     activateVVHView = "activateVVHView",
@@ -288,10 +287,9 @@ type Mutations = {
     [mutationTypes.setTheme](state: State, theme: string): void;
     [mutationTypes.showInstructions](state: State, showInstructions: boolean): void;
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
-    [mutationTypes.showVvhGuides](state: State, showVvhGuides: boolean): void;
-    [mutationTypes.showVvhMeters](state: State, showVvhMeters: boolean): void;
     [mutationTypes.showScorecard](state: State, showScorecard: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
+    [mutationTypes.showVvhInstructions](state: State, showVvhInstructions: boolean): void;
     [mutationTypes.activateVVHView](state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}): void;
     [mutationTypes.inactivateVVHView](state: State, vvhViewId: number): void;
     [mutationTypes.setCPUsStrategies](state: State, CPUsStrategies: string[]): void;
@@ -328,14 +326,12 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showInstructions = showInstructions),
     showOptions: (state: State, showOptions: boolean) =>
         (state.app.options.showOptions = showOptions),
-    showVvhGuides: (state: State, showVvhGuides: boolean) =>
-        (state.app.options.showVvhGuides = showVvhGuides),
-    showVvhMeters: (state: State, showVvhMeters: boolean) =>
-        (state.app.options.showVvhMeters = showVvhMeters),
     showScorecard: (state: State, showScorecard: boolean) =>
         (state.app.options.showScorecard = showScorecard),
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
+    showVvhInstructions: (state: State, showVvhInstructions: boolean) =>
+        (state.app.options.showVvhInstructions = showVvhInstructions),
     activateVVHView: (state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}) =>
             (state.app.activeVVHViews[vvhViewId] = {name: vvhView, toggleOptions: false, toggleScrolling: false, toggleGuides: true}),
     inactivateVVHView: (state: State, vvhViewId: number) =>

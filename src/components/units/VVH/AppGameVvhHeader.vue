@@ -3,19 +3,15 @@
         <div id="app-game-vvh-header-left">
             <!-- TODO: implement VVH instructions and change the behavior of the button below. -->
             <AppGameVvhHeaderInstructions class="buttons" title="Show Game Instructions" />
-            <AppGameVvhHeaderGuidesOptions class="buttons" title="Toggle Graph Legend" />
         </div>
         <AppGameVvhHeaderTitle />
         <div id="app-game-vvh-header-right">
             <AppGameVvhHeaderScrollOptions class="buttons" title="Toggle Scrolling" />
-            <AppGameVvhHeaderMetersOptions class="buttons" title="Toggle Options" />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import AppGameVvhHeaderGuidesOptions from "./AppGameVvhHeaderLegend.vue";
-    import AppGameVvhHeaderMetersOptions from "./AppGameVvhHeaderOptions.vue";
     import AppGameVvhHeaderScrollOptions from "./AppGameVvhHeaderScrolling.vue";
     import AppGameVvhHeaderInstructions from "./AppGameVvhHeaderInstructions.vue";
     import AppGameVvhHeaderTitle from "./AppGameVvhHeaderTitle.vue";

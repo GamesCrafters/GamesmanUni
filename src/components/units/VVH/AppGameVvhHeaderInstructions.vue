@@ -1,13 +1,33 @@
 <template>
-    <button id="app-game-vvh-header-instructions"
-            @click="store.commit(mutationTypes.showInstructions, true)">
-        𝓲
-    </button>
+    <button id="app-game-vvh-header-instructions" @click="store.commit(mutationTypes.showVvhInstructions, true)">𝓲</button>
+    <UniPopupWindow v-if="options && options.showVvhInstructions" @close="store.commit(mutationTypes.showVvhInstructions, false)">
+            <VueMarkdownIt class="c-markdown" :break="true" :linkify="true" :plugins="plugins" :source="vvhInstructions" />
+            If you worked on this project and were not properly credited, please email <a href="mailto: ddgarcia@cs.berkeley.edu">ddgarcia@cs.berkeley.edu</a> to request a correction.
+        </UniPopupWindow>
 </template>
 
 <script lang="ts" setup>
+    import { computed } from "vue";
+    import MarkdownItLinkAttributes from "markdown-it-link-attributes";
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
+    import UniPopupWindow from "../../templates/UniPopupWindow.vue";
+
     const store = useStore();
+    const options = computed(() => store.getters.options);
+    const vvhInstructions = computed(() => {
+        {"# Visual Value History\n\n##"}
+    })
+    const plugins = [
+        {
+            plugin: MarkdownItLinkAttributes,
+            options: {
+                attrs: {
+                    target: "_blank",
+                    rel: "noopener noreferrer nofollow",
+                },
+            },
+        },
+    ];
 </script>
 
 <style lang="scss" scoped>

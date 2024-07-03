@@ -118,8 +118,7 @@ export const defaultOptions: Types.Options = {
     showNextMoves: true,
     showOptions: false,
     showMenu: true,
-    showVvhGuides: true,
-    showVvhMeters: false,
+    showVvhInstructions: false,
     vvhScrolling: false,
     showScorecard: false,
 };
