@@ -1,0 +1,36 @@
+<svg width="601" height="501" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background colors -->
+  <rect x="50" y="50" width="300" height="100" fill="#C5E5ED"/>
+  <rect x="50" y="150" width="300" height="200" fill="#dcdcdc"/>
+  <rect x="50" y="350" width="300" height="100" fill="#D2E8A2"/>
+  
+  <!-- Dashed lines for the grid -->
+  <g stroke="#e28743" stroke-dasharray="5,5" fill="none">
+    <rect x="50" y="50" width="300" height="400"/>
+
+    <rect x="375" y="1" width="100" height="100"/>
+    <rect x="500" y="1" width="100" height="100"/>
+    <rect x="435" y="125" width="100" height="100"/>
+
+    <rect x="435" y="275" width="100" height="100"/>
+    <rect x="500" y="400" width="100" height="100"/>
+    <rect x="375" y="400" width="100" height="100"/>
+
+    <line x1="150" y1="50" x2="150" y2="450"/>
+    <line x1="250" y1="50" x2="250" y2="450"/>
+    <line x1="50" y1="150" x2="350" y2="150"/>
+    <line x1="50" y1="250" x2="350" y2="250"/>
+    <line x1="50" y1="350" x2="350" y2="350"/>
+  </g>
+  
+  <!-- Row labels -->
+  <text x="15" y="110" font-family="Arial" font-size="20">1</text>
+  <text x="15" y="210" font-family="Arial" font-size="20">2</text>
+  <text x="15" y="310" font-family="Arial" font-size="20">3</text>
+  <text x="15" y="410" font-family="Arial" font-size="20">4</text>
+
+  <!-- Column labels -->
+  <text x="95" y="30" font-family="Arial" font-size="20">A</text>
+  <text x="195" y="30" font-family="Arial" font-size="20">B</text>
+  <text x="295" y="30" font-family="Arial" font-size="20">C</text>
+</svg>
