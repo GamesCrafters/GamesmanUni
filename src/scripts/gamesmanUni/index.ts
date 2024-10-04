@@ -36,6 +36,11 @@ export const addInstructions = async (app: Types.App, payload: {gameId: string, 
     return app;
 }
 
+export const addVVHInstructions = async (app: Types.App) => {
+    const instructions = "";
+    return app;
+}
+
 export const loadGame = async (app: Types.App, payload: { gameId: string; force?: boolean }) => {
     if (!Object.keys(app.games).length) {
         const updatedApp = await loadGames(app);
@@ -120,7 +125,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", toggleOptions: false, toggleScrolling: false, toggleGuides: true});
+    if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration: false}});
     if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;

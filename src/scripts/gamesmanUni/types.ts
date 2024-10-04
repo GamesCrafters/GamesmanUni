@@ -186,7 +186,12 @@ export type Rating = {
 
 export type VVHView = {
     name: string;
+    viewOptions: ViewOptions;
+}
+
+export type ViewOptions = {
     toggleOptions: boolean;
     toggleScrolling: boolean;
     toggleGuides: boolean;
+    toggleSideBranchExploration: boolean;
 }

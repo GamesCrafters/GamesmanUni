@@ -797,9 +797,10 @@
     import "vue-slider-component/theme/default.css";
 
     defineProps({
-        toggleOptions: Boolean,
+        viewOptions: Boolean,
         toggleScrolling: Boolean,
         toggleGuides: Boolean,
+        toggleSideBranchExploration: Boolean,
     });
 
     const store = useStore();

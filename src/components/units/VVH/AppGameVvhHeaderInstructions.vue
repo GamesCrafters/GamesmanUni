@@ -9,13 +9,15 @@
 <script lang="ts" setup>
     import { computed } from "vue";
     import MarkdownItLinkAttributes from "markdown-it-link-attributes";
-    import { mutationTypes, useStore } from "../../../scripts/plugins/store";
+    import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import UniPopupWindow from "../../templates/UniPopupWindow.vue";
 
     const store = useStore();
     const options = computed(() => store.getters.options);
     const vvhInstructions = computed(() => {
-        {"# Visual Value History\n\n##"}
+        if (false) {
+            store.dispatch(actionTypes.addInstructions, {gameId: store.getters.currentGameId, variantId: store.getters.currentVariantId});
+        }
     })
     const plugins = [
         {

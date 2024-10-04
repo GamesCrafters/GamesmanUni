@@ -333,9 +333,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     showVvhInstructions: (state: State, showVvhInstructions: boolean) =>
         (state.app.options.showVvhInstructions = showVvhInstructions),
     activateVVHView: (state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}) =>
-            (state.app.activeVVHViews[vvhViewId] = {name: vvhView, toggleOptions: false, toggleScrolling: false, toggleGuides: true}),
+            (state.app.activeVVHViews[vvhViewId] = {name: vvhView, viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration:false}}),
     inactivateVVHView: (state: State, vvhViewId: number) =>
-        (state.app.activeVVHViews.splice(vvhViewId, 1).push({name: "", toggleOptions: false, toggleScrolling: false, toggleGuides: false})),
+        (state.app.activeVVHViews.splice(vvhViewId, 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: false, toggleSideBranchExploration: false}})),
     setCPUsStrategies: (state: State, CPUsStrategies: string[]) =>
         (state.app.CPUsStrategies = CPUsStrategies),
     setCPUsRatings: (state: State, CPUsRatings: number[]) =>
