@@ -46,149 +46,33 @@
 
                 <!-- 0 Labels -->
                 <text class="draw-symbol" :x="chartWidth / 2" :y="gridTop - xCoordinateHeight / 2"
-                    dominant-baseline="middle" text-anchor="middle">0</text>
+                    dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
                 <text class="draw-symbol" :x="chartWidth / 2" :y="gridBottom + xCoordinateHeight / 2"
-                    dominant-baseline="middle" text-anchor="middle">0</text>
-
-                <!-- Win By Coordinates -->
-                <template v-for="(_, winBy) in (Math.max(5, maximumWinBy) + 1)" :key="winBy">
-                    <text class="view-coordinate" v-if="winBy % xInterval === 0"
-                        :x="gridLeft + (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
+                    dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
+                
+                <!-- Draw Remoteness Coordinates -->
+                 <template v-for="(_, drawLevelRemoteness) in (Math.max(5, maximumDrawLevelRemoteness) + 1)" :key="maximumDrawLevelRemoteness">
+                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
+                        :x="gridLeft + (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
                         :y="gridTop - xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ winBy }}
+                        {{ drawLevelRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="winBy % xInterval === 0"
-                        :x="gridRight - (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
+                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
+                        :x="gridRight - (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
                         :y="gridTop - xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ winBy }}
+                        {{ drawLevelRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="winBy % xInterval === 0"
-                        :x="gridLeft + (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
+                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
+                        :x="gridLeft + (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
                         :y="gridBottom + xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ winBy }}
+                        {{ drawLevelRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="winBy % xInterval === 0"
-                        :x="gridRight - (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
+                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
+                        :x="gridRight - (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
                         :y="gridBottom + xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ winBy }}
+                        {{ drawLevelRemoteness }}
                     </text>
-                </template>
-                <!-- Win By Bars -->
-                <template v-for="(_, winBy) in Math.max(5, maximumWinBy) + 2" :key="winBy">
-                    <line :class="winBy % xInterval !== 0 ?
-                        'view-bar' : 'view-interval-bar'" :x1="gridCenter - winBy * columnWidth" :y1="gridTop"
-                        :x2="gridCenter - winBy * columnWidth" :y2="gridBottom" :stroke-width="winBy % xInterval !== 0 ?
-                            xBarWidth : xIntervalBarWidth" />
-                    <line :class="winBy % xInterval !== 0 ?
-                        'view-bar' : 'view-interval-bar'" :x1="gridCenter + winBy * columnWidth" :y1="gridTop"
-                        :x2="gridCenter + winBy * columnWidth" :y2="gridBottom" :stroke-width="winBy % xInterval !== 0 ?
-                            xBarWidth : xIntervalBarWidth" />
-                </template>
-
-                <!-- Move Coordinates -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <text class="move-coordinate" v-if="currentValuedRounds[roundNumber].firstPlayerTurn"
-                            :x="yCoordinateWidth / 2" :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            dominant-baseline="middle" text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
-                        </text>
-                        <text class="move-coordinate" v-else :x="gridRight + yCoordinateWidth / 2"
-                            :y="gridTop + roundNumber * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                            text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
-                        </text>
-                    </template>
-
-                    <template v-if="isEndOfMatch">
-                        <template v-if="isPuzzleGame">
-                            <text class="move-coordinate" :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                                text-anchor="middle">
-                                🥳
-                            </text>
-                        </template>
-                        <template v-else-if="currentPositionValue === 'tie'">
-                            <text class="move-coordinate" :x="yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                                text-anchor="middle">
-                                🤔
-                            </text>
-                            <text class="move-coordinate" :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                                text-anchor="middle">
-                                🤔
-                            </text>
-                        </template>
-                        <template v-else>
-                            <text class="move-coordinate" :x="yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                                text-anchor="middle"> {{
-                                    (currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                    (!currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                    "🥳" : "😢"
-                                }} </text>
-                            <text class="move-coordinate" :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2" dominant-baseline="middle"
-                                text-anchor="middle"> {{
-                                    (!currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                    (currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                    "🥳" : "😢"
-                                }}</text>
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Position Value Links -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                            :x1="winByNodeGridXPosition(roundNumber)"
-                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            :x2="winByNodeGridXPosition(roundNumber + 1)"
-                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2" :stroke-width="linkWidth" />
-                    </template>
-                </template>
-
-                <!-- Link from Current Position Value to Next Moves' Position Value -->
-                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves"
-                        :key="nextMove">
-                        <line :class="`${nextMove.moveValue} link`" :x1="winByNodeGridXPosition(currentValuedRoundId)"
-                            :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                            :x2="winByNextNodeGridXPosition(currentValuedRoundId, nextMove)"
-                            :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2" :stroke-width="linkWidth" />
-                    </template>
-                </template>
-
-                <!-- Move Nodes -->
-                <template v-if="showNextMoves && currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
-                            :key="nextMove.move">
-                            <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '']"
-                                class="next-move-position-value" :cx="winByNextNodeGridXPosition(roundNumber, nextMove)"
-                                :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
-                                :stroke-width="4 * nextMovePositionValueSize" @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Position Nodes -->
-                <template v-if="currentValuedRoundId">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <circle
-                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
-                            class="position-value" :cx="winByNodeGridXPosition(roundNumber)"
-                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2" :r="positionValueSize"
-                            :stroke-width="4 * positionValueSize" @click="roundNumber !== currentValuedRoundId &&
-                                store.dispatch(actionTypes.undoMove, {
-                                    toRoundId: currentValuedRounds[roundNumber].id
-                                })" />
-                    </template>
-                </template>
+                 </template>
             </svg>
             <p id="right-y-axis-label" v-if="toggleGuides">
                 <b>Moves</b>
@@ -233,7 +117,7 @@
             </div>
             <div class="meter">
                 <p class="label">View Interval</p>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumWinBy" :tooltip="'active'" />
+                <VueSlider v-model="xInterval" :min="1" :max="maximumDrawLevelRemoteness" :tooltip="'active'" />
             </div>
         </div>
     </div>
@@ -314,7 +198,7 @@
 
     const yCoordinateWidth = ref(5);
     const chartWidth = ref(50);
-    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumWinBy.value) + 1));
+    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumDrawLevelRemoteness.value) + 1));
     const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
     const gridLeft = computed(() => yCoordinateWidth.value);
@@ -346,8 +230,8 @@
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
     }
 
-    // Stores the maximum between the maximum 'Win By' value or the default value.
-    const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
+    // Stores the maximum between the maximum Draw Level Remoteness value or the default value.
+    const maximumDrawLevelRemoteness = computed(() => store.getters.maximumDrawLevelRemoteness(1, store.getters.currentRoundId));
 
     /** 
      * Determines the x-position of the current position's node in the 'Win By' view of the Visual Value History (VVH) graph.

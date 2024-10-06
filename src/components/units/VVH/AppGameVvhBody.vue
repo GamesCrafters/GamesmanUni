@@ -9,7 +9,7 @@
                         </div>
                         <div class="view-dropdown-options">
                             <div class="view-dropdown-option" v-for="vvhViewOption in VVHViews" :class="{active: vvhViewOption === activeVVHView.name}" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
-                                <div v-if="(vvhViewOption === 'Win By' && supportsWinBy || vvhViewOption != 'Win By') && vvhViewOption != activeVVHView.name">
+                                <div v-if="renderDropdownOption(vvhViewOption, activeVVHView.name)">
                                     <b>{{ vvhViewOption }}</b>
                                 </div>
                             </div>
@@ -20,6 +20,9 @@
                     </div>
                     <div v-else-if="activeVVHView.name === 'Win By'">
                         <AppGameVvhBodyWinByView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" :toggle-side-branch-exploration="activeVVHView.viewOptions.toggleSideBranchExploration"/>
+                    </div>
+                    <div v-else-if="activeVVHView.name === 'Draw Level'">
+                        <AppGameVvhBodyDrawLevelView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
                     </div>
                     <div v-else-if="activeVVHView.name === 'Column'">
                         <AppGameVvhBodyColumnView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
@@ -36,7 +39,7 @@
                     <button class="buttons" v-if="activeVVHView.name === 'Remoteness' || activeVVHView.name === 'Win By'" @click="activeVVHView.viewOptions.toggleSideBranchExploration = !activeVVHView.viewOptions.toggleSideBranchExploration" title="Toggle Side Branch Exploration">⧖</button>
                 </div>
             </div>
-            <button id="add-view-button" class="buttons" v-if="(supportsWinBy && activeVVHViews.length < VVHViews.length) || (!supportsWinBy && activeVVHViews.length < VVHViews.length - 1)" @click="addVVHView()" title="Add View">+</button>
+            <button id="add-view-button" class="buttons" v-if="existsAvailableView" @click="addVVHView()" title="Add View">+</button>
         </div>
     </div>
 </template>
@@ -47,22 +50,21 @@
     import AppGameVvhBodyRemotenessView from "./AppGameVvhBodyRemotenessView.vue";
     import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
     import AppGameVvhBodyColumnView from "./AppGameVvhBodyColumnView.vue";
-    import AppGameVvhBodyDrawLevelsView from "./AppGameVvhBodyDrawLevelsView.vue";
+    import AppGameVvhBodyDrawLevelView from "./AppGameVvhBodyDrawLevelView.vue";
     import { VVHViews } from "../../../models/datas/defaultApp";
-
+    
     const store = useStore();
-    const options = computed(() => store.getters.options);
     const currentGameId = computed(() => store.getters.currentGameId);
 
     const activeVVHViews = computed(() => store.getters.currentActiveVVHViews);
 
-    const vvhScrolling = computed(() => (options.value ? options.value.vvhScrolling : false));
+    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
     );
-
+    
     /** 
      * Changes the visual value history view with vvhViewId to a new vvhView. If the new vvh view is
      * already in the activeVVHViews array, then swaps the new vvh view with the view with vvhViewId.
@@ -82,28 +84,71 @@
     }
 
     /**
-     * Adds an additional view to the VVH Body; loops through all of the VVHViews and until it finds 
+     * Adds an additional view to the VVH Body; filters all of the VVHViews until it finds 
      * a view which is not active.
      * @returns none.
      */
     const addVVHView = () => {
-        if (supportsWinBy.value) {
-            for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
-                if(!activeVVHViews.value.some(VVHView => VVHView.name === VVHViews[vvhViewId])) {
-                    store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
-                    break;
-                }
-            }
-        } else {
-            for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
-                if( VVHViews[vvhViewId] != "Win By" && !activeVVHViews.value.some(VVHView => VVHView.name === VVHViews[vvhViewId])) {
-                    store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
-                    break;
-                }
+        for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
+            if (viewIsAvailable(VVHViews[vvhViewId])) {
+                store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
+                break;
             }
         }
     }
+
+    /**
+     * Returns true if there exists at least one view which is available.
+     * @returns none.
+     */
+    const existsAvailableView = computed(() => {
+        for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
+            if (viewIsAvailable(VVHViews[vvhViewId])) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    /**
+     * Determines if the VVH View Option VVHView is legal. Checks if the current
+     * view is not active and the game meets some pre-established conditions.
+     * @param VVHView 
+     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     */
+     const viewIsAvailable = (VVHVIewName: string) => {
+        if (activeVVHViews.value.some((activeVVHView) => activeVVHView.name === VVHVIewName)) {
+            return false;
+        }
+
+        return viewIsLegal(VVHVIewName);
+    }
+
+    /**
+     * Determines if the VVH View Option vvhViewOption renders depending on if the VVH View Option is legal 
+     * and is not the current active VVH View.
+     * @param vvhViewOption 
+     * @param activeVVHViewName 
+     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     */
+    const renderDropdownOption = (vvhViewOptionName: string, activeVVHViewName: string) => {
+        if (vvhViewOptionName == activeVVHViewName) {
+            return false;
+        }
+        
+        return viewIsLegal(vvhViewOptionName);
+    }
     
+    const viewIsLegal = (VVHViewName: string) => {
+        switch(VVHViewName) {
+            case "Win By":
+                return supportsWinBy.value;
+            case "Draw Level":
+                return !isPuzzleGame.value;
+            default:
+                return true;
+        }
+    }
 </script>
 
 <style lang="scss" scoped>

@@ -797,7 +797,7 @@
     import "vue-slider-component/theme/default.css";
 
     defineProps({
-        viewOptions: Boolean,
+        toggleOptions: Boolean,
         toggleScrolling: Boolean,
         toggleGuides: Boolean,
         toggleSideBranchExploration: Boolean,

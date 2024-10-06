@@ -90,6 +90,8 @@ type Getters = {
     currentTotalWins(state: State): number;
     currentPlayerWinsMap(state: State): Map<String, number>;
     currentActiveVVHViews(state: State): Array<GMUTypes.VVHView>;
+    maximumDrawLevelRemoteness(state: State):
+        (from: number, to: number) => number;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -247,6 +249,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
         state.app.scorecard.playerWinsMap,
     currentActiveVVHViews: (state: State) =>
         state.app.activeVVHViews,
+    maximumDrawLevelRemoteness: (state: State) =>
+    (from: number, to: number) =>
+        GMU.getMaximumDrawLevelRemoteness(state.app, { from, to }),
 };
 
 export enum mutationTypes {

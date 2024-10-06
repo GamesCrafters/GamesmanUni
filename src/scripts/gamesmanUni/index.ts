@@ -126,6 +126,7 @@ export const initiateMatch = async (app: Types.App, payload: {
     if (!updatedApp) return undefined;
 
     if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration: false}});
+    if (game.type === "onePlayer" && app.activeVVHViews.some(VVHView => VVHView.name === "Draw Level")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Draw Level"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration: false}});
     if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
@@ -313,6 +314,31 @@ export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: num
         }
     }
     return Math.max(...winbys);
+};
+
+/** 
+ * Determines the maximum Draw Level Remoteness value between rounds payload.from to payload.to. If there is no Draw Level Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
+export const getMaximumDrawLevelRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
+    const drawLevelRemotenesses = new Set<number>();
+    drawLevelRemotenesses.add(5); // In case all involved positions are draw, 5 shall be the default maximum winby
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        if (round.position.positionValue === "draw") drawLevelRemotenesses.add(round.position.drawRemoteness);
+        if (app.options.showNextMoves) {
+            for (const availableMove in round.position.availableMoves) {
+                if (round.position.availableMoves[availableMove].positionValue === "draw" && round.position.availableMoves[availableMove].drawRemoteness) {
+                    drawLevelRemotenesses.add(round.position.availableMoves[availableMove].drawRemoteness);
+                }
+            }
+        }
+    }
+    return Math.max(...drawLevelRemotenesses);
 };
 
 export const isEndOfMatch = (app: Types.App) =>
