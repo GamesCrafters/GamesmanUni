@@ -1,0 +1,16 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+
+<line x1="100" y1="300" x2="700" y2="300" stroke="black" stroke-width="20"/>
+  <line x1="100" y1="500" x2="700" y2="500" stroke="black" stroke-width="20"/>
+  
+  <!-- Vertical lines -->
+  <line x1="300" y1="100" x2="300" y2="700" stroke="black" stroke-width="20"/>
+  <line x1="500" y1="100" x2="500" y2="700" stroke="black" stroke-width="20"/>
+  
+  <!-- Optional border -->
+  <rect x="100" y="100" width="600" height="600" fill="none" stroke="black" stroke-width="20"/>
+
+</svg>
