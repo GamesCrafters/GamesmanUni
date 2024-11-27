@@ -170,6 +170,7 @@ export const defaultApp: Types.App = {
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
+    vvhInstructions: "# No Instructions Available",
     activeVVHViews: activeVVHViews,
     currentMatch: {
         id: 0, gameType: "",

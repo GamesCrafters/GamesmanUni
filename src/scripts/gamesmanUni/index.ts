@@ -37,7 +37,8 @@ export const addInstructions = async (app: Types.App, payload: {gameId: string, 
 }
 
 export const addVVHInstructions = async (app: Types.App) => {
-    const instructions = "";
+    const instructions = await GCTAPI.loadInstructions("https://raw.githubusercontent.com/GamesCrafters/Explainers/refs/heads/ae/viewsinstructions/instructions/en/views/views.xml");
+    app.vvhInstructions = instructions ? instructions.instructions : "";
     return app;
 }
 
@@ -125,9 +126,13 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
+    // Removes non-legal VVH views from the active VVH views.
     if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration: false}});
     if (game.type === "onePlayer" && app.activeVVHViews.some(VVHView => VVHView.name === "Draw Level")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Draw Level"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true, toggleSideBranchExploration: false}});
+    
+    // Replaces non-legal CPUs Strategies from the active CPUs Strategies.
     if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
+    
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;

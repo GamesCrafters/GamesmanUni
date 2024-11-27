@@ -10,16 +10,17 @@
     import { computed } from "vue";
     import VueMarkdownIt from "vue3-markdown-it";
     import MarkdownItLinkAttributes from "markdown-it-link-attributes";
-    import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
+    import { mutationTypes, useStore } from "../../../scripts/plugins/store";
     import UniPopupWindow from "../../templates/UniPopupWindow.vue";
 
     const store = useStore();
     const options = computed(() => store.getters.options);
+    
     const vvhInstructions = computed(() => {
-        if (false) {
-            store.dispatch(actionTypes.addInstructions, {gameId: store.getters.currentGameId, variantId: store.getters.currentVariantId});
-        }
+        let instructions = store.getters.currentVVHInstructions
+        return instructions ? instructions : "# No Instructions Available";
     })
+
     const plugins = [
         {
             plugin: MarkdownItLinkAttributes,

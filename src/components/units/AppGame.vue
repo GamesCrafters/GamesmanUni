@@ -19,6 +19,7 @@
     const variantId = route.params.variantId as string;
     const initialPosition = route.params.initialPosition as string;
     store.dispatch(actionTypes.initiateMatch, { gameId: gameId, variantId: variantId, startPosition: initialPosition });
+    store.dispatch(actionTypes.addVVHInstructions);
     const options = computed(() => store.getters.options);
     const showMenu = computed(() => (options.value ? options.value.showMenu : true));
     onBeforeRouteLeave(() => store.dispatch(actionTypes.exitMatch));

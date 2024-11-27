@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-header-scorecard">
-        <button @click="store.commit(mutationTypes.showScorecard, true)" :disabled="currentGameType === 'puzzles' || currentScorecardSize === 0" title="Display Scorecard">📖</button>
+        <button @click="store.commit(mutationTypes.showScorecard, true)" :disabled="currentGameType === 'puzzles' || currentScorecardSize === 0" title="Scorecard">📖</button>
         <UniPopupWindow v-if="options && options.showScorecard" @close="store.commit(mutationTypes.showScorecard, false)">
             <div id="popup">
                 <h1 id="title">Scorecard</h1>

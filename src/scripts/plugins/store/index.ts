@@ -92,6 +92,7 @@ type Getters = {
     currentActiveVVHViews(state: State): Array<GMUTypes.VVHView>;
     maximumDrawLevelRemoteness(state: State):
         (from: number, to: number) => number;
+    currentVVHInstructions(state: State): string;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -252,6 +253,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     maximumDrawLevelRemoteness: (state: State) =>
     (from: number, to: number) =>
         GMU.getMaximumDrawLevelRemoteness(state.app, { from, to }),
+    currentVVHInstructions: (state: State) =>
+        state.app.vvhInstructions
 };
 
 export enum mutationTypes {
@@ -277,6 +280,7 @@ export enum mutationTypes {
     addScorecardRecord = "addScorecardRecord",
     setGamesPlayed = "setGamesPlayed",
     setPlayerWinsEntry = "setPlayerWinsEntry",
+    showMenu = "showMenu",
 }
 
 type Mutations = {
@@ -302,6 +306,7 @@ type Mutations = {
     [mutationTypes.addScorecardRecord](state: State, scorecardRecord: GMUTypes.ScorecardRecord): void;
     [mutationTypes.setGamesPlayed] (state: State, gamesPlayed: number): void;
     [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
+    [mutationTypes.showMenu] (state: State, showMenu: boolean): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -350,7 +355,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     setGamesPlayed: (state: State, totalWins: number) =>
         (state.app.scorecard.totalWins = totalWins),
     setPlayerWinsEntry: (state: State, {player, wins}:{player: string, wins: number}) =>
-        (state.app.scorecard.playerWinsMap.set(player, wins))
+        (state.app.scorecard.playerWinsMap.set(player, wins)),
+    showMenu: (state: State, showMenu: boolean) =>
+    (state.app.options.showMenu = showMenu),
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
@@ -362,6 +369,7 @@ type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
 
 export enum actionTypes {
     addInstructions = "addInstructions",
+    addVVHInstructions = "addVVHInstructions",
     loadGames = "loadGames",
     loadVariants = "loadVariants",
     initiateMatch = "initiateMatch",
@@ -380,6 +388,7 @@ export enum actionTypes {
 
 type Actions = {
     [actionTypes.addInstructions](context: ActionContext, payload: {gameId: string, variantId: string}): Promise<void>;
+    [actionTypes.addVVHInstructions](context: ActionContext): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, payload: {
         type: string
     }): Promise<void>;
@@ -416,7 +425,11 @@ type Actions = {
 
 const actions: Vuex.ActionTree<State, State> & Actions = {
     addInstructions: async (context: ActionContext, payload: {gameId: string, variantId: string}) => {
-        const updatedApp = await GMU.addInstructions(context.state.app, {gameId: payload.gameId, variantId: payload.variantId})
+        const updatedApp = await GMU.addInstructions(context.state.app, {gameId: payload.gameId, variantId: payload.variantId});
+        if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
+    },
+    addVVHInstructions: async (context: ActionContext) => {
+        const updatedApp = await GMU.addVVHInstructions(context.state.app);
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadGames: async (context: ActionContext, payload: { type: string }) => {

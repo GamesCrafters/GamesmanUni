@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-header-options">
-        <button @click="store.commit(mutationTypes.showOptions, true)">⚙</button>
+        <button @click="store.commit(mutationTypes.showOptions, true)" title="Options">⚙</button>
         <UniPopupWindow v-if="(options && options.showOptions) || false" @close="updateOptions()">
             <div id="popup">
                 <h1 id="title">{{ gameName }} ({{ variantDescription }})</h1>
@@ -175,7 +175,7 @@
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="options.showNextMoves" />
+                                v-model="options.showNextMoves" @click="() => {options.showNextMoveHints = false; options.showNextMoveDeltaRemotenesses = false}"/>
                             <label for="checkbox">Available Move Buttons</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves">
