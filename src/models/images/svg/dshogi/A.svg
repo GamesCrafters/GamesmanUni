@@ -30,8 +30,3 @@
       d="m47.9594,45.4242l.4015,4.8512c.0638.7704-.1286,1.5402-.5457,2.1835l-.883,1.3619c-.2136.3294-.3728.8248-.464,1.3684-.2372,1.4145.847,2.7027,2.2429,2.7027h1.1233" />
   </g>
 </svg>
-
-
-<circle cx="67" cy="5" r="5" fill="red" />
-<text x="67" y="6" font-family="Arial" font-size="8" fill="white" text-anchor="middle" alignment-baseline="middle"
-  font-weight="bold">2</text>
