@@ -537,8 +537,8 @@
      * @returns y-offset in the Graph's grid.
     */
     const roundYOffset = (roundID: number) => {
-        const position = currentValuedRounds.value[roundID].position;
-        const drawLevel = position.drawLevel;
+        const position = currentValuedRounds.value[roundID] ? currentValuedRounds.value[roundID].position : null;
+        const drawLevel = position ? position.drawLevel : -1;
         
         // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
         if (drawLevel === -1) {
@@ -598,9 +598,9 @@
      * @returns true if the (starting) position is a pure-draw.
     */
     const isPureDraw = (roundID: number) => {
-        const round = currentValuedRounds.value[roundID];
-        const position = round.position;
-        const drawRemoteness = position.drawRemoteness;
+        const round = currentValuedRounds.value[roundID] ? currentValuedRounds.value[roundID] : null;
+        const position = round ? round.position : null;
+        const drawRemoteness = position ? position.drawRemoteness : -1;
         return drawRemoteness !== -1;
     }
 
