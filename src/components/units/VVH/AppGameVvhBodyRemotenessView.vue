@@ -800,7 +800,6 @@
         toggleOptions: Boolean,
         toggleScrolling: Boolean,
         toggleGuides: Boolean,
-        toggleSideBranchExploration: Boolean,
     });
 
     const store = useStore();

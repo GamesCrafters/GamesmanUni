@@ -194,5 +194,4 @@ export type ViewOptions = {
     toggleOptions: boolean;
     toggleScrolling: boolean;
     toggleGuides: boolean;
-    toggleSideBranchExploration: boolean;
 }

@@ -16,10 +16,10 @@
                         </div>
                     </div>
                     <div v-if="activeVVHView.name === 'Remoteness'">
-                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" :toggle-side-branch-exploration="activeVVHView.viewOptions.toggleSideBranchExploration"/>
+                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
                     </div>
                     <div v-else-if="activeVVHView.name === 'Win By'">
-                        <AppGameVvhBodyWinByView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" :toggle-side-branch-exploration="activeVVHView.viewOptions.toggleSideBranchExploration"/>
+                        <AppGameVvhBodyWinByView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
                     </div>
                     <div v-else-if="activeVVHView.name === 'Draw Level'">
                         <AppGameVvhBodyDrawLevelView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
@@ -39,7 +39,6 @@
                     <button class="buttons" @click="activeVVHView.viewOptions.toggleOptions = !activeVVHView.viewOptions.toggleOptions" title="Toggle View Options">⚙</button>
                     <button class="buttons" @click="activeVVHView.viewOptions.toggleGuides = !activeVVHView.viewOptions.toggleGuides" title="Toggle View Guides">^</button>
                     <button class="buttons" @click="activeVVHView.viewOptions.toggleScrolling = !activeVVHView.viewOptions.toggleScrolling" title="Toggle View Scrolling">↕</button>
-                    <button class="buttons" v-if="activeVVHView.name === 'Remoteness' || activeVVHView.name === 'Win By'" @click="activeVVHView.viewOptions.toggleSideBranchExploration = !activeVVHView.viewOptions.toggleSideBranchExploration" title="Toggle Side Branch Exploration">⧖</button>
                 </div>
             </div>
             <button id="add-view-button" class="buttons" v-if="existsAvailableView" @click="addVVHView()" title="Add View">+</button>
