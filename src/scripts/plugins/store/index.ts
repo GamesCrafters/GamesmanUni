@@ -92,6 +92,8 @@ type Getters = {
     currentActiveVVHViews(state: State): Array<GMUTypes.VVHView>;
     maximumDrawLevelRemoteness(state: State):
         (from: number, to: number) => number;
+    maximumDrawLevel(state: State):
+        (from: number, to: number) => number;
     currentVVHInstructions(state: State): string;
 };
 
@@ -253,6 +255,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     maximumDrawLevelRemoteness: (state: State) =>
     (from: number, to: number) =>
         GMU.getMaximumDrawLevelRemoteness(state.app, { from, to }),
+    maximumDrawLevel: (state: State) =>
+    (from: number, to: number) =>
+        GMU.getMaximumDrawLevel(state.app, { from, to }),
     currentVVHInstructions: (state: State) =>
         state.app.vvhInstructions
 };

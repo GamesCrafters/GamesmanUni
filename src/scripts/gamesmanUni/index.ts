@@ -346,6 +346,28 @@ export const getMaximumDrawLevelRemoteness = (app: Types.App, payload: { from: n
     return Math.max(...drawLevelRemotenesses);
 };
 
+/** 
+ * Determines the maximum Draw Level Remoteness value between rounds payload.from to payload.to. If there is no Draw Level Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
+export const getMaximumDrawLevel = (app: Types.App, payload: { from: number; to: number }) => {
+    const drawLevels = new Set<number>();
+    drawLevels.add(0); // In case all involved positions are non-pure draws or non-draws, 0 shall be the default maximum draw level
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        const drawLevel = round.position.drawLevel;
+
+        // Available moves cannot reach a higher drawLevel, thus irrelevant
+        // Non-Pure Draws & Non-Draw Nodes have drawLevel of -1 => max {0, -1, ...} is never -1
+        drawLevels.add(drawLevel);
+    }
+    return Math.max(...drawLevels);
+};
+
 export const isEndOfMatch = (app: Types.App) =>
     app.currentMatch.round.position.remoteness == 0 ||
     !Object.keys(app.currentMatch.round.position.availableMoves).length;

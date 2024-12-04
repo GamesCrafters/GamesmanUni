@@ -7,25 +7,33 @@
             </p>
             <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`" xmlns="http://www.w3.org/2000/svg">
                 <template v-if="toggleGuides">
-                    <text class="left-player-winning-direction" :x="gridLeft" :y="winningDirectionHeight / 2"
+                    <text class="left-player-winning-direction"
+                        :x="gridLeft"
+                        :y="winningDirectionHeight / 2"
                         dominant-baseline="middle" text-anchor="start">
                         |⬅
                         <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
                         Winning
                     </text>
-                    <text class="right-player-winning-direction" :x="gridRight" :y="winningDirectionHeight / 2"
+                    <text class="right-player-winning-direction"
+                        :x="gridRight"
+                        :y="winningDirectionHeight / 2"
                         dominant-baseline="middle" text-anchor="end">
                         <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
                         Winning ⮕|
                     </text>
-                    <text class="left-player-winning-direction" :x="gridLeft" :y="chartHeight - winningDirectionHeight / 2"
+                    <text class="left-player-winning-direction"
+                        :x="gridLeft"
+                        :y="chartHeight - winningDirectionHeight / 2"
                         dominant-baseline="middle" text-anchor="start">
                         |⬅
                         <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
                         Winning
                     </text>
-                    <text class="right-player-winning-direction" :x="gridRight"
-                        :y="chartHeight - winningDirectionHeight / 2" dominant-baseline="middle" text-anchor="end">
+                    <text class="right-player-winning-direction"
+                        :x="gridRight"
+                        :y="chartHeight - winningDirectionHeight / 2"
+                        dominant-baseline="middle" text-anchor="end">
                         <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
                         Winning ⮕|
                     </text>
@@ -37,42 +45,256 @@
                 <!-- Round Rows -->
                 <template v-if="currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <rect :class="`turn-${turn(roundNumber)}`" class="round-row" :x="gridLeft"
-                            :y="gridTop + (roundNumber - 1) * rowHeight" :width="gridWidth" :height="rowHeight" />
+                        <!-- Regular Round Row -->
+                        <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
+                            :x="gridLeft"
+                            :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber)"
+                            :width="gridWidth" :height="rowHeight" />
                     </template>
                 </template>
-                <rect v-if="!isEndOfMatch" :class="`turn-0`" class="round-row" :x="gridLeft" :y="gridBottom - rowHeight"
+
+                <rect v-if="!isEndOfMatch" :class="`turn-0`" class="round-row"
+                    :x="gridLeft"
+                    :y="gridBottom - rowHeight + roundYOffset(currentValuedRoundId)"
                     :width="gridWidth" :height="rowHeight" />
 
                 <!-- 0 Labels -->
-                <text class="draw-symbol" :x="chartWidth / 2" :y="gridTop - xCoordinateHeight / 2"
+                <text class="draw-symbol"
+                    :x="chartWidth / 2"
+                    :y="gridTop - xCoordinateHeight / 2"
                     dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
-                <text class="draw-symbol" :x="chartWidth / 2" :y="gridBottom + xCoordinateHeight / 2"
+                <text class="draw-symbol"
+                    :x="chartWidth / 2"
+                    :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
                     dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
-                
+
                 <!-- Draw Remoteness Coordinates -->
-                 <template v-for="(_, drawLevelRemoteness) in (Math.max(5, maximumDrawLevelRemoteness) + 1)" :key="maximumDrawLevelRemoteness">
-                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
-                        :x="gridLeft + (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
-                        :y="gridTop - xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ drawLevelRemoteness }}
+                <template v-for="(_, drawRemoteness) in Math.max(0, maximumDrawLevelRemoteness) + 1"
+                        :key="drawRemoteness">
+                    <text class="view-coordinate"
+                            v-if="!isPuzzleGame && drawRemoteness % xInterval === 0"
+                            :x="gridLeft + drawRemoteness * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ drawRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
-                        :x="gridRight - (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
-                        :y="gridTop - xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ drawLevelRemoteness }}
+                    <text class="view-coordinate"
+                            v-if="drawRemoteness % xInterval === 0"
+                            :x="gridRight - drawRemoteness * columnWidth"
+                            :y="gridTop - xCoordinateHeight / 2"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ drawRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
-                        :x="gridLeft + (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
-                        :y="gridBottom + xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ drawLevelRemoteness }}
+                    <text class="view-coordinate"
+                            v-if="!isPuzzleGame && drawRemoteness % xInterval === 0"
+                            :x="gridLeft + drawRemoteness * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ drawRemoteness }}
                     </text>
-                    <text class="view-coordinate" v-if="drawLevelRemoteness != 0 && drawLevelRemoteness % xInterval === 0"
-                        :x="gridRight - (Math.max(5, maximumDrawLevelRemoteness) + 1 - drawLevelRemoteness) * columnWidth"
-                        :y="gridBottom + xCoordinateHeight / 2" dominant-baseline="middle" text-anchor="middle">
-                        {{ drawLevelRemoteness }}
+                    <text class="view-coordinate"
+                            v-if="drawRemoteness % xInterval === 0"
+                            :x="gridRight - drawRemoteness * columnWidth"
+                            :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                        {{ drawRemoteness }}
                     </text>
-                 </template>
+                </template>
+
+                <!-- Draw Level Bars -->
+                <template v-for="(_, drawRemoteness) in Math.max(0, maximumDrawLevelRemoteness) + 2" :key="drawRemoteness">
+                    <line v-if="!isPuzzleGame"
+                        :class="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                            'view-bar' : 'view-interval-bar'"
+                        :x1="gridLeft + drawRemoteness * columnWidth"
+                        :y1="gridTop"
+                        :x2="gridLeft + drawRemoteness * columnWidth"
+                        :y2="gridBottom + roundYOffset(currentValuedRoundId)"
+                        :stroke-width="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                            xBarWidth : xIntervalBarWidth" />
+                    <line :class="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                              'view-bar' : 'view-interval-bar'"
+                          :x1="gridRight - drawRemoteness * columnWidth"
+                          :y1="gridTop"
+                          :x2="gridRight - drawRemoteness * columnWidth"
+                          :y2="gridBottom + roundYOffset(currentValuedRoundId)"
+                          :stroke-width="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                              xBarWidth : xIntervalBarWidth" />
+                </template>
+                
+                <!-- Move Coordinates -->
+                <template v-if="currentValuedRoundId >= 2">
+                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
+                        <text class="move-coordinate" v-if="currentValuedRounds[roundNumber].firstPlayerTurn"
+                            :x="yCoordinateWidth / 2"
+                            :y="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            dominant-baseline="middle" text-anchor="middle">
+                            {{ currentValuedRounds[roundNumber].move }}
+                        </text>
+                        <text class="move-coordinate" v-else :x="gridRight + yCoordinateWidth / 2"
+                            :y="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            dominant-baseline="middle"
+                            text-anchor="middle">
+                            {{ currentValuedRounds[roundNumber].move }}
+                        </text>
+                    </template>
+
+                    <template v-if="isEndOfMatch">
+                        <template v-if="isPuzzleGame">
+                            <text class="move-coordinate"
+                                :x="gridRight + yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                dominant-baseline="middle"
+                                text-anchor="middle">
+                                🥳
+                            </text>
+                        </template>
+                        <template v-else-if="currentPositionValue === 'tie'">
+                            <text class="move-coordinate"
+                                :x="yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                dominant-baseline="middle"
+                                text-anchor="middle">
+                                🤔
+                            </text>
+                            <text class="move-coordinate"
+                                :x="gridRight + yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                dominant-baseline="middle"
+                                text-anchor="middle">
+                                🤔
+                            </text>
+                        </template>
+                        <template v-else>
+                            <text class="move-coordinate"
+                                :x="yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                dominant-baseline="middle"
+                                text-anchor="middle"> {{
+                                    (currentFirstPlayerTurn && currentPositionValue === "win") ||
+                                    (!currentFirstPlayerTurn && currentPositionValue === "lose") ?
+                                    "🥳" : "😢"
+                                }} </text>
+                            <text class="move-coordinate"
+                                :x="gridRight + yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                dominant-baseline="middle"
+                                text-anchor="middle"> {{
+                                    (!currentFirstPlayerTurn && currentPositionValue === "win") ||
+                                    (currentFirstPlayerTurn && currentPositionValue === "lose") ?
+                                    "🥳" : "😢"
+                                }}</text>
+                        </template>
+                    </template>
+                </template>
+
+                <!-- Initial Draw Fringe -->
+                <template v-if="isPureDraw(1)">
+                    <!-- Regular Round Row -->
+                    <rect 
+                        :class="'fringe-row'"
+                        :x="gridLeft + 0.5"
+                        :y="gridTop + 0.5"
+                        :width="gridWidth - 1" 
+                        :height="fringeOffset - 1" />
+                    <text
+                        class="fringe-row-heading"
+                        :x="gridLeft + (gridWidth / 2)"
+                        :y="gridTop + (fringeOffset / 2)"
+                        fill="white"
+                        dominant-baseline="middle"
+                        text-anchor="middle"
+                    >
+                        Draw Fringe {{ maximumDrawLevel }}
+                    </text>
+                </template>
+
+                <!-- Fringe Rows -->
+                <template v-if="currentValuedRoundId >= 1">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <template v-if="isNewDrawLevel(roundNumber)">
+                            <rect 
+                                :class="'fringe-row'"
+                                :x="gridLeft + 0.5"
+                                :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber - 1) + 0.5"
+                                :width="gridWidth - 1" 
+                                :height="fringeOffset - 1" />
+                            <text
+                                class="fringe-row-heading"
+                                :x="gridLeft + (gridWidth / 2)"
+                                :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber - 1) + (fringeOffset / 2)"
+                                fill="white"
+                                dominant-baseline="middle"
+                                text-anchor="middle"
+                            >
+                                Draw Fringe {{ roundDrawLevel(roundNumber) }}
+                            </text>
+                        </template>
+                    </template>
+                </template>
+
+                <!-- Position Value Links -->
+                <template v-if="currentValuedRoundId >= 2">
+                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
+                        <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
+                            :x1="drawLevelNodeGridXPosition(roundNumber)"
+                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            :x2="drawLevelNodeGridXPosition(roundNumber + 1)"
+                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2 + roundYOffset(roundNumber + 1)"
+                            :stroke-width="linkWidth" />
+                    </template>
+                </template>
+
+                <!-- Link from Current Position Value to Next Moves' Position Value -->
+                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
+                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves"
+                        :key="nextMove">
+                        <line :class="`${nextMove.moveValue} link`"
+                            :x1="drawLevelNodeGridXPosition(currentValuedRoundId)"
+                            :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :x2="drawLevelNextNodeGridXPosition(currentValuedRoundId, nextMove)"
+                            :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :stroke-width="linkWidth" />
+                    </template>
+                </template>
+
+                <!-- Move Nodes -->
+                <template v-if="showNextMoves && currentValuedRoundId >= 1">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
+                            :key="nextMove.move">
+                            <circle
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '']"
+                                class="next-move-position-value"
+                                :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
+                                :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
+                                :r="nextMovePositionValueSize"
+                                :stroke-width="4 * nextMovePositionValueSize" @click="roundNumber === currentValuedRoundId &&
+                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                        </template>
+                    </template>
+                </template>
+
+                <!-- Position Nodes -->
+                <template v-if="currentValuedRoundId">
+                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
+                        <circle
+                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
+                            class="position-value"
+                            :cx="drawLevelNodeGridXPosition(roundNumber)"
+                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            :r="positionValueSize"
+                            :stroke-width="4 * positionValueSize" @click="roundNumber !== currentValuedRoundId &&
+                                store.dispatch(actionTypes.undoMove, {
+                                    toRoundId: currentValuedRounds[roundNumber].id
+                                })" />
+                    </template>
+                </template>
+
             </svg>
             <p id="right-y-axis-label" v-if="toggleGuides">
                 <b>Moves</b>
@@ -90,6 +312,10 @@
             <div class="meter">
                 <p class="label">Row Height</p>
                 <VueSlider v-model="rowHeight" :min="1" :max="50" :tooltip="'active'" />
+            </div>
+            <div class="meter">
+                <p class="label">Fringe Height</p>
+                <VueSlider v-model="fringeOffset" :min="2" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Chart Width</p>
@@ -151,6 +377,8 @@
     const currentRounds = computed(() => store.getters.currentRounds);
 
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
+    const maximumDrawLevel = computed(() => store.getters.maximumDrawLevel(1, store.getters.currentRoundId));
+    const currentDrawLevel = computed(() => store.getters.currentPositionDrawLevel);
     
     /** 
      * Iterate through the rounds and see if any visited positions or any child positions of
@@ -192,9 +420,14 @@
     const rowHeight = ref(2);
     const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
     const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
-    const gridHeight = computed(() => rowHeight.value * rowCount.value);
+
+    // const gridHeight = computed(() => rowHeight.value * rowCount.value);
+    const gridHeight = computed(() => rowHeight.value * rowCount.value + roundYOffset(currentValuedRoundId.value));
+
     const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
-    const gridBottom = computed(() => chartHeight.value - gridTop.value);
+    //const gridBottom = computed(() => chartHeight.value - gridTop.value);
+    const gridBottom = computed(() => chartHeight.value - gridTop.value - roundYOffset(currentValuedRoundId.value));
+
 
     const yCoordinateWidth = ref(5);
     const chartWidth = ref(50);
@@ -238,21 +471,22 @@
      * @param {number} roundID - current round id.
      * @returns x position in the Graph's grid.
     */
-    const winByNodeGridXPosition = (roundID: number) => {
-        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-        if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-        ) {
-            return gridCenter.value - currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-            // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-        } else if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-        ) {
-            return gridCenter.value + currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-            // Tie & Draw Nodes
-        } else {
+    const drawLevelNodeGridXPosition = (roundID: number) => {
+        const round = currentValuedRounds.value[roundID];
+        const position = round.position;
+        const isFirstPlayerTurn = round.firstPlayerTurn;
+        const drawRemoteness = position.drawRemoteness;
+        const drawValue = drawRemoteness % 2 == 0 ? "lose": "win";
+        
+        // Center: Non-Pure Draws & Non-Draw Nodes
+        if (drawRemoteness === -1) {
             return gridCenter.value;
         }
+
+        // Left Hand Side: When its the first players turn (at that move) and is at a draw-win, or, its not the first players turn (at that move) and is at a draw-lose
+        const isLHS = (isFirstPlayerTurn && drawValue === 'win') || (!isFirstPlayerTurn && drawValue === 'lose');
+        return isLHS ? gridLeft.value + drawRemoteness * columnWidth.value : gridRight.value - drawRemoteness * columnWidth.value;
+        
     }
 
     /** 
@@ -261,22 +495,115 @@
      * @param {Move} nextMove - a next move of the current position.
      * @returns x position in the Graph's grid.
     */
-    const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
-        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-        if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'win')
-            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'lose')
-        ) {
-            return gridCenter.value - nextMove.winby * columnWidth.value;
-            // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-        } else if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'lose')
-            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'win')
-        ) {
-            return gridCenter.value + nextMove.winby * columnWidth.value;
-            // Tie & Draw Nodes
-        } else {
+    const drawLevelNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
+        const nextDrawRemoteness = nextMove.drawRemoteness;
+        const nextDrawValue = nextDrawRemoteness % 2 == 0 ? "lose": "win";
+        const isFirstPlayerNextTurn = nextTurn(roundID) === 1;
+        
+        // Center: Non-Pure Draws & Non-Draw Nodes
+        if (nextDrawRemoteness === undefined) {
             return gridCenter.value;
         }
+
+        // Left Hand Side: When its the first players turn (at that move) and is at a draw-win, or, its not the first players turn (at that move) and is at a draw-lose
+        const isLHS = (isFirstPlayerNextTurn && nextDrawValue === 'win') || (!isFirstPlayerNextTurn && nextDrawValue === 'lose');
+        return isLHS ? gridLeft.value + nextDrawRemoteness * columnWidth.value : gridRight.value - nextDrawRemoteness * columnWidth.value;
     }
+
+    /** 
+     * Determines if the game reached a new draw level in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns true if game reached a new draw level.
+    */
+    const isNewDrawLevel = (roundID: number) => {
+        const prevPosition = currentValuedRounds.value[roundID - 1].position;
+        const position = currentValuedRounds.value[roundID].position;
+        const prevDrawLevel = prevPosition.drawLevel;
+        const drawLevel = position.drawLevel;
+
+        // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
+        if (prevDrawLevel === -1 || drawLevel === -1) {
+            return false;
+        }
+        
+        return prevDrawLevel === drawLevel + 1;
+    }
+
+    const fringeOffset = ref(2);
+
+    /** 
+     * Determines the vertical offset for rows given the previous new draw levels in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns y-offset in the Graph's grid.
+    */
+    const roundYOffset = (roundID: number) => {
+        const position = currentValuedRounds.value[roundID].position;
+        const drawLevel = position.drawLevel;
+        
+        // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
+        if (drawLevel === -1) {
+            return (maximumDrawLevel.value + Number(isPureDraw(1))) * fringeOffset.value;
+        }
+        
+        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+    }
+
+    /** 
+     * Determines the vertical offset for rows given the previous new draw levels in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @param {Move} nextMove - a next move of the current position.
+     * @returns y-offset in the Graph's grid.
+    */
+    const roundMoveYOffset = (roundID: number, nextMove: Move) => {
+        const position = currentValuedRounds.value[roundID].position;
+        const nextMovedrawLevel = nextMove.drawLevel;
+        const drawLevel = position.drawLevel;
+
+        // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
+        if (nextMovedrawLevel === undefined || drawLevel === -1) {
+            return (maximumDrawLevel.value + Number(isPureDraw(1))) * fringeOffset.value;
+        }
+
+        // Since roundMoveYOffset is called for all moves, including the next moves available, we must account
+        // for the fact that the next moves available can't access their nextPosition as it does not yet exist
+        if (roundID != currentValuedRoundId.value) {
+            const prevPosition = currentValuedRounds.value[roundID].position;
+            const nextPosition = currentValuedRounds.value[roundID + 1].position;
+            const prevDrawLevel = prevPosition.drawLevel;
+            const nextDrawLevel = nextPosition.drawLevel;
+            const isNewDrawLevel = prevDrawLevel !== -1 && nextDrawLevel !== -1 && (prevDrawLevel === nextDrawLevel + 1);
+
+            if (isNewDrawLevel) {
+                return (maximumDrawLevel.value - nextDrawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+            }
+        }
+
+        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+    }
+
+    /** 
+     * Determines the draw level for the fringes in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns the fringe's draw level.
+    */
+    const roundDrawLevel = (roundID: number) => {
+        const position = currentValuedRounds.value[roundID].position;
+        const drawLevel = position.drawLevel;
+        return drawLevel;
+    }
+
+    /** 
+     * Determines whether a position is a pure-draw in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * @param {number} roundID - current round id.
+     * @returns true if the (starting) position is a pure-draw.
+    */
+    const isPureDraw = (roundID: number) => {
+        const round = currentValuedRounds.value[roundID];
+        const position = round.position;
+        const drawRemoteness = position.drawRemoteness;
+        return drawRemoteness !== -1;
+    }
+
 </script>
 
 <style lang="scss" scoped>
@@ -337,6 +664,12 @@
                     }
                 }
 
+                >.fringe-row-heading {
+                    fill: "white";
+                    font-size: 0.08rem;
+                    font-weight: 400;
+                }
+
                 >.draw-symbol {
                     fill: var(--primaryColor);
                     font-size: 0.07rem;
@@ -370,6 +703,12 @@
                         fill: var(--turn2Color);
                         opacity: 30%;
                     }
+                }
+
+                >.fringe-row {
+                    fill: purple;
+                    opacity: 100%;
+                    stroke: purple;
                 }
 
                 >.view-bar,
@@ -441,3 +780,5 @@
         }
     }
 </style>
+
+
