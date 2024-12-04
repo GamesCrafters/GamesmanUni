@@ -27,6 +27,9 @@
                     <div v-else-if="activeVVHView.name === 'Column'">
                         <AppGameVvhBodyColumnView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
                     </div>
+                    <div v-else-if="activeVVHView.name === 'Tree View'">
+                        <AppGameVvhBodyTreeView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
+                    </div>
                     <p class="bottom x-axis-label" v-if="activeVVHView.viewOptions.toggleGuides">
                         <b> {{ activeVVHView.name }} </b>
                     </p>
@@ -51,6 +54,7 @@
     import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
     import AppGameVvhBodyColumnView from "./AppGameVvhBodyColumnView.vue";
     import AppGameVvhBodyDrawLevelView from "./AppGameVvhBodyDrawLevelView.vue";
+    import AppGameVvhBodyTreeView from "./AppGameVvhBodyTreeView.vue";
     import { VVHViews } from "../../../models/datas/defaultApp";
     
     const store = useStore();
@@ -144,6 +148,8 @@
             case "Win By":
                 return supportsWinBy.value;
             case "Draw Level":
+                return !isPuzzleGame.value;
+            case "Tree View":
                 return !isPuzzleGame.value;
             default:
                 return true;

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, getCurrentScope, watch } from "vue";
+    import { computed, watch } from "vue";
     import { useStore, mutationTypes } from "../../../scripts/plugins/store";
     import LoadingScreen from "../LoadingScreen.vue"
     import ImageAutoGUI from "./ImageAutoGUI.vue";
@@ -14,7 +14,6 @@
     import CustomGUISim from "./CustomGUISim.vue";
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import { deepcopy } from "../../../scripts/gamesmanUni/index";
-    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import * as GMUTypes from "../../../scripts/gamesmanUni/types";
 
     const store = useStore();
