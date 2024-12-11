@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Vertical lines -->
+  <line x1="100" y1="0" x2="100" y2="400" stroke="#C0C0C0" stroke-width="6"/>
+  <line x1="200" y1="0" x2="200" y2="400" stroke="#C0C0C0" stroke-width="6"/>
+  <line x1="300" y1="0" x2="300" y2="400" stroke="#C0C0C0" stroke-width="6"/>
+  
+  <!-- Horizontal lines -->
+  <line x1="0" y1="100" x2="400" y2="100" stroke="#C0C0C0" stroke-width="6"/>
+  <line x1="0" y1="200" x2="400" y2="200" stroke="#C0C0C0" stroke-width="6"/>
+  <line x1="0" y1="300" x2="400" y2="300" stroke="#C0C0C0" stroke-width="6"/>
+</svg>
