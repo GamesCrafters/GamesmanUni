@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="-40 -40 80 80">
+  <rect x="-25" y="-10" width="50" height="19" fill="none" stroke="#000000" stroke-width="1" rx="4" ry="4"/>
+  <text x="0" y="-0.5" text-anchor="middle" alignment-baseline="middle" 
+        font-family="Times" font-size="7" font-weight="bold" 
+        fill="#none" stroke="none">End Game</text>
+</svg>

@@ -19,6 +19,7 @@
     const store = useStore();
     const games = [
         { gameId: "tictactoe", variantId: "regular", isDrawGame: false },
+        { gameId: "abrobad", variantId: "standard", isDrawGame: false },
         { gameId: "chinesechess", variantId: "regular", isDrawGame: false, startPosition: "1_---k---------------------P---------------------------R-------------n------------------K---" },
         { gameId: "topitop", variantId: "regular", isDrawGame: false },
         { gameId: "quarto", variantId: "regular", isDrawGame: false },
