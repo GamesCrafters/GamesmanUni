@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="rg0" cx="-107.6189" cy="-90.5162" r="10.0083" fx="-109.6206" fy="-92.5178"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" style="stop-color:#000000" />
+            <stop offset="1" style="stop-color:#000000;stop-opacity:0" />
+        </radialGradient>
+        <radialGradient id="rg1" cx="-109.6189" cy="-92.5162" r="10.0083" fx="-114.623" fy="-97.5203"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#b6a8fe" />
+            <stop offset="0.5" stop-color="#4960f7" />
+            <stop offset="1" stop-color="#0400f5" />
+        </radialGradient>
+        <radialGradient id="rg2" cx="-107.6189" cy="-90.5162" r="10.0083" fx="-109.6206" fy="-92.5178"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" style="stop-color:#000000" />
+            <stop offset="1" style="stop-color:#000000;stop-opacity:0" />
+        </radialGradient>
+        <radialGradient id="rg3" cx="-109.6189" cy="-92.5162" r="10.0083" fx="-114.623" fy="-97.5203"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fea8a8" />
+            <stop offset="0.5" stop-color="#fc6464" />
+            <stop offset="1" stop-color="#d00000" />
+        </radialGradient>
+        <g id="b" transform="scale(0.5) translate(-50,-50)">
+            <path fill="url(#rg0)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg1)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+        <g id="r" transform="scale(0.5) translate(-50,-50)">
+            <path fill="url(#rg2)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg3)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+    </defs>
+    <circle cx="0" cy="0" r="50" fill="#CFCFCF"/>
+    <g fill="#000"><circle cx="0" cy="0" r="2"/><circle cx="-17" cy="41.0416" r="2"/><circle cx="-41.0416" cy="17" r="2"/><circle cx="-17" cy="-41.0416" r="2"/><circle cx="17" cy="-41.0416" r="2"/><circle cx="41.0416" cy="-17" r="2"/><circle cx="41.0416" cy="17" r="2"/><circle cx="17" cy="41.0416" r="2"/><circle cx="-41.0416" cy="-17" r="2"/></g>
+    <path d="M17,41.0416L-17,41.0416L-41.0416,17L-41.0416,-17L-17,-41.0416L17,-41.0416L41.0416,-17L41.0416,17zL-17,-41.0416M17,-41.0416L-17,41.0416M41.0416,-17L-41.0416,17M41.0416,17L-41.0416,-17" stroke="#000" fill="none"/>
+    <path d="M-14.4661,39.7678L-1.8389,8.3592L0.9327,9.5073L-0.7654,1.8478L-7.3822,6.0631L-4.6106,7.2112L-17.2378,38.6198A 1.5 1.5 0 0 0 -14.4661 39.7678Z" fill="#ffff00" stroke="#ffff00" /><path d="M-38.844,-14.8488L-8.3592,-1.8389L-9.5073,0.9327L-1.8478,-0.7654L-6.0631,-7.3822L-7.2112,-4.6106L-37.6959,-17.6205A 1.5 1.5 0 0 0 -38.844 -14.8488Z" fill="#ffff00" stroke="#ffff00" /><path d="M14.4661,-39.7678L1.8389,-8.3592L-0.9327,-9.5073L0.7654,-1.8478L7.3822,-6.0631L4.6106,-7.2112L17.2378,-38.6198A 1.5 1.5 0 0 0 14.4661 -39.7678Z" fill="#800000" stroke="#800000" />
+    <use href="#b" x="-17" y="-41.0416"/><use href="#b" x="41.0416" y="-17"/><use href="#b" x="41.0416" y="17"/><use href="#b" x="17" y="41.0416"/><use href="#r" x="17" y="-41.0416"/><use href="#r" x="-41.0416" y="-17"/><use href="#r" x="-41.0416" y="17"/><use href="#r" x="-17" y="41.0416"/>
+</svg>

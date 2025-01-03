@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px"
-     viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
-    <rect x="0" y="10" width="30" height="30" stroke="black" stroke-width="0.25" fill="#BBBBBB"/>
-    
-    <line x1="0" y1="40" x2="30" y2="40" stroke="black" stroke-width="0.5"/>
-    <line x1="0" y1="10" x2="30" y2="10" stroke="black" stroke-width="0.25"/>
-    <line x1="0" y1="20" x2="30" y2="20" stroke="black" stroke-width="0.25"/>
-    <line x1="0" y1="30" x2="30" y2="30" stroke="black" stroke-width="0.25"/>
-
-    <line x1="0" y1="10" x2="0" y2="40" stroke="black" stroke-width="0.5"/>
-    <line x1="10" y1="10" x2="10" y2="40" stroke="black" stroke-width="0.25"/>
-    <line x1="20" y1="10" x2="20" y2="40" stroke="black" stroke-width="0.25"/>
-    <line x1="30" y1="10" x2="30" y2="40" stroke="black" stroke-width="0.25"/>
-</svg>
+<?xml version="1.0" encoding="utf-8"?> <svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"> <rect x="0" y="10" width="30" height="30" fill="#BBB" rx="3" ry="3" /> <path d="M10,10v30M20,10v30M0,20h30M0,30h30" stroke="#DDD" stroke-width="0.25" /> <rect x="0" y="0" width="30" height="9.5" rx="3" ry="3" fill="#f68888"/> <rect x="30.5" y="10" width="9.5" height="30" rx="3" ry="3" fill="#a7a7f9"/> </svg>

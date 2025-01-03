@@ -1,0 +1,31 @@
+<svg id="image-autogui" xmlns="http://www.w3.org/2000/svg" viewBox="15 0 70 70" data-turn="A" data-v-d6b2a3a8="">
+<rect x="0" y="0" width="100" height="20" rx="4" fill="#dddddd"/>
+    <text id="entity0" x="50" y="10.52" style="font-size: 4.8px;text-anchor:middle;">GAME</text> 
+    <text x="60" y="44" fill="#008800"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">L</text> <text x="30" y="34" fill="#008800" opacity="0.75"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">B</text> <text x="40" y="34" fill="#008800"
+        opacity="0.75" style="font-size: 10px; stroke:none;text-anchor:middle;">C</text> <text x="50" y="44"
+        fill="#008800" opacity="0.5" style="font-size: 10px; stroke:none;text-anchor:middle;">K</text> <text x="60"
+        y="54" fill="#008800" opacity="0.5" style="font-size: 10px; stroke:none;text-anchor:middle;">S</text> <text
+        x="20" y="34" fill="#880000" style="font-size: 10px; stroke:none;text-anchor:middle;">A</text> <text x="50" y="34" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">D</text> <text x="60" y="34" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">E</text> <text x="70" y="34" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">F</text> <text x="80" y="34" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">G</text> <text x="20" y="44" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">H</text> <text x="30" y="44" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">I</text> <text x="40" y="44" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">J</text> <text x="70" y="44" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">M</text> <text x="80" y="44" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">N</text> <text x="20" y="54" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">O</text> <text x="30" y="54" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">P</text> <text x="40" y="54" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">Q</text> <text x="50" y="54" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">R</text> <text x="70" y="54" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">T</text> <text x="80" y="54" fill="#880000"
+        style="font-size: 10px; stroke: none;text-anchor:middle;">U</text> <text x="30" y="64" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">V</text> <text x="40" y="64" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">W</text> <text x="50" y="64" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">X</text> <text x="60" y="64" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">Y</text> <text x="70" y="64" fill="#880000"
+        style="font-size: 10px; stroke:none;text-anchor:middle;">Z</text>
+</svg>

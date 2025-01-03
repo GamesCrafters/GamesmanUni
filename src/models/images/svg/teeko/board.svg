@@ -1,0 +1,67 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer -->
+    <rect x="15" y="15" width="570" height="570" fill="#FEC595" stroke="#b56e39" stroke-width="30" />
+    
+    <!-- Middle -->
+    <rect x="45" y="45" width="510" height="510" fill="none" stroke="#C97D41" stroke-width="11" />
+
+    <!-- Inner -->
+    <rect x="100" y="100" width="400" height="400" fill="none" stroke="#C97D41" stroke-width="4" />
+
+    <!-- Horizontal and vertical lines -->
+    <line x1="200" y1="100" x2="200" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="300" y1="100" x2="300" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="400" y1="100" x2="400" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="200" x2="500" y2="200" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="300" x2="500" y2="300" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="400" x2="500" y2="400" stroke="#C97D41" stroke-width="4" />
+
+    <!-- Left to right diagonals -->
+    <line x1="400" y1="100" x2="500" y2="200" stroke="#C97D41" stroke-width="4" />
+    <line x1="300" y1="100" x2="500" y2="300" stroke="#C97D41" stroke-width="4" />
+    <line x1="200" y1="100" x2="500" y2="400" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="100" x2="500" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="200" x2="400" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="300" x2="300" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="100" y1="400" x2="200" y2="500" stroke="#C97D41" stroke-width="4" />
+    
+    <!-- Right to left diagonals -->
+    <line x1="200" y1="100" x2="100" y2="200" stroke="#C97D41" stroke-width="4" />
+    <line x1="300" y1="100" x2="100" y2="300" stroke="#C97D41" stroke-width="4" />
+    <line x1="400" y1="100" x2="100" y2="400" stroke="#C97D41" stroke-width="4" />
+    <line x1="500" y1="100" x2="100" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="500" y1="200" x2="200" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="500" y1="300" x2="300" y2="500" stroke="#C97D41" stroke-width="4" />
+    <line x1="500" y1="400" x2="400" y2="500" stroke="#C97D41" stroke-width="4" />
+
+    <!-- Circles -->
+    <circle cx="100" cy="100" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="200" cy="100" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="300" cy="100" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="400" cy="100" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="500" cy="100" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+
+    <circle cx="100" cy="200" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="200" cy="200" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="300" cy="200" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="400" cy="200" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="500" cy="200" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+
+    <circle cx="100" cy="300" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="200" cy="300" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="300" cy="300" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="400" cy="300" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="500" cy="300" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+
+    <circle cx="100" cy="400" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="200" cy="400" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="300" cy="400" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="400" cy="400" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="500" cy="400" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+
+    <circle cx="100" cy="500" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="200" cy="500" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="300" cy="500" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="400" cy="500" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+    <circle cx="500" cy="500" r="42" fill="#FEC595" stroke="#C97D41" stroke-width="4" />
+</svg>

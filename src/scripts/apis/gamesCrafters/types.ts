@@ -7,110 +7,89 @@ export type Error = Status & {
     error: string;
 };
 
-export type OnePlayerGames = Status & {
-    response: Array<Status & {
-        gameId: string;
+export type Instructions = {
+    instructions: string;
+}
+
+export type Games = Array<{
+    id: string;
+    name: string;
+    type: string;
+    gui: string;
+}>;
+
+export type Game = {
+    id: string;
+    name: string;
+    variants: Array<{
+        id: string;
         name: string;
+        gui: string;
     }>;
+    allowCustomVariantCreation: boolean;
+    supportsWinBy: boolean;
+    instructions: string;
 };
 
-export type OnePlayerGameVariants = Status & {
-    response: {
-        author: string;
-        dateCreated: string;
-        description: string;
-        gameId: string;
-        instructions: string;
-        name: string;
-        variants: Array<Status & {
-            description: string;
-            startPosition: string;
-            variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
-        }>;
-        custom: string;
-    };
+export type Variant = {
+    id: string;
+    name: string;
+    startPosition: string;
+    autoguiStartPosition: string;
+    imageAutoGUIData: ImageAutoGUIData;
+    gui: string;
 };
 
-export type TwoPlayerGames = Status & {
-    response: Array<Status & {
-            gameId: string;
-        name: string;
-    }>;
-};
-
-export type TwoPlayerGameVariants = Status & {
-    response: {
-        gameId: string;
-        instructions: string;
-        name: string;
-        variants: Array<Status & {
-            description: string;
-            startPosition: string;
-            variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
-        }>;
-        custom: string;
-    };
-};
-
-export type GameVariant = Status & {
-    response: {
-        variant: Array<{
-            description: string;
-            startPosition: string;
-            variantId: string;
-            autogui_v2_data: AutoGUIv2Data;
-        }>;
-    };
-};
-
-export type AutoGUIv2Data = {
+export type ImageAutoGUIData = {
     defaultTheme: string;
-    themes: Record<string, AutoGUIv2Theme>;
+    themes: Record<string, ImageAutoGUITheme>;
 };
 
-export type AutoGUIv2Theme = {
-    backgroundGeometry: AutoGUIv2Coordinate;
-    backgroundImage: string;
-    foregroundImage: string;
-    piecesOverArrows: boolean;
-    arrowThickness: number;
+export type ImageAutoGUITheme = {
+    space: Array<number>;
+    centers: Array<Array<number>>;
+    background: string;
+    foreground: string;
+    charImages: Record<string, ImageAutoGUICharImage>;
+    textEntityFontSize: number;
+    circleButtonRadius: number;
     lineWidth: number;
-    defaultMoveTokenRadius: number;
-    centers: Array<AutoGUIv2Coordinate>;
-    pieces: Record<string, AutoGUIv2Token>;
+    arrowWidth: number;
+    textButtonFontSize: number;
+    entitiesOverArrows: boolean;
+    sounds: Record<string, string>;
+    animationType: string;
+    defaultAnimationWindow: Array<number>;
 };
 
-export type AutoGUIv2Coordinate =
-    [x: number, y: number];
-
-export type AutoGUIv2Token = {
+export type ImageAutoGUICharImage = {
     image: string;
     scale: number;
 };
 
-export type Position = Status & {
-    response: {
-        moves: Array<{
-            deltaRemoteness: number;
-            move: string;
-            moveName: string;
-            moveValue: string;
-            position: string;
-            positionValue: string;
-            remoteness: number;
-            mex: string;
-        }>;
-        position: string;
-        positionValue: string;
-        remoteness: number;
-        mex: string;
-    };
+export type Move = {
+    move: string;
+    autoguiMove: string;
+    position: string;
+    autoguiPosition: string;
+    deltaRemoteness: number;
+    moveValue: string;
+    positionValue: string;
+    remoteness: number;
+    winby: number;
+    mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
-export type RandomPosition = Status & {
-    response: {
-        position: string;
-    }
+export type Position = {
+    moves: Array<Move>;
+    position: string;
+    autoguiPosition: string;
+    positionValue: string;
+    remoteness: number;
+    winby: number;
+    mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };

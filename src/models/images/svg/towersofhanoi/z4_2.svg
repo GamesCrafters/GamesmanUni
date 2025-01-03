@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="0 -32 64 64" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#bcbec0" >
+        <rect x="0" y="10" width="64" height="2"/>
+        <rect x="7" y="0" width="2" height="12" rx="1"/>
+        <rect x="23" y="0" width="2" height="12" rx="1"/>
+        <rect x="39" y="0" width="2" height="12" rx="1"/>
+        <rect x="55" y="0" width="2" height="12" rx="1"/>
+    </g>
+</svg>

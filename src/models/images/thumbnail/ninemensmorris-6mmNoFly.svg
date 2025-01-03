@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+    viewBox="28 88 184 184">
+    <defs>
+        <radialGradient id="rg1" cx="-107.6189" cy="-90.5162" r="10" fx="-109.6206" fy="-92.5178"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#000" />
+            <stop offset="1" stop-color="#000" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="rg2" cx="-109.6189" cy="-92.5162" r="10" fx="-114.623" fy="-97.5203"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#888888" />
+            <stop offset="0.5" stop-color="#5B5B5B" />
+            <stop offset="1" stop-color="#000000" />
+        </radialGradient>
+        <radialGradient id="rg3" cx="-107.5" cy="190.5449" r="10" fx="-109.5" fy="188.55"
+            gradientTransform="matrix(1 0 0 -1 159.5 242.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#000000" />
+            <stop offset="1" stop-color="#000000" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="rg4" cx="-109.5" cy="192.55" r="10" fx="-114.5" fy="187.55"
+            gradientTransform="matrix(0 1 1 0 -142.5 159.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FFFFFF" />
+            <stop offset="0.5" stop-color="#DDDDDD" />
+            <stop offset="1" stop-color="#999999" />
+        </radialGradient>
+        <g id="b" transform="scale(1.0454) translate(-50 -50)">
+            <path fill="url(#rg1)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg2)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+        <g id="w" transform="scale(1.0454) translate(-50 -50)">
+            <path fill="url(#rg3)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg4)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+    </defs>
+    <g transform="translate(39.5,20.5)">
+        <rect fill="#FFF0C0" y="80" width="160" height="160" />
+        <path fill="none" stroke="#000000"
+            d="M0,80h160v160h-160z M40,120h80v80h-80z M80,80v40 M160,160h-40 M80,240v-40 M0,160h40H0z" />
+    </g>
+    <g transform="translate(10 80) scale(2.2)"><path d="M53,82.72727272727272L80.46868727272727,82.72727272727272L80.46868727272727,84.54545454545455
+            L84.36363636363636,81.81818181818181L80.46868727272727,79.09090909090908L80.46868727272727,80.9090909090909
+            L53,80.9090909090909A 0.9090909090909091 0.9090909090909091 0 0 0 53 82.72727272727272Z" fill="#880000" stroke="#880000"/><path d="M53,9.999999999999998L80.46868727272727,9.999999999999998L80.46868727272727,11.818181818181817
+            L84.36363636363636,9.09090909090909L80.46868727272727,6.363636363636363L80.46868727272727,8.181818181818182
+            L53,8.181818181818182A 0.9090909090909091 0.9090909090909091 0 0 0 53 9.999999999999998Z" fill="#880000" stroke="#880000"/><path d="M67.27272727272727,30.272727272727273L67.27272727272727,39.55959636363636L65.45454545454544,39.55959636363636
+            L68.18181818181817,43.45454545454545L70.9090909090909,39.55959636363636L69.09090909090908,39.55959636363636
+            L69.09090909090908,30.272727272727273A 0.9090909090909091 0.9090909090909091 0 0 0 67.27272727272727 30.272727272727273Z" fill="#ffff00" stroke="#ffff00"/><path d="M53,64.54545454545455L62.28686909090908,64.54545454545455L62.28686909090908,66.36363636363636
+            L66.18181818181817,63.63636363636363L62.28686909090908,60.90909090909091L62.28686909090908,62.72727272727273
+            L53,62.72727272727273A 0.9090909090909091 0.9090909090909091 0 0 0 53 64.54545454545455Z" fill="#ffff00" stroke="#ffff00"/></g>
+    <use href="#w" x="40" y="100"/>
+    <use href="#b" x="120" y="100"/>
+    <use href="#w" x="120" y="140"/>
+    <use href="#b" x="160" y="140"/>
+    <use href="#w" x="40" y="180"/>
+    <use href="#w" x="80" y="180"/>
+    <use href="#w" x="200" y="180"/>
+    <use href="#b" x="80" y="220"/>
+    <use href="#b" x="120" y="220"/>
+    <use href="#w" x="40" y="260"/>
+    <use href="#b" x="120" y="260"/>
+</svg>

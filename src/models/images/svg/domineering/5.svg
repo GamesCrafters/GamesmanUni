@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="no"?>
+ <svg id="BackgroundSVG" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <path id="h" transform="scale(19.76)" d="M-0.5,-0.5h1v1h-1z" stroke-width="0.06072874493927126"
+            stroke="#000" stroke-linejoin="round" fill="none" />
+    </defs>
+    <use href="#h" x="10.48" y="10.48"/><use href="#h" x="30.24" y="10.48"/><use href="#h" x="50.0" y="10.48"/><use href="#h" x="69.76" y="10.48"/><use href="#h" x="89.52" y="10.48"/><use href="#h" x="10.48" y="30.24"/><use href="#h" x="30.24" y="30.24"/><use href="#h" x="50.0" y="30.24"/><use href="#h" x="69.76" y="30.24"/><use href="#h" x="89.52" y="30.24"/><use href="#h" x="10.48" y="50.0"/><use href="#h" x="30.24" y="50.0"/><use href="#h" x="50.0" y="50.0"/><use href="#h" x="69.76" y="50.0"/><use href="#h" x="89.52" y="50.0"/><use href="#h" x="10.48" y="69.76"/><use href="#h" x="30.24" y="69.76"/><use href="#h" x="50.0" y="69.76"/><use href="#h" x="69.76" y="69.76"/><use href="#h" x="89.52" y="69.76"/><use href="#h" x="10.48" y="89.52"/><use href="#h" x="30.24" y="89.52"/><use href="#h" x="50.0" y="89.52"/><use href="#h" x="69.76" y="89.52"/><use href="#h" x="89.52" y="89.52"/>
+</svg>

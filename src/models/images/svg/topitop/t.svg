@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?> <svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"> <circle cx="5" cy="5" r="4.5" stroke="none" fill="white" opacity="0.001"/> <circle cx="5" cy="5" r="4" fill="none" stroke-width="1"/> <polygon points="4.0,6 4.5,4.5 5.5,4.5 6.0,6" fill="blue" stroke="none" /> </svg>

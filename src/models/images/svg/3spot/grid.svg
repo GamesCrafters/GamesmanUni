@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px"
-     viewBox="0 0 30 40" style="enable-background:new 0 0 30 40;" xml:space="preserve">
-    <rect x="0" y="0" width="30" height="30" stroke="black" stroke-width="0.25" fill="#555555"/>
-
-    <line x1="10" y1="0" x2="10" y2="30" stroke="black" stroke-width="0.25"/>
-    <line x1="20" y1="0" x2="20" y2="30" stroke="black" stroke-width="0.25"/>
-
-    <line x1="0" y1="10" x2="30" y2="10" stroke="black" stroke-width="0.25"/>
-    <line x1="0" y1="20" x2="30" y2="20" stroke="black" stroke-width="0.25"/>
-
-    <circle cx="5" cy="25" r="1" fill="black"/>
-    <circle cx="15" cy="25" r="1" fill="black"/>
-    <circle cx="25" cy="25" r="1" fill="black"/>
+<svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="-0.125 -0.125 30.25 40">
+    <defs><circle id="a" r="1" fill="#000"/></defs>
+    <path d="M0,0h30v30h-30zM10,0v30M20,0v30M0,10h30M0,20h30" stroke="#000" stroke-width="0.25" fill="#555"/>
+    <use href="#a" x="5" y="25"/><use href="#a" x="15" y="25"/><use href="#a" x="25" y="25"/>
+    <path d="M1,32h8v6h-8z" fill="#5a70ff"/>
+    <path d="M21,32h8v6h-8z" fill="#f26464"/>
 </svg>

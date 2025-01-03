@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 10 10">
+	<circle cx="0" cy="0" r="4.5" stroke="none" fill="white" opacity="0.001"/>
+	<circle cx="0" cy="0" r="4" fill="none" stroke-width="1"/>
+	<path d="M-2.5,-2.165 L2.5,-2.165 L0,2.165 z" stroke="none" fill="red"/>
+</svg>

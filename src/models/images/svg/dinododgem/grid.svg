@@ -1,0 +1,17 @@
+<svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+    <g fill="#9fce1e">
+    <rect x="0" y="10.5" rx="2" ry="2" width="9.5" height="9"/>
+    <rect x="0" y="20.5" rx="2" ry="2" width="9.5" height="9"/>
+    <rect x="0" y="30.5" rx="2" ry="2" width="9.5" height="9"/>
+    <rect x="50.5" y="10" width="9.5" height="40" rx="4" ry="4"/>
+    </g>
+    <g fill="#6838b6">
+    <rect x="20.5" y="50.5" rx="2" ry="2" width="9" height="9.5"/>
+    <rect x="30.5" y="50.5" rx="2" ry="2" width="9" height="9.5"/>
+    <rect x="40.5" y="50.5" rx="2" ry="2" width="9" height="9.5"/>
+    <rect x="10" y="0" width="40" height="9.5" rx="4" ry="4"/>
+    </g>
+    <rect x="10" y="10" width="40" height="40" rx="4" ry="4" fill="#a77432" />
+    <path d="M10,20h40M10,30h40M10,40h40M20,10v40M30,10v40M40,10v40"
+        stroke="#dcab6b" fill="none" stroke-width="0.25"/>
+</svg>
