@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+    <defs>
+        <radialGradient id="rg0" cx="-107.6189" cy="-90.5162" r="10.0083" fx="-109.6206" fy="-92.5178"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" style="stop-color:#000000" />
+            <stop offset="1" style="stop-color:#000000;stop-opacity:0" />
+        </radialGradient>
+
+        <radialGradient id="rg1" cx="-109.6189" cy="-92.5162" r="10.0083" fx="-114.623" fy="-97.5203"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#b6a8fe" />
+            <stop offset="0.5" stop-color="#4960f7" />
+            <stop offset="1" stop-color="#0400f5" />
+        </radialGradient>
+
+        <radialGradient id="rg2" cx="-107.6189" cy="-90.5162" r="10.0083" fx="-109.6206" fy="-92.5178"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" style="stop-color:#000000" />
+            <stop offset="1" style="stop-color:#000000;stop-opacity:0" />
+        </radialGradient>
+
+        <radialGradient id="rg3" cx="-109.6189" cy="-92.5162" r="10.0083" fx="-114.623" fy="-97.5203"
+            gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fea8a8" />
+            <stop offset="0.5" stop-color="#fc6464" />
+            <stop offset="1" stop-color="#d00000" />
+        </radialGradient>
+
+        <g id="b" transform="scale(0.5) translate(-50,-50)">
+            <path fill="url(#rg0)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg1)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+
+        <g id="r" transform="scale(0.5) translate(-50,-50)">
+            <path fill="url(#rg2)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+            <path fill="url(#rg3)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+        </g>
+
+        <circle id="c" r="2" fill="gray" />
+    </defs>
+    <path d="M10,53L50,71L70,62L10,35L50,17M10,53L70,26L30,8L10,17L70,44L30,62" fill="none" stroke="gray" />
+    <use href="#c" x="10" y="17" />
+    <use href="#c" x="10" y="35" />
+    <use href="#c" x="10" y="53" />
+    <use href="#c" x="30" y="8" />
+    <use href="#c" x="30" y="26" />
+    <use href="#c" x="30" y="44" />
+    <use href="#c" x="30" y="62" />
+    <use href="#c" x="50" y="17" />
+    <use href="#c" x="50" y="35" />
+    <use href="#c" x="50" y="53" />
+    <use href="#c" x="50" y="71" />
+    <use href="#c" x="70" y="26" />
+    <use href="#c" x="70" y="44" />
+    <use href="#c" x="70" y="62" />
+    <path d="M47.9755,33.9786L33.1861,26.9951L33.5143,26.2656L31.4591,26.6566L32.5295,28.4542L32.8578,27.7246L47.6472,34.7082A 0.4 0.4 0 0 0 47.9755 33.9786Z" fill="#008000" stroke="#008000" /><path d="M67.9755,42.9786L53.1861,35.9951L53.5143,35.2656L51.4591,35.6566L52.5295,37.4542L52.8578,36.7246L67.6472,43.7082A 0.4 0.4 0 0 0 67.9755 42.9786Z" fill="#008000" stroke="#008000" /><path d="M67.6472,62.2918L52.8578,69.2754L52.5295,68.5458L51.4591,70.3434L53.5143,70.7344L53.1861,70.0049L67.9755,63.0214A 0.4 0.4 0 0 0 67.6472 62.2918Z" fill="#008000" stroke="#008000" opacity="0.75" /><path d="M67.6472,44.2918L52.8578,51.2754L52.5295,50.5458L51.4591,52.3434L53.5143,52.7344L53.1861,52.0049L67.9755,45.0214A 0.4 0.4 0 0 0 67.6472 44.2918Z" fill="#008000" stroke="#008000" opacity="0.75" /><path d="M67.9755,24.9786L53.1861,17.9951L53.5143,17.2656L51.4591,17.6566L52.5295,19.4542L52.8578,18.7246L67.6472,25.7082A 0.4 0.4 0 0 0 67.9755 24.9786Z" fill="#800000" stroke="#800000" /><path d="M67.9755,60.9786L53.1861,53.9951L53.5143,53.2656L51.4591,53.6566L52.5295,55.4542L52.8578,54.7246L67.6472,61.7082A 0.4 0.4 0 0 0 67.9755 60.9786Z" fill="#800000" stroke="#800000" opacity="0.75" /><path d="M47.9755,51.9786L33.1861,44.9951L33.5143,44.2656L31.4591,44.6566L32.5295,46.4542L32.8578,45.7246L47.6472,52.7082A 0.4 0.4 0 0 0 47.9755 51.9786Z" fill="#800000" stroke="#800000" opacity="0.5" /><path d="M47.9755,15.9786L33.1861,8.9951L33.5143,8.2656L31.4591,8.6566L32.5295,10.4542L32.8578,9.7246L47.6472,16.7082A 0.4 0.4 0 0 0 47.9755 15.9786Z" fill="#800000" stroke="#800000" /><path d="M47.6472,35.2918L32.8578,42.2754L32.5295,41.5458L31.4591,43.3434L33.5143,43.7344L33.1861,43.0049L47.9755,36.0214A 0.4 0.4 0 0 0 47.6472 35.2918Z" fill="#800000" stroke="#800000" /><path d="M67.6472,26.2918L52.8578,33.2754L52.5295,32.5458L51.4591,34.3434L53.5143,34.7344L53.1861,34.0049L67.9755,27.0214A 0.4 0.4 0 0 0 67.6472 26.2918Z" fill="#800000" stroke="#800000" /><path d="M27.6472,44.2918L12.8578,51.2754L12.5295,50.5458L11.4591,52.3434L13.5143,52.7344L13.1861,52.0049L27.9755,45.0214A 0.4 0.4 0 0 0 27.6472 44.2918Z" fill="#800000" stroke="#800000" opacity="0.75" />
+    <use href="#b" x="10" y="17" />
+    <use href="#b" x="10" y="35" />
+    <use href="#b" x="30" y="62" />
+    <use href="#r" x="70" y="26" />
+    <use href="#r" x="70" y="44" />
+    <use href="#r" x="70" y="62" />
+    
+</svg>

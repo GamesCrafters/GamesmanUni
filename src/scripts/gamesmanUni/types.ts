@@ -1,4 +1,4 @@
-import { AutoGUIv2Data } from "../apis/gamesCrafters/types";
+import { ImageAutoGUIData } from "../apis/gamesCrafters/types";
 
 export type Update = {
     status: string;
@@ -9,11 +9,13 @@ export type App = Update & {
     version: string;
     preferences: Preferences;
     dataSources: DataSources;
-    gameTypes: GameTypes;
+    games: Record<string, Game>;
     commits: Commits;
     options: Options;
     matches: Matches;
     currentMatch: Match;
+    vvhView: string;
+    CPUsStrategy: string[];
 };
 
 export type Player = {
@@ -26,57 +28,49 @@ export type Preferences = {
     locale: string;
     fallbackLocale: string;
     rootFontSize: string;
+    volume: number;
+    ambienceVolume: number;
 };
 
 export type DataSources = {
     gitHubRepositoryAPI: string;
-    onePlayerGameAPI: string;
-    twoPlayerGameAPI: string;
-};
-
-export type GameTypes = Record<string, Games>;
-
-export type Games = Update & {
-    games: Record<string, Game>;
+    gameAPI: string;
 };
 
 export type Game = {
     id: string;
     name: string;
-    author: string;
-    description: string;
-    dateCreated: string;
-    instructions: string;
+    instructions: Record<string, string>;
     type: string;
-    variants: Variants;
-    status: string;
-    gui_status: string;
-    custom: boolean;
-};
-
-export type Variants = Update & {
     variants: Record<string, Variant>;
+    gui: string;
+    allowCustomVariantCreation: boolean;
+    supportsWinBy: boolean;
 };
 
 export type Variant = {
     id: string;
-    description: string;
+    name: string;
     startPosition: string;
+    autoguiStartPosition: string;
     positions: Positions;
-    autogui_v2_data: AutoGUIv2Data;
-    status: string;
-    gui_status: string;
+    imageAutoGUIData: ImageAutoGUIData;
+    gui: string;
 };
 
 export type Positions = Record<string, Position>;
 
-export type Position = Update & {
-    availableMoveNames: MoveNames;
+export type Position = {
+    moveToAutoguiMove: MoveNames;
     availableMoves: Moves;
     position: string;
+    autoguiPosition: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
 export type Moves = Record<string, Move>;
@@ -86,13 +80,17 @@ export type MoveNames = Record<string, string>;
 export type Move = {
     deltaRemoteness: number;
     move: string;
-    moveName: string;
+    autoguiMove: string;
     moveValue: string;
     moveValueOpacity: number;
     position: string;
+    autoguiPosition: string;
     positionValue: string;
     remoteness: number;
+    winby: number;
     mex: string;
+    drawLevel: number;
+    drawRemoteness: number;
 };
 
 export type Commits = Update & {
@@ -111,6 +109,7 @@ export type Commit = {
 };
 
 export type Options = {
+    automoveIfSingleMove: boolean;
     computerMoveDuration: number;
     showInstructions: boolean;
     showNextMoveDeltaRemotenesses: boolean;
@@ -132,15 +131,17 @@ export type Match = {
     gameTheme: string;
     variantId: string;
     startPosition: string;
+    autoguiStartPosition: string;
     firstPlayer: Player;
     secondPlayer: Player;
     rounds: Rounds;
     moveHistory: string;
     round: Round;
-    created: number;
-    lastPlayed: number;
+    // created: number;
+    // lastPlayed: number;
     backgroundLoading: boolean;
     computerMoving: boolean;
+    animationPlaying: boolean;
 };
 
 export type Rounds = Array<Round>;
@@ -149,7 +150,7 @@ export type Round = {
     id: number;
     firstPlayerTurn: boolean;
     move: string;
-    moveName: string;
+    autoguiMove: string;
     moveValue: string;
     position: Position;
 };

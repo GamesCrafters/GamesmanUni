@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-    import AppHeader from "./components/units/AppHeader.vue";
+    import AppHeader from "./components/units/Header/AppHeader.vue";
     import AppFooter from "./components/units/AppFooter.vue";
 </script>
 

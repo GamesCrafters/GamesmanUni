@@ -35,6 +35,72 @@ body {
     width: 100%;
 }
 
+.c-markdown {
+    h1 {
+        text-align: center;
+        font-size: 4em;
+        padding-bottom: 1em;
+        font-weight: 900;
+        color: var(--secondaryColor);
+    }
+
+    h2 {
+        text-align: left;
+        font-weight: 600;
+        font-size: 2em;
+        margin: 1rem 0;
+        color: var(--secondaryColor);
+        padding-bottom: 0.3em;
+        border-bottom: 0.1em solid var(--neutralColor);
+    }
+
+    p {
+        font-size: 1.6em;
+        padding-bottom: 1.6em;
+        strong {
+            font-size: 1em;
+            font-weight: 800;
+        }
+    }
+
+    img {
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        width: 30em;
+    }
+
+    ul, ol {
+        padding-bottom: 1.6em;
+        padding-left: 1.6em;
+        list-style: square;
+
+        li {
+            text-align: justify;
+            list-style-position: outside;
+            font-size: 1.6em;
+            padding-bottom: 0.8em;
+
+            strong {
+                font-size: 1em;
+                font-weight: 800;
+            }
+
+            p {
+                padding-top: 0em;
+                padding-bottom: 0em;
+                font-size: 1em;
+            }
+        }
+
+        a {
+            font-size: 1em;
+        }
+    }    
+}
+
 h1 {
     font-size: 2rem;
     font-weight: 400;
@@ -130,6 +196,11 @@ button {
         border-radius: 1rem;
         font-weight: 400;
         padding: 0.5rem;
+        > img {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
     }
     .uni-dropdown-menu {
         background-color: var(--neutralColor);

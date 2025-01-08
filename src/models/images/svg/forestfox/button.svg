@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Jiachun Li -->
+<svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="-401 0 1320 1320">
+<path d="M0,0h518v733h-518z" stroke-width="0" fill="#fff" opacity="0.001"/>
+<line x1="100" y1="660" x2="418" y2="660" stroke-width="40" stroke-linecap="round"/>
+</svg>

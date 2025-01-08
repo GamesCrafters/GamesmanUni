@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-     y="0px"
-     viewBox="0 0 80 10" style="enable-background:new 0 0 100 70;" xml:space="preserve">
-
-    <rect x="0" y="0" width="80" height="10" fill="#FEC595"/>
-    <rect x="0" y="0" width="10" height="10" fill="#C97D41"/>
-    <rect x="20" y="0" width="10" height="10" fill="#C97D41"/>
-    <rect x="40" y="0" width="10" height="10" fill="#C97D41"/>
-    <rect x="60" y="0" width="10" height="10" fill="#C97D41"/>
-
-
-</svg>
+<?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 10"><path d="M0,0h80v10h-80z" fill="#FEC595"/><path d="M0,0h10v10h-10zM20,0h10v10h-10zM40,0h10v10h-10zM60,0h10v10h-10z" fill="#C97D41"/></svg>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <defs>
+        <g id="r" fill="black">
+            <circle cx="20" cy="20" r="2" />
+            <circle cx="60" cy="20" r="2" />
+            <circle cx="100" cy="20" r="2" />
+            <circle cx="140" cy="20" r="2" />
+            <circle cx="180" cy="20" r="2" />
+        </g>
+    <radialGradient id="rg1" cx="-107.6189" cy="-90.5162" r="10" fx="-109.6206" fy="-92.5178"
+        gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#000" />
+        <stop offset="1" stop-color="#000" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="rg2" cx="-109.6189" cy="-92.5162" r="10" fx="-114.623" fy="-97.5203"
+        gradientTransform="matrix(1 0 0 1 159.5 142.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#888888" />
+        <stop offset="0.5" stop-color="#5B5B5B" />
+        <stop offset="1" stop-color="#000000" />
+    </radialGradient>
+    <radialGradient id="rg3" cx="-107.5" cy="190.5449" r="10" fx="-109.5" fy="188.55"
+        gradientTransform="matrix(1 0 0 -1 159.5 242.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#000000" />
+        <stop offset="1" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="rg4" cx="-109.5" cy="192.55" r="10" fx="-114.5" fy="187.55"
+        gradientTransform="matrix(0 1 1 0 -142.5 159.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#FFFFFF" />
+        <stop offset="0.5" stop-color="#DDDDDD" />
+        <stop offset="1" stop-color="#999999" />
+    </radialGradient>
+    <g id="b" transform="scale(1.25) translate(-50 -50)">
+        <path fill="url(#rg1)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+        <path fill="url(#rg2)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+    </g>
+    <g id="w" transform="scale(1.25) translate(-50 -50)">
+        <path fill="url(#rg3)" d="M61.9,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S61.9,46.5,61.9,52z" />
+        <path fill="url(#rg4)" d="M59.9,50c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S59.9,44.5,59.9,50z" />
+    </g>
+    </defs>
+    <path d="M0,0v200h200v-200z" fill="#fff0c0" />
+    <g fill="none" opacity="0.7" stroke-width="1.5">
+        <path stroke="#b7410e" d="M20,20l160,160M180,20l-160,160M100,20l80,80l-80,80l-80,-80l80,-80" />
+        <path stroke="#87ceeb" d="M60,20l120,120l-40,40l-120,-120zM140,20l40,40l-120,120l-40,-40z"/>
+    </g>
+    <use href="#r" x="0" y="0" />
+    <use href="#r" x="0" y="40" />
+    <use href="#r" x="0" y="80" />
+    <use href="#r" x="0" y="120" />
+    <use href="#r" x="0" y="160" />
+    <path d="M173.4003,20.4714L150.5699,44.716L145.8559,40.002L142.8284,57.1716L159.998,54.1441L155.284,49.4301L178.1144,25.1854A 3.3333 3.3333 0 0 0 173.4003 20.4714Z" fill="#ffff00" stroke="#ffff00" /><path d="M21.8856,25.1854L44.716,49.4301L40.002,54.1441L57.1716,57.1716L54.1441,40.002L49.4301,44.716L26.5997,20.4714A 3.3333 3.3333 0 0 0 21.8856 25.1854Z" fill="#ffff00" stroke="#ffff00" /><path d="M173.4003,60.4714L150.5699,84.716L145.8559,80.002L142.8284,97.1716L159.998,94.1441L155.284,89.4301L178.1144,65.1854A 3.3333 3.3333 0 0 0 173.4003 60.4714Z" fill="#ffff00" stroke="#ffff00" /><path d="M21.8856,65.1854L44.716,89.4301L40.002,94.1441L57.1716,97.1716L54.1441,80.002L49.4301,84.716L26.5997,60.4714A 3.3333 3.3333 0 0 0 21.8856 65.1854Z" fill="#ffff00" stroke="#ffff00" /><path d="M133.4003,20.4714L110.5699,44.716L105.8559,40.002L102.8284,57.1716L119.998,54.1441L115.284,49.4301L138.1144,25.1854A 3.3333 3.3333 0 0 0 133.4003 20.4714Z" fill="#ffff00" stroke="#ffff00" /><path d="M61.8856,25.1854L84.716,49.4301L80.002,54.1441L97.1716,57.1716L94.1441,40.002L89.4301,44.716L66.5997,20.4714A 3.3333 3.3333 0 0 0 61.8856 25.1854Z" fill="#ffff00" stroke="#ffff00" /><path d="M106.5997,179.5286L129.4301,155.284L134.1441,159.998L137.1716,142.8284L120.002,145.8559L124.716,150.5699L101.8856,174.8146A 3.3333 3.3333 0 0 0 106.5997 179.5286Z" fill="#ffff00" stroke="#ffff00" opacity="0.75" /><path d="M98.1144,174.8146L75.284,150.5699L79.998,145.8559L62.8284,142.8284L65.8559,159.998L70.5699,155.284L93.4003,179.5286A 3.3333 3.3333 0 0 0 98.1144 174.8146Z" fill="#ffff00" stroke="#ffff00" opacity="0.75" />
+    <use href="#w" x="20" y="20"/>
+    <use href="#w" x="60" y="20"/>
+    <use href="#b" x="100" y="20"/>
+    <use href="#w" x="140" y="20"/>
+    <use href="#w" x="180" y="20"/>
+    <use href="#w" x="20" y="60"/>
+    <use href="#w" x="180" y="60"/>
+    <use href="#b" x="20" y="180"/>
+    <use href="#b" x="60" y="180"/>
+    <use href="#w" x="100" y="180"/>
+    <use href="#b" x="140" y="180"/>
+    <use href="#b" x="180" y="180"/>
+    <use href="#b" x="20" y="140"/>
+    <use href="#b" x="180" y="140"/>
+</svg>

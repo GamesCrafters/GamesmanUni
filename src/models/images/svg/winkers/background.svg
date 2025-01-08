@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="300" viewBox="0 0 240 300">
+  <style>
+    circle {
+      fill: none;
+      stroke: #a3a3a3;
+      stroke-width: 1;
+    }
+  </style>
+  <g transform="translate(120, 120)">
+    <!-- Row 1 -->
+    <circle cx="-45" cy="-80" r="20" />
+    <circle cx="0" cy="-80" r="20" />
+    <circle cx="45" cy="-80" r="20" />
+
+    <!-- Row 2 -->
+    <circle cx="-67.5" cy="-40" r="20" />
+    <circle cx="-22.5" cy="-40" r="20" />
+    <circle cx="22.5" cy="-40" r="20" />
+    <circle cx="67.5" cy="-40" r="20" />
+
+    <!-- Row 3 -->
+    <circle cx="-90" cy="0" r="20" />
+    <circle cx="-45" cy="0" r="20" />
+    <circle cx="0" cy="0" r="20" />
+    <circle cx="45" cy="0" r="20" />
+    <circle cx="90" cy="0" r="20" />
+
+    <!-- Row 4 -->
+    <circle cx="-67.5" cy="40" r="20" />
+    <circle cx="-22.5" cy="40" r="20" />
+    <circle cx="22.5" cy="40" r="20" />
+    <circle cx="67.5" cy="40" r="20" />
+
+    <!-- Row 5 -->
+    <circle cx="-45" cy="80" r="20" />
+    <circle cx="0" cy="80" r="20" />
+    <circle cx="45" cy="80" r="20" />
+  </g>
+</svg>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+<style>
+  .st0 {
+    font-size: 2px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+</style>
+<defs>
+    <marker id="arrow"
+      viewBox="0 0 10 10"
+      refX="5" refY="5"
+      markerWidth="4" markerHeight="3" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#fff"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="90" height="90" fill="#dddddd"/>
+  <line x1="32" y1="0" x2="32" y2="70" stroke-width="0.5" stroke="#6065ff" stroke-dasharray="4 1"/>
+  <line x1="0" y1="70" x2="100" y2="70" stroke-width="0.5" stroke="#6065ff" stroke-dasharray="4 1"/>
+  <line x1="32" y1="50" x2="100" y2="50" stroke-width="0.5" stroke="#a7aafd" stroke-dasharray="2 2"/>
+  <line x1="32" y1="39" x2="100" y2="39" stroke-width="0.5" stroke="#a7aafd" stroke-dasharray="2 2"/>
+  <line x1="32" y1="10" x2="100" y2="10" stroke-width="0.5" stroke="#a7aafd" stroke-dasharray="2 2"/>
+  <g fill="#ffff00" stroke-width="0.5">
+    <g stroke="#ffffff">
+      <line x1="73.5" y1="5.0" x2="79.5" y2="5.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="83.0" y1="7.5" x2="83.0" y2="11.5" marker-end="url(#arrow)" />
+<line x1="80.5" y1="15.0" x2="73.5" y2="15.0" marker-end="url(#arrow)" />
+<line x1="71.9815599727615" y1="16.52427690212423" x2="80.2258160381339" y2="22.866012337026078" marker-end="url(#arrow)" />
+<line x1="70.0" y1="22.5" x2="70.0" y2="18.5" marker-end="url(#arrow)" />
+<line x1="72.5" y1="25.0" x2="79.5" y2="25.0" marker-end="url(#arrow)" />
+<line x1="83.0" y1="27.5" x2="83.0" y2="31.5" marker-end="url(#arrow)" />
+<line x1="81.0184400272385" y1="33.47572309787577" x2="72.7741839618661" y2="27.133987662973922" marker-end="url(#arrow)" />
+<line x1="81.0184400272385" y1="26.52427690212423" x2="72.7741839618661" y2="32.86601233702608" marker-end="url(#arrow)" />
+<line x1="70.0" y1="32.5" x2="70.0" y2="28.5" marker-end="url(#arrow)" />
+<line x1="81.0184400272385" y1="36.52427690212423" x2="72.7741839618661" y2="42.86601233702608" marker-end="url(#arrow)" />
+<line x1="70.0" y1="37.5" x2="70.0" y2="41.5" marker-end="url(#arrow)" />
+<line x1="73.5" y1="45.0" x2="79.5" y2="45.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="80.2258160381339" y1="47.13398766297392" x2="72.7741839618661" y2="52.86601233702608" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="73.5" y1="55.0" x2="79.5" y2="55.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="67.76393202250021" y1="56.11803398874989" x2="53.130495168499706" y2="63.43475241575015" marker-end="url(#arrow)" />
+<line x1="47.5" y1="65.0" x2="43.5" y2="65.0" marker-end="url(#arrow)" />
+<line x1="40.0" y1="62.5" x2="40.0" y2="58.5" marker-end="url(#arrow)" />
+<line x1="42.5" y1="55.0" x2="56.5" y2="55.0" marker-end="url(#arrow)" />
+<line x1="58.23223304703363" y1="56.76776695296637" x2="52.474873734152915" y2="62.525126265847085" marker-end="url(#arrow)" />
+<line x1="48.23223304703363" y1="66.76776695296637" x2="42.474873734152915" y2="72.52512626584708" marker-end="url(#arrow)" />
+<line x1="42.26680277972127" y1="73.94567312571104" x2="79.82647610839022" y2="56.47605762400455" marker-end="url(#arrow)" />
+<line x1="38.38087894976115" y1="73.09515170560135" x2="25.266769470334392" y2="57.66678761215811" marker-end="url(#arrow)" />
+<line x1="11.5" y1="55.0" x2="19.5" y2="55.0" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+<line x1="22.629148867674388" y1="57.47234088217074" x2="20.519191585255857" y2="71.53872276496097" marker-end="url(#arrow)" />
+<line x1="9.286239388568816" y1="57.14373231428136" x2="18.19926485600366" y2="71.9987747600061" marker-end="url(#arrow)" />
+<line x1="38.23223304703363" y1="56.76776695296637" x2="22.474873734152915" y2="72.52512626584708" marker-end="url(#arrow)" />
+<line x1="21.118033988749897" y1="77.23606797749979" x2="23.434752415750147" y2="81.8695048315003" marker-end="url(#arrow)" />
+<line x1="37.91987426415539" y1="76.38675049056307" x2="27.912176030182454" y2="83.0585493132117" marker-end="url(#arrow)" /></g>
+  <circle cx="70" cy="5" r="2.5" stroke="#008000"/> <!-- 0 -->
+  <circle cx="83" cy="5" r="2.5" stroke="#880000"/> <!-- 1 -->
+  <circle cx="83" cy="15" r="2.5" stroke="#008000"/> <!-- 2 -->
+  <circle cx="70" cy="15" r="2.5" stroke="#880000"/> <!-- 3 -->
+  <circle cx="83" cy="25" r="2.5" stroke="#008000"/> <!-- 4 -->
+  <circle cx="70" cy="25" r="2.5" stroke="#008000"/> <!-- 5 -->
+  <circle cx="70" cy="35" r="2.5" stroke="#880000"/> <!-- 6 -->
+  <circle cx="83" cy="35" r="2.5" stroke="#880000"/> <!-- 7 -->
+  <circle cx="70" cy="45" r="2.5" stroke="#008000"/> <!-- 8 -->
+  <circle cx="83" cy="45" r="2.5" stroke="#880000"/> <!-- 9 -->
+  <circle cx="70" cy="55" r="2.5" stroke="#008000"/> <!-- 10 -->
+  <circle cx="83" cy="55" r="2.5" stroke="#880000"/> <!-- 11 -->
+  <circle cx="50" cy="65" r="2.5" stroke="#880000"/> <!-- 12 -->
+  <circle cx="40" cy="65" r="2.5" stroke="#008000"/> <!-- 13 -->
+  <circle cx="60" cy="55" r="2.5" stroke="#008000"/> <!-- 14 -->
+   <circle cx="40" cy="55" r="2.5" stroke="#880000"/> <!-- 15 -->
+  </g>
+  <g stroke="#000" stroke-width="0.25">
+  <circle cx="8" cy="55" r="2.625" fill="#ffff00"/>  <!-- 19 -->
+  <circle cx="23" cy="55" r="2.625" fill="#ffff00"/> <!-- 20 -->
+  <circle cx="20" cy="75" r="2.625" fill="#008000"/> <!-- 16 -->
+  <circle cx="40" cy="75" r="2.625" fill="#008000"/> <!-- 17 -->
+  <circle cx="25" cy="85" r="2.625" fill="#880000"/> <!-- 18 -->
+    </g>
+  <text x="35" y="5" class="st0">Pure Draw Level 3</text>
+  <text x="35" y="25" class="st0">Pure Draw Level 2</text>
+  <text x="35" y="45" class="st0">Pure Draw Level 1</text>
+  <text x="66" y="68" class="st0">Pure Draw Level 0</text>
+  <text x="3" y="38" class="st0">Non-Pure Draws</text>
+</svg>
