@@ -48,5 +48,5 @@
         "preview:https": "serve dist",
         "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
     },
-    "version": "5.0.0-alpha.311"
+    "version": "5.0.0-alpha.312"
 }
