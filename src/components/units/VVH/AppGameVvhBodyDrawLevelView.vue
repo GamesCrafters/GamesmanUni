@@ -209,7 +209,7 @@
                         dominant-baseline="middle"
                         text-anchor="middle"
                     >
-                        Draw Fringe {{ maximumDrawLevel }}
+                        Draw Level {{ maximumDrawLevel }}
                     </text>
                 </template>
 
@@ -231,7 +231,7 @@
                                 dominant-baseline="middle"
                                 text-anchor="middle"
                             >
-                                Draw Fringe {{ roundDrawLevel(roundNumber) }}
+                                Draw Level {{ roundDrawLevel(roundNumber) }}
                             </text>
                         </template>
                     </template>
@@ -268,12 +268,13 @@
                         <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', 'drawRemoteness' in currentValuedRounds[roundNumber].position ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
                                 :r="nextMovePositionValueSize"
-                                :stroke-width="4 * nextMovePositionValueSize" @click="roundNumber === currentValuedRoundId &&
+                                :stroke-width="nextMovePositionValueStrokeSize"
+                                @click="roundNumber === currentValuedRoundId &&
                                     store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
                         </template>
                     </template>
@@ -283,12 +284,13 @@
                 <template v-if="currentValuedRoundId">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
                         <circle
-                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
+                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue, currentValuedRounds[roundNumber].position.drawRemoteness > -1 ? (currentValuedRounds[roundNumber].position.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
                             class="position-value"
                             :cx="drawLevelNodeGridXPosition(roundNumber)"
                             :cy="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
                             :r="positionValueSize"
-                            :stroke-width="4 * positionValueSize" @click="roundNumber !== currentValuedRoundId &&
+                            :stroke-width="positionValueStrokeSize"
+                            @click="roundNumber !== currentValuedRoundId &&
                                 store.dispatch(actionTypes.undoMove, {
                                     toRoundId: currentValuedRounds[roundNumber].id
                                 })" />
@@ -326,8 +328,16 @@
                 <VueSlider v-model="positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
+                <p class="label">Position Value Stroke Size</p>
+                <VueSlider v-model="positionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+            </div>
+            <div class="meter">
                 <p class="label">Next Move Position Value Size</p>
                 <VueSlider v-model="nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+            </div>
+            <div class="meter">
+                <p class="label">Next Move Position Value Stroke Size</p>
+                <VueSlider v-model="nextMovePositionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Link Width</p>
@@ -378,7 +388,6 @@
 
     const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
     const maximumDrawLevel = computed(() => store.getters.maximumDrawLevel(1, store.getters.currentRoundId));
-    const currentDrawLevel = computed(() => store.getters.currentPositionDrawLevel);
     
     /** 
      * Iterate through the rounds and see if any visited positions or any child positions of
@@ -438,8 +447,10 @@
     const gridRight = computed(() => chartWidth.value - gridLeft.value);
     const gridCenter = computed(() => chartWidth.value / 2)
 
-    const positionValueSize = ref(0.2);
-    const nextMovePositionValueSize = ref(0.1);
+    const positionValueSize = ref(0.6);
+    const positionValueStrokeSize = ref(0.2);
+    const nextMovePositionValueSize = ref(0.3);
+    const nextMovePositionValueStrokeSize = ref(0.1);
     const xInterval = ref(5);
     const linkWidth = ref(0.2);
     const xBarWidth = ref(0.1);
@@ -743,6 +754,16 @@
 
                     &.win {
                         fill: var(--winColor);
+                        stroke: var(--winColor);
+                    }
+
+                    &.draw-lose {
+                        fill: var(--drawColor);
+                        stroke: var(--loseColor);
+                    }
+
+                    &.draw-win {
+                        fill: var(--drawColor);
                         stroke: var(--winColor);
                     }
                 }
