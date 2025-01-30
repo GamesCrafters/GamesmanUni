@@ -296,11 +296,11 @@
     );
 
     /**
-     * Determines if the VVH View Option vvhViewOption renders depending on if the VVH View Option is legal 
-     * and is not the current active VVH View.
-     * @param vvhViewOption 
-     * @param activeVVHViewName 
-     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     * Determines if the CPU Strategy Option CPUStrategyOptionName renders depending on if the CPU Strategy Option is legal 
+     * and is not the current active Strategy.
+     * @param CPUStrategyOptionName 
+     * @param activeCPUStrategyOptionName 
+     * @returns true/false if the CPUStrategyOptionName is rendered depending on the pre-established conditions.
      */
      const renderDropdownOption = (CPUStrategyOptionName: string, activeCPUStrategyOptionName: string) => {
         if (CPUStrategyOptionName == activeCPUStrategyOptionName) {
