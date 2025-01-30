@@ -430,11 +430,9 @@
     const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
     const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
 
-    // const gridHeight = computed(() => rowHeight.value * rowCount.value);
     const gridHeight = computed(() => rowHeight.value * rowCount.value + roundYOffset(currentValuedRoundId.value));
 
     const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
-    //const gridBottom = computed(() => chartHeight.value - gridTop.value);
     const gridBottom = computed(() => chartHeight.value - gridTop.value - roundYOffset(currentValuedRoundId.value));
 
 
@@ -447,10 +445,15 @@
     const gridRight = computed(() => chartWidth.value - gridLeft.value);
     const gridCenter = computed(() => chartWidth.value / 2)
 
+    // Node radius
     const positionValueSize = ref(0.6);
+    // Node stroke
     const positionValueStrokeSize = ref(0.2);
+    // Move node radius
     const nextMovePositionValueSize = ref(0.3);
+    // Move node stroke
     const nextMovePositionValueStrokeSize = ref(0.1);
+    
     const xInterval = ref(5);
     const linkWidth = ref(0.2);
     const xBarWidth = ref(0.1);
