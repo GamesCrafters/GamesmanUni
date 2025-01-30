@@ -268,7 +268,7 @@
                         <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', 'drawRemoteness' in currentValuedRounds[roundNumber].position ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', 'drawLevel' in nextMove ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"

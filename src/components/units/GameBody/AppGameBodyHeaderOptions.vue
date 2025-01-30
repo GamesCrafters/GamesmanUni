@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="strategy-dropdown-options">
                                         <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[0]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(0, CPUStrategyOption)">
-                                            <div v-if="(CPUStrategyOption != 'Win By' && !supportsWinBy && CPUStrategyOption != currentCPUsStrategies[0]) || supportsWinBy && CPUStrategyOption != currentCPUsStrategies[0]">
+                                            <div v-if="renderDropdownOption(CPUStrategyOption, currentCPUsStrategies[0])">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="strategy-dropdown-options">
                                         <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[1]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(1, CPUStrategyOption)">
-                                            <div v-if="(CPUStrategyOption != 'Win By' && !supportsWinBy && CPUStrategyOption != currentCPUsStrategies[1]) || supportsWinBy && CPUStrategyOption != currentCPUsStrategies[1]">
+                                            <div v-if="renderDropdownOption(CPUStrategyOption, currentCPUsStrategies[1])">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
@@ -294,6 +294,31 @@
     const currentCPUsRatings = computed(() =>
         store.getters.currentCPUsRatings
     );
+
+    /**
+     * Determines if the VVH View Option vvhViewOption renders depending on if the VVH View Option is legal 
+     * and is not the current active VVH View.
+     * @param vvhViewOption 
+     * @param activeVVHViewName 
+     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     */
+     const renderDropdownOption = (CPUStrategyOptionName: string, activeCPUStrategyOptionName: string) => {
+        if (CPUStrategyOptionName == activeCPUStrategyOptionName) {
+            return false;
+        }
+        
+        return viewIsLegal(CPUStrategyOptionName);
+    }
+    
+    const viewIsLegal = (VVHViewName: string) => {
+        switch(VVHViewName) {
+            case "Win By":
+                return supportsWinBy.value;
+            default:
+                return true;
+        }
+    }
+
 </script>
 
 <style lang="scss" scoped>
