@@ -620,37 +620,45 @@
                                 :key="nextMove.move">
                             <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
-                                                 showNextMoveHints ? nextMove.positionValue : '']"
+                                                 showNextMoveHints ? nextMove.positionValue : '',
+                                                 (roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                     class="next-move-position-value"
                                     :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">
                                 <circle v-if="!isPuzzleGame"
-                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
+                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (roundNumber == currentRoundId && highlightedMove === nextMove.move)}"
                                     class="next-move-position-value"
                                     :cx="gridLeft + nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
+                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (roundNumber == currentRoundId && highlightedMove === nextMove.move)}"
                                     class="next-move-position-value"
                                     :cx="gridRight - nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                             <template v-else>
                                 <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
-                                                 showNextMoveHints ? nextMove.positionValue : '']"
+                                                 showNextMoveHints ? nextMove.positionValue : '',
+                                                 (roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                     class="next-move-position-value"
                                     :cx="isPuzzleGame ? gridRight - nextMove.remoteness * columnWidth : nextMove.moveValue === 'win' ?
                                         (turn(roundNumber) === 1 ?
@@ -660,7 +668,9 @@
                                         gridLeft + nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { move: nextMove.move })" 
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                         </template>
                     </template>
@@ -790,7 +800,7 @@
 
 <script lang="ts" setup>
     import { computed, ref } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
@@ -880,6 +890,7 @@
     const xBarWidth = ref(0.1);
     const xIntervalBarWidth = ref(0.2);
 
+    const highlightedMove = computed(() => store.getters.currentHighlightedMove);
     /** 
      * Determines whether it is the first player's turn or the second player's turn based on the current round id.
      * @param {number} roundID - current round id.
@@ -962,6 +973,7 @@
                     &.clickable:hover {
                         cursor: pointer;
                     }
+
                 }
                 > .position-value,
                 > .next-move-position-value,
@@ -981,6 +993,11 @@
                     &.win {
                         fill: var(--winColor);
                         stroke: var(--winColor);
+                    }
+
+                    &.highlighted {
+                        fill: var(--moveHighlightColor);
+                        stroke: var(--moveHighlightColor);
                     }
                 }
             }

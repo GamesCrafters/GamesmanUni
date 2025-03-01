@@ -10,7 +10,10 @@
             </tr>
             <template v-if="currentValuedRoundId >= 1">
                 <tr v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" class="moves"
-                    @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })">
+                    :class="[(highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                    @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                    @mouseover="store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                    @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
                 <td>{{ nextMove.move }}</td>
                     <td
                         :class="{ win: nextMove.moveValue === 'win', lose: nextMove.moveValue === 'lose', tie: nextMove.moveValue === 'tie', draw: nextMove.moveValue === 'draw' }">
@@ -32,7 +35,7 @@
 
 <script lang="ts" setup>
     import { computed } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
@@ -85,6 +88,8 @@
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
     );
+
+    const highlightedMove = computed(() => store.getters.currentHighlightedMove);
 </script>
 
 <style lang="scss" scoped>
@@ -107,9 +112,15 @@
         position: sticky;
     }
 
-    .moves:hover {
-        background-color: aliceblue;
-        cursor: pointer;
+    .moves {
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.highlighted {
+            outline: 2px solid var(--moveHighlightColor);
+            background-color: #f0f8ff;
+        }  
     }
 
     .draw {

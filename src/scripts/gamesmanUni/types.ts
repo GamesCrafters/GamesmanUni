@@ -19,6 +19,7 @@ export type App = Update & {
     CPUsStrategies: Array<string>;
     CPUsRatings: number[];
     scorecard: Scorecard;
+    highlightedMove: string;
 };
 
 export type Player = {

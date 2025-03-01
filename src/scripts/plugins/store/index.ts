@@ -95,6 +95,7 @@ type Getters = {
     maximumDrawLevel(state: State):
         (from: number, to: number) => number;
     currentVVHInstructions(state: State): string;
+    currentHighlightedMove(state: State): string;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -259,7 +260,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     (from: number, to: number) =>
         GMU.getMaximumDrawLevel(state.app, { from, to }),
     currentVVHInstructions: (state: State) =>
-        state.app.vvhInstructions
+        state.app.vvhInstructions,
+    currentHighlightedMove: (state: State) =>
+        state.app.highlightedMove
 };
 
 export enum mutationTypes {
@@ -286,6 +289,7 @@ export enum mutationTypes {
     setGamesPlayed = "setGamesPlayed",
     setPlayerWinsEntry = "setPlayerWinsEntry",
     showMenu = "showMenu",
+    setHighlightedMove = "setHighlightedMove"
 }
 
 type Mutations = {
@@ -312,6 +316,7 @@ type Mutations = {
     [mutationTypes.setGamesPlayed] (state: State, gamesPlayed: number): void;
     [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
     [mutationTypes.showMenu] (state: State, showMenu: boolean): void;
+    [mutationTypes.setHighlightedMove] (state: State, highlightedMove: string): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -362,7 +367,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     setPlayerWinsEntry: (state: State, {player, wins}:{player: string, wins: number}) =>
         (state.app.scorecard.playerWinsMap.set(player, wins)),
     showMenu: (state: State, showMenu: boolean) =>
-    (state.app.options.showMenu = showMenu),
+        (state.app.options.showMenu = showMenu),
+    setHighlightedMove: (state: State, highlightedMove: string) =>
+    (state.app.highlightedMove = highlightedMove)
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

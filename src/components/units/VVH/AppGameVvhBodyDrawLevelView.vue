@@ -268,14 +268,19 @@
                         <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', 'drawLevel' in nextMove ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
+                                    showNextMoveHints ? nextMove.positionValue : '',
+                                    'drawLevel' in nextMove ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '',
+                                    (roundNumber === currentValuedRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
                                 :r="nextMovePositionValueSize"
                                 :stroke-width="nextMovePositionValueStrokeSize"
                                 @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                @mouseover="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                @mouseout="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, '')" />
                         </template>
                     </template>
                 </template>
@@ -361,7 +366,7 @@
 
 <script lang="ts" setup>
     import { computed, ref } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
@@ -458,6 +463,8 @@
     const linkWidth = ref(0.2);
     const xBarWidth = ref(0.1);
     const xIntervalBarWidth = ref(0.2);
+
+    const highlightedMove = computed(() => store.getters.currentHighlightedMove);
 
     /** 
      * Determines whether it is the first player's turn or the second player's turn based on the current round id.
@@ -617,7 +624,6 @@
         const drawRemoteness = position ? position.drawRemoteness : -1;
         return drawRemoteness !== -1;
     }
-
 </script>
 
 <style lang="scss" scoped>
@@ -759,7 +765,7 @@
                         fill: var(--winColor);
                         stroke: var(--winColor);
                     }
-
+                    
                     &.draw-lose {
                         fill: var(--drawColor);
                         stroke: var(--loseColor);
@@ -768,6 +774,11 @@
                     &.draw-win {
                         fill: var(--drawColor);
                         stroke: var(--winColor);
+                    }
+
+                    &.highlighted {
+                        fill: var(--moveHighlightColor);
+                        stroke: var(--moveHighlightColor);
                     }
                 }
             }

@@ -14,9 +14,11 @@
     <template v-if="!animationPlaying && entitiesOverArrows"> 
       <path v-for="(arrow, i) in autoguiPositionData.arrows" :key="'arrow' + i"
         :d="formatArrowPathPoints(arrow, arrowWidth)"
-        :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+        :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (highlightedMove === arrow.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         <title>{{ moveButtonTitle(arrow.move.str) }}</title>
       </path>
     </template>
@@ -34,7 +36,10 @@
 
     <!-- Draw Text Entities -->
     <text v-for="(value, i) of autoguiPositionData.textEntities" :key="'entity' + i"
-      class="entity" :id="'entity' + i" :x="centers[i][0]" :y="centers[i][1]" 
+      class="entity"
+      :id="'entity' + i"
+      :x="centers[i][0]"
+      :y="centers[i][1]" 
       :style="'font-size:' + textEntityFontSize + 'px;'">
       {{ value }}
     </text>
@@ -55,11 +60,13 @@
               :y="centers[token.center][1] - 0.5 * charImages[token.token].scale * widthFactor"
               :width="charImages[token.token].scale * widthFactor" 
               :height="charImages[token.token].scale * widthFactor"
-              :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+              :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (highlightedMove === token.move.str) ? 'highlighted' : '']"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
               :href="getImageSource(charImages[token.token].image) + '#MoveButtonSVG'"
-              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
+              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })"
+              @mouseover="store.commit(mutationTypes.setHighlightedMove, token.move.str)"
+              @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
               <title>{{ moveButtonTitle(token.move.str) }}</title>
             </use>
           </g>
@@ -68,10 +75,12 @@
           <circle v-else
             :cx="centers[token.center][0]" :cy="centers[token.center][1]"
             :stroke-width="0" :r="defaultMoveTokenRadius"
-            :class="'iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move)"
+            :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (highlightedMove === token.move.str) ? 'highlighted' : '']"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
             :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px;'"
-            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })">
+            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })"
+            @mouseover="store.commit(mutationTypes.setHighlightedMove, token.move.str)"
+            @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
             <title>{{ moveButtonTitle(token.move.str) }}</title>
           </circle>
         </g>
@@ -80,10 +89,12 @@
       <!-- Draw T-type (text) move buttons -->
       <text v-for="textButton in autoguiPositionData.textButtons" :key="textButton.move.str"
         :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
-        :class="'iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move)"
+        :class="['iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move), (highlightedMove === textButton.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
         :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: textButton.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, textButton.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         {{ textButton.text }}
         <title>{{ moveButtonTitle(textButton.move.str) }}</title>
       </text>
@@ -92,9 +103,11 @@
       <template v-if="!entitiesOverArrows"> 
         <path v-for="arrow in autoguiPositionData.arrows " :key="arrow.move.str"
           :d="formatArrowPathPoints(arrow, arrowWidth)"
-          :class="'iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move)"
+          :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (highlightedMove === arrow.move.str) ? 'highlighted' : '']"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })">
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
+          @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
+          @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
           <title>{{ moveButtonTitle(arrow.move.str) }}</title>
         </path>
       </template>
@@ -106,9 +119,11 @@
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
         :stroke-width="lineWidth * widthFactor"
-        :class="'iag-button-line ' + getBoardMoveElementHintClass(line.move)"
+        :class="['iag-button-line ' + getBoardMoveElementHintClass(line.move), (highlightedMove === line.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: line.move.str })">
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, line.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         <title>{{ moveButtonTitle(line.move.str) }}</title>
       </line>
 
@@ -167,15 +182,17 @@
       <div class="move" v-for="listedMove in listedMoves" :key="listedMove.move"
         :class="options.showNextMoveHints ? `uni-${listedMove.moveValue}` : ''"
         :style="{ opacity: options.showNextMoveDeltaRemotenesses ? listedMove.moveValueOpacity : 1 }"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: listedMove.autoguiMove })">{{ listedMove.move }}
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: listedMove.move })"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, listedMove.move)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">{{ listedMove.move }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed } from "vue";
-  import { actionTypes, useStore } from "../../../scripts/plugins/store";
+  import { computed, watch } from "vue";
+  import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
@@ -467,6 +484,20 @@
 
   const getBoardMoveElementHintClass = (move?: IAGMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
+
+  const consolelog = (msg: any) => {
+    console.log(msg);
+    return;
+  }
+
+  const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+
+  watch(
+    () => highlightedMove.value,
+    async () => {
+      consolelog(highlightedMove.value);
+    }
+  );
 </script>
 
 <style lang="scss" scoped>
@@ -542,11 +573,32 @@
     [data-turn="2"] &.move { fill: var(--turn2Color); stroke: var(--turn1Color); }
 
     &.move.hint- {
-      &win      { fill: var(--winColor); stroke: var(--winColor); }
-      &draw     { fill: var(--drawColor); stroke: var(--drawColor); }
-      &tie      { fill: var(--tieColor); stroke: var(--tieColor); }
-      &lose     { fill: var(--loseColor); stroke: var(--loseColor); }
-      &unsolved { fill: var(--unsolvedColor); stroke: var(--unsolvedColor); }
+      &win {
+        fill: var(--winColor);
+        stroke: var(--winColor);
+      }
+      &draw {
+        fill: var(--drawColor);
+        stroke: var(--drawColor);
+      }
+      &tie {
+        fill: var(--tieColor);
+        stroke: var(--tieColor);
+      }
+      &lose     {
+        fill: var(--loseColor);
+        stroke: var(--loseColor);
+      }
+      &unsolved {
+        fill: var(--unsolvedColor);
+        stroke: var(--unsolvedColor);
+      }
+      &win,&draw,&tie,&lose,&unsolved {
+        &.highlighted {
+          fill: var(--moveHighlightColor);
+          stroke: var(--moveHighlightColor);
+        }
+      }
     }
 
     &:hover {
@@ -593,6 +645,12 @@
         stroke: var(--unsolvedColor);
         fill: var(--unsolvedColor)
       }
+      &win,&draw,&tie,&lose,&unsolved {
+        &.highlighted {
+          fill: var(--moveHighlightColor);
+          stroke: var(--moveHighlightColor);
+        }
+      }
     }
 
     &:hover {
@@ -617,6 +675,12 @@
       &tie { stroke: var(--tieColor); }
       &lose { stroke: var(--loseColor); }
       &unsolved { stroke: var(--unsolvedColor); }
+      &win,&draw,&tie,&lose,&unsolved {
+        &.highlighted {
+          fill: var(--moveHighlightColor);
+          stroke: var(--moveHighlightColor);
+        }
+      }
     }
 
     &:hover {

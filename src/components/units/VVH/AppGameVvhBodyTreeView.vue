@@ -18,13 +18,20 @@
                 <p class="label">Link Stroke Width</p>
                 <VueSlider v-model="linkStrokeWidth" :min="1" :max="10" :tooltip="'active'" />
             </div>
+            <div class="view-option">
+                <input class="uni-toggle-button"
+                                    aria-label="toggle"
+                                    type="checkbox"
+                                    v-model="showCurrentMovesOnly"/>
+                <label for="checkbox">Show Current Round Moves Only</label>
+            </div>
         </div>
     </div>
 </template>
   
 <script lang="ts" setup>
     import { computed, ref, onMounted, watch, reactive } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { useStore } from "../../../scripts/plugins/store";
     import * as d3 from "d3";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
@@ -38,6 +45,7 @@
     const nodeRadius = ref(20);
     const nodeStrokeWidth = ref(2);
     const linkStrokeWidth = ref(2);
+    const showCurrentMovesOnly = ref(false);
 
     defineProps({
         toggleOptions: Boolean,
@@ -183,7 +191,7 @@
             .attr("stroke", "black")
             .attr("style", (d) => {
                 const color = `var(--${d.data.positionValue}Color)`;
-                const opacity = d.data.isUnexplored ? "0.5" : "1";
+                const opacity = !showCurrentMovesOnly.value ? (d.data.isUnexplored ? "0.5" : "1") : (d.data.isUnexplored ? (d.data.isUnexplored && d.data.parentNode?.position == currentNode.value?.position ? "0.5" : "0") : "1");
                 return `fill: ${color}; opacity: ${opacity};`;
             })
             .attr("cursor", (d) => (d.data.isUnexplored ? "pointer" : "default"))
@@ -227,7 +235,7 @@
         });
     };
 
-    watch([chartHeight, nodeRadius, nodeStrokeWidth, linkStrokeWidth], () => {
+    watch([chartHeight, nodeRadius, nodeStrokeWidth, linkStrokeWidth, showCurrentMovesOnly], () => {
         if (treeContainer.value) {
             drawTree(treeData.value ? treeData.value : {
                 position: "",
@@ -329,5 +337,18 @@
     .win {
         fill: var(--winColor);
         stroke: var(--winColor);
+    }
+
+    .view-option {
+        border: 0.1rem solid var(--neutralColor);
+        border-radius: 1rem;
+        margin: 1rem;
+        padding: 1rem;
+        align-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
     }
 </style>

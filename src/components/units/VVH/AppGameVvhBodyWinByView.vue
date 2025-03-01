@@ -167,11 +167,14 @@
                         <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                 class="next-move-position-value" :cx="winByNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
-                                :stroke-width="4 * nextMovePositionValueSize" @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })" />
+                                :stroke-width="4 * nextMovePositionValueSize"
+                                @click="roundNumber === currentValuedRoundId &&
+                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                         </template>
                     </template>
                 </template>
@@ -241,7 +244,7 @@
 
 <script lang="ts" setup>
     import { computed, ref } from "vue";
-    import { actionTypes, useStore } from "../../../scripts/plugins/store";
+    import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
     import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
@@ -393,6 +396,8 @@
             return gridCenter.value;
         }
     }
+
+    const highlightedMove = computed(() => store.getters.currentHighlightedMove);
 </script>
 
 <style lang="scss" scoped>
@@ -521,6 +526,11 @@
                     &.win {
                         fill: var(--winColor);
                         stroke: var(--winColor);
+                    }
+
+                    &.highlighted {
+                        fill: var(--moveHighlightColor);
+                        stroke: var(--moveHighlightColor);
                     }
                 }
             }
