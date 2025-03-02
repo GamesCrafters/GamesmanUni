@@ -1,7 +1,7 @@
 <template>
     <component v-if="autoguiPosition === ''" :is="LoadingScreen"/>
     <component v-else-if="customGameBoardExists" :is="customGUIs[gameId]" />
-    <component v-else :is="ImageAutoGUI" />
+    <ImageAutoGUI v-else :is-overlay="false" />
 </template>
 
 <script lang="ts" setup>

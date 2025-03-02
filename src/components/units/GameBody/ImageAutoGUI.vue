@@ -6,7 +6,7 @@
     :data-turn="autoguiPositionData.turn">
 
     <!-- Draw Background Image -->
-    <image v-if="'background' in theme" x="0" y="0"
+    <image v-if="'background' in theme && !isOverlay" x="0" y="0"
       :width="scaledWidth" :height="scaledHeight"
       :href="getImageSource(theme.background)"/>
 
@@ -22,7 +22,7 @@
     </template>
 
     <!-- Draw Regular (Image) Entities -->
-    <g v-for="(entity, i) in autoguiPositionData.board" :key="'entity' + i">
+    <g v-if="!isOverlay" v-for="(entity, i) in autoguiPositionData.board" :key="'entity' + i">
       <image class="entity" v-if="entity != '-' && entity in charImages"
         :id="'entity' + i"
         :x="centers[i][0] - 0.5 * charImages[entity].scale * widthFactor"
@@ -40,7 +40,7 @@
     </text>
  
     <!-- Draw Foreground Image -->
-    <image v-if="'foreground' in theme" x="0" y="0"
+    <image v-if="'foreground' in theme && !isOverlay" x="0" y="0"
       :width="scaledWidth" :height="scaledHeight"
       :href="getImageSource(theme.foreground)"/>
 
@@ -137,6 +137,10 @@
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
+  defineProps({
+        isOverlay: Boolean,
+    });
+
   interface IAGMove {
     str: string; // Autogui move string
     hint: string;
@@ -176,7 +180,7 @@
   const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
   const scaledWidth = 100;
-  const animationPlaying = computed(() => store.getters.animationPlaying);
+  const animationPlaying = false;
 
   const imageAutoGUIData = computed(() => store.getters.imageAutoGUIData(store.getters.currentGameId, store.getters.currentVariantId));
   const theme = computed(() => {
