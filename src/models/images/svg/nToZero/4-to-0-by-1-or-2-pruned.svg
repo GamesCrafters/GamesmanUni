@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.9.6, SVG Export Plug-In . SVG Version: 9.03 Build 54986)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 777.6 950.4" style="enable-background:new 0 0 777.6 950.4;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:12;stroke-miterlimit:10;}
+	.st1{stroke:#000000;stroke-width:12;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#000000;stroke-width:12;stroke-miterlimit:10;}
+	.st3{font-family:'MyriadPro-Regular';}
+	.st4{font-size:141.6px;}
+</style>
+<line class="st0" x1="129.6" y1="475.2" x2="388.8" y2="820.8"/>
+<line class="st0" x1="648" y1="475.2" x2="388.8" y2="820.8"/>
+<line class="st0" x1="129.6" y1="129.6" x2="129.6" y2="475.2"/>
+<path class="st0" d="M129.6,475.2"/>
+<path class="st0" d="M648,129.6"/>
+<path class="st0" d="M648,475.2"/>
+<path class="st0" d="M648,129.6"/>
+<path class="st1" d="M129.6,475.2c518.4,0,518.4,0,518.4,0"/>
+<path class="st1" d="M129.6,129.6c518.4,0,518.4,0,518.4,0"/>
+<circle class="st2" cx="388.8" cy="820.8" r="86.4"/>
+<text transform="matrix(1 0 0 1 352.4807 864)" class="st3 st4">0</text>
+<circle class="st2" cx="129.6" cy="475.2" r="86.4"/>
+<text transform="matrix(1 0 0 1 93.2807 518.4)" class="st3 st4">2</text>
+<circle class="st2" cx="648" cy="475.2" r="86.4"/>
+<text transform="matrix(1 0 0 1 611.6807 518.4)" class="st3 st4">1</text>
+<circle class="st2" cx="129.6" cy="129.6" r="86.4"/>
+<text transform="matrix(1 0 0 1 93.2807 172.8)" class="st3 st4">4</text>
+<circle class="st2" cx="648" cy="129.6" r="86.4"/>
+<text transform="matrix(1 0 0 1 611.6807 172.8)" class="st3 st4">3</text>
+</svg>
