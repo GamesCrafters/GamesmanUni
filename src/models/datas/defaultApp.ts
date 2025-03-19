@@ -197,4 +197,5 @@ export const defaultApp: Types.App = {
         playerWinsMap: new Map(),
         records: [],
     },
+    highlightedMove: '',
 };
