@@ -115,27 +115,42 @@
       <!-- Draw MQ-type (quadratic bezier) move buttons. -->
       <path 
         v-for="quadraticBezier in autoguiPositionData.quadraticBeziers" 
+        fill="none"
         :d="`M ${quadraticBezier.start.x} ${quadraticBezier.start.y} Q ${quadraticBezier.control.x} ${quadraticBezier.control.y} ${quadraticBezier.end.x} ${quadraticBezier.end.y}`" 
-        fill="none" 
-        stroke="black" 
+        :stroke-linecap="'round'"
+        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
+        :stroke-width="2"
+        :class="'iag-button-quadraticbezier ' + getBoardMoveElementHintClass(quadraticBezier.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? quadraticBezier.move.hintOpacity : 1"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: quadraticBezier.move.str })"
         :key="quadraticBezier.move.str"
       />
 
       <!-- Draw MC-type (cubic bezier) move buttons. -->
       <path 
         v-for="cubicBezier in autoguiPositionData.cubicBeziers" 
+        fill="none"
         :d="`M ${cubicBezier.start.x} ${cubicBezier.start.y} C ${cubicBezier.control1.x} ${cubicBezier.control1.y}, ${cubicBezier.control2.x} ${cubicBezier.control2.y}, ${cubicBezier.end.x} ${cubicBezier.end.y}`" 
-        fill="none" 
-        stroke="black" 
+        :stroke-linecap="'round'"
+        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
+        :stroke-width="2"
+        :class="'iag-button-cubicbezier ' + getBoardMoveElementHintClass(cubicBezier.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cubicBezier.move.hintOpacity : 1"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: cubicBezier.move.str })"
         :key="cubicBezier.move.str"
       />
 
       <!-- Draw MA-type (elliptical arc) move buttons. -->
       <path 
-        v-for="ellipticalArc in autoguiPositionData.ellipticalArcs" 
+        v-for="ellipticalArc in autoguiPositionData.ellipticalArcs"
+        fill="none"
         :d="`M ${ellipticalArc.start.x} ${ellipticalArc.start.y} A ${ellipticalArc.radiiX} ${ellipticalArc.radiiY} ${ellipticalArc.rotation} ${ellipticalArc.largeArcFlag} ${ellipticalArc.clockwiseSweepFlag} ${ellipticalArc.end.x} ${ellipticalArc.end.y}`" 
-        fill="none" 
-        stroke="black" 
+        :stroke-linecap="'round'"
+        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
+        :stroke-width="2"
+        :class="'iag-button-ellipticalarc ' + getBoardMoveElementHintClass(ellipticalArc.move)"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? ellipticalArc.move.hintOpacity : 1"
+        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: ellipticalArc.move.str })"
         :key="ellipticalArc.move.str"
       />
     </template>
@@ -329,17 +344,12 @@
 
         let matches;
         if ((matches = moveObj.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
-          console.log(matches);
           tokens.push({token: matches[1], center: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
-          console.log(matches);
           arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
-          console.log(matches);
         } else if ((matches = moveObj.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
-          console.log(matches);
           lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
-          console.log(matches);
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^MQ_([ACR]{3})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
@@ -355,7 +365,7 @@
             console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
           }
           cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
-        } else if ((matches = moveObj.autoguiMove.match(/^MA_([ACR]{7})/))) {
+        } else if ((matches = moveObj.autoguiMove.match(/^MA_([ACRX]{7})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 7) {
@@ -596,7 +606,7 @@
     }
   }
 
-  .iag-button-line {
+  .iag-button-line, .iag-button-quadraticbezier, .iag-button-cubicbezier, .iag-button-ellipticalarc {
     stroke: var(--primaryColor);
 
     [data-turn="1"] & { stroke: var(--turn1Color); }
