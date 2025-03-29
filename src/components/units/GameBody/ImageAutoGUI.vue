@@ -352,21 +352,24 @@
         } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^MQ_([ACR]{3})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           quadraticBeziers.push({start: points[0], control: points[1], end: points[2], move: move});
           if (points.length != 3) {
             console.error("[IAGQuadraticBezierButton] Unexpected number of points:", points);
           }
         } else if ((matches = moveObj.autoguiMove.match(/^MC_([ACR]{4})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 4) {
             console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
           }
           cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
         } else if ((matches = moveObj.autoguiMove.match(/^MA_([ACRX]{7})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 7) {
             console.error("[IAGEllipticalArcButton] Unexpected number of points:", points);
