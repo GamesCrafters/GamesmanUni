@@ -111,6 +111,33 @@
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: line.move.str })">
         <title>{{ moveButtonTitle(line.move.str) }}</title>
       </line>
+
+      <!-- Draw MQ-type (quadratic bezier) move buttons. -->
+      <path 
+        v-for="quadraticBezier in autoguiPositionData.quadraticBeziers" 
+        :d="`M ${quadraticBezier.start.x} ${quadraticBezier.start.y} Q ${quadraticBezier.control.x} ${quadraticBezier.control.y} ${quadraticBezier.end.x} ${quadraticBezier.end.y}`" 
+        fill="none" 
+        stroke="black" 
+        :key="quadraticBezier.move.str"
+      />
+
+      <!-- Draw MC-type (cubic bezier) move buttons. -->
+      <path 
+        v-for="cubicBezier in autoguiPositionData.cubicBeziers" 
+        :d="`M ${cubicBezier.start.x} ${cubicBezier.start.y} C ${cubicBezier.control1.x} ${cubicBezier.control1.y}, ${cubicBezier.control2.x} ${cubicBezier.control2.y}, ${cubicBezier.end.x} ${cubicBezier.end.y}`" 
+        fill="none" 
+        stroke="black" 
+        :key="cubicBezier.move.str"
+      />
+
+      <!-- Draw MA-type (elliptical arc) move buttons. -->
+      <path 
+        v-for="ellipticalArc in autoguiPositionData.ellipticalArcs" 
+        :d="`M ${ellipticalArc.start.x} ${ellipticalArc.start.y} A ${ellipticalArc.radiiX} ${ellipticalArc.radiiY} ${ellipticalArc.rotation} ${ellipticalArc.largeArcFlag} ${ellipticalArc.clockwiseSweepFlag} ${ellipticalArc.end.x} ${ellipticalArc.end.y}`" 
+        fill="none" 
+        stroke="black" 
+        :key="ellipticalArc.move.str"
+      />
     </template>
   </svg>
   <div id="position-string" v-else>
@@ -168,6 +195,37 @@
     move: IAGMove;
   }
 
+  interface Point {
+    x: number;
+    y: number;
+  }
+
+  interface IAGQuadraticBezierButton {
+    start: Point;
+    control: Point;
+    end: Point;
+    move: IAGMove;
+  }
+
+  interface IAGCubicBezierButton {
+    start: Point;
+    control1: Point;
+    control2: Point;
+    end: Point;
+    move: IAGMove;
+  }
+
+  interface IAGEllipticalArcButton {
+    start: Point;
+    radiiX: number;
+    radiiY: number;
+    rotation: number;
+    largeArcFlag: number;
+    clockwiseSweepFlag: number;
+    end: Point;
+    move: IAGMove;
+  }
+
   const store = useStore();
   const options = computed(() => store.getters.options);
   const currentPosition = computed(() => store.getters.currentPosition);
@@ -198,6 +256,45 @@
   const textEntityFontSize = computed(() => theme.value.textEntityFontSize * widthFactor.value || 10);
   const textButtonFontSize = computed(() => theme.value.textButtonFontSize * widthFactor.value || 10);
 
+  /**
+   * Parses a series of points from the 'parsedData' array, dependant of the positioning mode. Given the 'X' positioning mode highlights
+   * that a parameter is a single value and not a point, this value is stored in the x-component of the point and the y component is
+   * attributed a value of -1 ({x: value, y: -1}).
+   * @param {string} positioningModeSubstring - A string where each character represents the positioning mode of one parameter.
+   * 'A' - Absolute
+   * 'C' - Center
+   * 'R' - Center-Relative
+   * 'X' - Non-positioning parameter
+   * @param {number[]} parsedData - Array of numbers.
+   * @returns {Point[]} - Array of points.
+   */
+  const parseAbsolutePoints = (positioningModeSubstring: string, parsedData: number[]): Point[] => {
+        const points: Point[] = [];
+
+        let dataIndex = 0;
+        for (let i = 0; i < positioningModeSubstring.length; i++) {
+          if (positioningModeSubstring[i] === 'A') {
+              points.push({x: parsedData[dataIndex], y: parsedData[dataIndex + 1]});
+              dataIndex += 2;
+            } else if (positioningModeSubstring[i] === 'C') {
+              let centerIndex = parsedData[dataIndex];
+              points.push({x: centers.value[centerIndex][0], y: centers.value[centerIndex][1]});
+              dataIndex += 1;
+            } else if (positioningModeSubstring[i] === 'R') {
+              let centerIndex = parsedData[dataIndex];
+              let xOffset = parsedData[dataIndex + 1];
+              let yOffset = parsedData[dataIndex + 2];
+              points.push({x: centers.value[centerIndex][0] + xOffset, y: centers.value[centerIndex][1] + yOffset});
+              dataIndex += 3;
+            } else if (positioningModeSubstring[i] === 'X') {
+              points.push({x: parsedData[dataIndex], y: -1});
+              dataIndex += 1;
+            }
+        }
+
+        return points;
+      };
+
   const autoguiPositionData = computed(() => {
     const matches = currentAutoguiPosition.value.match(/^(1|2)_([a-zA-Z0-9-\.~]+)*/)!;
     const isValidAutoguiPositionString = matches && matches.length >= 3 && imageAutoGUIData.value != null;
@@ -209,8 +306,11 @@
       let arrows: IAGArrowButton[] = [];
       let lines: IAGLineButton[] = [];
       let textButtons: IAGTextButton[] = [];
+      let quadraticBeziers: IAGQuadraticBezierButton[] = [];
+      let cubicBeziers: IAGCubicBezierButton[] = [];
+      let ellipticalArcs: IAGEllipticalArcButton[] = [];
       let listedButtons = [];
-      let textIndices = []
+      let textIndices = [];
       for (var i = 0; i < board.length; i++) {
         if (board[i] === ".") textIndices.push(i);
       }
@@ -229,18 +329,45 @@
 
         let matches;
         if ((matches = moveObj.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
+          console.log(matches);
           tokens.push({token: matches[1], center: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
+          console.log(matches);
           arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
+          console.log(matches);
         } else if ((matches = moveObj.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
-          lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move });
+          console.log(matches);
+          lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
+          console.log(matches);
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
+        } else if ((matches = moveObj.autoguiMove.match(/^MQ_([ACR]{3})/))) {
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
+          quadraticBeziers.push({start: points[0], control: points[1], end: points[2], move: move});
+          if (points.length != 3) {
+            console.error("[IAGQuadraticBezierButton] Unexpected number of points:", points);
+          }
+        } else if ((matches = moveObj.autoguiMove.match(/^MC_([ACR]{4})/))) {
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
+          if (points.length != 4) {
+            console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
+          }
+          cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
+        } else if ((matches = moveObj.autoguiMove.match(/^MA_([ACR]{7})/))) {
+          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+)/g)].map(match => parseInt(match[1]));
+          const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
+          if (points.length != 7) {
+            console.error("[IAGEllipticalArcButton] Unexpected number of points:", points);
+          }
+          // Non-positioning parameter values are accessed through the x-component of the point, hence the use of points[i].x.
+          ellipticalArcs.push({start: points[0], radiiX: points[1].x, radiiY: points[2].x, rotation: points[3].x, largeArcFlag: points[4].x, clockwiseSweepFlag: points[5].x, end: points[6], move: move});
         } else {
           listedButtons.push(moveObj);
         }
       }
-      
+
       const computeSquaredLength = (ax: number, ay: number, bx: number, by: number): number => {
         return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
       };
@@ -265,6 +392,9 @@
         lines,
         textEntities,
         textButtons,
+        quadraticBeziers,
+        cubicBeziers,
+        ellipticalArcs,
         listedButtons,
         isValidAutoguiPositionString,
       };
