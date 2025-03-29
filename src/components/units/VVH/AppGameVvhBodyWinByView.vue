@@ -164,7 +164,7 @@
                 <!-- Move Nodes -->
                 <template v-if="showNextMoves && currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
+                        <template v-for="nextMove in surfaceHighlightedMoveInMoves(highlightedMove, currentValuedRounds[roundNumber].position.availableMoves)"
                             :key="nextMove.move">
                             <circle
                                 :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
@@ -245,7 +245,7 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
-    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
+    import { Moves, Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
@@ -398,6 +398,25 @@
     }
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+
+    /**
+     * 'Surfaces' the highlighted move 'highlightedMove' in the Moves (Record<string, Move>) 'moves'. Given the 
+     * last move rendered is the move rendered on top, to 'surface' the highlighted move refers to placing the 
+     * move as the last entry in the Record.
+     * @param {string} highlightedMove - highlighted move name as a string, if no move is highlighted
+     * then highlightedMove must be an empty string "".
+     * @param {Moves} moves
+     * @returns non-modified available moves if highlightedMove is an empty string--- If it is not empty,
+     * returns the available moves with the highlighted move last.
+     */
+     const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Moves) => {
+        if (highlightedMove === "" || !moves.hasOwnProperty(highlightedMove)) {
+            return moves;
+        }
+
+        const { [highlightedMove]: highlighted, ...restMoves } = moves;
+        return { ...restMoves, [highlightedMove]: highlighted };
+    }
 </script>
 
 <style lang="scss" scoped>

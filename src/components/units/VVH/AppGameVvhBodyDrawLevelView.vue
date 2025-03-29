@@ -265,7 +265,7 @@
                 <!-- Move Nodes -->
                 <template v-if="showNextMoves && currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
+                        <template v-for="nextMove in surfaceHighlightedMoveInMoves(highlightedMove, currentValuedRounds[roundNumber].position.availableMoves)"
                             :key="nextMove.move">
                             <circle
                                 :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
@@ -367,7 +367,7 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
-    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
+    import { Moves, Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
@@ -603,7 +603,8 @@
     }
 
     /** 
-     * Determines the draw level for the fringes in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * Determines the draw level for the fringes in the 'Draw Level' view of the Visual Value History (VVH) 
+     * graph.
      * @param {number} roundID - current round id.
      * @returns the fringe's draw level.
     */
@@ -614,7 +615,8 @@
     }
 
     /** 
-     * Determines whether a position is a pure-draw in the 'Draw Level' view of the Visual Value History (VVH) graph.
+     * Determines whether a position is a pure-draw in the 'Draw Level' view of the Visual Value History (VVH)
+     * graph.
      * @param {number} roundID - current round id.
      * @returns true if the (starting) position is a pure-draw.
     */
@@ -623,6 +625,25 @@
         const position = round ? round.position : null;
         const drawRemoteness = position ? position.drawRemoteness : -1;
         return drawRemoteness !== -1;
+    }
+
+    /**
+     * 'Surfaces' the highlighted move 'highlightedMove' in the Moves (Record<string, Move>) 'moves'. Given the 
+     * last move rendered is the move rendered on top, to 'surface' the highlighted move refers to placing the 
+     * move as the last entry in the Record.
+     * @param {string} highlightedMove - highlighted move name as a string, if no move is highlighted
+     * then highlightedMove must be an empty string "".
+     * @param {Moves} moves
+     * @returns non-modified available moves if highlightedMove is an empty string--- If it is not empty,
+     * returns the available moves with the highlighted move last.
+     */
+    const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Moves) => {
+        if (highlightedMove === "" || !moves.hasOwnProperty(highlightedMove)) {
+            return moves;
+        }
+
+        const { [highlightedMove]: highlighted, ...restMoves } = moves;
+        return { ...restMoves, [highlightedMove]: highlighted };
     }
 </script>
 
