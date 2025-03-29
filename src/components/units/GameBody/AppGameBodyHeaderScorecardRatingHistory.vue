@@ -5,8 +5,8 @@
                 <table>
                     <thead>
                         <tr class="ratings-headers">
-                            <td>Left Player</td>
-                            <td>Right Player</td>
+                            <td>{{ currentScorecardRecord ? currentScorecardRecord.leftPlayer.name : "Left Player"}}</td>
+                            <td>{{ currentScorecardRecord ? currentScorecardRecord.rightPlayer.name : "Right Player"}}</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,9 +33,8 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, watch, ref, onMounted } from "vue";
-    import { mutationTypes, useStore } from "../../../scripts/plugins/store";
-    import { Rating } from "../../../scripts/gamesmanUni/types";
+    import { computed } from "vue";
+    import { useStore } from "../../../scripts/plugins/store";
     const props = defineProps({
         selectedId: {
             type: Number,

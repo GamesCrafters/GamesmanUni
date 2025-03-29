@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-body-header-scorecard-donut">        
         <div>
-            {{ playerSide == "left" ? "Left" : "Right" }} Player Rating
+            {{ (currentScorecardRecord ?  (playerSide == "left" ? currentScorecardRecord.leftPlayer.name + "\'s" : currentScorecardRecord.rightPlayer.name  + "\'s") : (playerSide == "left" ? "Left Player\'s" : "Right Player\'s'"))}} Rating
         </div>
         <div id="donut">
         <div>
@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
     import { computed, watch, ref, onMounted } from "vue";
-    import { mutationTypes, useStore } from "../../../scripts/plugins/store";
+    import { useStore } from "../../../scripts/plugins/store";
     import { Rating } from "../../../scripts/gamesmanUni/types";
 
     //Define props
