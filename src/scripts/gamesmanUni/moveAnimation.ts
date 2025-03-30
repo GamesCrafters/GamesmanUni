@@ -272,7 +272,6 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
             var duration = animateImageAutoGUI(currPosition, nextPosition);
 
             const soundChar = moveObj.autoguiMove[moveObj.autoguiMove.length - 1];
-            console.log(soundChar);
             if (soundChar in sounds) {
                 playMoveSFX(sounds[soundChar]);
             }

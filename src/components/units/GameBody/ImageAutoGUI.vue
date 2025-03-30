@@ -353,7 +353,6 @@
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^MQ_([ACR]{3})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
-          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           quadraticBeziers.push({start: points[0], control: points[1], end: points[2], move: move});
           if (points.length != 3) {
