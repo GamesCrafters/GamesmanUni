@@ -2,7 +2,7 @@
     <div id="app-game-vvh-header">
         <div id="app-game-vvh-header-left">
             <!-- TODO: implement VVH instructions and change the behavior of the button below. -->
-            <AppGameVvhHeaderInstructions class="buttons" title="Show Game Instructions" />
+            <AppGameVvhHeaderInstructions class="buttons" title="Show View Instructions" />
         </div>
         <AppGameVvhHeaderTitle />
         <div id="app-game-vvh-header-right">

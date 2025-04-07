@@ -36,12 +36,6 @@ export const addInstructions = async (app: Types.App, payload: {gameId: string, 
     return app;
 }
 
-export const addVVHInstructions = async (app: Types.App) => {
-    const instructions = await GCTAPI.loadInstructions("https://raw.githubusercontent.com/GamesCrafters/Explainers/refs/heads/ae/viewsinstructions/instructions/en/views/views.xml");
-    app.vvhInstructions = instructions ? instructions.instructions : "";
-    return app;
-}
-
 export const loadGame = async (app: Types.App, payload: { gameId: string; force?: boolean }) => {
     if (!Object.keys(app.games).length) {
         const updatedApp = await loadGames(app);

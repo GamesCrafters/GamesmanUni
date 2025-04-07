@@ -94,7 +94,6 @@ type Getters = {
         (from: number, to: number) => number;
     maximumDrawLevel(state: State):
         (from: number, to: number) => number;
-    currentVVHInstructions(state: State): string;
     currentHighlightedMove(state: State): string;
 };
 
@@ -259,8 +258,6 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     maximumDrawLevel: (state: State) =>
     (from: number, to: number) =>
         GMU.getMaximumDrawLevel(state.app, { from, to }),
-    currentVVHInstructions: (state: State) =>
-        state.app.vvhInstructions,
     currentHighlightedMove: (state: State) =>
         state.app.highlightedMove
 };
@@ -278,7 +275,7 @@ export enum mutationTypes {
     setTheme = "setTheme",
     showInstructions = "showInstructions",
     showOptions = "showOptions",
-    showVvhInstructions = "showVvhInstructions",
+    showViewsInstructions = "showViewsInstructions",
     showScorecard = "showScorecard",
     toggleVvhScrolling = "toggleVvhScrolling",
     activateVVHView = "activateVVHView",
@@ -307,7 +304,7 @@ type Mutations = {
     [mutationTypes.showOptions](state: State, showOptions: boolean): void;
     [mutationTypes.showScorecard](state: State, showScorecard: boolean): void;
     [mutationTypes.toggleVvhScrolling](state: State, vvhScrolling: boolean): void;
-    [mutationTypes.showVvhInstructions](state: State, showVvhInstructions: boolean): void;
+    [mutationTypes.showViewsInstructions](state: State, showViewsInstructions: boolean): void;
     [mutationTypes.activateVVHView](state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}): void;
     [mutationTypes.inactivateVVHView](state: State, vvhViewId: number): void;
     [mutationTypes.setCPUsStrategies](state: State, CPUsStrategies: string[]): void;
@@ -350,8 +347,8 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
         (state.app.options.showScorecard = showScorecard),
     toggleVvhScrolling: (state: State, vvhScrolling: boolean) =>
         (state.app.options.vvhScrolling = vvhScrolling),
-    showVvhInstructions: (state: State, showVvhInstructions: boolean) =>
-        (state.app.options.showVvhInstructions = showVvhInstructions),
+    showViewsInstructions: (state: State, showVvhInstructions: boolean) =>
+        (state.app.options.showViewsInstructions = showVvhInstructions),
     activateVVHView: (state: State, {vvhViewId, vvhView}:{vvhViewId: number,vvhView: string}) =>
             (state.app.activeVVHViews[vvhViewId] = {name: vvhView, viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true }}),
     inactivateVVHView: (state: State, vvhViewId: number) =>
@@ -381,7 +378,6 @@ type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
 
 export enum actionTypes {
     addInstructions = "addInstructions",
-    addVVHInstructions = "addVVHInstructions",
     loadGames = "loadGames",
     loadVariants = "loadVariants",
     initiateMatch = "initiateMatch",
@@ -400,7 +396,6 @@ export enum actionTypes {
 
 type Actions = {
     [actionTypes.addInstructions](context: ActionContext, payload: {gameId: string, variantId: string}): Promise<void>;
-    [actionTypes.addVVHInstructions](context: ActionContext): Promise<void>;
     [actionTypes.loadGames](context: ActionContext, payload: {
         type: string
     }): Promise<void>;
@@ -438,10 +433,6 @@ type Actions = {
 const actions: Vuex.ActionTree<State, State> & Actions = {
     addInstructions: async (context: ActionContext, payload: {gameId: string, variantId: string}) => {
         const updatedApp = await GMU.addInstructions(context.state.app, {gameId: payload.gameId, variantId: payload.variantId});
-        if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
-    },
-    addVVHInstructions: async (context: ActionContext) => {
-        const updatedApp = await GMU.addVVHInstructions(context.state.app);
         if (updatedApp) context.commit(mutationTypes.setApp, updatedApp);
     },
     loadGames: async (context: ActionContext, payload: { type: string }) => {

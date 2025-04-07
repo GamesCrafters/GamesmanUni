@@ -118,7 +118,7 @@ export const defaultOptions: Types.Options = {
     showNextMoves: true,
     showOptions: false,
     showMenu: true,
-    showVvhInstructions: false,
+    showViewsInstructions: false,
     vvhScrolling: false,
     showScorecard: false,
 };
@@ -170,7 +170,6 @@ export const defaultApp: Types.App = {
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
-    vvhInstructions: "# No Instructions Available",
     activeVVHViews: activeVVHViews,
     currentMatch: {
         id: 0, gameType: "",
