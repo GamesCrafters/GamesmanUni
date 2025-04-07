@@ -27,9 +27,6 @@
                     <div v-else-if="activeVVHView.name === 'Column'">
                         <AppGameVvhBodyColumnView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
                     </div>
-                    <div v-else-if="activeVVHView.name === 'Tree View'">
-                        <AppGameVvhBodyTreeView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
-                    </div>
                     <p class="bottom x-axis-label" v-if="activeVVHView.viewOptions.toggleGuides">
                         <b> {{ activeVVHView.name }} </b>
                     </p>
