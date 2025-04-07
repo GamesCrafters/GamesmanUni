@@ -112,42 +112,42 @@
         <title>{{ moveButtonTitle(line.move.str) }}</title>
       </line>
 
-      <!-- Draw MQ-type (quadratic bezier) move buttons. -->
+      <!-- Draw LQ-subtype (quadratic bezier) move buttons. -->
       <path 
         v-for="quadraticBezier in autoguiPositionData.quadraticBeziers" 
         fill="none"
         :d="`M ${quadraticBezier.start.x} ${quadraticBezier.start.y} Q ${quadraticBezier.control.x} ${quadraticBezier.control.y} ${quadraticBezier.end.x} ${quadraticBezier.end.y}`" 
         :stroke-linecap="'round'"
-        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
-        :stroke-width="2"
+        :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
+        :stroke-width=lineWidth
         :class="'iag-button-quadraticbezier ' + getBoardMoveElementHintClass(quadraticBezier.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? quadraticBezier.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: quadraticBezier.move.str })"
         :key="quadraticBezier.move.str"
       />
 
-      <!-- Draw MC-type (cubic bezier) move buttons. -->
+      <!-- Draw LC-subtype (cubic bezier) move buttons. -->
       <path 
         v-for="cubicBezier in autoguiPositionData.cubicBeziers" 
         fill="none"
         :d="`M ${cubicBezier.start.x} ${cubicBezier.start.y} C ${cubicBezier.control1.x} ${cubicBezier.control1.y}, ${cubicBezier.control2.x} ${cubicBezier.control2.y}, ${cubicBezier.end.x} ${cubicBezier.end.y}`" 
         :stroke-linecap="'round'"
-        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
-        :stroke-width="2"
+        :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
+        :stroke-width=lineWidth
         :class="'iag-button-cubicbezier ' + getBoardMoveElementHintClass(cubicBezier.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cubicBezier.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: cubicBezier.move.str })"
         :key="cubicBezier.move.str"
       />
 
-      <!-- Draw MA-type (elliptical arc) move buttons. -->
+      <!-- Draw LA-subtype (elliptical arc) move buttons. -->
       <path 
         v-for="ellipticalArc in autoguiPositionData.ellipticalArcs"
         fill="none"
         :d="`M ${ellipticalArc.start.x} ${ellipticalArc.start.y} A ${ellipticalArc.radiiX} ${ellipticalArc.radiiY} ${ellipticalArc.rotation} ${ellipticalArc.largeArcFlag} ${ellipticalArc.clockwiseSweepFlag} ${ellipticalArc.end.x} ${ellipticalArc.end.y}`" 
         :stroke-linecap="'round'"
-        :style="'--w: ' + 2 + ';--w2: ' + (2 * 1.75) + ';'"
-        :stroke-width="2"
+        :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
+        :stroke-width=lineWidth
         :class="'iag-button-ellipticalarc ' + getBoardMoveElementHintClass(ellipticalArc.move)"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? ellipticalArc.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: ellipticalArc.move.str })"
@@ -341,7 +341,6 @@
           hintOpacity: !options.value.showNextMoves ? 0.001 : moveObj.moveValueOpacity,
           nextPosition: moveObj.position
         };
-
         let matches;
         if ((matches = moveObj.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
           tokens.push({token: matches[1], center: parseInt(matches[2]), move});
@@ -351,14 +350,14 @@
           lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move});
         } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
-        } else if ((matches = moveObj.autoguiMove.match(/^MQ_([ACR]{3})/))) {
+        } else if ((matches = moveObj.autoguiMove.match(/^LQ_([ACR]{3})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           quadraticBeziers.push({start: points[0], control: points[1], end: points[2], move: move});
           if (points.length != 3) {
             console.error("[IAGQuadraticBezierButton] Unexpected number of points:", points);
           }
-        } else if ((matches = moveObj.autoguiMove.match(/^MC_([ACR]{4})/))) {
+        } else if ((matches = moveObj.autoguiMove.match(/^LC_([ACR]{4})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
@@ -366,7 +365,7 @@
             console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
           }
           cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
-        } else if ((matches = moveObj.autoguiMove.match(/^MA_([ACRX]{7})/))) {
+        } else if ((matches = moveObj.autoguiMove.match(/^LA_([ACRX]{7})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
