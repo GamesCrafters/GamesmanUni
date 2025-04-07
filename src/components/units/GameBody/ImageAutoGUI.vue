@@ -359,7 +359,6 @@
           }
         } else if ((matches = moveObj.autoguiMove.match(/^LC_([ACR]{4})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
-          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 4) {
             console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
@@ -367,7 +366,6 @@
           cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
         } else if ((matches = moveObj.autoguiMove.match(/^LA_([ACRX]{7})/))) {
           const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
-          console.log(parsedData);
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 7) {
             console.error("[IAGEllipticalArcButton] Unexpected number of points:", points);
