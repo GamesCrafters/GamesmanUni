@@ -130,7 +130,7 @@
       <path 
         v-for="cubicBezier in autoguiPositionData.cubicBeziers" 
         fill="none"
-        :d="`M ${cubicBezier.start.x} ${cubicBezier.start.y} C ${cubicBezier.control1.x} ${cubicBezier.control1.y}, ${cubicBezier.control2.x} ${cubicBezier.control2.y}, ${cubicBezier.end.x} ${cubicBezier.end.y}`" 
+        :d="`M ${cubicBezier.start.x} ${cubicBezier.start.y} C ${cubicBezier.control1.x} ${cubicBezier.control1.y} ${cubicBezier.control2.x} ${cubicBezier.control2.y} ${cubicBezier.end.x} ${cubicBezier.end.y}`" 
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
         :stroke-width=lineWidth
