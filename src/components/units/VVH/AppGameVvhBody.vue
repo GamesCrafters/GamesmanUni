@@ -50,7 +50,6 @@
     import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
     import AppGameVvhBodyColumnView from "./AppGameVvhBodyColumnView.vue";
     import AppGameVvhBodyDrawLevelView from "./AppGameVvhBodyDrawLevelView.vue";
-    import AppGameVvhBodyTreeView from "./AppGameVvhBodyTreeView.vue";
     import { VVHViews } from "../../../models/datas/defaultApp";
     
     const store = useStore();
@@ -144,8 +143,6 @@
             case "Win By":
                 return supportsWinBy.value;
             case "Draw Level":
-                return !isPuzzleGame.value;
-            case "Tree View":
                 return !isPuzzleGame.value;
             default:
                 return true;
