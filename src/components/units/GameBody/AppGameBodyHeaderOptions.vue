@@ -307,11 +307,11 @@
             return false;
         }
         
-        return viewIsLegal(CPUStrategyOptionName);
+        return strategyIsLegal(CPUStrategyOptionName);
     }
     
-    const viewIsLegal = (VVHViewName: string) => {
-        switch(VVHViewName) {
+    const strategyIsLegal = (CPUStrategyName: string) => {
+        switch(CPUStrategyName) {
             case "Win By":
                 return supportsWinBy.value;
             default:
