@@ -1,6 +1,5 @@
 <template>
     <div id="app-game-body-header">
-        <button> ← </button>
         <AppGameBodyHeaderInstructions />
         <AppGameBodyHeaderTitle />
         <AppGameBodyHeaderOptions />
@@ -26,13 +25,6 @@
         justify-content: space-around;
         > * {
             margin: 1rem;
-        }
-
-        button {
-            border-radius: 100%;
-            font-size: 2rem;
-            height: max(2.5rem, min(5vh, 5vw));
-            width: max(2.5rem, min(5vh, 5vw));
         }
     }
 </style>

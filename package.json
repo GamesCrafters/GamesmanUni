@@ -17,7 +17,6 @@
     "devDependencies": {
         "@intlify/vite-plugin-vue-i18n": "3.4.0",
         "@octokit/types": "6.37.1",
-        "@types/d3": "^7.4.3",
         "@types/markdown-it": "12.2.3",
         "@types/markdown-it-link-attributes": "3.0.1",
         "@types/punycode": "2.1.0",
