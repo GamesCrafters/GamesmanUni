@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #405eab;
+        stroke-miterlimit: 10;
+        stroke-width: 8px;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.5, SVG Export Plug-In . SVG Version: 1.2.0 Build 176)  -->
+  <g>
+    <g id="Layer_1">
+      <g>
+        <polygon points="300 33.05 350 119.65 400 206.25 350 292.86 300 379.46 200 379.46 100 379.46 50 292.86 0 206.25 50 119.65 100 33.05 200 33.05 300 33.05"/>
+        <path class="cls-1" d="M213.14,249.42"/>
+        <path class="cls-1" d="M50,292.86"/>
+        <path class="cls-1" d="M200,379.46h0c0-76.98-83.33-125.09-150-86.6h0"/>
+      </g>
+    </g>
+  </g>
+</svg>
