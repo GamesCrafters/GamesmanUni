@@ -8,21 +8,21 @@
                 <td>Remoteness</td>
                 <td v-if="supportsWinBy">Win By</td>
             </tr>
-            <template v-if="currentValuedRoundId >= 1">
-                <tr v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" class="moves"
+            <template v-if="currentRoundId >= 1">
+                <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
                     :class="[(highlightedMove === nextMove.move) ? 'highlighted' : '']"
                     @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })"
                     @mouseover="store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
                     @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
                 <td>{{ nextMove.move }}</td>
                     <td
-                        :class="{ win: nextMove.moveValue === 'win', lose: nextMove.moveValue === 'lose', tie: nextMove.moveValue === 'tie', draw: nextMove.moveValue === 'draw' }">
+                        :class="[nextMove.moveValue]">
                     {{ nextMove.moveValue }}
                     </td>
                     <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawLevel }}</td>
                     <td v-else> - </td>
                     <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
-                    <td v-else>{{ nextMove.remoteness }}</td>
+                    <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : nextMove.remoteness }}</td>
                     <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
                 </tr>
             </template>
@@ -36,8 +36,6 @@
 <script lang="ts" setup>
     import { computed } from "vue";
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
-    import { Rounds } from "../../../scripts/gamesmanUni/types";
-    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
     defineProps({
         toggleOptions: Boolean,
@@ -46,44 +44,9 @@
     });
 
     const store = useStore();
+    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentRounds = computed(() => store.getters.currentRounds);
-    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-    const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
-    
-    /** 
-    * Iterate through the rounds and see if any visited positions or any child positions of
-    * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
-    * to be a dummy value of 1 greater than the maximum known finite remoteness,
-    * which is where on the VVH finite unknown remoteness positions will go.
-    * @returns [0]: A copy of the match's rounds, with the remotenesses of FUR positions set to max known remoteness + 1
-    * @returns [1]: A boolean indicating whether there are FUR positions.
-    */
-    const detectFiniteUnknownRemoteness = computed((): [Rounds, boolean] => {
-        var roundsCopy = JSON.parse(JSON.stringify(currentRounds.value)) as Rounds;
-        var finiteUnknownRemotenessExists = false;
-        for (const round of roundsCopy) {
-            if (round.position.positionValue !== "unsolved") {
-                if (round.position.remoteness == Remoteness.FINITE_UNKNOWN) {
-                    round.position.remoteness = maximumRemoteness.value + 1;
-                    finiteUnknownRemotenessExists = true;
-                }
-                for (const move in round.position.availableMoves) {
-                    const moveObj = round.position.availableMoves[move]
-                    if (moveObj.remoteness == Remoteness.FINITE_UNKNOWN) {
-                        moveObj.remoteness = maximumRemoteness.value + 1;
-                        finiteUnknownRemotenessExists = true;
-                    }
-                }
-            }
-        }
-        return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
-    });
-    const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
-
-    const currentValuedRoundId = computed(() =>
-        Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
-    );
     const currentGameId = computed(() => store.getters.currentGameId); 
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
@@ -138,6 +101,11 @@
 
     .win {
         background-color: var(--winColor);
+        color: white;
+    }
+
+    .unsolved {
+        background-color: var(--unsolvedColor);
         color: white;
     }
 }
