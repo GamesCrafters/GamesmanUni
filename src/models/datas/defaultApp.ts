@@ -17,8 +17,8 @@ export const defaultPreferences: Types.Preferences = {
 
 export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
-    gameAPI: "https://nyc.cs.berkeley.edu/universal/v1/"
-    // gameAPI: "http://localhost:8082/"
+    //gameAPI: "https://nyc.cs.berkeley.edu/universal/v1/"
+    gameAPI: "http://localhost:8082/"
 };
 
 export const defaultAvailableMove: Types.Move = {
