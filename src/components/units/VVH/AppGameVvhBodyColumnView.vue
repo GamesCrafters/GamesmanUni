@@ -8,7 +8,7 @@
                 <td>Remoteness</td>
                 <td v-if="supportsWinBy">Win By</td>
             </tr>
-            <template v-if="currentRoundId >= 1">
+            <template v-if="currentRoundId >= 1 && !currentMatch.computerMoving">
                 <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
                     :class="[(highlightedMove === nextMove.move) ? 'highlighted' : '']"
                     @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })"
@@ -45,9 +45,11 @@
 
     const store = useStore();
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
+    const currentMatch = computed(() => store.getters.currentMatch);
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentRounds = computed(() => store.getters.currentRounds);
-    const currentGameId = computed(() => store.getters.currentGameId); 
+    const currentGameId = computed(() => store.getters.currentGameId);
+
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
     );
