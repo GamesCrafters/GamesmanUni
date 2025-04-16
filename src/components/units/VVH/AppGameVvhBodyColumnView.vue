@@ -27,6 +27,9 @@
                 </tr>
             </template>
         </table>
+        <template v-if="currentMatch.computerMoving">
+            ... Making Move ...
+        </template>
         <template v-if="isEndOfMatch">
             No moves available.
         </template>
