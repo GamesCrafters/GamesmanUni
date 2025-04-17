@@ -121,6 +121,7 @@ export const defaultOptions: Types.Options = {
     showViewsInstructions: false,
     vvhScrolling: false,
     showScorecard: false,
+    highlightMove: true,
 };
 
 export const defaultMatches: Types.Matches = {};

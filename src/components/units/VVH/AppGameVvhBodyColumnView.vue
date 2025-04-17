@@ -10,7 +10,7 @@
             </tr>
             <template v-if="currentRoundId >= 1 && !currentMatch.computerMoving">
                 <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
-                    :class="[(highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                    :class="[(options.highlightMove && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                     @click="store.dispatch(actionTypes.runMove, { move: nextMove.move })"
                     @mouseover="store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
                     @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
@@ -47,6 +47,7 @@
     });
 
     const store = useStore();
+    const options = computed(() => store.getters.options);
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
     const currentMatch = computed(() => store.getters.currentMatch);
     const currentRoundId = computed(() => store.getters.currentRoundId);
@@ -83,6 +84,7 @@
     .moves {
         &:hover {
             cursor: pointer;
+            background-color: #f0f8ff;
         }
 
         &.highlighted {

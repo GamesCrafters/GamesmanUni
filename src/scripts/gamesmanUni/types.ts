@@ -123,6 +123,7 @@ export type Options = {
     showViewsInstructions: boolean;
     vvhScrolling: boolean;
     showScorecard: boolean;
+    highlightMove: boolean;
 };
 
 export type Matches = Record<number, Match>;

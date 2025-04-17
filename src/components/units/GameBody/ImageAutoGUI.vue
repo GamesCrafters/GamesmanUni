@@ -14,7 +14,7 @@
     <template v-if="!animationPlaying && entitiesOverArrows"> 
       <path v-for="(arrow, i) in autoguiPositionData.arrows" :key="'arrow' + i"
         :d="formatArrowPathPoints(arrow, arrowWidth)"
-        :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (highlightedMove === arrow.move.str) ? 'highlighted' : '']"
+        :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (options.highlightMove && highlightedMove === arrow.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
@@ -60,7 +60,7 @@
               :y="centers[token.center][1] - 0.5 * charImages[token.token].scale * widthFactor"
               :width="charImages[token.token].scale * widthFactor" 
               :height="charImages[token.token].scale * widthFactor"
-              :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (highlightedMove === token.move.str) ? 'highlighted' : '']"
+              :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (options.highlightMove && highlightedMove === token.move.str) ? 'highlighted' : '']"
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
               :href="getImageSource(charImages[token.token].image) + '#MoveButtonSVG'"
@@ -75,7 +75,7 @@
           <circle v-else
             :cx="centers[token.center][0]" :cy="centers[token.center][1]"
             :stroke-width="0" :r="defaultMoveTokenRadius"
-            :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (highlightedMove === token.move.str) ? 'highlighted' : '']"
+            :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (options.highlightMove && highlightedMove === token.move.str) ? 'highlighted' : '']"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
             :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px;'"
             @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: token.move.str })"
@@ -89,7 +89,7 @@
       <!-- Draw T-type (text) move buttons -->
       <text v-for="textButton in autoguiPositionData.textButtons" :key="textButton.move.str"
         :x="centers[textButton.center][0]" :y="centers[textButton.center][1]"
-        :class="['iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move), (highlightedMove === textButton.move.str) ? 'highlighted' : '']"
+        :class="['iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move), (options.highlightMove && highlightedMove === textButton.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
         :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: textButton.move.str })"
@@ -103,7 +103,7 @@
       <template v-if="!entitiesOverArrows"> 
         <path v-for="arrow in autoguiPositionData.arrows " :key="arrow.move.str"
           :d="formatArrowPathPoints(arrow, arrowWidth)"
-          :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (highlightedMove === arrow.move.str) ? 'highlighted' : '']"
+          :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (options.highlightMove && highlightedMove === arrow.move.str) ? 'highlighted' : '']"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
           @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: arrow.move.str })"
           @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
@@ -119,7 +119,7 @@
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth * widthFactor + ';--w2: ' + (lineWidth * widthFactor * 1.75) + ';'"
         :stroke-width="lineWidth * widthFactor"
-        :class="['iag-button-line ' + getBoardMoveElementHintClass(line.move), (highlightedMove === line.move.str) ? 'highlighted' : '']"
+        :class="['iag-button-line ' + getBoardMoveElementHintClass(line.move), (options.highlightMove && highlightedMove === line.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { move: line.move.str })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, line.move.str)"

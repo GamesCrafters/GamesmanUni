@@ -175,14 +175,16 @@
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="options.showNextMoves" @click="() => {options.showNextMoveHints = false; options.showNextMoveDeltaRemotenesses = false}"/>
+                                v-model="options.showNextMoves"
+                                @click="() => {options.showNextMoveHints = false; options.showNextMoveDeltaRemotenesses = false; options.highlightMove = false}"/>
                             <label for="checkbox">Available Move Buttons</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves">
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="options.showNextMoveHints" />
+                                v-model="options.showNextMoveHints"
+                                @click="() => {options.showNextMoveDeltaRemotenesses = false; options.highlightMove = false}"/>
                             <label for="checkbox">Available Moves' Position Value Predictions</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves && options.showNextMoveHints">
@@ -191,6 +193,13 @@
                                 type="checkbox"
                                 v-model="options.showNextMoveDeltaRemotenesses" />
                             <label for="checkbox">Available Moves' Delta Remoteness Predictions</label>
+                        </div>
+                        <div class="option" v-if="options.showNextMoves && options.showNextMoveHints">
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="options.highlightMove" />
+                            <label for="checkbox">Move Highlighting</label>
                         </div>
                     </div>
                 </div>

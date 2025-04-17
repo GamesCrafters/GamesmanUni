@@ -164,10 +164,10 @@
                 <!-- Move Nodes -->
                 <template v-if="showNextMoves && currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in surfaceHighlightedMoveInMoves(highlightedMove, currentValuedRounds[roundNumber].position.availableMoves)"
+                        <template v-for="nextMove in surfaceHighlightedMoveInMoves((options.highlightMove ? highlightedMove : ''), currentValuedRounds[roundNumber].position.availableMoves)"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                 class="next-move-position-value" :cx="winByNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
                                 :stroke-width="4 * nextMovePositionValueSize"

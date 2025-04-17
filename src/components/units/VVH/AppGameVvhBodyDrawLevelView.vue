@@ -265,13 +265,13 @@
                 <!-- Move Nodes -->
                 <template v-if="showNextMoves && currentValuedRoundId >= 1">
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in surfaceHighlightedMoveInMoves(highlightedMove, currentValuedRounds[roundNumber].position.availableMoves)"
+                        <template v-for="nextMove in surfaceHighlightedMoveInMoves((options.highlightMove ? highlightedMove : ''), currentValuedRounds[roundNumber].position.availableMoves)"
                             :key="nextMove.move">
                             <circle
                                 :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
                                     showNextMoveHints ? nextMove.positionValue : '',
                                     'drawLevel' in nextMove ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '',
-                                    (roundNumber === currentValuedRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                    (options.highlightMove && roundNumber === currentValuedRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
