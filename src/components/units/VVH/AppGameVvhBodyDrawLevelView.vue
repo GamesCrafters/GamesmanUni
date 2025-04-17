@@ -367,7 +367,7 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
-    import { Moves, Move, Rounds } from "../../../scripts/gamesmanUni/types";
+    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
@@ -482,7 +482,7 @@
     */
     const nextTurn = (roundID: number) => {
         return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
-    }
+    };
 
     // Stores the maximum between the maximum Draw Level Remoteness value or the default value.
     const maximumDrawLevelRemoteness = computed(() => store.getters.maximumDrawLevelRemoteness(1, store.getters.currentRoundId));
@@ -507,8 +507,7 @@
         // Left Hand Side: When its the first players turn (at that move) and is at a draw-win, or, its not the first players turn (at that move) and is at a draw-lose
         const isLHS = (isFirstPlayerTurn && drawValue === 'win') || (!isFirstPlayerTurn && drawValue === 'lose');
         return isLHS ? gridLeft.value + drawRemoteness * columnWidth.value : gridRight.value - drawRemoteness * columnWidth.value;
-        
-    }
+    };
 
     /** 
      * Determines the x-position of the next move's node in the 'Win By' view of the Visual Value History (VVH) graph.
@@ -529,7 +528,7 @@
         // Left Hand Side: When its the first players turn (at that move) and is at a draw-win, or, its not the first players turn (at that move) and is at a draw-lose
         const isLHS = (isFirstPlayerNextTurn && nextDrawValue === 'win') || (!isFirstPlayerNextTurn && nextDrawValue === 'lose');
         return isLHS ? gridLeft.value + nextDrawRemoteness * columnWidth.value : gridRight.value - nextDrawRemoteness * columnWidth.value;
-    }
+    };
 
     /** 
      * Determines if the game reached a new draw level in the 'Draw Level' view of the Visual Value History (VVH) graph.
@@ -548,7 +547,7 @@
         }
         
         return prevDrawLevel === drawLevel + 1;
-    }
+    };
 
     const fringeOffset = ref(2);
 
@@ -567,7 +566,7 @@
         }
         
         return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
-    }
+    };
 
     /** 
      * Determines the vertical offset for rows given the previous new draw levels in the 'Draw Level' view of the Visual Value History (VVH) graph.
@@ -600,7 +599,7 @@
         }
 
         return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
-    }
+    };
 
     /** 
      * Determines the draw level for the fringes in the 'Draw Level' view of the Visual Value History (VVH) 
@@ -612,7 +611,7 @@
         const position = currentValuedRounds.value[roundID].position;
         const drawLevel = position.drawLevel;
         return drawLevel;
-    }
+    };
 
     /** 
      * Determines whether a position is a pure-draw in the 'Draw Level' view of the Visual Value History (VVH)
@@ -625,26 +624,30 @@
         const position = round ? round.position : null;
         const drawRemoteness = position ? position.drawRemoteness : -1;
         return drawRemoteness !== -1;
-    }
+    };
 
     /**
      * 'Surfaces' the highlighted move 'highlightedMove' in the Moves (Record<string, Move>) 'moves'. Given the 
      * last move rendered is the move rendered on top, to 'surface' the highlighted move refers to placing the 
-     * move as the last entry in the Record.
-     * @param {string} highlightedMove - highlighted move name as a string, if no move is highlighted
+     * move as the last entry in the return array.
+     * @param {string} highlightedMove - the name of the highlighted move as a string, if no move is highlighted
      * then highlightedMove must be an empty string "".
-     * @param {Moves} moves
-     * @returns non-modified available moves if highlightedMove is an empty string--- If it is not empty,
-     * returns the available moves with the highlighted move last.
-     */
-    const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Moves) => {
+     * @param {Moves} moves - The available moves.
+     * @returns {Move[]} An array of moves, with the highlighted move placed last. If no move is highlighted, 
+     * returns the original moves in their current order.
+    */
+    const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Record<string, Move>): Move[] => {
         if (highlightedMove === "" || !moves.hasOwnProperty(highlightedMove)) {
-            return moves;
+            return Object.values(moves);
         }
 
-        const { [highlightedMove]: highlighted, ...restMoves } = moves;
-        return { ...restMoves, [highlightedMove]: highlighted };
-    }
+        const moveEntries = Object.entries(moves);
+        const highlighted = moveEntries.find(([key]) => key === highlightedMove)?.[1] || null;
+        const otherMoves = moveEntries.filter(([key]) => key !== highlightedMove).map(([_, move]) => move);
+
+        if (highlighted) otherMoves.push(highlighted);
+        return otherMoves;
+    };
 </script>
 
 <style lang="scss" scoped>

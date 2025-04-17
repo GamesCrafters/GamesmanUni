@@ -801,7 +801,7 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
-    import { Rounds, Moves } from "../../../scripts/gamesmanUni/types";
+    import { Rounds, Move } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
     import VueSlider from "vue-slider-component";
     import "vue-slider-component/theme/default.css";
@@ -903,21 +903,25 @@
     /**
      * 'Surfaces' the highlighted move 'highlightedMove' in the Moves (Record<string, Move>) 'moves'. Given the 
      * last move rendered is the move rendered on top, to 'surface' the highlighted move refers to placing the 
-     * move as the last entry in the Record.
-     * @param {string} highlightedMove - highlighted move name as a string, if no move is highlighted
+     * move as the last entry in the return array.
+     * @param {string} highlightedMove - the name of the highlighted move as a string, if no move is highlighted
      * then highlightedMove must be an empty string "".
-     * @param {Moves} moves
-     * @returns non-modified available moves if highlightedMove is an empty string--- If it is not empty,
-     * returns the available moves with the highlighted move last.
-     */
-     const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Moves) => {
+     * @param {Moves} moves - The available moves.
+     * @returns {Move[]} An array of moves, with the highlighted move placed last. If no move is highlighted, 
+     * returns the original moves in their current order.
+    */
+    const surfaceHighlightedMoveInMoves = (highlightedMove: string, moves: Record<string, Move>): Move[] => {
         if (highlightedMove === "" || !moves.hasOwnProperty(highlightedMove)) {
-            return moves;
+            return Object.values(moves);
         }
 
-        const { [highlightedMove]: highlighted, ...restMoves } = moves;
-        return { ...restMoves, [highlightedMove]: highlighted };
-    }
+        const moveEntries = Object.entries(moves);
+        const highlighted = moveEntries.find(([key]) => key === highlightedMove)?.[1] || null;
+        const otherMoves = moveEntries.filter(([key]) => key !== highlightedMove).map(([_, move]) => move);
+
+        if (highlighted) otherMoves.push(highlighted);
+        return otherMoves;
+    };
 </script>
 
 <style lang="scss" scoped>
