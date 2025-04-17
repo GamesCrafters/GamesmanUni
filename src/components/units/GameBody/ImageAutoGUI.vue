@@ -597,6 +597,11 @@
         &.highlighted {
           fill: var(--moveHighlightColor);
           stroke: var(--moveHighlightColor);
+          animation-name: pulsing-point;
+          animation-duration: 0.3s;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
+          animation-direction: alternate;
         }
       }
     }
@@ -649,6 +654,11 @@
         &.highlighted {
           fill: var(--moveHighlightColor);
           stroke: var(--moveHighlightColor);
+          animation-name: pulsing-arrow;
+          animation-duration: 0.3s;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
+          animation-direction: alternate;
         }
       }
     }
@@ -679,6 +689,11 @@
         &.highlighted {
           fill: var(--moveHighlightColor);
           stroke: var(--moveHighlightColor);
+          animation-name: pulsing-line;
+          animation-duration: 0.3s;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
+          animation-direction: alternate;
         }
       }
     }
