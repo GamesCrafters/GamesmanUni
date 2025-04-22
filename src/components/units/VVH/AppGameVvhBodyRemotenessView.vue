@@ -621,15 +621,15 @@
                             <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
                                                  showNextMoveHints ? nextMove.positionValue : '',
-                                                 (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                                 (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                     class="next-move-position-value"
                                     :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.move })"
-                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">

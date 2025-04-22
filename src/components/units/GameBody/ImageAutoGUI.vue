@@ -135,10 +135,12 @@
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
         :stroke-width=lineWidth
-        :class="'iag-button-quadraticbezier ' + getBoardMoveElementHintClass(quadraticBezier.move)"
+        :class="['iag-button-quadraticbezier ' + getBoardMoveElementHintClass(quadraticBezier.move), (options.highlightMove && highlightedMove === quadraticBezier.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? quadraticBezier.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: quadraticBezier.move.str })"
         :key="quadraticBezier.move.str"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, quadraticBezier.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
       />
 
       <!-- Draw LC-subtype (cubic bezier) move buttons. -->
@@ -149,10 +151,12 @@
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
         :stroke-width=lineWidth
-        :class="'iag-button-cubicbezier ' + getBoardMoveElementHintClass(cubicBezier.move)"
+        :class="['iag-button-cubicbezier ' + getBoardMoveElementHintClass(cubicBezier.move), (options.highlightMove && highlightedMove === cubicBezier.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cubicBezier.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: cubicBezier.move.str })"
         :key="cubicBezier.move.str"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, cubicBezier.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
       />
 
       <!-- Draw LA-subtype (elliptical arc) move buttons. -->
@@ -163,10 +167,12 @@
         :stroke-linecap="'round'"
         :style="'--w: ' + lineWidth + ';--w2: ' + (lineWidth * 1.75) + ';'"
         :stroke-width=lineWidth
-        :class="'iag-button-ellipticalarc ' + getBoardMoveElementHintClass(ellipticalArc.move)"
+        :class="['iag-button-ellipticalarc ' + getBoardMoveElementHintClass(ellipticalArc.move), (options.highlightMove && highlightedMove === ellipticalArc.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? ellipticalArc.move.hintOpacity : 1"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: ellipticalArc.move.str })"
         :key="ellipticalArc.move.str"
+        @mouseover="store.commit(mutationTypes.setHighlightedMove, ellipticalArc.move.str)"
+        @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
       />
     </template>
   </svg>
