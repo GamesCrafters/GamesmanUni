@@ -167,13 +167,13 @@
                         <template v-for="nextMove in surfaceHighlightedMoveInMoves((options.highlightMove ? highlightedMove : ''), currentValuedRounds[roundNumber].position.availableMoves)"
                             :key="nextMove.move">
                             <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '', (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                 class="next-move-position-value" :cx="winByNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
                                 :stroke-width="4 * nextMovePositionValueSize"
                                 @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })"
-                                @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                                @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                 @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                         </template>
                     </template>

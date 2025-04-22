@@ -10,9 +10,9 @@
             </tr>
             <template v-if="currentRoundId >= 1 && !currentMatch.computerMoving">
                 <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
-                    :class="[(options.highlightMove && highlightedMove === nextMove.move) ? 'highlighted' : '']"
-                    @click="store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.move })"
-                    @mouseover="store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                    :class="[(options.highlightMove && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
+                    @click="store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                    @mouseover="store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                     @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
                 <td>{{ nextMove.move }}</td>
                     <td

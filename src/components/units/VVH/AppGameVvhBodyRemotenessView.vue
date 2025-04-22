@@ -628,37 +628,37 @@
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
+                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.move })"
                                     @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">
                                 <circle v-if="!isPuzzleGame"
-                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move)}"
+                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove)}"
                                     class="next-move-position-value"
                                     :cx="gridLeft + nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
-                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move)}"
+                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove)}"
                                     class="next-move-position-value"
                                     :cx="gridRight - nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
                                     :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { move: nextMove.move })"
-                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                             <template v-else>
                                 <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
                                                  showNextMoveHints ? nextMove.positionValue : '',
-                                                 (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                                 (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                     class="next-move-position-value"
                                     :cx="isPuzzleGame ? gridRight - nextMove.remoteness * columnWidth : nextMove.moveValue === 'win' ?
                                         (turn(roundNumber) === 1 ?
@@ -668,8 +668,8 @@
                                         gridLeft + nextMove.remoteness * columnWidth"
                                     :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
                                     :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { move: nextMove.move })" 
-                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" 
+                                    @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
                             </template>
                         </template>

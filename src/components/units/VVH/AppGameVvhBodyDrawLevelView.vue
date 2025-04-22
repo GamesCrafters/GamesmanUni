@@ -271,15 +271,15 @@
                                 :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
                                     showNextMoveHints ? nextMove.positionValue : '',
                                     'drawLevel' in nextMove ? (nextMove.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '',
-                                    (options.highlightMove && roundNumber === currentValuedRoundId && highlightedMove === nextMove.move) ? 'highlighted' : '']"
+                                    (options.highlightMove && roundNumber === currentValuedRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
                                 :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
                                 :r="nextMovePositionValueSize"
                                 :stroke-width="nextMovePositionValueStrokeSize"
                                 @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { move: nextMove.move })"
-                                @mouseover="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.move)"
+                                    store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
+                                @mouseover="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                 @mouseout="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, '')" />
                         </template>
                     </template>

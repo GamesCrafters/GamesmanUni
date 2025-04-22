@@ -391,13 +391,10 @@ export const generateComputerMove = (round: Types.Round) => {
     switch(CPUStrategy) {
         case "Remoteness":
             return generateComputerMoveByRemoteness(round);
-            break;
         case "Win By":
             return generateComputerMoveByWinBy(round);
-            break;
         case "Skill Expression":
             return generateComputerMoveBySkillExpression(round);
-            break;
     }
     
     console.error("noSuchCPUStrategy.");
