@@ -1,9 +1,12 @@
 <template>
   <!-- Render position only if the autogui position string is valid. -->
+  <div>
   <svg v-if="autoguiPositionData.isValidAutoguiPositionString"
     id="image-autogui" xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
-    :data-turn="autoguiPositionData.turn">
+    :data-turn="autoguiPositionData.turn"
+    ref="svgRef"
+    >
 
     <!-- Draw Background Image -->
     <image v-if="'background' in theme && !isOverlay" x="0" y="0"
@@ -129,17 +132,113 @@
       </div>
     </div>
   </div>
+  </div>
+  <img v-if="isOverlay" :src="pngDataUrl" id="board-overlay" alt="Board PNG Image" />
 </template>
 
 <script lang="ts" setup>
-  import { computed } from "vue";
+  import { computed, nextTick, onMounted, ref} from "vue";
   import { actionTypes, useStore } from "../../../scripts/plugins/store";
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
+
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
-  defineProps({
-        isOverlay: Boolean,
-    });
+  const props = defineProps({
+    isOverlay: Boolean,
+  });
+
+  const svgRef     = ref<SVGSVGElement|null>(null);
+  const pngDataUrl = ref<string>('');
+  const showPNG    = ref(false);
+
+  const RENDER_DELAY_MS = 200;
+
+  function copyStyles(sourceEl: Element, targetEl: Element) {
+    const computed = getComputedStyle(sourceEl);
+    for (let i = 0; i < computed.length; i++) {
+      const prop = computed[i];
+      const value = computed.getPropertyValue(prop);
+
+      // Cast targetEl to HTMLElement to access the 'style' property
+      if (targetEl instanceof HTMLElement) {
+        targetEl.style.setProperty(prop, value);
+        console.log(targetEl);
+        console.log(targetEl.style);
+      }
+    }
+  }
+
+  async function inlineExternalUses(svgEl: SVGSVGElement) {
+    const uses = Array.from(svgEl.querySelectorAll<SVGUseElement>('use'));
+
+    for (const use of uses) {
+      const rawHref = use.getAttribute('href') || use.getAttribute('xlink:href');
+      if (!rawHref) continue;
+
+      const [url, symbolId] = rawHref.split('#');
+      if (!url || !symbolId) continue;
+
+      try {
+        const svgText = await fetch(url).then(res => res.text());
+        const extDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+        const symbol = extDoc.getElementById(symbolId) as SVGGraphicsElement | null;
+        if (!symbol) continue;
+
+        const cloned = document.importNode(symbol, true) as SVGGraphicsElement;
+        copyStyles(use, cloned);
+        // Apply position/size manually from <use> to cloned node
+        ['x','y','width','height','transform','class','style'].forEach(attr => {
+          const val = use.getAttribute(attr);
+          if (val != null) cloned.setAttribute(attr, val);
+        });
+
+        use.parentNode?.replaceChild(cloned, use);
+      } catch (err) {
+        console.warn(`Could not inline ${url}#${symbolId}`, err);
+      }
+    }
+  }
+
+  async function svgToPng() {
+    // wait for Vue render + images
+    await nextTick();
+    await new Promise(res => setTimeout(res, RENDER_DELAY_MS));
+
+    const svgEl = svgRef.value;
+    if (!svgEl) return;
+
+    // inline any external <use> symbols
+    await inlineExternalUses(svgEl);
+
+    // serialize to string
+    const xml  = new XMLSerializer().serializeToString(svgEl);
+    const blob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+
+    // draw into canvas via offscreen <img>
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const scaleFactor = 20;
+      const vb = svgEl.viewBox.baseVal;
+      const widthPx  = vb.width * scaleFactor;
+      const heightPx = vb.height * scaleFactor;
+      canvas.width = widthPx;
+      canvas.height = heightPx;
+      
+      const ctx = canvas.getContext('2d')!;
+      ctx.clearRect(0, 0, widthPx, heightPx);
+      ctx.drawImage(img, 0, 0, widthPx, heightPx);
+
+      pngDataUrl.value = canvas.toDataURL('image/png');
+      showPNG.value    = true;
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+
+  onMounted( props.isOverlay ? svgToPng : () => {});
 
   interface IAGMove {
     str: string; // Autogui move string
@@ -332,10 +431,10 @@
 
   const getBoardMoveElementHintClass = (move?: IAGMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
+
 </script>
 
 <style lang="scss" scoped>
-
   #image-autogui {
     height: 100%;
     width: 100%;
