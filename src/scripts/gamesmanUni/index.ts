@@ -409,7 +409,7 @@ export const generateComputerMove = (round: Types.Round) => {
  * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
  * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
  * @param {Types.Round} round - current round.
- * @returns CPU player's next move.
+ * @returns {string} CPU player's next move's AutoGUI move string.
  */
 const generateComputerMoveByRemoteness = (round: Types.Round) => {
     const store = useStore();
@@ -445,7 +445,7 @@ const generateComputerMoveByRemoteness = (round: Types.Round) => {
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
 
-    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
 }
 
 /**
@@ -456,7 +456,7 @@ const generateComputerMoveByRemoteness = (round: Types.Round) => {
  * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
  * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
  * @param {Types.Round} round - current round.
- * @returns CPU player's next move.
+ * @returns {string} CPU player's next move's AutoGUI move string.
  */
 const generateComputerMoveByWinBy = (round: Types.Round) => {
     const currentPositionValue = round.position.positionValue;
@@ -483,13 +483,14 @@ const generateComputerMoveByWinBy = (round: Types.Round) => {
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
 
-    return bestMoves[Math.floor(Math.random() * bestMoves.length)].move;
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
 }
 
 /**
- * WIP
- * @param round - current round.
- * @returns CPU player's next move.
+ * Generates a number from [0,1], if this number is smaller than the CPUSkillRating generates the best move
+ * through the Remoteness CPU strategy, else returns a random move.
+ * @param  {Types.Round} round - current round.
+ * @returns {string} CPU player's next move's AutoGUI move string.
  */
 const generateComputerMoveBySkillExpression = (round: Types.Round) => {
     const store = useStore();
@@ -503,7 +504,7 @@ const generateComputerMoveBySkillExpression = (round: Types.Round) => {
         return generateComputerMoveByRemoteness(round);
     }
 
-    return availableMoves[Math.floor(Math.random() * availableMoves.length)].move;
+    return availableMoves[Math.floor(Math.random() * availableMoves.length)].autoguiMove;
 }
 
 export const runMove = async (app: Types.App, payload: { autoguiMove: string }) => {
