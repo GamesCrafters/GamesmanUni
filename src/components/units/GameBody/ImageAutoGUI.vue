@@ -485,19 +485,7 @@
   const getBoardMoveElementHintClass = (move?: IAGMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
 
-  const consolelog = (msg: any) => {
-    console.log(msg);
-    return;
-  }
-
   const highlightedMove = computed(() => store.getters.currentHighlightedMove);
-
-  watch(
-    () => highlightedMove.value,
-    async () => {
-      consolelog(highlightedMove.value);
-    }
-  );
 </script>
 
 <style lang="scss" scoped>
@@ -602,6 +590,7 @@
           animation-iteration-count: infinite;
           animation-timing-function: ease-in-out;
           animation-direction: alternate;
+          opacity: 1;
         }
       }
     }
@@ -659,6 +648,7 @@
           animation-iteration-count: infinite;
           animation-timing-function: ease-in-out;
           animation-direction: alternate;
+          opacity: 1;
         }
       }
     }
@@ -694,6 +684,7 @@
           animation-iteration-count: infinite;
           animation-timing-function: ease-in-out;
           animation-direction: alternate;
+          opacity: 1;
         }
       }
     }
