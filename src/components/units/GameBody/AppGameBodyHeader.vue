@@ -1,9 +1,9 @@
 <template>
     <div id="app-game-body-header">
-        <AppGameBodyHeaderInstructions />
-        <AppGameBodyHeaderOptions />
-        <AppGameBodyHeaderTitle />
         <AppGameBodyHeaderScorecard />
+        <AppGameBodyHeaderInstructions />
+        <AppGameBodyHeaderTitle />
+        <AppGameBodyHeaderOptions />
         <button v-if="options.showMenu" title="Toggle Analysis"
             @click="() => {options.showMenu = false; options.showNextMoves = false; options.showNextMoveHints = false; options.showNextMoveDeltaRemotenesses = false; options.highlightMove = false}"
         > &lt; </button>
