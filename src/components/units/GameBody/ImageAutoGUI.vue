@@ -683,7 +683,6 @@
       &unsolved { stroke: var(--unsolvedColor); }
       &win,&draw,&tie,&lose,&unsolved {
         &.highlighted {
-          fill: var(--moveHighlightColor);
           stroke: var(--moveHighlightColor);
           animation-name: pulsing-line;
           animation-duration: 0.3s;
