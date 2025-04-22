@@ -153,21 +153,6 @@
 
   const RENDER_DELAY_MS = 200;
 
-  function copyStyles(sourceEl: Element, targetEl: Element) {
-    const computed = getComputedStyle(sourceEl);
-    for (let i = 0; i < computed.length; i++) {
-      const prop = computed[i];
-      const value = computed.getPropertyValue(prop);
-
-      // Cast targetEl to HTMLElement to access the 'style' property
-      if (targetEl instanceof HTMLElement) {
-        targetEl.style.setProperty(prop, value);
-        console.log(targetEl);
-        console.log(targetEl.style);
-      }
-    }
-  }
-
   async function inlineExternalUses(svgEl: SVGSVGElement) {
     const uses = Array.from(svgEl.querySelectorAll<SVGUseElement>('use'));
 
@@ -185,37 +170,67 @@
         if (!symbol) continue;
 
         const cloned = document.importNode(symbol, true) as SVGGraphicsElement;
-        copyStyles(use, cloned);
-        // Apply position/size manually from <use> to cloned node
-        ['x','y','width','height','transform','class','style'].forEach(attr => {
+
+        const computedStyles = window.getComputedStyle(symbol);
+        for (let i = 0; i < computedStyles.length; i++) {
+          const property = computedStyles[i];
+          cloned.style.setProperty(property, computedStyles.getPropertyValue(property));
+        }
+        
+        ['x','y','width','height','transform','class'].forEach(attr => {
           const val = use.getAttribute(attr);
           if (val != null) cloned.setAttribute(attr, val);
         });
-
+        
+        if(cloned.classList.contains('hint-lose')) {
+          cloned.style.setProperty('fill', '#800000');
+        } else if (cloned.classList.contains('hint-win')) {
+          cloned.style.setProperty('fill', '#008000');
+        } else if (cloned.classList.contains('hint-draw') || cloned.classList.contains('hint-tie')) {
+          cloned.style.setProperty('fill', '#ffff00');
+        }
+        
         use.parentNode?.replaceChild(cloned, use);
       } catch (err) {
         console.warn(`Could not inline ${url}#${symbolId}`, err);
       }
     }
+
+    const circles = Array.from(svgEl.querySelectorAll<SVGUseElement>('circle'));
+    for (const circle of circles) {
+      const cloned = circle.cloneNode(true) as SVGCircleElement;
+
+      const computed = window.getComputedStyle(circle);
+      for (let i = 0; i < computed.length; i++) {
+        const prop = computed[i];
+        cloned.style.setProperty(prop, computed.getPropertyValue(prop));
+      }
+
+      if(cloned.classList.contains('hint-lose')) {
+        cloned.style.setProperty('fill', '#800000');
+      } else if (cloned.classList.contains('hint-win')) {
+        cloned.style.setProperty('fill', '#008000');
+      } else if (cloned.classList.contains('hint-draw') || cloned.classList.contains('hint-tie')) {
+        cloned.style.setProperty('fill', '#ffff00');
+      }
+
+      circle.parentNode?.replaceChild(cloned, circle);
+    }
   }
 
   async function svgToPng() {
-    // wait for Vue render + images
     await nextTick();
     await new Promise(res => setTimeout(res, RENDER_DELAY_MS));
 
     const svgEl = svgRef.value;
     if (!svgEl) return;
 
-    // inline any external <use> symbols
     await inlineExternalUses(svgEl);
 
-    // serialize to string
     const xml  = new XMLSerializer().serializeToString(svgEl);
     const blob = new Blob([xml], { type: 'image/svg+xml;charset=utf-8' });
     const url  = URL.createObjectURL(blob);
 
-    // draw into canvas via offscreen <img>
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
