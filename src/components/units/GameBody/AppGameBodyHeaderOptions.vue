@@ -204,6 +204,9 @@
                     </div>
                 </div>
             </div>
+            <div id="localstorage">
+                <button @click="clearPreferences" id="clear-localstorage">Restore Default Preferences</button>
+            </div>
         </UniPopupWindow>
     </div>
 </template>
@@ -326,6 +329,13 @@
         }
     }
 
+    /**
+     * Clears ALL localStorage from the site and reloads.
+     */
+    const clearPreferences = () => {
+        localStorage.clear();
+        location.reload();
+    };
 </script>
 
 <style lang="scss" scoped>
