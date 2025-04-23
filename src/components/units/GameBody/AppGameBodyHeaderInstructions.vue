@@ -14,7 +14,6 @@
     import MarkdownItLinkAttributes from "markdown-it-link-attributes";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import UniPopupWindow from "../../templates/UniPopupWindow.vue";
-    import { useI18n } from "vue-i18n";
 
     const store = useStore();
     const options = computed(() => store.getters.options);

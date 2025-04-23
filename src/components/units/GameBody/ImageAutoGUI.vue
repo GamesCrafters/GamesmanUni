@@ -197,7 +197,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, watch } from "vue";
+  import { computed } from "vue";
   import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");

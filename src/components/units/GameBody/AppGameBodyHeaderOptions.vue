@@ -225,14 +225,12 @@
     const currentRightPlayer = computed(() => store.getters.currentRightPlayer);
     const currentLeftPlayerName = computed(() => (currentLeftPlayer ? currentLeftPlayer.value.name : ""));
     const currentRightPlayerName = computed(() => (currentRightPlayer ? currentRightPlayer.value.name : ""));
-    const currentGameType = computed(() => store.getters.currentGameType);
     const currentGameId = computed(() => store.getters.currentGameId); 
 
     const updatedLeftPlayer = ref({ name: "", isComputer: false });
     const updatedRightPlayer = ref({ name: "", isComputer: false });
     const atLeastOnePlayerIsntComputer = computed(() => !updatedLeftPlayer.value.isComputer || (!updatedRightPlayer.value.isComputer && !isPuzzleGame.value));
 
-    const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
 
