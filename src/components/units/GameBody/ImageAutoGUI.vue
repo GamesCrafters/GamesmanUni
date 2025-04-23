@@ -186,7 +186,7 @@
     <h3>{{ autoguiPositionData.isValidAutoguiPositionString ? 'Other' : ''}} Available Moves</h3>
     <div id="moves">
       <div class="move" v-for="listedMove in listedMoves" :key="listedMove.move"
-        :class="options.showNextMoveHints ? `uni-${listedMove.moveValue}` : ''"
+        :class="[options.showNextMoveHints ? `uni-${listedMove.moveValue}` : '', (options.highlightMove && highlightedMove === listedMove.move) ? 'highlighted' : '']"
         :style="{ opacity: options.showNextMoveDeltaRemotenesses ? listedMove.moveValueOpacity : 1 }"
         @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: listedMove.move })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, listedMove.move)"
@@ -415,7 +415,6 @@
       };
 
       arrows = arrows.sort(compareArrowSquaredLength);
-
       return {
         turn: turn,
         board,
@@ -532,6 +531,11 @@
             border-radius: 1rem;
             margin: 1rem;
             padding: 1rem;
+            &.highlighted {
+              border: 0.1rem solid var(--moveHighlightColor);
+              background-color: var(--moveHighlightColor);
+              opacity: 1 !important;
+            }
             &:hover {
               cursor: pointer;
             }
