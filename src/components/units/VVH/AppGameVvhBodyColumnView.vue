@@ -4,9 +4,9 @@
             <tr class="table-headers" v-if="toggleGuides">
                 <td>Move</td>
                 <td>Value</td>
-                <td>Draw Level</td>
-                <td>Remoteness</td>
-                <td v-if="supportsWinBy">Win By</td>
+                <td v-if="showDrawLevelColumn">Draw Level</td>
+                <td v-if="showRemotenessColumn">Remoteness</td>
+                <td v-if="showWinByColumn && supportsWinBy">Win By</td>
             </tr>
             <template v-if="currentRoundId >= 1 && !currentMatch.computerMoving">
                 <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
@@ -19,11 +19,17 @@
                         :class="[nextMove.moveValue]">
                     {{ nextMove.moveValue }}
                     </td>
-                    <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawLevel }}</td>
-                    <td v-else> - </td>
-                    <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
-                    <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : nextMove.remoteness }}</td>
-                    <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
+                    <template v-if="showDrawLevelColumn">
+                        <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawLevel }}</td>
+                        <td v-else> - </td>
+                    </template>
+                    <template v-if="showRemotenessColumn">
+                        <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
+                        <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : (nextMove.moveValue == 'draw') ? "∞" : nextMove.remoteness }}</td>
+                    </template>
+                    <template v-if="showWinByColumn">
+                        <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
+                    </template>
                 </tr>
             </template>
         </table>
@@ -33,11 +39,43 @@
         <template v-if="isEndOfMatch">
             No moves available.
         </template>
+        <div id="view-options" v-if="toggleOptions">
+            <div class="view-option">
+                <div class="wrapper">
+                    <input class="uni-toggle-button"
+                        aria-label="toggle"
+                        type="checkbox"
+                        v-model="showDrawLevelColumn"
+                    />
+                    <label for="checkbox">Toggle Draw Level Column</label>
+                </div>
+            </div>
+            <div class="view-option">
+                <div class="wrapper">
+                    <input class="uni-toggle-button"
+                        aria-label="toggle"
+                        type="checkbox"
+                        v-model="showRemotenessColumn"
+                    />
+                    <label for="checkbox">Toggle Remoteness Column</label>
+                </div>
+            </div>
+            <div class="view-option" v-if="supportsWinBy">
+                <div class="wrapper">
+                    <input class="uni-toggle-button"
+                        aria-label="toggle"
+                        type="checkbox"
+                        v-model="showWinByColumn"
+                    />
+                    <label for="checkbox">Toggle Win By Column</label>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
 
     defineProps({
@@ -59,61 +97,86 @@
     );
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+
+    const showDrawLevelColumn = ref(true);
+    const showRemotenessColumn = ref(true);
+    const showWinByColumn = ref(true);
 </script>
 
 <style lang="scss" scoped>
-#app-game-vvh-body-columnview {
-    
-    table {
-        width: 100%;
-    }
-
-    table tr td {
-        border-bottom: 1px solid #ddd;
-        text-align: center;
-    }
-
-    td {
-        padding: 0.5rem;
-    }
-
-    .table-headers {
-        position: sticky;
-    }
-
-    .moves {
-        &:hover {
-            cursor: pointer;
-            background-color: #f0f8ff;
+    #app-game-vvh-body-columnview {
+        
+        table {
+            width: 100%;
         }
 
-        &.highlighted {
-            outline: 2px solid var(--moveHighlightColor);
-            background-color: #f0f8ff;
-        }  
+        table tr td {
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        td {
+            padding: 0.5rem;
+        }
+
+        .table-headers {
+            position: sticky;
+        }
+
+        .moves {
+            &:hover {
+                cursor: pointer;
+                background-color: #f0f8ff;
+            }
+
+            &.highlighted {
+                outline: 2px solid var(--moveHighlightColor);
+                background-color: #f0f8ff;
+            }  
+        }
+
+        .draw {
+            background-color: var(--drawColor);
+        }
+
+        .tie {
+            background-color: var(--tieColor);
+        }
+
+        .lose {
+            background-color: var(--loseColor);
+            color: white;
+        }
+
+        .win {
+            background-color: var(--winColor);
+            color: white;
+        }
+
+        .unsolved {
+            background-color: var(--unsolvedColor);
+            color: white;
+        }
     }
 
-    .draw {
-        background-color: var(--drawColor);
-    }
+    #view-options {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        gap: 1rem;
 
-    .tie {
-        background-color: var(--tieColor);
-    }
+        .view-option {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .lose {
-        background-color: var(--loseColor);
-        color: white;
+        .wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     }
-
-    .win {
-        background-color: var(--winColor);
-        color: white;
-    }
-
-    .unsolved {
-        background-color: var(--unsolvedColor);
-        color: white;
-    }
-}
 </style>
