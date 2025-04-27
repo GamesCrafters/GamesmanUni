@@ -151,7 +151,6 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(app.currentMatch.round)
     ];
 
-    console.log(app.currentMatch.rounds);
     playGameAmbience();
 
     if (payload.startPosition !== 'random') {
