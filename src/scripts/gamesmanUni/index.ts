@@ -8,7 +8,7 @@ import { playGameAmbience, pauseAllGameSounds } from "./audio"
 import { useStore } from "../plugins/store";
 export const moveHistoryDelim = ':';
 
-const deepcopy = (obj: Object) => {
+export const deepcopy = (obj: Object) => {
     return JSON.parse(JSON.stringify(obj));
 };
 
@@ -120,7 +120,13 @@ export const initiateMatch = async (app: Types.App, payload: {
     const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
     if (!updatedApp) return undefined;
 
-    if (!game.supportsWinBy) app.CPUsStrategy = Defaults.defaultCPUsStrategy;
+    // Removes non-legal VVH views from the active VVH views.
+    if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true }});
+    if (game.type === "onePlayer" && app.activeVVHViews.some(VVHView => VVHView.name === "Draw Level")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Draw Level"), 1).push({name: "", viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true }});
+    
+    // Replaces non-legal CPUs Strategies from the active CPUs Strategies.
+    if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
+    
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
     app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
@@ -144,6 +150,7 @@ export const initiateMatch = async (app: Types.App, payload: {
         deepcopy(Defaults.defaultRound),
         deepcopy(app.currentMatch.round)
     ];
+
     playGameAmbience();
 
     if (payload.startPosition !== 'random') {
@@ -309,6 +316,53 @@ export const getMaximumWinBy = (app: Types.App, payload: { from: number; to: num
     return Math.max(...winbys);
 };
 
+/** 
+ * Determines the maximum Draw Level Remoteness value between rounds payload.from to payload.to. If there is no Draw Level Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
+export const getMaximumDrawLevelRemoteness = (app: Types.App, payload: { from: number; to: number }) => {
+    const drawLevelRemotenesses = new Set<number>();
+    drawLevelRemotenesses.add(5); // In case all involved positions are draw, 5 shall be the default maximum winby
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        if (round.position.positionValue === "draw") drawLevelRemotenesses.add(round.position.drawRemoteness);
+        if (app.options.showNextMoves) {
+            for (const availableMove in round.position.availableMoves) {
+                if (round.position.availableMoves[availableMove].positionValue === "draw" && round.position.availableMoves[availableMove].drawRemoteness) {
+                    drawLevelRemotenesses.add(round.position.availableMoves[availableMove].drawRemoteness);
+                }
+            }
+        }
+    }
+    return Math.max(...drawLevelRemotenesses);
+};
+
+/** 
+ * Determines the maximum Draw Level Remoteness value between rounds payload.from to payload.to. If there is no Draw Level Remoteness value greater
+ * than the threshold of 5, then returns the threshold.
+ * @param {Types.App} app - App.
+ * @param {number} payload.from - round id to start calculating the maximum Win By value.
+ * @param {number} payload.to - round id to end calculating the maximum Win By value.
+ * @returns the maximum Win By value when it is greater than the threshold, else returns the threshold.
+*/
+export const getMaximumDrawLevel = (app: Types.App, payload: { from: number; to: number }) => {
+    const drawLevels = new Set<number>();
+    drawLevels.add(0); // In case all involved positions are non-pure draws or non-draws, 0 shall be the default maximum draw level
+    for (let roundId = payload.from; roundId <= payload.to; roundId++) {
+        const round = app.currentMatch.rounds[roundId];
+        const drawLevel = round.position.drawLevel;
+
+        // Available moves cannot reach a higher drawLevel, thus irrelevant
+        // Non-Pure Draws & Non-Draw Nodes have drawLevel of -1 => max {0, -1, ...} is never -1
+        drawLevels.add(drawLevel);
+    }
+    return Math.max(...drawLevels);
+};
+
 export const isEndOfMatch = (app: Types.App) =>
     app.currentMatch.round.position.remoteness == 0 ||
     !Object.keys(app.currentMatch.round.position.availableMoves).length;
@@ -324,15 +378,7 @@ export const exitMatch = (app: Types.App) => {
 };
 
 /** 
- * Determines the CPU player's next move. If the CPU strategy is set to 'Remoteness' and the CPU player is winning on the current position, returns
- * the move with the lowest remoteness value; if there are multiple moves with the lowest remoteness value and the current game supports win by, returns 
- * the move with the highest win by value. If the CPU player is losing on the current position, returns the move with the highest remoteness value; if 
- * there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the CPU strategy is set to 'Win By'
- * and the CPU player is winning on the current position, returns the move with the highest win by value; if there are multiple moves with the highest win 
- * by value, returns the move with the lowest remoteness value. If the CPU player is losing on the current position, returns the move with the lowest win 
- * by value; if there are multiple moves with the lowest win by value, returns the move with the highest remoteness.
- * Regardless of CPU strategy, if the current position is a known pure draw: if the current position is a draw-win, then return the 
- * lowest-draw-remoteness same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * Determines the CPU player's next move based if the CPU strategy is set to 'Remoteness', 'Win By', or 'Skill Expression'.
  * @param {Types.Round} round - current round.
  * @returns CPU player's next move.
 */
@@ -340,54 +386,126 @@ export const generateComputerMove = (round: Types.Round) => {
     const store = useStore();
     const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
     const CPUStrategy = store.getters.currentCPUStrategy(currentPlayerTurn - 1);
+    
+    
+    switch(CPUStrategy) {
+        case "Remoteness":
+            return generateComputerMoveByRemoteness(round);
+        case "Win By":
+            return generateComputerMoveByWinBy(round);
+        case "Skill Expression":
+            return generateComputerMoveBySkillExpression(round);
+    }
+    
+    console.error("noSuchCPUStrategy.");
+    return "";
+};
+
+/**
+ * If the CPU player is winning on the current position, returns the move  with the lowest remoteness value; if there are 
+ * multiple moves with the lowest remoteness value and the current game supports win by, returns the move with the highest 
+ * win by value. If the CPU player is losing on the current position, returns the move with the highest remoteness value; 
+ * if  there are multiple moves with the highest remoteness value, then returns the move with the lowest win by value. If the 
+ * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
+ * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * @param {Types.Round} round - current round.
+ * @returns {string} CPU player's next move's AutoGUI move string.
+ */
+const generateComputerMoveByRemoteness = (round: Types.Round) => {
+    const store = useStore();
+
     const gameId = store.getters.currentGameId;
-    const supportsWinBy = store.getters.supportsWinBy(gameId);
-    const availableMoves = Object.values(round.position.availableMoves);
     const currentPositionValue = round.position.positionValue;
 
-    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
-    
-    if (CPUStrategy === "Remoteness") {
-        if (currentPositionValue === "win" || currentPositionValue === "tie") {
-            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-            
-            if (supportsWinBy) {
-                const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
-                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
-            }
-        } else if (currentPositionValue === "lose") {
-            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    const supportsWinBy = store.getters.supportsWinBy(gameId);
 
-            if (supportsWinBy) {
-                const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
-                bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
-            }
-        }
-    } else if (CPUStrategy === "Win By"){
-        if (currentPositionValue === "win" || currentPositionValue === "tie") {
+    const availableMoves = Object.values(round.position.availableMoves);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
+
+    if (currentPositionValue === "win" || currentPositionValue === "tie") {
+        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+        
+        if (supportsWinBy) {
             const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
             bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+        }
+    } else if (currentPositionValue === "lose") {
+        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
 
-            const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
-        } else if (currentPositionValue === "lose") {
+        if (supportsWinBy) {
             const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
             bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
-
-            const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
-            bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
         }
-    }
-    if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
+    } else if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
         var isDrawWin = round.position.drawRemoteness & 1; // Bit indicating whether current position is a draw-win
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawLevel === round.position.drawLevel && isDrawWin != (availableMove.drawRemoteness & 1));
         var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
         bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
     }
+
     return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
-};
+}
+
+/**
+ * If the CPU player is winning on the current position, returns the move with the highest win by value; if there are 
+ * multiple moves with the highest win by value, returns the move with the lowest remoteness value. If the CPU player 
+ * is losing on the current position, returns the move with the lowest win  by value; if there are multiple moves with 
+ * the lowest win by value, returns the move with the highest remoteness. If the 
+ * current position is a known pure draw: if the current position is a draw-win, then return the lowest-draw-remoteness 
+ * same-draw-level draw-win move; else return the highest-draw-remoteness same-draw-level draw-lose move.
+ * @param {Types.Round} round - current round.
+ * @returns {string} CPU player's next move's AutoGUI move string.
+ */
+const generateComputerMoveByWinBy = (round: Types.Round) => {
+    const currentPositionValue = round.position.positionValue;
+
+    const availableMoves = Object.values(round.position.availableMoves);
+    let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
+
+    if (currentPositionValue === "win" || currentPositionValue === "tie") {
+        const maximumWinBy = Math.max(...bestMoves.map((bestMove) => bestMove.winby));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.winby === maximumWinBy);
+
+        const minimumRemoteness = Math.min(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === minimumRemoteness);
+    } else if (currentPositionValue === "lose") {
+        const minimumWinBy = Math.min(...bestMoves.map((bestMove) => bestMove.winby));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.winby === minimumWinBy);
+
+        const maximumRemoteness = Math.max(...bestMoves.map((bestMove) => bestMove.remoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.remoteness === maximumRemoteness);
+    } else if (currentPositionValue === "draw" && round.position.drawLevel != -1) { // If current position is a known pure draw
+        var isDrawWin = round.position.drawRemoteness & 1; // Bit indicating whether current position is a draw-win
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawLevel === round.position.drawLevel && isDrawWin != (availableMove.drawRemoteness & 1));
+        var desiredRemoteness = (isDrawWin ? Math.min : Math.max)(...bestMoves.map((bestMove) => bestMove.drawRemoteness));
+        bestMoves = bestMoves.filter((availableMove) => availableMove.drawRemoteness === desiredRemoteness);
+    }
+
+    return bestMoves[Math.floor(Math.random() * bestMoves.length)].autoguiMove;
+}
+
+/**
+ * Generates a number from [0,1], if this number is smaller than the CPUSkillRating generates the best move
+ * through the Remoteness CPU strategy, else returns a random move.
+ * @param  {Types.Round} round - current round.
+ * @returns {string} CPU player's next move's AutoGUI move string.
+ */
+const generateComputerMoveBySkillExpression = (round: Types.Round) => {
+    const store = useStore();
+
+    const currentPlayerTurn = store.getters.currentValuedRounds[round.id].firstPlayerTurn ? 1 : 2;
+
+    const CPUSkillRating = store.getters.currentCPUsRatings[currentPlayerTurn - 1];
+    const availableMoves = Object.values(round.position.availableMoves);
+
+    if(Math.random() < CPUSkillRating) {
+        return generateComputerMoveByRemoteness(round);
+    }
+
+    return availableMoves[Math.floor(Math.random() * availableMoves.length)].autoguiMove;
+}
 
 export const runMove = async (app: Types.App, payload: { autoguiMove: string }) => {
     app.currentMatch.round.autoguiMove = payload.autoguiMove;

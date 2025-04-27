@@ -1,1257 +1,151 @@
 <template>
     <div id="app-game-vvh-body">
-        <p id="color-guides" v-if="showVvhGuides">
-            <mark class="uni-win color">win</mark>
-            <mark class="uni-draw color">draw</mark>
-            <mark class="uni-tie color">tie</mark>
-            <mark class="uni-lose color">lose</mark>
-        </p>
-        <div class="top x-axis-label" v-if="showVvhGuides">
-            <div class="view-dropdown" v-if="supportsWinBy">
-                <div class="view-dropdown-selection">
-                    <b>{{ vvhView }} ▼</b>
-                </div>
-                <div class="view-dropdown-options">
-                    <div class="view-dropdown-option" :class="{active: vvhViewOption === vvhView}" v-for="vvhViewOption in appVvhViews" :key="vvhViewOption" @click="setVvhView(vvhViewOption)">
-                        <div v-if="vvhViewOption != vvhView">
-                            <b>{{ vvhViewOption }}</b>
+        <div id="body">
+            <div v-for="(activeVVHView, viewId) in activeVVHViews" class="view" :class="{scrollable: activeVVHView.viewOptions.toggleScrolling}">
+                <div id="view-body">
+                    <div class="view-dropdown">
+                        <div class="view-dropdown-selection">
+                            <b>{{ activeVVHView.name }} ▼</b>
+                        </div>
+                        <div class="view-dropdown-options">
+                            <div class="view-dropdown-option" v-for="vvhViewOption in VVHViews" :class="{active: vvhViewOption === activeVVHView.name}" :key="vvhViewOption" @click="setVVHView(viewId, vvhViewOption)">
+                                <div v-if="renderDropdownOption(vvhViewOption, activeVVHView.name)">
+                                    <b>{{ vvhViewOption }}</b>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div v-if="activeVVHView.name === 'Remoteness'">
+                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
+                    </div>
+                    <div v-else-if="activeVVHView.name === 'Win By'">
+                        <AppGameVvhBodyWinByView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
+                    </div>
+                    <div v-else-if="activeVVHView.name === 'Draw Level'">
+                        <AppGameVvhBodyDrawLevelView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
+                    </div>
+                    <div v-else-if="activeVVHView.name === 'Column'">
+                        <AppGameVvhBodyColumnView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
+                    </div>
+                    <p class="bottom x-axis-label" v-if="activeVVHView.viewOptions.toggleGuides">
+                        <b> {{ activeVVHView.name }} </b>
+                    </p>
+                </div>
+                <div id="view-buttons">
+                    <button class="buttons" v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" title="Close View">x</button>
+                    <button class="buttons" @click="activeVVHView.viewOptions.togglePreferences = !activeVVHView.viewOptions.togglePreferences" title="Toggle View Preferences">⚙</button>
+                    <button class="buttons" @click="activeVVHView.viewOptions.toggleGuides = !activeVVHView.viewOptions.toggleGuides" title="Toggle View Guides">^</button>
+                    <button class="buttons" @click="activeVVHView.viewOptions.toggleScrolling = !activeVVHView.viewOptions.toggleScrolling" title="Toggle View Scrolling">↕</button>
                 </div>
             </div>
-            <div v-else>
-                <b>Remoteness</b>
-            </div>
-        </div>
-        <div id="body">
-            <p id="left-y-axis-label" v-if="showVvhGuides && !isPuzzleGame">
-                <b>Moves</b>
-            </p>
-            
-            <!-- Chart -->
-            <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
-                             xmlns="http://www.w3.org/2000/svg" v-if="vvhView === appVvhViews[0]">
-                <!-- Winning Directions -->
-                <template v-if="showVvhGuides">
-                    <template v-if="isPuzzleGame">
-                        <text class="player-winning-direction"
-                                :x="gridRight"
-                                :y="winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="end">
-                            <tspan id="player">{{ currentLeftPlayerName }}</tspan>
-                            Winning ⮕|
-                        </text>
-                        <text class="player-winning-direction"
-                                :x="gridRight"
-                                :y="chartHeight - winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="end">
-                            <tspan id="player">{{ currentLeftPlayerName }}</tspan>
-                            Winning ⮕|
-                        </text>
-                    </template>
-                    <template v-else>
-                        <text class="left-player-winning-direction" 
-                                :x="gridLeft"
-                                :y="winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="start">
-                            |⬅
-                            <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
-                            Winning
-                        </text>
-                        <text class="right-player-winning-direction"
-                                :x="gridRight"
-                                :y="winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="end">
-                            <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
-                            Winning ⮕|
-                        </text>
-                        <text class="left-player-winning-direction"
-                                :x="gridLeft"
-                                :y="chartHeight - winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="start">
-                            |⬅
-                            <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
-                            Winning
-                        </text>
-                        <text class="right-player-winning-direction"
-                                :x="gridRight"
-                                :y="chartHeight - winningDirectionHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="end">
-                            <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
-                            Winning ⮕|
-                        </text>
-                    </template>
-                </template>
-
-                <!-- D Symbols for Games and F Symbols for Puzzles -->
-                <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                          :y="gridTop - xCoordinateHeight / 2"
-                                          dominant-baseline="middle"
-                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
-                <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                          :y="gridBottom + xCoordinateHeight / 2"
-                                          dominant-baseline="middle"
-                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
-
-                <!-- Remoteness Coordinates -->
-                <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + 1"
-                        :key="remoteness">
-                    <text class="view-coordinate"
-                            v-if="!isPuzzleGame &&remoteness % xInterval === 0"
-                            :x="gridLeft + remoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ remoteness }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="remoteness % xInterval === 0"
-                            :x="gridRight - remoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ remoteness }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="!isPuzzleGame && remoteness % xInterval === 0"
-                            :x="gridLeft + remoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ remoteness }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="remoteness % xInterval === 0"
-                            :x="gridRight - remoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ remoteness }}
-                    </text>
-                </template>
-
-                <!-- Unknown Remoteness Remoteness Coordinates -->
-                <template v-if="finiteUnknownRemotenessExists">
-                    <text class="view-coordinate"
-                            v-if="!isPuzzleGame"
-                            :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">?</text>
-                    <text class="view-coordinate"
-                            :x="gridRight - (maximumRemoteness + 1) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">?</text>
-                    <text class="view-coordinate"
-                            v-if="!isPuzzleGame"
-                            :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">?</text>
-                    <text class="view-coordinate"
-                            :x="gridRight - (maximumRemoteness + 1) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">?</text>
-                </template>
-
-                <!-- Move Coordinates (Move Names) -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1"
-                            :key="roundNumber">
-                        <text class="move-coordinate"
-                                v-if="!isPuzzleGame && currentValuedRounds[roundNumber].firstPlayerTurn"
-                                :x="yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move[0] == '~' ? '' : currentValuedRounds[roundNumber].move }}
-                        </text>
-                        <text class="move-coordinate"
-                                v-else
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move[0] == '~' ? '' : currentValuedRounds[roundNumber].move }}
-                        </text>
-                    </template>
-
-                    <template v-if="isEndOfMatch">
-                        <template v-if="isPuzzleGame">
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                {{ currentPositionValue === "win" ? "🥳" : "😢" }}
-                            </text>
-                        </template>
-                        <template v-else-if="currentPositionValue === 'tie'">
-                            <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                🤔
-                            </text>
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                🤔
-                            </text>
-                        </template>
-                        <template v-else>
-                            <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle"> {{ 
-                                (currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                (!currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                "🥳" : "😢"
-                            }} </text>
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle"> {{
-                                (!currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                (currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                "🥳" : "😢" 
-                            }}</text>
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Grid Base -->
-                <rect id="grid-base" :x="gridLeft" :y="gridTop" :width="gridWidth" :height="gridHeight" />
-
-                <!-- Round Rows -->
-                <template v-if="currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
-                            :x="gridLeft"
-                            :y="gridTop + (roundNumber - 1) * rowHeight"
-                            :width="gridWidth"
-                            :height="rowHeight" />
-                    </template>
-                </template>
-                <rect v-if="!isEndOfMatch"
-                    :class="`turn-0`"
-                    class="round-row"
-                    :x="gridLeft"
-                    :y="gridBottom - rowHeight"
-                    :width="gridWidth"
-                    :height="rowHeight" />
-
-                <!-- Remoteness Bars -->
-                <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + (finiteUnknownRemotenessExists ? 3 : 2)" :key="remoteness">
-                    <line v-if="!isPuzzleGame"
-                        :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                            'view-bar' : 'view-interval-bar'"
-                        :x1="gridLeft + remoteness * columnWidth"
-                        :y1="gridTop"
-                        :x2="gridLeft + remoteness * columnWidth"
-                        :y2="gridBottom"
-                        :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                            xBarWidth : xIntervalBarWidth" />
-                    <line :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                              'view-bar' : 'view-interval-bar'"
-                          :x1="gridRight - remoteness * columnWidth"
-                          :y1="gridTop"
-                          :x2="gridRight - remoteness * columnWidth"
-                          :y2="gridBottom"
-                          :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                              xBarWidth : xIntervalBarWidth" />
-                </template>
-
-                <!-- Position Value Links -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :x2="isPuzzleGame ?
-                                    gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                    currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
-                                    (turn(roundNumber + 1) === 1 ?
-                                    gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                    gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth) :
-                                    turn(roundNumber + 1) === 1 ?
-                                    gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                    gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                        <template v-else-if="currentValuedRounds[roundNumber].position.positionValue === 'tie'">
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line v-if="!isPuzzleGame"
-                                :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
-                                        (turn(roundNumber + 1) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth) :
-                                        turn(roundNumber + 1) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
-                                        (turn(roundNumber + 1) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth) :
-                                        turn(roundNumber + 1) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                        <template v-else>
-                            <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        currentValuedRounds[roundNumber].position.positionValue === 'win' ?
-                                        (turn(roundNumber) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
-                                <line v-if="!isPuzzleGame" :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        currentValuedRounds[roundNumber].position.positionValue === 'win' ?
-                                        (turn(roundNumber) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        currentValuedRounds[roundNumber].position.positionValue === 'win' ?
-                                        (turn(roundNumber) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        currentValuedRounds[roundNumber].position.positionValue === 'win' ?
-                                        (turn(roundNumber) === 1
-                                        ? gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth
-                                        : currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
-                                        (turn(roundNumber + 1) === 1 ?
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth) :
-                                        turn(roundNumber + 1) === 1 ?
-                                        gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Link from Current Position Value to Next Moves' Position Value -->
-                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" :key="nextMove">
-                        <template v-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'draw' || currentValuedRounds[currentValuedRoundId].position.remoteness == Remoteness.INFINITY">
-                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="nextMove.moveValue === 'tie'">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        nextMove.moveValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                        <template v-else-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'tie'">
-                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${nextMove.moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="nextMove.moveValue === 'tie'">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${nextMove.moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${nextMove.moveValue} link`"
-                                    :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        nextMove.moveValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        nextMove.moveValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                        <template v-else>
-                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        currentValuedRounds[currentValuedRoundId].position.positionValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else-if="nextMove.moveValue === 'tie'">
-                                <line v-if="!isPuzzleGame"
-                                    :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        currentValuedRounds[currentValuedRoundId].position.positionValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        currentValuedRounds[currentValuedRoundId].position.positionValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                            <template v-else>
-                                <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        currentValuedRounds[currentValuedRoundId].position.positionValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
-                                        gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        nextMove.moveValue === 'win' ?
-                                        (turn(currentValuedRoundId) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(currentValuedRoundId) === 1 ?
-                                        gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                            </template>
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Next Moves' Position Values -->
-                <template v-if="showNextMoves && currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves"
-                                :key="nextMove.move">
-                            <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
-                                <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
-                                                 showNextMoveHints ? nextMove.positionValue : '']"
-                                    class="next-move-position-value"
-                                    :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" />
-                            </template>
-                            <template v-else-if="nextMove.moveValue === 'tie'">
-                                <circle v-if="!isPuzzleGame"
-                                    :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
-                                    class="next-move-position-value"
-                                    :cx="gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" />
-                                <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints }"
-                                    class="next-move-position-value"
-                                    :cx="gridRight - nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId &&
-                                        store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" />
-                            </template>
-                            <template v-else>
-                                <circle :class="[roundNumber === currentValuedRoundId ? 'clickable' : '',
-                                                 showNextMoveHints ? nextMove.positionValue : '']"
-                                    class="next-move-position-value"
-                                    :cx="isPuzzleGame ? gridRight - nextMove.remoteness * columnWidth : nextMove.moveValue === 'win' ?
-                                        (turn(roundNumber) === 1 ?
-                                        gridLeft + nextMove.remoteness * columnWidth :
-                                        gridRight - nextMove.remoteness * columnWidth) :
-                                        turn(roundNumber) === 1 ? gridRight - nextMove.remoteness * columnWidth :
-                                        gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
-                                    @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" />
-                            </template>
-                        </template>
-                    </template>
-                </template>
-                
-                <!-- Position Values -->
-                <template v-if="currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
-                            <circle :class="(roundNumber !== currentValuedRoundId ? 'clickable' : '') + ' ' + currentValuedRounds[roundNumber].position.positionValue + ' position-value'"
-                                :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
-                                @click="roundNumber !== currentValuedRoundId &&
-                                    store.dispatch(actionTypes.undoMove, {
-                                        toRoundId: currentValuedRounds[roundNumber].id
-                                    })" />
-                        </template>
-                        <template v-else-if="currentValuedRounds[roundNumber].position.positionValue === 'tie'">
-                            <circle v-if="!isPuzzleGame"
-                                :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
-                                class="tie position-value"
-                                :cx="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2" :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
-                                @click="roundNumber !== currentValuedRoundId &&
-                                    store.dispatch(actionTypes.undoMove, {
-                                        toRoundId: currentValuedRounds[roundNumber].id
-                                    })" />
-                            <line v-if="!isPuzzleGame"
-                                :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
-                                class="tie position-value link"
-                                :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :x2="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :y2="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :stroke-width="linkWidth"
-                                @click="roundNumber !== currentValuedRoundId &&
-                                    store.dispatch(actionTypes.undoMove, {
-                                        toRoundId: currentValuedRounds[roundNumber].id
-                                    })" />
-                            <circle :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
-                                class="tie position-value"
-                                :cx="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
-                                @click="roundNumber !== currentValuedRoundId &&
-                                    store.dispatch(actionTypes.undoMove, {
-                                        toRoundId: currentValuedRounds[roundNumber].id
-                                    })" />
-                        </template>
-                        <template v-else>
-                            <circle :class="[roundNumber !== currentValuedRoundId ?
-                                    'clickable' :
-                                    '', currentValuedRounds[roundNumber].position.positionValue]"
-                                class="position-value"
-                                :cx="isPuzzleGame ?
-                                    gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                    currentValuedRounds[roundNumber].position.positionValue === 'win' ?
-                                    (turn(roundNumber) === 1 ?
-                                    gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                    gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth) :
-                                    turn(roundNumber) === 1 ?
-                                    gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
-                                    gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
-                                @click="roundNumber !== currentValuedRoundId &&
-                                    store.dispatch(actionTypes.undoMove, {
-                                        toRoundId: currentValuedRounds[roundNumber].id
-                                    })" />
-                        </template>
-                    </template>
-                </template>
-            </svg>
-
-            <!-- Win By Chart -->
-            <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
-                xmlns="http://www.w3.org/2000/svg" v-else>
-                <template v-if="showVvhGuides">
-                    <text class="left-player-winning-direction" 
-                        :x="gridLeft"
-                        :y="winningDirectionHeight / 2"
-                        dominant-baseline="middle"
-                        text-anchor="start">
-                        |⬅
-                        <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
-                        Winning
-                    </text>
-                    <text class="right-player-winning-direction"
-                            :x="gridRight"
-                            :y="winningDirectionHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="end">
-                        <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
-                        Winning ⮕|
-                    </text>
-                    <text class="left-player-winning-direction"
-                            :x="gridLeft"
-                            :y="chartHeight - winningDirectionHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="start">
-                        |⬅
-                        <tspan id="player-1">{{ currentLeftPlayerName }}</tspan>
-                        Winning
-                    </text>
-                    <text class="right-player-winning-direction"
-                            :x="gridRight"
-                            :y="chartHeight - winningDirectionHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="end">
-                        <tspan id="player-2">{{ currentRightPlayerName }}</tspan>
-                        Winning ⮕|
-                    </text>
-                </template>
-
-                <!-- Grid Base -->
-                <rect id="grid-base" :x="gridLeft" :y="gridTop" :width="gridWidth" :height="gridHeight" />
-
-                <!-- Round Rows -->
-                <template v-if="currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
-                            :x="gridLeft"
-                            :y="gridTop + (roundNumber - 1) * rowHeight"
-                            :width="gridWidth"
-                            :height="rowHeight" />
-                    </template>
-                </template>
-                <rect v-if="!isEndOfMatch"
-                    :class="`turn-0`"
-                    class="round-row"
-                    :x="gridLeft"
-                    :y="gridBottom - rowHeight"
-                    :width="gridWidth"
-                    :height="rowHeight" />
-                <!-- 0 Labels -->
-                <text class="draw-symbol" :x="chartWidth / 2"
-                                          :y="gridTop - xCoordinateHeight / 2"
-                                          dominant-baseline="middle"
-                                          text-anchor="middle">0</text>
-                <text class="draw-symbol" :x="chartWidth / 2"
-                                          :y="gridBottom + xCoordinateHeight / 2"
-                                          dominant-baseline="middle"
-                                          text-anchor="middle">0</text>
-                
-                <!-- Win By Coordinates -->
-                <template v-for="(_, winBy) in ((Math.max(5, maximumWinBy) + 1))"
-                        :key="winBy">
-                    <text class="view-coordinate"
-                            v-if="winBy % xInterval === 0"
-                            :x="gridLeft + (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ winBy }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="winBy % xInterval === 0"
-                            :x="gridRight - (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ winBy }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="winBy % xInterval === 0"
-                            :x="gridLeft + (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ winBy }}
-                    </text>
-                    <text class="view-coordinate"
-                            v-if="winBy % xInterval === 0"
-                            :x="gridRight - (Math.max(5, maximumWinBy) + 1 - winBy) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
-                            dominant-baseline="middle"
-                            text-anchor="middle">
-                        {{ winBy }}
-                    </text>
-                </template>
-
-                <!-- Win By Bars -->
-                <template v-for="(_, winBy) in Math.max(5, maximumWinBy) + 2" :key="winBy">
-                    <line
-                        :class="winBy % xInterval !== 0 ?
-                            'view-bar' : 'view-interval-bar'"
-                        :x1="gridCenter - winBy * columnWidth"
-                        :y1="gridTop"
-                        :x2="gridCenter - winBy * columnWidth"
-                        :y2="gridBottom"
-                        :stroke-width="winBy % xInterval !== 0 ?
-                            xBarWidth : xIntervalBarWidth" />
-                    <line :class="winBy % xInterval !== 0 ?
-                              'view-bar' : 'view-interval-bar'"
-                          :x1="gridCenter + winBy * columnWidth"
-                          :y1="gridTop"
-                          :x2="gridCenter + winBy * columnWidth"
-                          :y2="gridBottom"
-                          :stroke-width="winBy % xInterval !== 0 ?
-                              xBarWidth : xIntervalBarWidth" />
-                </template>
-
-                <!-- Move Coordinates -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1"
-                            :key="roundNumber">
-                        <text class="move-coordinate"
-                                v-if="currentValuedRounds[roundNumber].firstPlayerTurn"
-                                :x="yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
-                        </text>
-                        <text class="move-coordinate"
-                                v-else
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                dominant-baseline="middle"
-                                text-anchor="middle">
-                            {{ currentValuedRounds[roundNumber].move }}
-                        </text>
-                    </template>
-
-                    <template v-if="isEndOfMatch">
-                        <template v-if="isPuzzleGame">
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                🥳
-                            </text>
-                        </template>
-                        <template v-else-if="currentPositionValue === 'tie'">
-                            <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                🤔
-                            </text>
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle">
-                                🤔
-                            </text>
-                        </template>
-                        <template v-else>
-                            <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle"> {{ 
-                                (currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                (!currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                "🥳" : "😢"
-                            }} </text>
-                            <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    dominant-baseline="middle"
-                                    text-anchor="middle"> {{
-                                (!currentFirstPlayerTurn && currentPositionValue === "win") ||
-                                (currentFirstPlayerTurn && currentPositionValue === "lose") ?
-                                "🥳" : "😢" 
-                            }}</text>
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Position Value Links -->
-                <template v-if="currentValuedRoundId >= 2">
-                    <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
-                        <line
-                            :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                            :x1="winByNodeGridXPosition(roundNumber)"
-                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            :x2="winByNodeGridXPosition(roundNumber + 1)"
-                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                            :stroke-width="linkWidth" />
-                    </template>
-                </template>
-
-                <!-- Link from Current Position Value to Next Moves' Position Value -->
-                <template v-if="showNextMoves && currentValuedRounds[currentValuedRoundId]">
-                    <template v-for="nextMove in currentValuedRounds[currentValuedRoundId].position.availableMoves" :key="nextMove">
-                        <line :class="`${nextMove.moveValue} link`"
-                                    :x1="winByNodeGridXPosition(currentValuedRoundId)"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="winByNextNodeGridXPosition(currentValuedRoundId, nextMove)"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
-                    </template>
-                </template>
-
-                <!-- Move Nodes -->
-                <template v-if="showNextMoves && currentValuedRoundId >= 1">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <template v-for="nextMove in currentValuedRounds[roundNumber].position.availableMoves" :key="nextMove.move">
-                            <circle
-                                :class="[roundNumber === currentValuedRoundId ? 'clickable' : '', showNextMoveHints ? nextMove.positionValue : '']"
-                                class="next-move-position-value"
-                                :cx="winByNextNodeGridXPosition(roundNumber, nextMove)"
-                                :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                :r="nextMovePositionValueSize"
-                                :stroke-width="4 * nextMovePositionValueSize"
-                                @click="roundNumber === currentValuedRoundId &&
-                                    store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" />
-                        </template>
-                    </template>
-                </template>
-
-                <!-- Position Nodes -->
-                <template v-if="currentValuedRoundId">
-                    <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
-                        <circle 
-                            :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue]"
-                            class="position-value"
-                            :cx="winByNodeGridXPosition(roundNumber)"
-                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                            :r="positionValueSize"
-                            :stroke-width="4 * positionValueSize"
-                            @click="roundNumber !== currentValuedRoundId &&
-                                store.dispatch(actionTypes.undoMove, {
-                                    toRoundId: currentValuedRounds[roundNumber].id
-                                })" />
-                    </template>
-                </template>
-            </svg>
-            <p id="right-y-axis-label" v-if="showVvhGuides">
-                <b>Moves</b>
-            </p>
-        </div>
-        <p class="bottom x-axis-label" v-if="showVvhGuides">
-            <b>{{ vvhView }}</b>
-        </p>
-        <div id="meters" v-if="showVvhMeters">
-            <div class="meter">
-                <p class="label">View Coordinate Height</p>
-                <VueSlider v-model="xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Coordinate Width</p>
-                <VueSlider v-model="yCoordinateWidth" :min="1" :max="50" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Row Height</p>
-                <VueSlider v-model="rowHeight" :min="1" :max="50" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Chart Width</p>
-                <VueSlider v-model="chartWidth" :min="1" :max="500" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Position Value Size</p>
-                <VueSlider v-model="positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Next Move Position Value Size</p>
-                <VueSlider v-model="nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Link Width</p>
-                <VueSlider v-model="linkWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Bar Width</p>
-                <VueSlider v-model="xBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">Interval Bar Width</p>
-                <VueSlider v-model="xIntervalBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
-            </div>
-            <div class="meter">
-                <p class="label">View Interval</p>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumRemoteness" :tooltip="'active'" v-if="vvhView === appVvhViews[0]"/>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumWinBy" :tooltip="'active'" v-else/>
-            </div>
+            <button id="add-view-button" class="buttons" v-if="existsAvailableView" @click="addVVHView()" title="Add View">+</button>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
-    import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
-    import VueSlider from "vue-slider-component";
-    import "vue-slider-component/theme/default.css";
-    import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
-    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
-
+    import { computed } from "vue";
+    import { mutationTypes, useStore } from "../../../scripts/plugins/store";
+    import AppGameVvhBodyRemotenessView from "./AppGameVvhBodyRemotenessView.vue";
+    import AppGameVvhBodyWinByView from "./AppGameVvhBodyWinByView.vue";
+    import AppGameVvhBodyColumnView from "./AppGameVvhBodyColumnView.vue";
+    import AppGameVvhBodyDrawLevelView from "./AppGameVvhBodyDrawLevelView.vue";
+    import { VVHViews } from "../../../models/datas/defaultApp";
+    
     const store = useStore();
-    const options = computed(() => store.getters.options);
-    const showNextMoves = computed(() => (options.value ? options.value.showNextMoves : true));
-    const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
-    const showVvhGuides = computed(() => (options.value ? options.value.showVvhGuides : true));
-    const showVvhMeters = computed(() => (options.value ? options.value.showVvhMeters : false));
+    const currentGameId = computed(() => store.getters.currentGameId);
+
+    const activeVVHViews = computed(() => store.getters.currentActiveVVHViews);
 
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
-    const currentLeftPlayerName = computed(() => (store.getters.currentLeftPlayer ? store.getters.currentLeftPlayer.name : ""));
-    const currentRightPlayerName = computed(() => (store.getters.currentRightPlayer ? store.getters.currentRightPlayer.name : ""));
-
-    const currentGameType = computed(() => store.getters.currentGameType);
-    const currentGameId = computed(() => store.getters.currentGameId); 
-
-    const currentRoundId = computed(() => store.getters.currentRoundId);
-    const currentPositionValue = computed(() => store.getters.currentPositionValue);
-    const currentRounds = computed(() => store.getters.currentRounds);
-
-    const maximumRemoteness = computed(() => store.getters.maximumRemoteness(1, store.getters.currentRoundId));
-
-    /** 
-     * Iterate through the rounds and see if any visited positions or any child positions of
-     * any visited positions have a finite unknown remoteness (FUR). If so, set their remoteness
-     * to be a dummy value of 1 greater than the maximum known finite remoteness,
-     * which is where on the VVH finite unknown remoteness positions will go.
-     * @returns [0]: A copy of the match's rounds, with the remotenesses of FUR positions set to max known remoteness + 1
-     * @returns [1]: A boolean indicating whether there are FUR positions.
-    */
-    const detectFiniteUnknownRemoteness = computed((): [Rounds, boolean] => {
-        var roundsCopy = JSON.parse(JSON.stringify(currentRounds.value)) as Rounds;
-        var finiteUnknownRemotenessExists = false;
-        for (const round of roundsCopy) {
-            if (round.position.positionValue !== "unsolved") {
-                if (round.position.remoteness == Remoteness.FINITE_UNKNOWN) {
-                    round.position.remoteness = maximumRemoteness.value + 1;
-                    finiteUnknownRemotenessExists = true;
-                }
-                for (const move in round.position.availableMoves) {
-                    const moveObj = round.position.availableMoves[move]
-                    if (moveObj.remoteness == Remoteness.FINITE_UNKNOWN) {
-                        moveObj.remoteness = maximumRemoteness.value + 1;
-                        finiteUnknownRemotenessExists = true;
-                    }
-                }
-            }
-        }
-        return [roundsCopy.filter(round => round.position.positionValue !== "unsolved"), finiteUnknownRemotenessExists];
-    });
-    const currentValuedRounds = computed(() => detectFiniteUnknownRemoteness.value[0]);
-    const finiteUnknownRemotenessExists = computed(() => detectFiniteUnknownRemoteness.value[1]);
-
-    const currentValuedRoundId = computed(() =>
-        Math.max(0, currentRoundId.value - currentRounds.value.length + currentValuedRounds.value.length)
-    );
-    const currentFirstPlayerTurn = computed(() => store.getters.currentMatch.round.firstPlayerTurn);
-
-    const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
-
-    const winningDirectionHeight = ref(2);
-    const xCoordinateHeight = ref(2);
-    const rowHeight = ref(2);
-    const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
-    const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
-    const gridHeight = computed(() => rowHeight.value * rowCount.value);
-    const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
-    const gridBottom = computed(() => chartHeight.value - gridTop.value);
-
-    const yCoordinateWidth = ref(5);
-    const chartWidth = ref(50);
-    const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (vvhView.value === appVvhViews[0] ? (maximumRemoteness.value + (finiteUnknownRemotenessExists.value ? 1 : 0) + 1) : Math.max(5, maximumWinBy.value) + 1));
-    const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
-    const columnWidth = computed(() => gridWidth.value / columnCount.value);
-    const gridLeft = computed(() => yCoordinateWidth.value);
-    const gridRight = computed(() => chartWidth.value - gridLeft.value);
-    const gridCenter = computed(() => chartWidth.value/2)
-
-    const positionValueSize = ref(0.2);
-    const nextMovePositionValueSize = ref(0.1);
-    const xInterval = ref(5);
-    const linkWidth = ref(0.2);
-    const xBarWidth = ref(0.1);
-    const xIntervalBarWidth = ref(0.2);
-
-    /** 
-     * Determines whether it is the first player's turn or the second player's turn based on the current round id.
-     * @param {number} roundID - current round id.
-     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
-    */
-    const turn = (roundID: number) => {
-        return currentValuedRounds.value[roundID].firstPlayerTurn ? 1 : 2;
-    };
-    
-    /** 
-     * Determines whether it will be the first player's turn or the second player's turn on the next turn based on the current round id.
-     * @param {number} roundID - current round id.
-     * @returns 1 when it is the first player's turn, 2 when it is the second player's turn.
-    */
-    const nextTurn = (roundID: number) => {
-        return currentValuedRounds.value[roundID].firstPlayerTurn ? 2 : 1;
-    }
-
-    // Array of the available VVH views. Possible to add extra views E.g. Game Tree, Move Table.
-    const appVvhViews = ["Remoteness", "Win By"]
-
-    // Default VVH View.
-    const vvhView = ref(appVvhViews[0]); 
-
-    // Stores the maximum between the maximum 'Win By' value or the default value.
-    const maximumWinBy = computed(() => store.getters.maximumWinBy(1, store.getters.currentRoundId));
-    
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
         currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
     );
-
+    
     /** 
-     * Changes the Visual Value History's (VVH) view to a new VVH view.
-     * @param {string} newVvhView - new VVH view.
+     * Changes the visual value history view with vvhViewId to a new vvhView. If the new vvh view is
+     * already in the activeVVHViews array, then swaps the new vvh view with the view with vvhViewId.
+     * @param {number} vvhViewId - Index of current view in activeVVHViews array.
+     * @param {string} newVVHView - new VVH view.
      * @returns none.
     */
-    const setVvhView = (newVvhView: string) => {
-        vvhView.value = newVvhView;
-        store.commit(mutationTypes.setVvhView, newVvhView);
-    };
+    const setVVHView = (vvhViewId: number, newVVHView: string) => {
+        for (let activeVVHViewId = 0; activeVVHViewId < activeVVHViews.value.length; activeVVHViewId++) {
+            if (activeVVHViews.value[activeVVHViewId].name === newVVHView) {
+                const vvhViewNameSwap = activeVVHViews.value[vvhViewId].name;
+                store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViewId, vvhView: vvhViewNameSwap});
+                break;
+            }
+        }
+        store.commit(mutationTypes.activateVVHView, {vvhViewId: vvhViewId, vvhView: newVVHView});
+    }
 
-    /** 
-     * Determines the x-position of the current position's node in the 'Win By' view of the Visual Value History (VVH) graph.
-     * @param {number} roundID - current round id.
-     * @returns x position in the Graph's grid.
-    */
-    const winByNodeGridXPosition = (roundID: number) => {
-        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-        if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-            ) {
-            return gridCenter.value - currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-        // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-        } else if ((currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'lose')
-            || (!currentValuedRounds.value[roundID].firstPlayerTurn && currentValuedRounds.value[roundID].position.positionValue === 'win')
-        ) {
-            return gridCenter.value + currentValuedRounds.value[roundID].position.winby * columnWidth.value;
-        // Tie & Draw Nodes
-        } else {
-            return gridCenter.value;
+    /**
+     * Adds an additional view to the VVH Body; filters all of the VVHViews until it finds 
+     * a view which is not active.
+     * @returns none.
+     */
+    const addVVHView = () => {
+        for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
+            if (viewIsAvailable(VVHViews[vvhViewId])) {
+                store.commit(mutationTypes.activateVVHView, {vvhViewId: activeVVHViews.value.length, vvhView: VVHViews[vvhViewId]});
+                break;
+            }
         }
     }
 
-    /** 
-     * Determines the x-position of the next move's node in the 'Win By' view of the Visual Value History (VVH) graph.
-     * @param {number} roundID - current round id.
-     * @param {Move} nextMove - a next move of the current position.
-     * @returns x position in the Graph's grid.
-    */
-    const winByNextNodeGridXPosition = (roundID: number, nextMove: Move) => {
-        // Left Nodes: When its the first players turn (at that move) and is winning, or, its not the first players turn (at that move) and is loosing
-        if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'win') 
-            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'lose')
-            ) {
-            return gridCenter.value - nextMove.winby * columnWidth.value;
-        // Right Nodes: When its the first players turn (at that move) and is loosing, or, its not the first players (at that move) turn and is winning
-        } else if ((nextTurn(roundID) === 1 && nextMove.positionValue === 'lose') 
-            || (nextTurn(roundID) === 2 && nextMove.positionValue === 'win')
-        ) {
-            return gridCenter.value + nextMove.winby * columnWidth.value;
-        // Tie & Draw Nodes
-        } else {
-            return gridCenter.value;
+    /**
+     * Returns true if there exists at least one view which is available.
+     * @returns none.
+     */
+    const existsAvailableView = computed(() => {
+        for(let vvhViewId = 0; vvhViewId < VVHViews.length; vvhViewId++) {
+            if (viewIsAvailable(VVHViews[vvhViewId])) {
+                return true;
+            }
+        }
+        return false;
+    });
+
+    /**
+     * Determines if the VVH View Option VVHView is legal. Checks if the current
+     * view is not active and the game meets some pre-established conditions.
+     * @param VVHView 
+     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     */
+     const viewIsAvailable = (VVHVIewName: string) => {
+        if (activeVVHViews.value.some((activeVVHView) => activeVVHView.name === VVHVIewName)) {
+            return false;
+        }
+
+        return viewIsLegal(VVHVIewName);
+    }
+
+    /**
+     * Determines if the VVH View Option vvhViewOption renders depending on if the VVH View Option is legal 
+     * and is not the current active VVH View.
+     * @param vvhViewOption 
+     * @param activeVVHViewName 
+     * @returns true/false if the vvhViewOption is rendered depending on the pre-established conditions.
+     */
+    const renderDropdownOption = (vvhViewOptionName: string, activeVVHViewName: string) => {
+        if (vvhViewOptionName == activeVVHViewName) {
+            return false;
+        }
+        
+        return viewIsLegal(vvhViewOptionName);
+    }
+    
+    const viewIsLegal = (VVHViewName: string) => {
+        switch(VVHViewName) {
+            case "Win By":
+                return supportsWinBy.value;
+            case "Draw Level":
+                return !isPuzzleGame.value;
+            default:
+                return true;
         }
     }
 </script>
@@ -1261,6 +155,7 @@
         border-radius: 1rem;
         border: 0.1rem solid var(--neutralColor);
         padding: 1rem;
+
         > #color-guides {
             margin: 1rem;
             text-align: center;
@@ -1270,132 +165,26 @@
                 padding: 0.25rem 0.5rem;
             }
         }
-        > .x-axis-label {
-            text-align: center;
-        }
-        > #body {
-            align-content: normal;
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: center;
-            > * {
-                flex: 1 1 auto;
-            }
-            > #left-y-axis-label {
+    }
+
+    .view {
+        margin: 0 0 1rem 1rem;
+        border-radius: 1rem;
+        border: 0.1rem solid var(--neutralColor);
+        padding: 1rem;
+        display: flex;
+        >#view-body {
+            flex: 100;
+            >.x-axis-label {
                 text-align: center;
-                transform: rotate(-90deg);
-            }
-            > #chart {
-                > .player-winning-direction,
-                > .left-player-winning-direction,
-                > .right-player-winning-direction {
-                    fill: var(--primaryColor);
-                    font-size: 0.07rem;
-                    font-weight: 400;
-                    > #player,
-                    > #player-1 {
-                        fill: var(--turn1Color);
-                        font-size: 0.07rem;
-                        font-weight: 400;
-                    }
-                    > #player-2 {
-                        fill: var(--turn2Color);
-                        font-size: 0.07rem;
-                        font-weight: 400;
-                    }
-                }
-                > .draw-symbol {
-                    fill: var(--primaryColor);
-                    font-size: 0.07rem;
-                }
-                > .view-coordinate {
-                    fill: var(--primaryColor);
-                    font-size: 0.07rem;
-                }
-                > .move-coordinate {
-                    fill: var(--primaryColor);
-                    font-size: 0.07rem;
-                }
-                > #grid-base {
-                    fill: white;
-                }
-                > .round-row {
-                    &.turn-0 {
-                        fill: var(--neutralColor);
-                    }
-                    &.turn-1 {
-                        fill: var(--turn1Color);
-                        opacity: 30%;
-                    }
-                    &.turn-2 {
-                        fill: var(--turn2Color);
-                        opacity: 30%;
-                    }
-                }
-                > .view-bar,
-                > .view-interval-bar {
-                    stroke: black;
-                }
-                > .position-value,
-                > .next-move-position-value {
-                    &.clickable:hover {
-                        cursor: pointer;
-                    }
-                }
-                > .position-value,
-                > .next-move-position-value,
-                > .link {
-                    &.draw {
-                        fill: var(--drawColor);
-                        stroke: var(--drawColor);
-                    }
-                    &.tie {
-                        fill: var(--tieColor);
-                        stroke: var(--tieColor);
-                    }
-                    &.lose {
-                        fill: var(--loseColor);
-                        stroke: var(--loseColor);
-                    }
-                    &.win {
-                        fill: var(--winColor);
-                        stroke: var(--winColor);
-                    }
-                }
-            }
-            > #right-y-axis-label {
-                text-align: center;
-                transform: rotate(90deg);
-            }
-        }
-        #meters {
-            padding: 1rem 10%;
-            > .meter {
-                align-content: normal;
-                align-items: center;
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                justify-content: space-between;
-                padding: 0.5rem;
-                position: relative;
-                > * {
-                    flex: 1 1 auto;
-                }
-                > .label {
-                    line-height: 1rem;
-                    max-width: 30%;
-                    text-align: left;
-                }
             }
         }
     }
 
     .view-dropdown {
         min-width: 192px;
-        position: relative;
+        position: static;
+        top: 0;
         display: inline-block;
         cursor: pointer;
     }
@@ -1406,11 +195,44 @@
         background-color: #f9f9f9;
         min-width: 192px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        padding: 6px 0px 6px 0px;
         z-index: 1;
     }
 
     .view-dropdown:hover .view-dropdown-options {
         display: block;
+    }
+
+    .view-dropdown-option:hover {
+        background-color: #ececec;
+    }
+
+    #add-view-button {
+        margin: auto;
+    }
+    
+    .buttons {
+        margin: 0.5rem;
+        border-radius: 100%;
+        height: max(1.5rem, min(2.5vh, 2.5vw));
+        width: max(1.5rem, min(2.5vh, 2.5vw));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    #view-buttons {
+        float: right;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+    }
+
+    .scrollable {
+        max-height: 40em;
+        overflow-y:auto;
     }
 </style>
