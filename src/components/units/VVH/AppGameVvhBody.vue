@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div v-if="activeVVHView.name === 'Remoteness'">
-                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
+                        <AppGameVvhBodyRemotenessView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
                     </div>
                     <div v-else-if="activeVVHView.name === 'Win By'">
                         <AppGameVvhBodyWinByView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
