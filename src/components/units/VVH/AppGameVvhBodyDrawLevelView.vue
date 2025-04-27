@@ -307,7 +307,7 @@
                 <b>Moves</b>
             </p>
         </div>
-        <div id="meters" v-if="toggleOptions">
+        <div id="meters" v-if="togglePreferences">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
                 <VueSlider v-model="viewPreferences.xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
@@ -373,7 +373,7 @@
     import "vue-slider-component/theme/default.css";
 
     defineProps({
-        toggleOptions: Boolean,
+        togglePreferences: Boolean,
         toggleScrolling: Boolean,
         toggleGuides: Boolean,
     });

@@ -192,7 +192,7 @@ export type VVHView = {
 }
 
 export type ViewOptions = {
-    toggleOptions: boolean;
+    togglePreferences: boolean;
     toggleScrolling: boolean;
     toggleGuides: boolean;
 }

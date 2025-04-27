@@ -16,16 +16,16 @@
                         </div>
                     </div>
                     <div v-if="activeVVHView.name === 'Remoteness'">
-                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
+                        <AppGameVvhBodyRemotenessView :toggle-options="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
                     </div>
                     <div v-else-if="activeVVHView.name === 'Win By'">
-                        <AppGameVvhBodyWinByView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
+                        <AppGameVvhBodyWinByView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides" />
                     </div>
                     <div v-else-if="activeVVHView.name === 'Draw Level'">
-                        <AppGameVvhBodyDrawLevelView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
+                        <AppGameVvhBodyDrawLevelView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
                     </div>
                     <div v-else-if="activeVVHView.name === 'Column'">
-                        <AppGameVvhBodyColumnView :toggle-options="activeVVHView.viewOptions.toggleOptions" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
+                        <AppGameVvhBodyColumnView :toggle-preferences="activeVVHView.viewOptions.togglePreferences" :toggle-scrolling="activeVVHView.viewOptions.toggleScrolling" :toggle-guides="activeVVHView.viewOptions.toggleGuides"/>
                     </div>
                     <p class="bottom x-axis-label" v-if="activeVVHView.viewOptions.toggleGuides">
                         <b> {{ activeVVHView.name }} </b>
@@ -33,7 +33,7 @@
                 </div>
                 <div id="view-buttons">
                     <button class="buttons" v-if="viewId != 0" @click="store.commit(mutationTypes.inactivateVVHView, viewId)" title="Close View">x</button>
-                    <button class="buttons" @click="activeVVHView.viewOptions.toggleOptions = !activeVVHView.viewOptions.toggleOptions" title="Toggle View Options">⚙</button>
+                    <button class="buttons" @click="activeVVHView.viewOptions.togglePreferences = !activeVVHView.viewOptions.togglePreferences" title="Toggle View Preferences">⚙</button>
                     <button class="buttons" @click="activeVVHView.viewOptions.toggleGuides = !activeVVHView.viewOptions.toggleGuides" title="Toggle View Guides">^</button>
                     <button class="buttons" @click="activeVVHView.viewOptions.toggleScrolling = !activeVVHView.viewOptions.toggleScrolling" title="Toggle View Scrolling">↕</button>
                 </div>

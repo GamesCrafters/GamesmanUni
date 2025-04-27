@@ -39,7 +39,7 @@
         <template v-if="isEndOfMatch">
             No moves available.
         </template>
-        <div id="view-options" v-if="toggleOptions">
+        <div id="view-options" v-if="togglePreferences">
             <div class="view-option">
                 <div class="wrapper">
                     <input class="uni-toggle-button"
@@ -80,7 +80,7 @@
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
     defineProps({
-        toggleOptions: Boolean,
+        togglePreferences: Boolean,
         toggleScrolling: Boolean,
         toggleGuides: Boolean,
     });
