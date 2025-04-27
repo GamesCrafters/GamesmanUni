@@ -156,7 +156,7 @@ export const defaultMatch: Types.Match = {
 };
 
 export const VVHViews: Array<string> = ["Remoteness", "Win By", "Draw Level", "Column"];
-export const activeVVHViews: Array<Types.VVHView> = [{name: VVHViews[0], viewOptions: {toggleOptions: false, toggleScrolling: false, toggleGuides: true}}]; //VVHViews[0] is set as the default view.
+export const activeVVHViews: Array<Types.VVHView> = [{name: VVHViews[0], viewOptions: {togglePreferences: false, toggleScrolling: false, toggleGuides: true}}]; //VVHViews[0] is set as the default view.
 
 export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
 export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
