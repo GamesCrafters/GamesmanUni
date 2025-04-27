@@ -68,11 +68,11 @@
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : gridCenter"
                                           :y="gridTop - xCoordinateHeight / 2"
                                           dominant-baseline="middle"
-                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
+                                          text-anchor="middle">{{ isPuzzleGame ? '∞' : 'D' }}</text>
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : gridCenter"
                                           :y="gridBottom + xCoordinateHeight / 2"
                                           dominant-baseline="middle"
-                                          text-anchor="middle">{{ isPuzzleGame ? 'F' : 'D' }}</text>
+                                          text-anchor="middle">{{ isPuzzleGame ? '∞' : 'D' }}</text>
 
                 <!-- Remoteness Coordinates -->
                 <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + 1"
