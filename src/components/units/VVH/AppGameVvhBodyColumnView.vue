@@ -25,7 +25,7 @@
                     </template>
                     <template v-if="showRemotenessColumn">
                         <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
-                        <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : (nextMove.moveValue == 'draw') ? "∞" : nextMove.remoteness }}</td>
+                        <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : (nextMove.remoteness == Remoteness.INFINITY) ? "∞" : nextMove.remoteness }}</td>
                     </template>
                     <template v-if="showWinByColumn">
                         <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
@@ -77,6 +77,7 @@
 <script lang="ts" setup>
     import { computed, ref } from "vue";
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
+    import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
     defineProps({
         toggleOptions: Boolean,
@@ -97,6 +98,8 @@
     );
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+
+    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
     const showDrawLevelColumn = ref(true);
     const showRemotenessColumn = ref(true);
