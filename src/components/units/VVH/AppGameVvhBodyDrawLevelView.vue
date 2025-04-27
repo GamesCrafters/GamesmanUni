@@ -5,7 +5,7 @@
             <p id="left-y-axis-label" v-if="toggleGuides && !isPuzzleGame">
                 <b>Moves</b>
             </p>
-            <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`" xmlns="http://www.w3.org/2000/svg">
+            <svg id="chart" :viewBox="`0 0 ${viewPreferences.chartWidth} ${chartHeight}`" xmlns="http://www.w3.org/2000/svg">
                 <template v-if="toggleGuides">
                     <text class="left-player-winning-direction"
                         :x="gridLeft"
@@ -48,57 +48,57 @@
                         <!-- Regular Round Row -->
                         <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
                             :x="gridLeft"
-                            :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber)"
-                            :width="gridWidth" :height="rowHeight" />
+                            :y="gridTop + (roundNumber - 1) * viewPreferences.rowHeight + roundYOffset(roundNumber)"
+                            :width="gridWidth" :height="viewPreferences.rowHeight" />
                     </template>
                 </template>
 
                 <rect v-if="!isEndOfMatch" :class="`turn-0`" class="round-row"
                     :x="gridLeft"
-                    :y="gridBottom - rowHeight + roundYOffset(currentValuedRoundId)"
-                    :width="gridWidth" :height="rowHeight" />
+                    :y="gridBottom - viewPreferences.rowHeight + roundYOffset(currentValuedRoundId)"
+                    :width="gridWidth" :height="viewPreferences.rowHeight" />
 
                 <!-- 0 Labels -->
                 <text class="draw-symbol"
-                    :x="chartWidth / 2"
-                    :y="gridTop - xCoordinateHeight / 2"
+                    :x="viewPreferences.chartWidth / 2"
+                    :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                     dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
                 <text class="draw-symbol"
-                    :x="chartWidth / 2"
-                    :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
+                    :x="viewPreferences.chartWidth / 2"
+                    :y="gridBottom + viewPreferences.xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
                     dominant-baseline="middle" text-anchor="middle">ND/NPD*</text>
 
                 <!-- Draw Remoteness Coordinates -->
                 <template v-for="(_, drawRemoteness) in Math.max(0, maximumDrawLevelRemoteness) + 1"
                         :key="drawRemoteness">
                     <text class="view-coordinate"
-                            v-if="!isPuzzleGame && drawRemoteness % xInterval === 0"
+                            v-if="!isPuzzleGame && drawRemoteness % viewPreferences.xInterval === 0"
                             :x="gridLeft + drawRemoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ drawRemoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="drawRemoteness % xInterval === 0"
+                            v-if="drawRemoteness % viewPreferences.xInterval === 0"
                             :x="gridRight - drawRemoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ drawRemoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="!isPuzzleGame && drawRemoteness % xInterval === 0"
+                            v-if="!isPuzzleGame && drawRemoteness % viewPreferences.xInterval === 0"
                             :x="gridLeft + drawRemoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ drawRemoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="drawRemoteness % xInterval === 0"
+                            v-if="drawRemoteness % viewPreferences.xInterval === 0"
                             :x="gridRight - drawRemoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2 + roundYOffset(currentValuedRoundId)"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ drawRemoteness }}
@@ -108,35 +108,35 @@
                 <!-- Draw Level Bars -->
                 <template v-for="(_, drawRemoteness) in Math.max(0, maximumDrawLevelRemoteness) + 2" :key="drawRemoteness">
                     <line v-if="!isPuzzleGame"
-                        :class="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                        :class="drawRemoteness % viewPreferences.xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
                             'view-bar' : 'view-interval-bar'"
                         :x1="gridLeft + drawRemoteness * columnWidth"
                         :y1="gridTop"
                         :x2="gridLeft + drawRemoteness * columnWidth"
                         :y2="gridBottom + roundYOffset(currentValuedRoundId)"
-                        :stroke-width="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
-                            xBarWidth : xIntervalBarWidth" />
-                    <line :class="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                        :stroke-width="drawRemoteness % viewPreferences.xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                            viewPreferences.xBarWidth : viewPreferences.xIntervalBarWidth" />
+                    <line :class="drawRemoteness % viewPreferences.xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
                               'view-bar' : 'view-interval-bar'"
                           :x1="gridRight - drawRemoteness * columnWidth"
                           :y1="gridTop"
                           :x2="gridRight - drawRemoteness * columnWidth"
                           :y2="gridBottom + roundYOffset(currentValuedRoundId)"
-                          :stroke-width="drawRemoteness % xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
-                              xBarWidth : xIntervalBarWidth" />
+                          :stroke-width="drawRemoteness % viewPreferences.xInterval !== 0 && drawRemoteness < Math.max(0, maximumDrawLevelRemoteness) + 1 ?
+                              viewPreferences.xBarWidth : viewPreferences.xIntervalBarWidth" />
                 </template>
                 
                 <!-- Move Coordinates -->
                 <template v-if="currentValuedRoundId >= 2">
                     <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
                         <text class="move-coordinate" v-if="currentValuedRounds[roundNumber].firstPlayerTurn"
-                            :x="yCoordinateWidth / 2"
-                            :y="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            :x="viewPreferences.yCoordinateWidth / 2"
+                            :y="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(roundNumber)"
                             dominant-baseline="middle" text-anchor="middle">
                             {{ currentValuedRounds[roundNumber].move }}
                         </text>
-                        <text class="move-coordinate" v-else :x="gridRight + yCoordinateWidth / 2"
-                            :y="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                        <text class="move-coordinate" v-else :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                            :y="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(roundNumber)"
                             dominant-baseline="middle"
                             text-anchor="middle">
                             {{ currentValuedRounds[roundNumber].move }}
@@ -146,8 +146,8 @@
                     <template v-if="isEndOfMatch">
                         <template v-if="isPuzzleGame">
                             <text class="move-coordinate"
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
                                 🥳
@@ -155,15 +155,15 @@
                         </template>
                         <template v-else-if="currentPositionValue === 'tie'">
                             <text class="move-coordinate"
-                                :x="yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                :x="viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
                                 🤔
                             </text>
                             <text class="move-coordinate"
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
                                 🤔
@@ -171,8 +171,8 @@
                         </template>
                         <template v-else>
                             <text class="move-coordinate"
-                                :x="yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                :x="viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
                                 dominant-baseline="middle"
                                 text-anchor="middle"> {{
                                     (currentFirstPlayerTurn && currentPositionValue === "win") ||
@@ -180,8 +180,8 @@
                                     "🥳" : "😢"
                                 }} </text>
                             <text class="move-coordinate"
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                                :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
                                 dominant-baseline="middle"
                                 text-anchor="middle"> {{
                                     (!currentFirstPlayerTurn && currentPositionValue === "win") ||
@@ -200,11 +200,11 @@
                         :x="gridLeft + 0.5"
                         :y="gridTop + 0.5"
                         :width="gridWidth - 1" 
-                        :height="fringeOffset - 1" />
+                        :height="viewPreferences.fringeOffset - 1" />
                     <text
                         class="fringe-row-heading"
                         :x="gridLeft + (gridWidth / 2)"
-                        :y="gridTop + (fringeOffset / 2)"
+                        :y="gridTop + (viewPreferences.fringeOffset / 2)"
                         fill="white"
                         dominant-baseline="middle"
                         text-anchor="middle"
@@ -220,13 +220,13 @@
                             <rect 
                                 :class="'fringe-row'"
                                 :x="gridLeft + 0.5"
-                                :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber - 1) + 0.5"
+                                :y="gridTop + (roundNumber - 1) * viewPreferences.rowHeight + roundYOffset(roundNumber - 1) + 0.5"
                                 :width="gridWidth - 1" 
-                                :height="fringeOffset - 1" />
+                                :height="viewPreferences.fringeOffset - 1" />
                             <text
                                 class="fringe-row-heading"
                                 :x="gridLeft + (gridWidth / 2)"
-                                :y="gridTop + (roundNumber - 1) * rowHeight + roundYOffset(roundNumber - 1) + (fringeOffset / 2)"
+                                :y="gridTop + (roundNumber - 1) * viewPreferences.rowHeight + roundYOffset(roundNumber - 1) + (viewPreferences.fringeOffset / 2)"
                                 fill="white"
                                 dominant-baseline="middle"
                                 text-anchor="middle"
@@ -242,10 +242,10 @@
                     <template v-for="roundNumber in currentValuedRoundId - 1" :key="roundNumber">
                         <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                             :x1="drawLevelNodeGridXPosition(roundNumber)"
-                            :y1="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
+                            :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(roundNumber)"
                             :x2="drawLevelNodeGridXPosition(roundNumber + 1)"
-                            :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2 + roundYOffset(roundNumber + 1)"
-                            :stroke-width="linkWidth" />
+                            :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(roundNumber + 1)"
+                            :stroke-width="viewPreferences.linkWidth" />
                     </template>
                 </template>
 
@@ -255,10 +255,10 @@
                         :key="nextMove">
                         <line :class="`${nextMove.moveValue} link`"
                             :x1="drawLevelNodeGridXPosition(currentValuedRoundId)"
-                            :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
                             :x2="drawLevelNextNodeGridXPosition(currentValuedRoundId, nextMove)"
-                            :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2 + roundYOffset(currentValuedRoundId)"
-                            :stroke-width="linkWidth" />
+                            :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2 + roundYOffset(currentValuedRoundId)"
+                            :stroke-width="viewPreferences.linkWidth" />
                     </template>
                 </template>
 
@@ -274,9 +274,9 @@
                                     (options.highlightMove && roundNumber === currentValuedRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                 class="next-move-position-value"
                                 :cx="drawLevelNextNodeGridXPosition(roundNumber, nextMove)"
-                                :cy="gridTop + roundNumber * rowHeight + rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
-                                :r="nextMovePositionValueSize"
-                                :stroke-width="nextMovePositionValueStrokeSize"
+                                :cy="gridTop + roundNumber * viewPreferences.rowHeight + viewPreferences.rowHeight / 2 + roundMoveYOffset(roundNumber, nextMove)"
+                                :r="viewPreferences.nextMovePositionValueSize"
+                                :stroke-width="viewPreferences.nextMovePositionValueStrokeSize"
                                 @click="roundNumber === currentValuedRoundId &&
                                     store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
                                 @mouseover="roundNumber === currentValuedRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
@@ -292,9 +292,9 @@
                             :class="[roundNumber !== currentValuedRoundId ? 'clickable' : '', currentValuedRounds[roundNumber].position.positionValue, currentValuedRounds[roundNumber].position.drawRemoteness > -1 ? (currentValuedRounds[roundNumber].position.drawRemoteness % 2 == 0 ? 'draw-lose' : 'draw-win') : '']"
                             class="position-value"
                             :cx="drawLevelNodeGridXPosition(roundNumber)"
-                            :cy="gridTop + roundNumber * rowHeight - rowHeight / 2 + roundYOffset(roundNumber)"
-                            :r="positionValueSize"
-                            :stroke-width="positionValueStrokeSize"
+                            :cy="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2 + roundYOffset(roundNumber)"
+                            :r="viewPreferences.positionValueSize"
+                            :stroke-width="viewPreferences.positionValueStrokeSize"
                             @click="roundNumber !== currentValuedRoundId &&
                                 store.dispatch(actionTypes.undoMove, {
                                     toRoundId: currentValuedRounds[roundNumber].id
@@ -310,62 +310,62 @@
         <div id="meters" v-if="toggleOptions">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
-                <VueSlider v-model="xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Coordinate Width</p>
-                <VueSlider v-model="yCoordinateWidth" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.yCoordinateWidth" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Row Height</p>
-                <VueSlider v-model="rowHeight" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.rowHeight" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Fringe Height</p>
-                <VueSlider v-model="fringeOffset" :min="2" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.fringeOffset" :min="2" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Chart Width</p>
-                <VueSlider v-model="chartWidth" :min="1" :max="500" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.chartWidth" :min="1" :max="500" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Position Value Size</p>
-                <VueSlider v-model="positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Position Value Stroke Size</p>
-                <VueSlider v-model="positionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.positionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Next Move Position Value Size</p>
-                <VueSlider v-model="nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Next Move Position Value Stroke Size</p>
-                <VueSlider v-model="nextMovePositionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.nextMovePositionValueStrokeSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Link Width</p>
-                <VueSlider v-model="linkWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.linkWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Bar Width</p>
-                <VueSlider v-model="xBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Interval Bar Width</p>
-                <VueSlider v-model="xIntervalBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xIntervalBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">View Interval</p>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumDrawLevelRemoteness" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xInterval" :min="1" :max="maximumDrawLevelRemoteness" :tooltip="'active'" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed, onMounted, reactive, ref, watch } from "vue";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { Move, Rounds } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
@@ -430,41 +430,58 @@
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
     const winningDirectionHeight = ref(2);
-    const xCoordinateHeight = ref(2);
-    const rowHeight = ref(2);
     const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
-    const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
+    const gridTop = computed(() => winningDirectionHeight.value + viewPreferences.xCoordinateHeight);
 
-    const gridHeight = computed(() => rowHeight.value * rowCount.value + roundYOffset(currentValuedRoundId.value));
+    const gridHeight = computed(() => viewPreferences.rowHeight * rowCount.value + roundYOffset(currentValuedRoundId.value));
 
     const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
     const gridBottom = computed(() => chartHeight.value - gridTop.value - roundYOffset(currentValuedRoundId.value));
 
-
-    const yCoordinateWidth = ref(5);
-    const chartWidth = ref(50);
     const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * (Math.max(5, maximumDrawLevelRemoteness.value) + 1));
-    const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
+    const gridWidth = computed(() => viewPreferences.chartWidth - 2 * viewPreferences.yCoordinateWidth);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
-    const gridLeft = computed(() => yCoordinateWidth.value);
-    const gridRight = computed(() => chartWidth.value - gridLeft.value);
-    const gridCenter = computed(() => chartWidth.value / 2)
-
-    // Node radius
-    const positionValueSize = ref(0.6);
-    // Node stroke
-    const positionValueStrokeSize = ref(0.2);
-    // Move node radius
-    const nextMovePositionValueSize = ref(0.3);
-    // Move node stroke
-    const nextMovePositionValueStrokeSize = ref(0.1);
-    
-    const xInterval = ref(5);
-    const linkWidth = ref(0.2);
-    const xBarWidth = ref(0.1);
-    const xIntervalBarWidth = ref(0.2);
+    const gridLeft = computed(() => viewPreferences.yCoordinateWidth);
+    const gridRight = computed(() => viewPreferences.chartWidth - gridLeft.value);
+    const gridCenter = computed(() => viewPreferences.chartWidth / 2)
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+
+    const viewPreferences = reactive({
+        xCoordinateHeight: 2,
+        yCoordinateWidth: 5,
+        rowHeight: 2,
+        fringeOffset: 2,
+        chartWidth: 50,
+        positionValueSize: 0.6, //Node Radius
+        positionValueStrokeSize: 0.2, //Node Stroke
+        nextMovePositionValueSize: 0.3, //Move Node Radius
+        nextMovePositionValueStrokeSize: 0.1, //Move Node Stroke
+        linkWidth: 0.2,
+        xBarWidth: 0.1,
+        xIntervalBarWidth: 0.2,
+        xInterval: 5
+    });
+    
+    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'drawLevelViewPreferences';
+
+    // Saves View Preferences to localStorage
+    watch(viewPreferences, (newVal) => {
+        localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(newVal));
+    }, { deep: true });
+
+    // Loads View Preferences from localStorage
+    onMounted(() => {
+        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+        if (savedPreferences) {
+            try {
+                const parsed = JSON.parse(savedPreferences);
+                Object.assign(viewPreferences, parsed);
+            } catch (e) {
+                console.warn('[localStorage] Invalid preferences data', e);
+            }
+        }
+    });
 
     /** 
      * Determines whether it is the first player's turn or the second player's turn based on the current round id.
@@ -549,8 +566,6 @@
         return prevDrawLevel === drawLevel + 1;
     };
 
-    const fringeOffset = ref(2);
-
     /** 
      * Determines the vertical offset for rows given the previous new draw levels in the 'Draw Level' view of the Visual Value History (VVH) graph.
      * @param {number} roundID - current round id.
@@ -562,10 +577,10 @@
         
         // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
         if (drawLevel === -1) {
-            return (maximumDrawLevel.value + Number(isPureDraw(1))) * fringeOffset.value;
+            return (maximumDrawLevel.value + Number(isPureDraw(1))) * viewPreferences.fringeOffset;
         }
         
-        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * viewPreferences.fringeOffset;
     };
 
     /** 
@@ -581,7 +596,7 @@
 
         // Non-Pure Draws & Non-Draw Nodes can't reach a new draw level
         if (nextMovedrawLevel === undefined || drawLevel === -1) {
-            return (maximumDrawLevel.value + Number(isPureDraw(1))) * fringeOffset.value;
+            return (maximumDrawLevel.value + Number(isPureDraw(1))) * viewPreferences.fringeOffset;
         }
 
         // Since roundMoveYOffset is called for all moves, including the next moves available, we must account
@@ -594,11 +609,11 @@
             const isNewDrawLevel = prevDrawLevel !== -1 && nextDrawLevel !== -1 && (prevDrawLevel === nextDrawLevel + 1);
 
             if (isNewDrawLevel) {
-                return (maximumDrawLevel.value - nextDrawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+                return (maximumDrawLevel.value - nextDrawLevel + Number(isPureDraw(1))) * viewPreferences.fringeOffset;
             }
         }
 
-        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * fringeOffset.value;
+        return (maximumDrawLevel.value - drawLevel + Number(isPureDraw(1))) * viewPreferences.fringeOffset;
     };
 
     /** 

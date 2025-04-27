@@ -4,7 +4,7 @@
             <p id="left-y-axis-label" v-if="toggleGuides && !isPuzzleGame">
                 <b>Moves</b>
             </p>
-            <svg id="chart" :viewBox="`0 0 ${chartWidth} ${chartHeight}`"
+            <svg id="chart" :viewBox="`0 0 ${viewPreferences.chartWidth} ${chartHeight}`"
                              xmlns="http://www.w3.org/2000/svg">
                 <!-- Winning Directions -->
                 <template v-if="toggleGuides">
@@ -66,11 +66,11 @@
 
                 <!-- D Symbols for Games and F Symbols for Puzzles -->
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : gridCenter"
-                                          :y="gridTop - xCoordinateHeight / 2"
+                                          :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                                           dominant-baseline="middle"
                                           text-anchor="middle">{{ isPuzzleGame ? '∞' : 'D' }}</text>
                 <text class="draw-symbol" :x="isPuzzleGame ? gridLeft : gridCenter"
-                                          :y="gridBottom + xCoordinateHeight / 2"
+                                          :y="gridBottom + viewPreferences.xCoordinateHeight / 2"
                                           dominant-baseline="middle"
                                           text-anchor="middle">{{ isPuzzleGame ? '∞' : 'D' }}</text>
 
@@ -78,33 +78,33 @@
                 <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + 1"
                         :key="remoteness">
                     <text class="view-coordinate"
-                            v-if="!isPuzzleGame &&remoteness % xInterval === 0"
+                            v-if="!isPuzzleGame &&remoteness % viewPreferences.xInterval === 0"
                             :x="gridLeft + remoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ remoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="remoteness % xInterval === 0"
+                            v-if="remoteness % viewPreferences.xInterval === 0"
                             :x="gridRight - remoteness * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ remoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="!isPuzzleGame && remoteness % xInterval === 0"
+                            v-if="!isPuzzleGame && remoteness % viewPreferences.xInterval === 0"
                             :x="gridLeft + remoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ remoteness }}
                     </text>
                     <text class="view-coordinate"
-                            v-if="remoteness % xInterval === 0"
+                            v-if="remoteness % viewPreferences.xInterval === 0"
                             :x="gridRight - remoteness * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">
                         {{ remoteness }}
@@ -116,23 +116,23 @@
                     <text class="view-coordinate"
                             v-if="!isPuzzleGame"
                             :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">?</text>
                     <text class="view-coordinate"
                             :x="gridRight - (maximumRemoteness + 1) * columnWidth"
-                            :y="gridTop - xCoordinateHeight / 2"
+                            :y="gridTop - viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">?</text>
                     <text class="view-coordinate"
                             v-if="!isPuzzleGame"
                             :x="gridLeft + (maximumRemoteness + 1) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">?</text>
                     <text class="view-coordinate"
                             :x="gridRight - (maximumRemoteness + 1) * columnWidth"
-                            :y="gridBottom + xCoordinateHeight / 2"
+                            :y="gridBottom + viewPreferences.xCoordinateHeight / 2"
                             dominant-baseline="middle"
                             text-anchor="middle">?</text>
                 </template>
@@ -143,16 +143,16 @@
                             :key="roundNumber">
                         <text class="move-coordinate"
                                 v-if="!isPuzzleGame && currentValuedRounds[roundNumber].firstPlayerTurn"
-                                :x="yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                :x="viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
                             {{ currentValuedRounds[roundNumber].move[0] == '~' ? '' : currentValuedRounds[roundNumber].move }}
                         </text>
                         <text class="move-coordinate"
                                 v-else
-                                :x="gridRight + yCoordinateWidth / 2"
-                                :y="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                :y="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                 dominant-baseline="middle"
                                 text-anchor="middle">
                             {{ currentValuedRounds[roundNumber].move[0] == '~' ? '' : currentValuedRounds[roundNumber].move }}
@@ -162,8 +162,8 @@
                     <template v-if="isEndOfMatch">
                         <template v-if="isPuzzleGame">
                             <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle">
                                 {{ currentPositionValue === "win" ? "🥳" : "😢" }}
@@ -171,15 +171,15 @@
                         </template>
                         <template v-else-if="currentPositionValue === 'tie'">
                             <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x="viewPreferences.yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle">
                                 🤔
                             </text>
                             <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle">
                                 🤔
@@ -187,8 +187,8 @@
                         </template>
                         <template v-else>
                             <text class="move-coordinate"
-                                    :x="yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x="viewPreferences.yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle"> {{ 
                                 (currentFirstPlayerTurn && currentPositionValue === "win") ||
@@ -196,8 +196,8 @@
                                 "🥳" : "😢"
                             }} </text>
                             <text class="move-coordinate"
-                                    :x="gridRight + yCoordinateWidth / 2"
-                                    :y="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x="gridRight + viewPreferences.yCoordinateWidth / 2"
+                                    :y="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     dominant-baseline="middle"
                                     text-anchor="middle"> {{
                                 (!currentFirstPlayerTurn && currentPositionValue === "win") ||
@@ -216,38 +216,38 @@
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
                         <rect :class="`turn-${turn(roundNumber)}`" class="round-row"
                             :x="gridLeft"
-                            :y="gridTop + (roundNumber - 1) * rowHeight"
+                            :y="gridTop + (roundNumber - 1) * viewPreferences.rowHeight"
                             :width="gridWidth"
-                            :height="rowHeight" />
+                            :height="viewPreferences.rowHeight" />
                     </template>
                 </template>
                 <rect v-if="!isEndOfMatch"
                     :class="`turn-0`"
                     class="round-row"
                     :x="gridLeft"
-                    :y="gridBottom - rowHeight"
+                    :y="gridBottom - viewPreferences.rowHeight"
                     :width="gridWidth"
-                    :height="rowHeight" />
+                    :height="viewPreferences.rowHeight" />
 
                 <!-- Remoteness Bars -->
                 <template v-for="(_, remoteness) in Math.max(0, maximumRemoteness) + (finiteUnknownRemotenessExists ? 3 : 2)" :key="remoteness">
                     <line v-if="!isPuzzleGame"
-                        :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
+                        :class="remoteness % viewPreferences.xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                             'view-bar' : 'view-interval-bar'"
                         :x1="gridLeft + remoteness * columnWidth"
                         :y1="gridTop"
                         :x2="gridLeft + remoteness * columnWidth"
                         :y2="gridBottom"
-                        :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                            xBarWidth : xIntervalBarWidth" />
-                    <line :class="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
+                        :stroke-width="remoteness % viewPreferences.xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
+                            viewPreferences.xBarWidth : viewPreferences.xIntervalBarWidth" />
+                    <line :class="remoteness % viewPreferences.xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
                               'view-bar' : 'view-interval-bar'"
                           :x1="gridRight - remoteness * columnWidth"
                           :y1="gridTop"
                           :x2="gridRight - remoteness * columnWidth"
                           :y2="gridBottom"
-                          :stroke-width="remoteness % xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
-                              xBarWidth : xIntervalBarWidth" />
+                          :stroke-width="remoteness % viewPreferences.xInterval !== 0 && remoteness < Math.max(0, maximumRemoteness) + 1 ?
+                              viewPreferences.xBarWidth : viewPreferences.xIntervalBarWidth" />
                 </template>
 
                 <!-- Position Value Links -->
@@ -256,31 +256,31 @@
                         <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
                             <template v-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'draw' || currentValuedRounds[roundNumber + 1].position.remoteness == Remoteness.INFINITY">
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
-                                :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                 :x2="isPuzzleGame ?
                                     gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                     currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
@@ -290,8 +290,8 @@
                                     turn(roundNumber + 1) === 1 ?
                                     gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                     gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                :stroke-width="linkWidth" />
+                                :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                         <template v-else-if="currentValuedRounds[roundNumber].position.positionValue === 'tie'">
@@ -299,37 +299,37 @@
                                 <line v-if="!isPuzzleGame"
                                     :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line v-if="!isPuzzleGame"
                                 :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
                                         (turn(roundNumber + 1) === 1 ?
                                         gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
@@ -337,11 +337,11 @@
                                         turn(roundNumber + 1) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                         currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
@@ -351,8 +351,8 @@
                                         turn(roundNumber + 1) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                         <template v-else>
@@ -367,10 +367,10 @@
                                         turn(roundNumber) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="currentValuedRounds[roundNumber + 1].position.positionValue === 'tie'">
                                 <line v-if="!isPuzzleGame" :class="`${currentValuedRounds[roundNumber].moveValue} link`"
@@ -383,10 +383,10 @@
                                         turn(roundNumber) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
                                     :x1="isPuzzleGame ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
@@ -397,10 +397,10 @@
                                         turn(roundNumber) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line :class="`${currentValuedRounds[roundNumber].moveValue} link`"
@@ -413,7 +413,7 @@
                                         turn(roundNumber) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                    :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth
                                         : currentValuedRounds[roundNumber + 1].position.positionValue === 'win' ?
@@ -423,8 +423,8 @@
                                         turn(roundNumber + 1) === 1 ?
                                         gridRight - currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[roundNumber + 1].position.remoteness * columnWidth"
-                                    :y2="gridTop + (roundNumber + 1) * rowHeight - rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + (roundNumber + 1) * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                     </template>
@@ -436,31 +436,31 @@
                         <template v-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'draw' || currentValuedRounds[currentValuedRoundId].position.remoteness == Remoteness.INFINITY">
                             <template v-if="nextMove.moveValue === 'draw' || nextMove.remoteness == Remoteness.INFINITY">
                                 <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line :class="`${nextMove.moveValue} link`"
-                                    :x1="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :x1="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         nextMove.moveValue === 'win' ?
@@ -470,8 +470,8 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                         <template v-else-if="currentValuedRounds[currentValuedRoundId].position.positionValue === 'tie'">
@@ -479,37 +479,37 @@
                                 <line v-if="!isPuzzleGame"
                                     :class="`${nextMove.moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${nextMove.moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">
                                 <line v-if="!isPuzzleGame"
                                     :class="`${nextMove.moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${nextMove.moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line v-if="!isPuzzleGame"
                                     :class="`${nextMove.moveValue} link`"
                                     :x1="gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         nextMove.moveValue === 'win' ?
@@ -519,11 +519,11 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${nextMove.moveValue} link`"
                                     :x1="gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         nextMove.moveValue === 'win' ?
@@ -533,8 +533,8 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                         <template v-else>
@@ -549,10 +549,10 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
-                                    :x2="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                    :x2="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else-if="nextMove.moveValue === 'tie'">
                                 <line v-if="!isPuzzleGame"
@@ -566,10 +566,10 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                                 <line :class="`${nextMove.moveValue} link`"
                                     :x1="isPuzzleGame ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
@@ -580,10 +580,10 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="gridRight - nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                             <template v-else>
                                 <line :class="`${nextMove.moveValue} link`"
@@ -596,7 +596,7 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth :
                                         gridLeft + currentValuedRounds[currentValuedRoundId].position.remoteness * columnWidth"
-                                    :y1="gridTop + currentValuedRoundId * rowHeight - rowHeight / 2"
+                                    :y1="gridTop + currentValuedRoundId * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                     :x2="isPuzzleGame ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         nextMove.moveValue === 'win' ?
@@ -606,8 +606,8 @@
                                         turn(currentValuedRoundId) === 1 ?
                                         gridRight - nextMove.remoteness * columnWidth :
                                         gridLeft + nextMove.remoteness * columnWidth"
-                                    :y2="gridTop + currentValuedRoundId * rowHeight + rowHeight / 2"
-                                    :stroke-width="linkWidth" />
+                                    :y2="gridTop + currentValuedRoundId * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :stroke-width="viewPreferences.linkWidth" />
                             </template>
                         </template>
                     </template>
@@ -623,10 +623,10 @@
                                                  showNextMoveHints ? nextMove.positionValue : '',
                                                  (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove) ? 'highlighted' : '']"
                                     class="next-move-position-value"
-                                    :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    :cx="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                    :cy="gridTop + roundNumber * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :r="viewPreferences.nextMovePositionValueSize"
+                                    :stroke-width="4 * viewPreferences.nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
                                         store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
                                     @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
@@ -637,9 +637,9 @@
                                     :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove)}"
                                     class="next-move-position-value"
                                     :cx="gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    :cy="gridTop + roundNumber * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :r="viewPreferences.nextMovePositionValueSize"
+                                    :stroke-width="4 * viewPreferences.nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
                                         store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
                                     @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
@@ -647,9 +647,9 @@
                                 <circle :class="{ clickable: roundNumber === currentValuedRoundId, tie: showNextMoveHints, highlighted: (options.highlightMove && roundNumber == currentRoundId && highlightedMove === nextMove.autoguiMove)}"
                                     class="next-move-position-value"
                                     :cx="gridRight - nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2"
-                                    :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    :cy="gridTop + roundNumber * viewPreferences.rowHeight + viewPreferences.rowHeight / 2"
+                                    :r="viewPreferences.nextMovePositionValueSize"
+                                    :stroke-width="4 * viewPreferences.nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId &&
                                         store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })"
                                     @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
@@ -666,8 +666,8 @@
                                         gridRight - nextMove.remoteness * columnWidth) :
                                         turn(roundNumber) === 1 ? gridRight - nextMove.remoteness * columnWidth :
                                         gridLeft + nextMove.remoteness * columnWidth"
-                                    :cy="gridTop + roundNumber * rowHeight + rowHeight / 2" :r="nextMovePositionValueSize"
-                                    :stroke-width="4 * nextMovePositionValueSize"
+                                    :cy="gridTop + roundNumber * viewPreferences.rowHeight + viewPreferences.rowHeight / 2" :r="viewPreferences.nextMovePositionValueSize"
+                                    :stroke-width="4 * viewPreferences.nextMovePositionValueSize"
                                     @click="roundNumber === currentValuedRoundId && store.dispatch(actionTypes.runMove, { autoguiMove: nextMove.autoguiMove })" 
                                     @mouseover="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, nextMove.autoguiMove)"
                                     @mouseout="roundNumber == currentRoundId && store.commit(mutationTypes.setHighlightedMove, '')"/>
@@ -681,10 +681,10 @@
                     <template v-for="roundNumber in currentValuedRoundId" :key="roundNumber">
                         <template v-if="currentValuedRounds[roundNumber].position.positionValue === 'draw' || currentValuedRounds[roundNumber].position.remoteness == Remoteness.INFINITY">
                             <circle :class="(roundNumber !== currentValuedRoundId ? 'clickable' : '') + ' ' + currentValuedRounds[roundNumber].position.positionValue + ' position-value'"
-                                :cx="isPuzzleGame ? gridLeft : chartWidth / 2"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
+                                :cx="isPuzzleGame ? gridLeft : viewPreferences.chartWidth / 2"
+                                :cy="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                :r="viewPreferences.positionValueSize"
+                                :stroke-width="4 * viewPreferences.positionValueSize"
                                 @click="roundNumber !== currentValuedRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
                                         toRoundId: currentValuedRounds[roundNumber].id
@@ -695,8 +695,8 @@
                                 :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
                                 class="tie position-value"
                                 :cx="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2" :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
+                                :cy="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2" :r="viewPreferences.positionValueSize"
+                                :stroke-width="4 * viewPreferences.positionValueSize"
                                 @click="roundNumber !== currentValuedRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
                                         toRoundId: currentValuedRounds[roundNumber].id
@@ -705,10 +705,10 @@
                                 :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
                                 class="tie position-value link"
                                 :x1="gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :y1="gridTop + roundNumber * rowHeight - rowHeight / 2"
+                                :y1="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
                                 :x2="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :y2="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :stroke-width="linkWidth"
+                                :y2="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                :stroke-width="viewPreferences.linkWidth"
                                 @click="roundNumber !== currentValuedRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
                                         toRoundId: currentValuedRounds[roundNumber].id
@@ -716,9 +716,9 @@
                             <circle :class="roundNumber !== currentValuedRoundId ? 'clickable' : ''"
                                 class="tie position-value"
                                 :cx="gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
+                                :cy="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                :r="viewPreferences.positionValueSize"
+                                :stroke-width="4 * viewPreferences.positionValueSize"
                                 @click="roundNumber !== currentValuedRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
                                         toRoundId: currentValuedRounds[roundNumber].id
@@ -738,9 +738,9 @@
                                     turn(roundNumber) === 1 ?
                                     gridRight - currentValuedRounds[roundNumber].position.remoteness * columnWidth :
                                     gridLeft + currentValuedRounds[roundNumber].position.remoteness * columnWidth"
-                                :cy="gridTop + roundNumber * rowHeight - rowHeight / 2"
-                                :r="positionValueSize"
-                                :stroke-width="4 * positionValueSize"
+                                :cy="gridTop + roundNumber * viewPreferences.rowHeight - viewPreferences.rowHeight / 2"
+                                :r="viewPreferences.positionValueSize"
+                                :stroke-width="4 * viewPreferences.positionValueSize"
                                 @click="roundNumber !== currentValuedRoundId &&
                                     store.dispatch(actionTypes.undoMove, {
                                         toRoundId: currentValuedRounds[roundNumber].id
@@ -756,50 +756,50 @@
         <div id="meters" v-if="toggleOptions">
             <div class="meter">
                 <p class="label">View Coordinate Height</p>
-                <VueSlider v-model="xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xCoordinateHeight" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Coordinate Width</p>
-                <VueSlider v-model="yCoordinateWidth" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.yCoordinateWidth" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Row Height</p>
-                <VueSlider v-model="rowHeight" :min="1" :max="50" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.rowHeight" :min="1" :max="50" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Chart Width</p>
-                <VueSlider v-model="chartWidth" :min="1" :max="500" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.chartWidth" :min="1" :max="500" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Position Value Size</p>
-                <VueSlider v-model="positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.positionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Next Move Position Value Size</p>
-                <VueSlider v-model="nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.nextMovePositionValueSize" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Link Width</p>
-                <VueSlider v-model="linkWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.linkWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Bar Width</p>
-                <VueSlider v-model="xBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">Interval Bar Width</p>
-                <VueSlider v-model="xIntervalBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xIntervalBarWidth" :min="0.1" :max="5" :interval="0.1" :tooltip="'active'" />
             </div>
             <div class="meter">
                 <p class="label">View Interval</p>
-                <VueSlider v-model="xInterval" :min="1" :max="maximumRemoteness" :tooltip="'active'" />
+                <VueSlider v-model="viewPreferences.xInterval" :min="1" :max="maximumRemoteness" :tooltip="'active'" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed, onMounted, reactive, ref, watch } from "vue";
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { Rounds, Move } from "../../../scripts/gamesmanUni/types";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
@@ -866,29 +866,51 @@
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
 
     const winningDirectionHeight = ref(2);
-    const xCoordinateHeight = ref(2);
-    const rowHeight = ref(2);
     const rowCount = computed(() => (isEndOfMatch.value ? currentValuedRoundId.value : currentValuedRoundId.value + 1));
-    const gridTop = computed(() => winningDirectionHeight.value + xCoordinateHeight.value);
-    const gridHeight = computed(() => rowHeight.value * rowCount.value);
+    const gridTop = computed(() => winningDirectionHeight.value + viewPreferences.xCoordinateHeight);
+    const gridHeight = computed(() => viewPreferences.rowHeight * rowCount.value);
     const chartHeight = computed(() => 2 * gridTop.value + gridHeight.value);
     const gridBottom = computed(() => chartHeight.value - gridTop.value);
 
-    const yCoordinateWidth = ref(5);
-    const chartWidth = ref(50);
     const columnCount = computed(() => (isPuzzleGame.value ? 1 : 2) * ((maximumRemoteness.value + (finiteUnknownRemotenessExists.value ? 1 : 0) + 1)));
-    const gridWidth = computed(() => chartWidth.value - 2 * yCoordinateWidth.value);
+    const gridWidth = computed(() => viewPreferences.chartWidth - 2 * viewPreferences.yCoordinateWidth);
     const columnWidth = computed(() => gridWidth.value / columnCount.value);
-    const gridLeft = computed(() => yCoordinateWidth.value);
-    const gridRight = computed(() => chartWidth.value - gridLeft.value);
-    const gridCenter = computed(() => chartWidth.value/2);
+    const gridLeft = computed(() => viewPreferences.yCoordinateWidth);
+    const gridRight = computed(() => viewPreferences.chartWidth - gridLeft.value);
+    const gridCenter = computed(() => viewPreferences.chartWidth/2);
 
-    const positionValueSize = ref(0.2);
-    const nextMovePositionValueSize = ref(0.1);
-    const xInterval = ref(5);
-    const linkWidth = ref(0.2);
-    const xBarWidth = ref(0.1);
-    const xIntervalBarWidth = ref(0.2);
+    const viewPreferences = reactive({
+        xCoordinateHeight: 2,
+        yCoordinateWidth: 5,
+        rowHeight: 2,
+        chartWidth: 50,
+        positionValueSize: 0.2,
+        nextMovePositionValueSize: 0.1,
+        linkWidth: 0.2,
+        xBarWidth: 0.1,
+        xIntervalBarWidth: 0.2,
+        xInterval: 5,
+    });
+    
+    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'remotenessViewPreferences';
+
+    // Saves View Preferences to localStorage
+    watch(viewPreferences, (newVal) => {
+        localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(newVal));
+    }, { deep: true });
+
+    // Loads View Preferences from localStorage
+    onMounted(() => {
+        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+        if (savedPreferences) {
+            try {
+                const parsed = JSON.parse(savedPreferences);
+                Object.assign(viewPreferences, parsed);
+            } catch (e) {
+                console.warn('[localStorage] Invalid preferences data', e);
+            }
+        }
+    });
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
     /** 

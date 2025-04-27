@@ -4,9 +4,9 @@
             <tr class="table-headers" v-if="toggleGuides">
                 <td>Move</td>
                 <td>Value</td>
-                <td v-if="showDrawLevelColumn">Draw Level</td>
-                <td v-if="showRemotenessColumn">Remoteness</td>
-                <td v-if="showWinByColumn && supportsWinBy">Win By</td>
+                <td v-if="viewPreferences.showDrawLevelColumn">Draw Level</td>
+                <td v-if="viewPreferences.showRemotenessColumn">Remoteness</td>
+                <td v-if="viewPreferences.showWinByColumn && supportsWinBy">Win By</td>
             </tr>
             <template v-if="currentRoundId >= 1 && !currentMatch.computerMoving">
                 <tr v-for="nextMove in currentRounds[currentRoundId].position.availableMoves" class="moves"
@@ -19,15 +19,15 @@
                         :class="[nextMove.moveValue]">
                     {{ nextMove.moveValue }}
                     </td>
-                    <template v-if="showDrawLevelColumn">
+                    <template v-if="viewPreferences.showDrawLevelColumn">
                         <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawLevel }}</td>
                         <td v-else> - </td>
                     </template>
-                    <template v-if="showRemotenessColumn">
+                    <template v-if="viewPreferences.showRemotenessColumn">
                         <td v-if="nextMove.drawLevel >= 0">{{ nextMove.drawRemoteness }}</td>
                         <td v-else>{{ (nextMove.moveValue === 'unsolved') ? '-' : (nextMove.remoteness == Remoteness.INFINITY) ? "∞" : nextMove.remoteness }}</td>
                     </template>
-                    <template v-if="showWinByColumn">
+                    <template v-if="viewPreferences.showWinByColumn">
                         <td v-if="supportsWinBy">{{ nextMove.winby }}</td>
                     </template>
                 </tr>
@@ -45,7 +45,7 @@
                     <input class="uni-toggle-button"
                         aria-label="toggle"
                         type="checkbox"
-                        v-model="showDrawLevelColumn"
+                        v-model="viewPreferences.showDrawLevelColumn"
                     />
                     <label for="checkbox">Toggle Draw Level Column</label>
                 </div>
@@ -55,7 +55,7 @@
                     <input class="uni-toggle-button"
                         aria-label="toggle"
                         type="checkbox"
-                        v-model="showRemotenessColumn"
+                        v-model="viewPreferences.showRemotenessColumn"
                     />
                     <label for="checkbox">Toggle Remoteness Column</label>
                 </div>
@@ -65,7 +65,7 @@
                     <input class="uni-toggle-button"
                         aria-label="toggle"
                         type="checkbox"
-                        v-model="showWinByColumn"
+                        v-model="viewPreferences.showWinByColumn"
                     />
                     <label for="checkbox">Toggle Win By Column</label>
                 </div>
@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref } from "vue";
+    import { computed, onMounted, reactive, ref, watch } from "vue";
     import { mutationTypes, actionTypes, useStore } from "../../../scripts/plugins/store";
     import * as Remoteness from "../../../scripts/gamesmanUni/remoteness";
 
@@ -99,11 +99,31 @@
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);
 
-    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
+    const viewPreferences = reactive({
+        showDrawLevelColumn: true,
+        showRemotenessColumn: true,
+        showWinByColumn: true,
+    });
 
-    const showDrawLevelColumn = ref(true);
-    const showRemotenessColumn = ref(true);
-    const showWinByColumn = ref(true);
+    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'columnViewPreferences';
+    
+    // Saves View Preferences to localStorage
+    watch(viewPreferences, (newVal) => {
+        localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(newVal));
+    }, { deep: true });
+
+    // Loads View Preferences from localStorage
+    onMounted(() => {
+        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+        if (savedPreferences) {
+            try {
+                const parsed = JSON.parse(savedPreferences);
+                Object.assign(viewPreferences, parsed);
+            } catch (e) {
+                console.warn('[localStorage] Invalid preferences data', e);
+            }
+        }
+    });
 </script>
 
 <style lang="scss" scoped>
