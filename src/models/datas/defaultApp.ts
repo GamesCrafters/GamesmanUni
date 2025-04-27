@@ -118,9 +118,10 @@ export const defaultOptions: Types.Options = {
     showNextMoves: true,
     showOptions: false,
     showMenu: true,
-    showVvhGuides: true,
-    showVvhMeters: false,
+    showViewsInstructions: false,
     vvhScrolling: false,
+    showScorecard: false,
+    highlightMove: true,
 };
 
 export const defaultMatches: Types.Matches = {};
@@ -154,7 +155,12 @@ export const defaultMatch: Types.Match = {
     animationPlaying: false
 };
 
-export const defaultCPUsStrategy: Array<string> = ["Remoteness", "Remoteness"];
+export const VVHViews: Array<string> = ["Remoteness", "Win By", "Draw Level", "Column"];
+export const activeVVHViews: Array<Types.VVHView> = [{name: VVHViews[0], viewOptions: {togglePreferences: false, toggleScrolling: false, toggleGuides: true}}]; //VVHViews[0] is set as the default view.
+
+export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
+export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
+export const defaultCPUsRatings: Array<number> = [0, 0];
 
 export const defaultApp: Types.App = {
     ...defaultUpdate,
@@ -165,7 +171,7 @@ export const defaultApp: Types.App = {
     commits: { ...defaultUpdate, commits: {} },
     options: { ...defaultOptions },
     matches: {},
-    vvhView: "",
+    activeVVHViews: activeVVHViews,
     currentMatch: {
         id: 0, gameType: "",
         gameId: "",
@@ -184,5 +190,12 @@ export const defaultApp: Types.App = {
             backgroundLoading: false,
             computerMoving: false
     },
-    CPUsStrategy: defaultCPUsStrategy,
+    CPUsStrategies: [...defaultCPUsStrategies],
+    CPUsRatings: [...defaultCPUsRatings],
+    scorecard: {
+        totalWins: 0,
+        playerWinsMap: new Map(),
+        records: [],
+    },
+    highlightedMove: '',
 };

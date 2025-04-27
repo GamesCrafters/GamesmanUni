@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, ref, watch } from "vue";
+    import { computed, ref, watch, onMounted } from "vue";
     import { mutationTypes, useStore } from "../../../scripts/plugins/store";
     import { useI18n } from "vue-i18n";
     import VueSlider from "vue-slider-component";
@@ -102,6 +102,40 @@
             setAmbienceVolume(preferences.value.ambienceVolume);
         }
     );
+
+    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'userPreferences';
+
+    watch(
+        [() => preferences.value.volume, () => preferences.value.ambienceVolume, appTheme, appLocale, appRootFontSize],
+        () => {
+            const dataToSave = {
+                volume: preferences.value.volume,
+                ambienceVolume: preferences.value.ambienceVolume,
+                theme: appTheme.value,
+                locale: appLocale.value,
+                fontSize: appRootFontSize.value
+            };
+            localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES_KEY, JSON.stringify(dataToSave));
+        },
+        { deep: true }
+    );
+
+    onMounted(() => {
+        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY);
+        if (savedPreferences) {
+            try {
+                const parsed = JSON.parse(savedPreferences);
+                if (parsed.volume !== undefined) setMoveSFXVolume(parsed.volume);
+                if (parsed.ambienceVolume !== undefined) setAmbienceVolume(parsed.ambienceVolume);
+                if (parsed.theme) setAppTheme(parsed.theme);
+                if (parsed.locale) setAppLocale(parsed.locale);
+                if (parsed.fontSize) setAppRootFontSize(parsed.fontSize);
+            } catch (e) {
+                console.warn('[localStorage] Invalid preferences data', e);
+            }
+        }
+    });
+
 </script>
 
 <style lang="scss" scoped>
