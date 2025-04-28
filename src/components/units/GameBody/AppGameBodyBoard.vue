@@ -28,11 +28,12 @@
     const customGameBoardExists = computed(() => gameId.value in customGUIs);
 
     const isEndOfMatch = computed(() => store.getters.isEndOfMatch);
+    const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
     watch(
         () => isEndOfMatch.value,
         async () => {
-            if (isEndOfMatch.value && store.state.app.currentMatch.round.position.position != "") {
+            if (isEndOfMatch.value && store.state.app.currentMatch.round.position.position != "" && !isPuzzleGame.value) {
                 const currentValuedRounds = computed(() => store.getters.currentValuedRounds);
                 const currentRoundId = computed(() => store.getters.currentRoundId);
                 const currentPositionValue = computed(() => store.getters.currentPositionValue);
