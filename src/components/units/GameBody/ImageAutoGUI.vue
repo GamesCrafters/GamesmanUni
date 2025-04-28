@@ -256,7 +256,7 @@
       };
 
       arrows = arrows.sort(compareArrowSquaredLength);
-
+      console.log(arrows)
       return {
         turn: turn,
         board,
