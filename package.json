@@ -48,5 +48,5 @@
         "preview:https": "serve dist",
         "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
     },
-    "version": "5.0.8"
+    "version": "5.0.9"
 }
