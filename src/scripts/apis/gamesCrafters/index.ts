@@ -10,7 +10,7 @@ export const loadData = async <DataType>(dataSource: string) => {
         console.error(`Error: Failed to load data from ${dataSource}.`);
         return undefined;
     }
-    if ("error" in data) {
+    if (typeof data === "object" && "error" in data) {
         console.error((<Types.Error>data).error);
         console.error(`Error: Returned error from ${dataSource}`);
         return undefined;
