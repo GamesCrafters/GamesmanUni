@@ -216,6 +216,27 @@
 
       circle.parentNode?.replaceChild(cloned, circle);
     }
+
+    const paths = Array.from(svgEl.querySelectorAll<SVGUseElement>('path'));
+    for (const path of paths) {
+      const cloned = path.cloneNode(true) as SVGCircleElement;
+
+      const computed = window.getComputedStyle(path);
+      for (let i = 0; i < computed.length; i++) {
+        const prop = computed[i];
+        cloned.style.setProperty(prop, computed.getPropertyValue(prop));
+      }
+
+      if(cloned.classList.contains('hint-lose')) {
+        cloned.style.setProperty('fill', '#800000');
+      } else if (cloned.classList.contains('hint-win')) {
+        cloned.style.setProperty('fill', '#008000');
+      } else if (cloned.classList.contains('hint-draw') || cloned.classList.contains('hint-tie')) {
+        cloned.style.setProperty('fill', '#ffff00');
+      }
+
+      path.parentNode?.replaceChild(cloned, path);
+    }
   }
 
   async function svgToPng() {
