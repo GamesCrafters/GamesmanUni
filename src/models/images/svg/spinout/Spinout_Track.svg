@@ -1,0 +1,12 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9660 1280" width="7660" height="1280">
+	<title>Spinout Board Small</title>
+	<style>
+		.s0 { fill: #8c8c8c;stroke: #000000;stroke-miterlimit:10;stroke-width: 5 } 
+		.s1 { fill: #b1b1b1;stroke: #000000;stroke-miterlimit:10;stroke-width: 5 } 
+	</style>
+	<g id="Layer 1">
+		<path id="Shape 1" fill-rule="evenodd" class="s0" d="m7660 0v1280h-7660v-1280z"/>
+		<path id="Shape 2 copy" fill-rule="evenodd" class="s1" d="m7660 0v221h-199c-92.9-75.7-211.6-121-341-121h-6480c-129.4 0-248.1 45.3-341 121h-299v-221z"/>
+		<path id="Shape 2 copy 2" fill-rule="evenodd" class="s1" d="m7660 1059v221h-7660v-221h5699c92.9 75.7 211.6 121 341 121 129.4 0 248.1-45.3 341-121z"/>
+	</g>
+</svg>
