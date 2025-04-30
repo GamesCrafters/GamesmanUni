@@ -14,8 +14,11 @@ export type App = Update & {
     options: Options;
     matches: Matches;
     currentMatch: Match;
-    vvhView: string;
-    CPUsStrategy: string[];
+    activeVVHViews: Array<VVHView>;
+    CPUsStrategies: Array<string>;
+    CPUsRatings: number[];
+    scorecard: Scorecard;
+    highlightedMove: string;
 };
 
 export type Player = {
@@ -117,9 +120,10 @@ export type Options = {
     showNextMoves: boolean;
     showOptions: boolean;
     showMenu: boolean;
-    showVvhGuides: boolean;
-    showVvhMeters: boolean;
+    showViewsInstructions: boolean;
     vvhScrolling: boolean;
+    showScorecard: boolean;
+    highlightMove: boolean;
 };
 
 export type Matches = Record<number, Match>;
@@ -149,8 +153,46 @@ export type Rounds = Array<Round>;
 export type Round = {
     id: number;
     firstPlayerTurn: boolean;
-    move: string;
+    move: string; //move name i.e. QC4 (queen to c4)
     autoguiMove: string;
-    moveValue: string;
+    moveValue: string; //'lose, win, tie, etc.'
     position: Position;
 };
+
+export type Scorecard = {
+    totalWins: number;
+    playerWinsMap: Map<string, number>;
+    records: Array<ScorecardRecord>;
+};
+
+export type ScorecardRecord = {
+    gameName: string;
+    variantName: string;
+    leftPlayer: Player;
+    rightPlayer: Player;
+    leftPlayerEndPosition: string;
+    CPUsStrategies: string[];
+    CPUsRatings: number[];
+    moveHistory: string;
+    stringMoveHistory: string[];
+    moveHistoryRatings: number[];
+    leftPlayerRatings: Rating;
+    rightPlayerRatings: Rating;
+};
+
+export type Rating = {
+    brilliant: number;
+    good: number;
+    blunder: number;
+};
+
+export type VVHView = {
+    name: string;
+    viewOptions: ViewOptions;
+}
+
+export type ViewOptions = {
+    togglePreferences: boolean;
+    toggleScrolling: boolean;
+    toggleGuides: boolean;
+}

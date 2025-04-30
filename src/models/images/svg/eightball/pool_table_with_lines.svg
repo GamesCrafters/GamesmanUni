@@ -1,0 +1,47 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Wood border (slim) -->
+  <rect x="0" y="0" width="100" height="100" rx="4" ry="4" fill="#5C2E0D"/>
+
+  <!-- Green felt area -->
+  <rect x="6" y="6" width="88" height="88" rx="3" ry="3" fill="url(#feltGradient)"/>
+
+  <!-- Inner shadow (slope effect) -->
+  <rect x="8" y="8" width="84" height="84" rx="3" ry="3" fill="url(#innerShadow)"/>
+
+  <!-- Pockets -->
+  <circle cx="6" cy="6" r="3" fill="black"/>
+  <circle cx="94" cy="6" r="3" fill="black"/>
+  <circle cx="6" cy="94" r="3" fill="black"/>
+  <circle cx="94" cy="94" r="3" fill="black"/>
+  <circle cx="50" cy="6" r="3" fill="black"/>
+  <circle cx="50" cy="94" r="3" fill="black"/>
+
+  <!-- Screws -->
+  <circle cx="18" cy="3" r="0.8" fill="#ccc"/>
+  <circle cx="36" cy="3" r="0.8" fill="#ccc"/>
+  <circle cx="64" cy="3" r="0.8" fill="#ccc"/>
+  <circle cx="82" cy="3" r="0.8" fill="#ccc"/>
+  <circle cx="18" cy="97" r="0.8" fill="#ccc"/>
+  <circle cx="36" cy="97" r="0.8" fill="#ccc"/>
+  <circle cx="64" cy="97" r="0.8" fill="#ccc"/>
+  <circle cx="82" cy="97" r="0.8" fill="#ccc"/>
+
+  <!-- Two vertical black lines (shorter - one box height ~33px) -->
+  <rect x="33" y="33.5" width="2.5" height="33" fill="black"/>
+  <rect x="64.5" y="33.5" width="2.5" height="33" fill="black"/>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="feltGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2e8b57"/>
+      <stop offset="100%" stop-color="#006400"/>
+    </linearGradient>
+
+    <linearGradient id="innerShadow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.12)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </linearGradient>
+  </defs>
+
+</svg>

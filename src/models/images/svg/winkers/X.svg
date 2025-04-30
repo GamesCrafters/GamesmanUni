@@ -1,0 +1,71 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="150" r="100" fill="blue" />
+  
+  <!-- Group of white lines, each rotated from the center -->
+  <g transform="translate(150, 150)" stroke="white" stroke-width="2">
+    <!-- 60 lines, each rotated by 6 degrees (360 / 60) -->
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(0)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(6)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(12)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(18)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(24)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(30)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(36)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(42)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(48)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(54)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(60)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(66)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(72)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(78)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(84)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(90)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(96)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(102)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(108)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(114)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(120)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(126)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(132)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(138)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(144)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(150)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(156)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(162)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(168)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(174)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(180)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(186)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(192)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(198)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(204)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(210)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(216)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(222)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(228)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(234)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(240)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(246)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(252)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(258)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(264)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(270)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(276)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(282)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(288)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(294)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(300)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(306)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(312)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(318)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(324)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(330)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(336)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(342)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(348)" />
+    <line x1="0" y1="0" x2="100" y2="0" transform="rotate(354)" />
+  </g>
+  <circle cx="150" cy="150" r="97" fill="none" stroke="blue" stroke-width="6"/>
+  <circle cx="150" cy="150" r="83" fill="blue"/>
+  <circle cx="150" cy="150" r="76" fill="blue" stroke="white" stroke-width="2"/>
+</svg>

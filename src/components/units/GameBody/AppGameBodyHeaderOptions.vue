@@ -1,6 +1,6 @@
 <template>
     <div id="app-game-body-header-options">
-        <button @click="store.commit(mutationTypes.showOptions, true)">⚙</button>
+        <button @click="store.commit(mutationTypes.showOptions, true)" title="Options">⚙</button>
         <UniPopupWindow v-if="(options && options.showOptions) || false" @close="updateOptions()">
             <div id="popup">
                 <h1 id="title">{{ gameName }} ({{ variantDescription }})</h1>
@@ -63,23 +63,29 @@
                                 v-model="updatedLeftPlayer.isComputer" />
                             <label for="checkbox">Computer</label>
                             <div v-if="updatedLeftPlayer.isComputer">
-                                <div class="strategy-dropdown" v-if="supportsWinBy">
+                                <div class="strategy-dropdown">
                                     <div class="strategy-dropdown-selection">
-                                        <b>{{ CPUsStrategy[0] }} ▼</b>
+                                        <b>{{ currentCPUsStrategies[0] }} ▼</b>
                                     </div>
                                     <div class="strategy-dropdown-options">
-                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === CPUsStrategy[0]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(0, CPUStrategyOption)">
-                                            <div v-if="CPUStrategyOption != CPUsStrategy[0]">
+                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[0]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(0, CPUStrategyOption)">
+                                            <div v-if="renderDropdownOption(CPUStrategyOption, currentCPUsStrategies[0])">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else>
-                                <b>Remoteness</b>
-                                </div>
                                 <br>
                                 Strategy
+                                <div v-if="currentCPUsStrategies[0] === 'Skill Expression'">
+                                    <VueSlider id="slider"
+                                    v-model="currentCPUsRatings[0]"
+                                    :min="0"
+                                    :max="1"
+                                    :interval="0.01"
+                                    :tooltip="'active'" />
+                                    Skill Rating
+                                </div>
                             </div>
                         </div>
                         <div class="name">
@@ -99,23 +105,29 @@
                                 v-model="updatedRightPlayer.isComputer" />
                             <label for="checkbox">Computer</label>
                             <div v-if="updatedRightPlayer.isComputer">
-                                <div class="strategy-dropdown" v-if="supportsWinBy">
+                                <div class="strategy-dropdown">
                                     <div class="strategy-dropdown-selection">
-                                        <b>{{ CPUsStrategy[1] }} ▼</b>
+                                        <b>{{ currentCPUsStrategies[1] }} ▼</b>
                                     </div>
                                     <div class="strategy-dropdown-options">
-                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === CPUsStrategy[1]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(1, CPUStrategyOption)">
-                                            <div v-if="CPUStrategyOption != CPUsStrategy[1]">
+                                        <div class="strategy-dropdown-option" :class="{active: CPUStrategyOption === currentCPUsStrategies[1]}" v-for="CPUStrategyOption in CPUStrategies" :key="CPUStrategyOption" @click="setCPUStrategy(1, CPUStrategyOption)">
+                                            <div v-if="renderDropdownOption(CPUStrategyOption, currentCPUsStrategies[1])">
                                             <b>{{ CPUStrategyOption }}</b>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else>
-                                <b>Remoteness</b>
-                                </div>
                                 <br>
                                 Strategy
+                                <div v-if="currentCPUsStrategies[1] === 'Skill Expression'">
+                                    <VueSlider id="slider"
+                                    v-model="currentCPUsRatings[1]"
+                                    :min="0"
+                                    :max="1"
+                                    :interval="0.01"
+                                    :tooltip="'active'" />
+                                    Skill Rating
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -163,14 +175,16 @@
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="options.showNextMoves" />
+                                v-model="options.showNextMoves"
+                                @click="() => {options.showNextMoveHints = false; options.showNextMoveDeltaRemotenesses = false; options.highlightMove = false}"/>
                             <label for="checkbox">Available Move Buttons</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves">
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="options.showNextMoveHints" />
+                                v-model="options.showNextMoveHints"
+                                @click="() => {options.showNextMoveDeltaRemotenesses = false; options.highlightMove = false}"/>
                             <label for="checkbox">Available Moves' Position Value Predictions</label>
                         </div>
                         <div class="option" v-if="options.showNextMoves && options.showNextMoveHints">
@@ -180,8 +194,18 @@
                                 v-model="options.showNextMoveDeltaRemotenesses" />
                             <label for="checkbox">Available Moves' Delta Remoteness Predictions</label>
                         </div>
+                        <div class="option" v-if="options.showNextMoves && options.showNextMoveHints">
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="options.highlightMove" />
+                            <label for="checkbox">Move Highlighting</label>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div id="localstorage">
+                <button @click="clearPreferences" id="clear-localstorage">Restore Default Preferences</button>
             </div>
         </UniPopupWindow>
     </div>
@@ -193,6 +217,7 @@
     import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
     import VueSlider from "vue-slider-component";
     import UniPopupWindow from "../../templates/UniPopupWindow.vue";
+    import { CPUStrategies } from "../../../models/datas/defaultApp";
 
     const route = useRoute();
     const store = useStore();
@@ -203,14 +228,12 @@
     const currentRightPlayer = computed(() => store.getters.currentRightPlayer);
     const currentLeftPlayerName = computed(() => (currentLeftPlayer ? currentLeftPlayer.value.name : ""));
     const currentRightPlayerName = computed(() => (currentRightPlayer ? currentRightPlayer.value.name : ""));
-    const currentGameType = computed(() => store.getters.currentGameType);
     const currentGameId = computed(() => store.getters.currentGameId); 
 
     const updatedLeftPlayer = ref({ name: "", isComputer: false });
     const updatedRightPlayer = ref({ name: "", isComputer: false });
     const atLeastOnePlayerIsntComputer = computed(() => !updatedLeftPlayer.value.isComputer || (!updatedRightPlayer.value.isComputer && !isPuzzleGame.value));
 
-    const gameType = route.params.type as string;
     const gameId = route.params.gameId as string;
     const variantId = route.params.variantId as string;
 
@@ -262,12 +285,10 @@
     const supportsWinBy = computed(() =>
         store.getters.supportsWinBy(currentGameId.value)
     );
-    
-    // Array of the available computer strategies.
-    const CPUStrategies = ["Remoteness", "Win By"]
 
-    // Default computer strategies [Remoteness, Remoteness].
-    const CPUsStrategy = ref([CPUStrategies[0],CPUStrategies[0]]);
+    const currentCPUsStrategies = computed(() =>
+        store.getters.currentCPUsStrategies
+    );
 
     /** 
      * Changes the strategy of play of the CPU player to a new CPU strategy.
@@ -276,9 +297,44 @@
      * @returns none.
     */
     const setCPUStrategy = (CPUID: number, newCPUStrategy: string) => {
-        CPUsStrategy.value[CPUID] = newCPUStrategy;
-        store.commit(mutationTypes.setCPUsStrategy, CPUsStrategy.value);
+        currentCPUsStrategies.value[CPUID] = newCPUStrategy;
+        store.commit(mutationTypes.setCPUsStrategies, currentCPUsStrategies.value);
+    };
+
+    const currentCPUsRatings = computed(() =>
+        store.getters.currentCPUsRatings
+    );
+
+    /**
+     * Determines if the CPU Strategy Option CPUStrategyOptionName renders depending on if the CPU Strategy Option is legal 
+     * and is not the current active Strategy.
+     * @param CPUStrategyOptionName 
+     * @param activeCPUStrategyOptionName 
+     * @returns true/false if the CPUStrategyOptionName is rendered depending on the pre-established conditions.
+     */
+     const renderDropdownOption = (CPUStrategyOptionName: string, activeCPUStrategyOptionName: string) => {
+        if (CPUStrategyOptionName == activeCPUStrategyOptionName) {
+            return false;
+        }
         
+        return strategyIsLegal(CPUStrategyOptionName);
+    }
+    
+    const strategyIsLegal = (CPUStrategyName: string) => {
+        switch(CPUStrategyName) {
+            case "Win By":
+                return supportsWinBy.value;
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Clears ALL localStorage from the site and reloads.
+     */
+    const clearPreferences = () => {
+        localStorage.clear();
+        location.reload();
     };
 </script>
 
@@ -288,7 +344,7 @@
             border-radius: 100%;
             font-size: 2rem;
             height: max(2.5rem, min(5vh, 5vw));
-            margin: 0.5rem 0;
+            margin: 0.5rem;
             width: max(2.5rem, min(5vh, 5vw));
         }
         #popup {
@@ -393,11 +449,14 @@
         background-color: #f9f9f9;
         min-width: 192px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        padding: 6px 0px 6px 0px;
-        z-index: 1;
+        z-index: 9999;
     }
 
     .strategy-dropdown:hover .strategy-dropdown-options {
         display: block;
+    }
+
+    .strategy-dropdown-option:hover {
+        background-color: #ececec;
     }
 </style>
