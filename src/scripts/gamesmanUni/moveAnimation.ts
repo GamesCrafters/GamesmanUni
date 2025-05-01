@@ -270,11 +270,10 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
             var theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
             const sounds = theTheme.sounds || {} as Record<string, string>;
             var duration = animateImageAutoGUI(currPosition, nextPosition);
-            let matches;
-            if (matches = moveObj.autoguiMove.match(/^([AMLT])_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)_([a-zA-Z0-9-]+)*/)) {
-                if (matches[4] in sounds) {
-                    playMoveSFX(sounds[matches[4]]);
-                }
+
+            const soundChar = moveObj.autoguiMove[moveObj.autoguiMove.length - 1];
+            if (soundChar in sounds) {
+                playMoveSFX(sounds[soundChar]);
             }
             return duration;
         }
