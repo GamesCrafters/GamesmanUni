@@ -27,8 +27,10 @@
     </g>
 
     <!-- Holes (approx positions based on image) -->
+    <!--
     <circle cx="150" cy="55"  r="20" fill="#5C3A21" />
     <circle cx="245" cy="150" r="20" fill="#5C3A21" />
     <circle cx="340" cy="245" r="20" fill="#5C3A21" />
     <circle cx="55"  cy="340" r="20" fill="#5C3A21" />
+    -->
 </svg>
