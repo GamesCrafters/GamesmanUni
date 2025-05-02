@@ -1,0 +1,5 @@
+<svg width="30" height="30" viewBox="-7 0 50 50" xmlns="http://www.w3.org/2000/svg" id="MoveButtonSVG">
+    <circle cx="15" cy="15" r="10" stroke="none"/>
+    <circle cx="15" cy="15" r="9" fill="#F8E49C" stroke="none"/>
+    <text x="15" y="15" text-anchor="middle" dominant-baseline="central" font-size="7" font-family="Arial" fill="black" stroke="none"> 3</text>
+</svg>
