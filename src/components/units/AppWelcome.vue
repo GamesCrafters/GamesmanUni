@@ -1,7 +1,7 @@
 <template>
 <div class="welcome">
     <h2 id="app-welcome">Play and visualize abstract strategy games!</h2>
-    <p id="game-info"><strong>54+</strong> games integrated &emsp;&emsp;&emsp; <strong>9+</strong> puzzles strongly solved</p>
+    <p id="game-info"><strong>{{gameCount}}+</strong> games integrated &emsp;&emsp;&emsp; <strong>{{puzzleCount}}+</strong> puzzles strongly solved</p>
     <div class="explore-buttons-container">
         <button @click="exploreAllGames">Explore All Games</button>
         <button @click="exploreAllPuzzles">Explore All Puzzles</button>
@@ -18,21 +18,43 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+    import { useI18n } from "vue-i18n";
+    import { useRouter } from "vue-router";
+    import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import { computed, onMounted } from "vue";
+    import { Game } from "../../scripts/gamesmanUni/types";
 
-const { t } = useI18n();
-const router = useRouter();
+    const { t } = useI18n();
+    const router = useRouter();
+    const store = useStore();
 
-const exploreAllGames = () => {
-    router.push("/games");
-}
-const exploreAllPuzzles = () => {
-    router.push("/puzzles");
-}
-const infoGames = () => {
-    router.push("/about");
-}
+    const exploreAllGames = () => {
+        router.push("/games");
+    }
+    const exploreAllPuzzles = () => {
+        router.push("/puzzles");
+    }
+    const infoGames = () => {
+        router.push("/about");
+    }
+
+    onMounted(() => {
+        if (Object.keys(store.getters.games).length !== 0) return;
+        store.dispatch(actionTypes.loadGames);
+    });
+
+    const allGames = computed<Game[]>(() => Object.values(store.state.app.games));
+    
+    const gameCount = computed(() => {
+        const games = allGames.value.filter(game => game.type === "twoPlayer")
+        return games.length > 0 ? games.length : 54;
+    });
+
+    const puzzleCount = computed(() => {
+        const puzzles = allGames.value.filter(game => game.type === "onePlayer")
+        return puzzles.length > 0 ? puzzles.length : 9;
+    });
+
 </script>
 
 <style lang="scss" scoped>
