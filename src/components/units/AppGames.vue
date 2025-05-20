@@ -19,54 +19,58 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import { actionTypes, useStore } from "../../scripts/plugins/store";
-import type { Game } from "../../scripts/gamesmanUni/types";
-const route = useRoute();
-const store = useStore();
-const getLogoSource = (game: Game) => {
-    const images = import.meta.globEager("../../models/images/thumbnail/*");
-    try {
-        const regularThumbnailSVGPath = `../../models/images/thumbnail/${game.id}-regular.svg`;
-        return images[regularThumbnailSVGPath].default;
-    } catch (errorMessage) {
+    import { computed, onMounted, ref } from "vue";
+    import { useRoute } from "vue-router";
+    import { actionTypes, useStore } from "../../scripts/plugins/store";
+    import type { Game } from "../../scripts/gamesmanUni/types";
+
+    const route = useRoute();
+    const store = useStore();
+    const getLogoSource = (game: Game) => {
+        const images = import.meta.globEager("../../models/images/thumbnail/*");
         try {
-            const regularThumbnailFilePath = `../../models/images/thumbnail/${game.id}-regular.png`;
-            return images[regularThumbnailFilePath].default;
+            const regularThumbnailSVGPath = `../../models/images/thumbnail/${game.id}-regular.svg`;
+            return images[regularThumbnailSVGPath].default;
         } catch (errorMessage) {
+            try {
+                const regularThumbnailFilePath = `../../models/images/thumbnail/${game.id}-regular.png`;
+                return images[regularThumbnailFilePath].default;
+            } catch (errorMessage) {
 
+            }
         }
+        const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
+        const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
+        return logo[appLogoFilePath].default;
     }
-    const logo = import.meta.globEager("../../models/images/logo-gamescrafters.png");
-    const appLogoFilePath = "../../models/images/logo-gamescrafters.png";
-    return logo[appLogoFilePath].default;
-}
-const gameType = computed(() => route.params.type as string);
-const gameTypeStr = computed(() => gameType.value === "puzzles" ? "onePlayer" : "twoPlayer");
-const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
-const search = ref("");
+    const gameType = computed(() => route.params.type as string);
+    const gameTypeStr = computed(() => gameType.value === "puzzles" ? "onePlayer" : "twoPlayer");
+    const gameTypeTitle = computed(() => gameType.value[0].toUpperCase() + gameType.value.slice(1));
+    const search = ref("");
 
-interface Category {
-    id: string;
-    name: string;
-    members: Game[];
-}
-
-const categories = computed(() => {
-    let categories: Category[] = [];
-    const asArray = Object.values(store.getters.games);
-    for (const strs of [["v3", " Animated GUIs"], ["v2", " Artisan GUIs"], ["v1", " Standard GUIs"], ["v0", "out GUIs (Still in Development)"]]) {
-        categories.push({
-            id: strs[0],
-            name: strs[1],
-            members: asArray.filter((value) => value.type === gameTypeStr.value && value.name.toLowerCase().includes(search.value.toLowerCase()) && value.gui === strs[0])
-        });
+    interface Category {
+        id: string;
+        name: string;
+        members: Game[];
     }
-    return categories;
-});
 
-store.dispatch(actionTypes.loadGames, { type: gameType.value });
+    const categories = computed(() => {
+        let categories: Category[] = [];
+        const asArray = Object.values(store.getters.games);
+        for (const strs of [["v3", " Animated GUIs"], ["v2", " Artisan GUIs"], ["v1", " Standard GUIs"], ["v0", "out GUIs (Still in Development)"]]) {
+            categories.push({
+                id: strs[0],
+                name: strs[1],
+                members: asArray.filter((value) => value.type === gameTypeStr.value && value.name.toLowerCase().includes(search.value.toLowerCase()) && value.gui === strs[0])
+            });
+        }
+        return categories;
+    });
+
+    onMounted(() => {
+        if (Object.keys(store.getters.games).length !== 0) return;
+        store.dispatch(actionTypes.loadGames);
+    });
 </script>
 
 <style lang="scss" scoped>
