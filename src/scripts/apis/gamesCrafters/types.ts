@@ -41,6 +41,7 @@ export type Variant = {
 };
 
 export type ImageAutoGUIData = {
+    ambience: string;
     defaultTheme: string;
     themes: Record<string, ImageAutoGUITheme>;
 };
