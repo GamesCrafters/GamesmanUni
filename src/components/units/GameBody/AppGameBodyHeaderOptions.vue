@@ -260,8 +260,8 @@
     const currentRightPlayerName = computed(() => (currentRightPlayer ? currentRightPlayer.value.name : ""));
     const currentGameId = computed(() => store.getters.currentGameId); 
 
-    const updatedLeftPlayer = ref({ name: "", isComputer: false, websocketEnabled: false });
-    const updatedRightPlayer = ref({ name: "", isComputer: false, websocketEnabled: false });
+    const updatedLeftPlayer = ref({ name: "", isComputer: false, webSocketEnabled: false });
+    const updatedRightPlayer = ref({ name: "", isComputer: false, webSocketEnabled: false });
     const atLeastOnePlayerIsntComputer = computed(() => !updatedLeftPlayer.value.isComputer || (!updatedRightPlayer.value.isComputer && !isPuzzleGame.value));
 
     const gameId = route.params.gameId as string;
