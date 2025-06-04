@@ -87,6 +87,21 @@
                                     Skill Rating
                                 </div>
                             </div>
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="updatedLeftPlayer.websocketEnabled" />
+                            <label for="checkbox">WebSocket</label>
+                            <div class="ws-wrapper" v-if="updatedLeftPlayer.websocketEnabled">
+                                <span class="ws-connection-indicator" :class="[true ? 'connected' : 'disconnected']"></span>
+                                <div class="ws-address-wrapper">
+                                    ws://
+                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20">
+                                </div>
+                                <div class="ws-connection-wrapper">
+                                    <button class="ws-connect-button" @click="">Connect</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="name">
                             <h4 class="title">Second Player</h4>
@@ -127,6 +142,21 @@
                                     :interval="0.01"
                                     :tooltip="'active'" />
                                     Skill Rating
+                                </div>
+                            </div>
+                            <input class="uni-toggle-button"
+                                aria-label="toggle"
+                                type="checkbox"
+                                v-model="updatedRightPlayer.webSocketEnabled" />
+                            <label for="checkbox">WebSocket</label>
+                            <div class="ws-wrapper" v-if="updatedRightPlayer.webSocketEnabled">
+                                <span class="ws-connection-indicator disconnected"></span>
+                                <div class="ws-address-wrapper">
+                                    ws://
+                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20">
+                                </div>
+                                <div class="ws-connection-wrapper">
+                                    <button class="ws-connect-button" @click="">Connect</button>
                                 </div>
                             </div>
                         </div>
@@ -230,8 +260,8 @@
     const currentRightPlayerName = computed(() => (currentRightPlayer ? currentRightPlayer.value.name : ""));
     const currentGameId = computed(() => store.getters.currentGameId); 
 
-    const updatedLeftPlayer = ref({ name: "", isComputer: false });
-    const updatedRightPlayer = ref({ name: "", isComputer: false });
+    const updatedLeftPlayer = ref({ name: "", isComputer: false, websocketEnabled: false });
+    const updatedRightPlayer = ref({ name: "", isComputer: false, websocketEnabled: false });
     const atLeastOnePlayerIsntComputer = computed(() => !updatedLeftPlayer.value.isComputer || (!updatedRightPlayer.value.isComputer && !isPuzzleGame.value));
 
     const gameId = route.params.gameId as string;
@@ -399,6 +429,36 @@
                         }
                         > .label {
                             text-align: center;
+                        }
+                        > .ws-wrapper {
+                            > .ws-connection-indicator {
+                                height: 0.9rem;
+                                width: 0.9rem;
+                                border-radius: 50%;
+                                display: inline-block;
+                                vertical-align: middle;
+                                margin: 0.1rem 0.4rem;
+                            }
+                            > .disconnected {
+                                background-color: var(--loseColor);
+                            }
+
+                            > .connected {
+                                background-color: var(--winColor);
+                            }
+                            > .ws-address-wrapper {
+                                display: inline;
+                                    > .ws-input {
+                                    text-align: left;
+                                    padding: 0.1rem 0.4rem;
+                                }
+                            }
+                            > .ws-connection-wrapper {
+                                margin-top: 0.2rem;
+                                > .ws-connect-button {
+                                    padding: 0.05em 0.2rem;
+                                }
+                            }
                         }
                     }
                 }

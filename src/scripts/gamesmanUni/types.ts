@@ -24,6 +24,7 @@ export type App = Update & {
 export type Player = {
     name: string;
     isComputer: boolean;
+    webSocketEnabled: boolean;
 }
 
 export type Preferences = {
