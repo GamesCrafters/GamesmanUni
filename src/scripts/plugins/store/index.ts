@@ -457,6 +457,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             context.commit(mutationTypes.setApp, updatedApp);
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
+        
+        const wsc: GMU.WebSocketClient = new GMU.WebSocketClient("ws://127.0.0.1:8080");
         await store.dispatch(actionTypes.runComputerMove);
     },
     exitMatch: (context: ActionContext) => {

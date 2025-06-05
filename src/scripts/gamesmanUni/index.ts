@@ -3,9 +3,11 @@ import * as GCTAPITypes from "../apis/gamesCrafters/types";
 import * as GHAPI from "../apis/gitHub";
 import type * as Types from "./types";
 import * as Defaults from "../../models/datas/defaultApp";
-import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
-import { playGameAmbience, pauseAllGameSounds } from "./audio"
+import { handleMoveAnimation, animationEpilogue } from "./moveAnimation";
+import { playGameAmbience, pauseAllGameSounds } from "./audio";
 import { useStore } from "../plugins/store";
+
+export { WebSocketClient } from "./WebSocketClient";
 export const moveHistoryDelim = ':';
 
 export const deepcopy = (obj: Object) => {

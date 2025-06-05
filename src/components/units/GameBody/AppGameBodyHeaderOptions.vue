@@ -90,9 +90,9 @@
                             <input class="uni-toggle-button"
                                 aria-label="toggle"
                                 type="checkbox"
-                                v-model="updatedLeftPlayer.websocketEnabled" />
+                                v-model="updatedLeftPlayer.webSocketEnabled" />
                             <label for="checkbox">WebSocket</label>
-                            <div class="ws-wrapper" v-if="updatedLeftPlayer.websocketEnabled">
+                            <div class="ws-wrapper" v-if="updatedLeftPlayer.webSocketEnabled">
                                 <span class="ws-connection-indicator" :class="[true ? 'connected' : 'disconnected']"></span>
                                 <div class="ws-address-wrapper">
                                     ws://
