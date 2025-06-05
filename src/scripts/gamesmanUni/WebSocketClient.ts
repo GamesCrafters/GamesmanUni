@@ -1,4 +1,3 @@
-import * as GMUTypes from "."
 import { Move } from "./types";
 
 const WS_ADDRESS_VALIDATOR_REGEX: RegExp = /^wss?:\/\/((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d):([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
@@ -18,11 +17,11 @@ interface WebSocketOptions {
 }
 
 enum WSMessageType {
-    ACKOWLEDGE = "ack",
+    ACKNOWLEDGE = "ack",
     MOVE = "move"
 }
 
-type WebSocketMessageType = WSMessageType.ACKOWLEDGE | WSMessageType.MOVE;
+type WebSocketMessageType = WSMessageType.ACKNOWLEDGE | WSMessageType.MOVE;
 
 interface WebSocketMessage {
     type: WebSocketMessageType;
@@ -49,8 +48,8 @@ export class WebSocketClient {
 
     /**
      * Creates a WebSocket object instance.
-     * @param {string} address - A valid ws:// or wss:// address in the format 'protocol://ip:port'.
-     * @param {Partial<WebSocketOptions>} options - Optional partial options for WebSocket behavior.
+     * @param {string} address - A valid `ws://` or `wss://` address in the format 'protocol://ip:port'.
+     * @param {Partial<WebSocketOptions>} options - Optional WebSocket configuration overrides.
      */
     constructor(address: string, options: Partial<WebSocketOptions> = {}) {
         WebSocketClient.validateAddress(address);
@@ -65,7 +64,8 @@ export class WebSocketClient {
     }
 
     /**
-     * Establishes a WebSocket Connection to `this.address` and sets up event listeners for `open`, `close`, `message`, `error`.
+     * Establishes a WebSocket Connection to `this.address` and sets up event listeners for `open`, `close`, 
+     * `message`, `error`.
      */
     private connect() {
         this.webSocket = new WebSocket(this.address);
@@ -93,7 +93,7 @@ export class WebSocketClient {
     }
 
     /**
-     * Logs messages to the console based on `logType` if `this.options.debug` is `true`.
+     * Logs messages to the console based on log type if `this.options.debug` is enabled.
      * @param {LogType} logType 
      * @param {string | Object} info 
      */
@@ -115,8 +115,8 @@ export class WebSocketClient {
 
     /**
      * Sends data to the WebSocket server if the connection is open.
-     * @param {string | Object} data - Data to send.
-     * @returns `true` or `false` depending on whether the data was sent.
+     * @param {string | Object} data - The data to send.
+     * @returns {boolean} Whether the data was successfully sent.
      */
     private send(data: string | Object): boolean {
         const message = typeof data === 'string' ? data : JSON.stringify(data);
@@ -154,9 +154,9 @@ export class WebSocketClient {
      * Attempts to reconnect to the WebSocket server if the connection is lost.
      *
      * Retries up to `this.options.reconnectMaxRetries` times, waiting
-     * `this.options.msReconnectInterval` milliseconds between each attempt.
+     * `this.options.msReconnectInterval` milliseconds between attempts.
      *
-     * Stops trying once the maximum retry count is reached.
+     * Stops once the maximum retry count is reached.
      */
     private reconnectOnConnectionCloseHandler = () => {
         if (this.retryCount < this.options.reconnectMaxRetries) {
@@ -169,20 +169,21 @@ export class WebSocketClient {
     };
 
     /**
-     * Returns true if the WebSocket is currently open.
+     * Returns whether the WebSocket connection is currently open.
+     * @returns {boolean} `true` if `WebSocket.OPEN` else `false`.
      */
     public isConnected(): boolean {
         return this.webSocket?.readyState === WebSocket.OPEN;
     }
 
     /**
-     * Waits for the server to acknowledge readiness, then sends a move.
-     * Automatically resets readiness flag after sending.
-     * @param {Move} move - GamesmanUni `Move`.
+     * Waits for an acknowledgment from the server, then sends a move.
+     * Automatically resets the acknowledgment flag after sending.
+     * @param {Move} move - The move to send.
      */
     public async sendMove(move: Move) {
         try {
-            await this.timeoutWaitUntilMessage(WSMessageType.ACKOWLEDGE);
+            await this.timeoutWaitUntilMessage(WSMessageType.ACKNOWLEDGE);
             
             if (!this.send(move)) {
                 return;
@@ -194,18 +195,17 @@ export class WebSocketClient {
     }
 
     /**
-     * 
+     * Sends an acknowledgment to the server and waits for a message of `move` type in response.
+     * @returns {Promise<WebSocketMessage>} The received `move` message.
      */
-    private async nextMove(msUntilTimeout: number = DEFAULT_PROTOCOL_TIMEOUT_MS): Promise<WebSocketMessage> {
-        this.send({type: "ack", status: "move-complete"});
+    public async nextMove(): Promise<WebSocketMessage> {
+        this.send({type: "ack", data: "move-complete"});
 
         return this.timeoutWaitUntilMessage(WSMessageType.MOVE);
     }
 
     /**
-     * Disconnects the WebSocket connection.
-     * `this.serverIsReady` is set to `false`.
-     * `this.readyResolver` is set to `null`.
+     * Disconnects the WebSocket connection and disables automatic reconnection.
      */
     public disconnect() {
         this.options.reconnect = false;
@@ -217,12 +217,14 @@ export class WebSocketClient {
     /**
      * Hook method triggered when a WebSocket connection is opened.
      * Override this to implement custom behavior.
+     * @param {MessageEvent} event - The message event.
      */
     private onConnectionOpenHandler = (event: Event) => {};
 
     /**
      * Hook method triggered when a message is received from the WebSocket server.
      * Override this to implement custom behavior.
+     * @param {MessageEvent} event - The message event.
      */
     private onMessageReceivedHandler = (event: MessageEvent) => {
         try {
@@ -238,17 +240,36 @@ export class WebSocketClient {
         }
     };
 
+    /**
+     * Registers a handler for a specific message type.
+     * If a handler is already registered, it will be overwritten.
+     * @param {WebSocketMessageType} type - The message type to register.
+     * @param {(message: WebSocketMessage) => void} handler - Handler to register.
+     */
     private registerMessageHandler (type: WebSocketMessageType, handler: (message: WebSocketMessage) => void) {
         this.messageHandlers[type] = handler;
     }
 
+    /**
+     * Unregisters a handler for a specific message type.
+     * @param {WebSocketMessageType} type - The message type to unregister.
+     */
     private unregisterMessageHandler (type: WebSocketMessageType) {
         delete this.messageHandlers[type];
     }
 
     /**
-     * Hook method triggered when the WebSocket connection is closed.
-     * Override this to implement custom behavior.
+     * Returns whether a handler exists for the given message type.
+     * @param {WebSocketMessageType} type - The message type to check.
+     * @returns {boolean} True if a handler exists.
+     */
+    public hasMessageHandler(type: WebSocketMessageType): boolean {
+        return !!this.messageHandlers[type];
+    }
+
+    /**
+     * Hook method called when the WebSocket connection is closed.
+     * Override to implement custom behavior.
      */
     private onConnectionCloseHandler = (event: Event) => {};
 
@@ -259,24 +280,36 @@ export class WebSocketClient {
     private onErrorReceivedHandler = (event: Event) => {};
 
     /* ------------------ Message Handlers ------------------ */
+
     /**
-     * Waits until the WebSocket server responds with message `type`.
-     * @param {number} msUntilTimeout - Waiting time, in ms, until timeout.
+     * Waits for a message of the specified type `type` from the WebSocket server.
+     * Times out after `msUntilTimeout` milliseconds.
+     * 
+     * @param {WebSocketMessageType} type - The message type to wait for.
+     * @param {number} msUntilTimeout - Timeout duration in milliseconds.
+     * @returns {Promise<WebSocketMessage>} A promise that resolves with the message.
+     * @throws If a handler for the specified type already exists.
      */
     private timeoutWaitUntilMessage(type: WebSocketMessageType, msUntilTimeout: number = DEFAULT_PROTOCOL_TIMEOUT_MS): Promise<WebSocketMessage> {
+        if (this.hasMessageHandler(type)) {
+            throw new Error(`Handler of type ${type} already exists.`);
+        }
+
         return new Promise((resolve, reject) => {
+            const listener = (msg: WebSocketMessage) => {
+                clearTimeout(timeout);
+                this.unregisterMessageHandler(type);
+                resolve(msg);
+            };
+
+            this.registerMessageHandler(type, listener);
+
             const timeout = setTimeout(() => {
             this.unregisterMessageHandler(type);
             reject(new Error(`Timed out while waiting for message of type '${type}'.`));
             }, msUntilTimeout);
             this.log(LogType.INFO, `Waiting on message of type '${type}'.`);
-            const listener = (msg: WebSocketMessage) => {
-            clearTimeout(timeout);
-            this.unregisterMessageHandler(type);
-            resolve(msg);
-            };
-
-            this.registerMessageHandler(type, listener);
+            
         });
     }
 }
