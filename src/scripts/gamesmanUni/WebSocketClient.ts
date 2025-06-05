@@ -3,6 +3,8 @@ import { Move } from "./types";
 
 const WS_ADDRESS_VALIDATOR_REGEX: RegExp = /^wss?:\/\/((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d):([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
 
+const DEFAULT_PROTOCOL_TIMEOUT_MS: number = 10000;
+
 enum LogType {
     INFO,
     ERROR
@@ -15,13 +17,22 @@ interface WebSocketOptions {
     reconnectMaxRetries: number;
 }
 
-interface AckProtocolMessage {
-    type: string;
-    status: string;
+enum WSMessageType {
+    ACKOWLEDGE = "ack",
+    MOVE = "move"
 }
 
+type WebSocketMessageType = WSMessageType.ACKOWLEDGE | WSMessageType.MOVE;
+
+interface WebSocketMessage {
+    type: WebSocketMessageType;
+    data: string;
+}
+
+type MessageHandler = (message: WebSocketMessage) => void;
+
 export class WebSocketClient {
-    private static WS_DEFAULT_OPTIONS: WebSocketOptions = {
+    private static readonly WS_DEFAULT_OPTIONS: WebSocketOptions = {
         debug: true,
         reconnect: true,
         msReconnectInterval: 2000,
@@ -32,9 +43,7 @@ export class WebSocketClient {
     private webSocket: WebSocket | null = null;
     private options: WebSocketOptions;
     
-    private serverIsReady: boolean = false;
-    // Stores a resolver that completes once an "ack" message with status "move-complete" is received.
-    private readyResolver: (() => void) | null = null;
+    private messageHandlers: Record<WebSocketMessageType, MessageHandler> = {} as Record<WebSocketMessageType, MessageHandler>;
 
     private retryCount: number = 0;
 
@@ -51,7 +60,7 @@ export class WebSocketClient {
             ...WebSocketClient.WS_DEFAULT_OPTIONS,
             ...options
         };
-        
+
         this.connect();
     }
 
@@ -167,42 +176,30 @@ export class WebSocketClient {
     }
 
     /**
-     * Waits until the WebSocket server is ready to receive information.
-     * @param {number} msUntilTimeout - Waiting time, in ms, until timeout.
-     */
-    private waitUntilReady(msUntilTimeout: number = 10000): Promise<void> {
-        if (this.serverIsReady) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                this.readyResolver = null;
-                reject(new Error(`Timed out while waiting for the server to be ready.`))
-            }, msUntilTimeout);
-            
-            this.readyResolver = () => {
-                clearTimeout(timeout);
-                resolve();
-            };
-        });
-
-    }
-
-    /**
      * Waits for the server to acknowledge readiness, then sends a move.
      * Automatically resets readiness flag after sending.
      * @param {Move} move - GamesmanUni `Move`.
      */
     public async sendMove(move: Move) {
         try {
-            await this.waitUntilReady();
+            await this.timeoutWaitUntilMessage(WSMessageType.ACKOWLEDGE);
             
             if (!this.send(move)) {
                 return;
             }
 
-            this.serverIsReady = false;
         } catch (error) {
             this.log(LogType.ERROR, `${error}`);
         }
+    }
+
+    /**
+     * 
+     */
+    private async nextMove(msUntilTimeout: number = DEFAULT_PROTOCOL_TIMEOUT_MS): Promise<WebSocketMessage> {
+        this.send({type: "ack", status: "move-complete"});
+
+        return this.timeoutWaitUntilMessage(WSMessageType.MOVE);
     }
 
     /**
@@ -211,9 +208,8 @@ export class WebSocketClient {
      * `this.readyResolver` is set to `null`.
      */
     public disconnect() {
+        this.options.reconnect = false;
         this.webSocket?.close();
-        this.serverIsReady = false;
-        this.readyResolver = null;
     }
     
     /* ------------------ Event Handlers ------------------ */
@@ -230,37 +226,57 @@ export class WebSocketClient {
      */
     private onMessageReceivedHandler = (event: MessageEvent) => {
         try {
-            const parsedPayload = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-            this.onAcknowledgeMessage(parsedPayload);
+            const msg: WebSocketMessage = JSON.parse(event.data);
+            const messageHandler = this.messageHandlers[msg.type];
+            if (messageHandler) {
+                messageHandler(msg);
+            } else {
+                this.log(LogType.ERROR, `Unhandled message type ${msg.type}.`);
+            }
         } catch (e) {
             this.log(LogType.ERROR, `Failed to parse message: ${event.data}`);
         }
     };
 
-    /**
-     * Handles messages of the acknolwedgement protocol and updates server and client state.
-     * @param {AckProtocolMessage} message - Ack Message received from the WebSocket Server.
-     */
-    private onAcknowledgeMessage(message: AckProtocolMessage) {
-        if (message?.type === "ack" && message?.status === "move-complete") {
-            this.serverIsReady = true;
-            this.readyResolver?.();
-            this.readyResolver = null;
-        }
+    private registerMessageHandler (type: WebSocketMessageType, handler: (message: WebSocketMessage) => void) {
+        this.messageHandlers[type] = handler;
+    }
+
+    private unregisterMessageHandler (type: WebSocketMessageType) {
+        delete this.messageHandlers[type];
     }
 
     /**
      * Hook method triggered when the WebSocket connection is closed.
      * Override this to implement custom behavior.
      */
-    private onConnectionCloseHandler = (event: Event) => {
-        this.serverIsReady = false;
-        this.readyResolver = null;
-    };
+    private onConnectionCloseHandler = (event: Event) => {};
 
     /**
      * Hook method triggered when a WebSocket error occurs.
      * Override this to implement custom behavior.
      */
     private onErrorReceivedHandler = (event: Event) => {};
+
+    /* ------------------ Message Handlers ------------------ */
+    /**
+     * Waits until the WebSocket server responds with message `type`.
+     * @param {number} msUntilTimeout - Waiting time, in ms, until timeout.
+     */
+    private timeoutWaitUntilMessage(type: WebSocketMessageType, msUntilTimeout: number = DEFAULT_PROTOCOL_TIMEOUT_MS): Promise<WebSocketMessage> {
+        return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+            this.unregisterMessageHandler(type);
+            reject(new Error(`Timed out while waiting for message of type '${type}'.`));
+            }, msUntilTimeout);
+            this.log(LogType.INFO, `Waiting on message of type '${type}'.`);
+            const listener = (msg: WebSocketMessage) => {
+            clearTimeout(timeout);
+            this.unregisterMessageHandler(type);
+            resolve(msg);
+            };
+
+            this.registerMessageHandler(type, listener);
+        });
+    }
 }
