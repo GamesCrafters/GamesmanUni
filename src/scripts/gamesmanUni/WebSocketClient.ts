@@ -1,4 +1,5 @@
 import * as GMUTypes from "."
+import { Move } from "./types";
 
 const WS_ADDRESS_VALIDATOR_REGEX: RegExp = /^wss?:\/\/((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d):([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
 
@@ -10,7 +11,7 @@ enum LogType {
 interface WebSocketOptions {
     debug: boolean;
     reconnect: boolean;
-    reconnectInterval: number;
+    msReconnectInterval: number;
     reconnectMaxRetries: number;
 }
 
@@ -18,7 +19,7 @@ export class WebSocketClient {
     private static WS_DEFAULT_OPTIONS: WebSocketOptions = {
         debug: true,
         reconnect: true,
-        reconnectInterval: 2000,
+        msReconnectInterval: 2000,
         reconnectMaxRetries: 5,
     }
 
@@ -26,6 +27,10 @@ export class WebSocketClient {
     private webSocket: WebSocket | null = null;
     private options: WebSocketOptions;
     
+    private serverIsReady: boolean = false;
+    // Stores a resolver that completes once an "ack" message with status "move-complete" is received.
+    private readyResolver: (() => void) | null = null;
+
     private retryCount: number = 0;
 
     /**
@@ -74,7 +79,7 @@ export class WebSocketClient {
     }
 
     /**
-     * Logs messages to the console based on `logType`.
+     * Logs messages to the console based on `logType` if `this.options.debug` is `true`.
      * @param {LogType} logType 
      * @param {string | Object} info 
      */
@@ -96,16 +101,19 @@ export class WebSocketClient {
 
     /**
      * Sends data to the WebSocket server if the connection is open.
-     * @param {string | Object} data 
+     * @param {string | Object} data
+     * @returns `true` or `false` depending on whether the data was sent.
      */
-    private send(data: string | Object) {
+    private send(data: string | Object): boolean {
         const message = typeof data === 'string' ? data : JSON.stringify(data);
 
         if (this.webSocket?.readyState === WebSocket.OPEN) {
             this.log(LogType.INFO, `Sent: ${message}`);
-            this.webSocket?.send(message);
+            this.webSocket.send(message);
+            return true;
         } else {
             this.log(LogType.ERROR, `Connection is closed.`)
+            return false;
         }
     }
 
@@ -118,7 +126,7 @@ export class WebSocketClient {
      * - IP Address Octets (`x`): 0-255
      * - Port (`port`): 1-65535
      * 
-     * Valid example: `ws://127.0.0.0:8080`
+     * Valid example: `ws://127.0.0.1:8080`
      * @param {string} address - Address to validate.
      * @throws Error if the address is invalid.
      */
@@ -132,7 +140,7 @@ export class WebSocketClient {
      * Attempts to reconnect to the WebSocket server if the connection is lost.
      *
      * Retries up to `this.options.reconnectMaxRetries` times, waiting
-     * `this.options.reconnectInterval` milliseconds between each attempt.
+     * `this.options.msReconnectInterval` milliseconds between each attempt.
      *
      * Stops trying once the maximum retry count is reached.
      */
@@ -140,12 +148,69 @@ export class WebSocketClient {
         if (this.retryCount < this.options.reconnectMaxRetries) {
             this.retryCount++;
             this.log(LogType.INFO, `Reconnecting... Attempt ${this.retryCount} out of ${this.options.reconnectMaxRetries}`)
-            setTimeout(() => this.connect(), this.options.reconnectInterval);
+            setTimeout(() => this.connect(), this.options.msReconnectInterval);
         } else {
-            this.log(LogType.INFO, `Max reconnect attempts (${this.options.reconnectMaxRetries}) reached. Giving up.`)
+            this.log(LogType.INFO, `Maximum reconnect attempts (${this.options.reconnectMaxRetries}) reached. Giving up.`)
         }
     };
 
+    /**
+     * Returns true if the WebSocket is currently open.
+     */
+    public isConnected(): boolean {
+        return this.webSocket?.readyState === WebSocket.OPEN;
+    }
+
+    /**
+     * Waits until the WebSocket server is ready to receive information.
+     * @param {number} msUntilTimeout - Waiting time, in ms, until timeout.
+     */
+    private waitUntilReady(msUntilTimeout: number = 10000): Promise<void> {
+        if (this.serverIsReady) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                this.readyResolver = null;
+                reject(new Error(`Timed out while waiting for the server to be ready.`))
+            }, msUntilTimeout);
+            
+            this.readyResolver = () => {
+                clearTimeout(timeout);
+                resolve();
+            };
+        });
+
+    }
+
+    /**
+     * Waits for the server to acknowledge readiness, then sends a move.
+     * Automatically resets readiness flag after sending.
+     * @param {Move} move - GamesmanUni `Move`.
+     */
+    public async sendMove(move: Move) {
+        try {
+            await this.waitUntilReady();
+            
+            if (!this.send(move)) {
+                return;
+            }
+
+            this.serverIsReady = false;
+        } catch (error) {
+            this.log(LogType.ERROR, `${error}`);
+        }
+    }
+
+    /**
+     * Disconnects the WebSocket connection.
+     * `this.serverIsReady` is set to `false`.
+     * `this.readyResolver` is set to `null`.
+     */
+    public disconnect() {
+        this.webSocket?.close();
+        this.serverIsReady = false;
+        this.readyResolver = null;
+    }
+    
     /* ------------------ Event Handlers ------------------ */
 
     /**
@@ -158,13 +223,31 @@ export class WebSocketClient {
      * Hook method triggered when a message is received from the WebSocket server.
      * Override this to implement custom behavior.
      */
-    private onMessageReceivedHandler = (event: Event) => {};
+    private onMessageReceivedHandler = (event: MessageEvent) => {
+        this.onAcknowledgeMessage(event.data);
+    };
+
+    /**
+     * Handles messages of type "ack" and updates server readiness state.
+     * @param {string} message - Message received from the WebSocket Server.
+     */
+    private onAcknowledgeMessage(message: string) {
+        const parsedPayload = typeof message === 'string' ? JSON.parse(message) : message;
+        if (parsedPayload?.type === "ack" && parsedPayload?.status === "move-complete") {
+            this.serverIsReady = true;
+            this.readyResolver?.();
+            this.readyResolver = null;
+        }
+    }
 
     /**
      * Hook method triggered when the WebSocket connection is closed.
      * Override this to implement custom behavior.
      */
-    private onConnectionCloseHandler = (event: Event) => {};
+    private onConnectionCloseHandler = (event: Event) => {
+        this.serverIsReady = false;
+        this.readyResolver = null;
+    };
 
     /**
      * Hook method triggered when a WebSocket error occurs.
