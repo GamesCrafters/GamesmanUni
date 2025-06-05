@@ -15,6 +15,11 @@ interface WebSocketOptions {
     reconnectMaxRetries: number;
 }
 
+interface AckProtocolMessage {
+    type: string;
+    status: string;
+}
+
 export class WebSocketClient {
     private static WS_DEFAULT_OPTIONS: WebSocketOptions = {
         debug: true,
@@ -101,7 +106,7 @@ export class WebSocketClient {
 
     /**
      * Sends data to the WebSocket server if the connection is open.
-     * @param {string | Object} data
+     * @param {string | Object} data - Data to send.
      * @returns `true` or `false` depending on whether the data was sent.
      */
     private send(data: string | Object): boolean {
@@ -224,16 +229,20 @@ export class WebSocketClient {
      * Override this to implement custom behavior.
      */
     private onMessageReceivedHandler = (event: MessageEvent) => {
-        this.onAcknowledgeMessage(event.data);
+        try {
+            const parsedPayload = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+            this.onAcknowledgeMessage(parsedPayload);
+        } catch (e) {
+            this.log(LogType.ERROR, `Failed to parse message: ${event.data}`);
+        }
     };
 
     /**
-     * Handles messages of type "ack" and updates server readiness state.
-     * @param {string} message - Message received from the WebSocket Server.
+     * Handles messages of the acknolwedgement protocol and updates server and client state.
+     * @param {AckProtocolMessage} message - Ack Message received from the WebSocket Server.
      */
-    private onAcknowledgeMessage(message: string) {
-        const parsedPayload = typeof message === 'string' ? JSON.parse(message) : message;
-        if (parsedPayload?.type === "ack" && parsedPayload?.status === "move-complete") {
+    private onAcknowledgeMessage(message: AckProtocolMessage) {
+        if (message?.type === "ack" && message?.status === "move-complete") {
             this.serverIsReady = true;
             this.readyResolver?.();
             this.readyResolver = null;
