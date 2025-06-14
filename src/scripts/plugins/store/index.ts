@@ -459,7 +459,8 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         }
         
         const wsc: GMU.WebSocketClient = new GMU.WebSocketClient("ws://127.0.0.1:8080");
-        wsc.sendMove({deltaRemoteness: 0.1, move: 'a4', autoguiMove: 'a3', moveValue: '1', moveValueOpacity: 3, position: 'pos', autoguiPosition: 'autoPos', positionValue: 'a', remoteness: 3, mex: '2', winby: 1, drawLevel: 3, drawRemoteness: 3});
+        await wsc.nextMove();
+        await wsc.sendMove({deltaRemoteness: 0.1, move: 'a4', autoguiMove: 'a3', moveValue: '1', moveValueOpacity: 3, position: 'pos', autoguiPosition: 'autoPos', positionValue: 'a', remoteness: 3, mex: '2', winby: 1, drawLevel: 3, drawRemoteness: 3});
         await store.dispatch(actionTypes.runComputerMove);
     },
     exitMatch: (context: ActionContext) => {

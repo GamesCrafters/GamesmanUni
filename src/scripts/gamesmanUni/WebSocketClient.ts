@@ -126,7 +126,7 @@ export class WebSocketClient {
             this.webSocket.send(message);
             return true;
         } else {
-            this.log(LogType.ERROR, `Connection is closed.`)
+            this.log(LogType.ERROR, `Could not send ${message}. Connection is closed.`)
             return false;
         }
     }
@@ -181,26 +181,23 @@ export class WebSocketClient {
      * Automatically resets the acknowledgment flag after sending.
      * @param {Move} move - The move to send.
      */
-    public async sendMove(move: Move) {
-        try {
-            await this.timeoutWaitUntilMessage(WSMessageType.ACKNOWLEDGE);
-            
+    public sendMove(move: Move) {
+        this.timeoutWaitUntilMessage(WSMessageType.ACKNOWLEDGE).then(() => {
             if (!this.send(move)) {
                 return;
             }
-
-        } catch (error) {
+        }).catch((error) => {
             this.log(LogType.ERROR, `${error}`);
-        }
+        });
     }
 
     /**
      * Sends an acknowledgment to the server and waits for a message of `move` type in response.
      * @returns {Promise<WebSocketMessage>} The received `move` message.
      */
-    public async nextMove(): Promise<WebSocketMessage> {
-        this.send({type: "ack", data: "move-complete"});
-
+    public nextMove(): Promise<WebSocketMessage> {
+        
+        this.timeoutWaitUntilMessageThenSendMessage(WSMessageType.ACKNOWLEDGE, {type: "ack", data: "move-complete"} as WebSocketMessage);
         return this.timeoutWaitUntilMessage(WSMessageType.MOVE);
     }
 
@@ -210,6 +207,7 @@ export class WebSocketClient {
     public disconnect() {
         this.options.reconnect = false;
         this.webSocket?.close();
+        this.messageHandlers = {} as any;
     }
     
     /* ------------------ Event Handlers ------------------ */
@@ -311,5 +309,13 @@ export class WebSocketClient {
             this.log(LogType.INFO, `Waiting on message of type '${type}'.`);
             
         });
+    }
+
+    public timeoutWaitUntilMessageThenSendMessage(waitForMessageType: WSMessageType, messageToSend: WebSocketMessage, msUntilTimeout: number = DEFAULT_PROTOCOL_TIMEOUT_MS): Promise<WebSocketMessage> {
+        return this.timeoutWaitUntilMessage(waitForMessageType, msUntilTimeout)
+            .then((msg) => {
+                this.send(messageToSend)
+                return msg;
+        })
     }
 }
