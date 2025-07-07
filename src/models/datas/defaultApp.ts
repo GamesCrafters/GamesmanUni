@@ -1,5 +1,6 @@
 import type * as Types from "../../scripts/gamesmanUni/types";
 import { ImageAutoGUITheme } from "../../scripts/apis/gamesCrafters/types";
+import { WebSocketClient } from "../../scripts/gamesmanUni";
 
 const defaultUpdate: Types.Update = {
     status: "",
@@ -161,6 +162,7 @@ export const activeVVHViews: Array<Types.VVHView> = [{name: VVHViews[0], viewOpt
 export const CPUStrategies: Array<string> = ["Remoteness", "Win By", "Skill Expression"];
 export const defaultCPUsStrategies: Array<string> = ["Remoteness", "Remoteness"];
 export const defaultCPUsRatings: Array<number> = [0, 0];
+export const defaultWebsockets: Array<WebSocketClient | null> = [null, null];
 
 export const defaultApp: Types.App = {
     ...defaultUpdate,
@@ -175,6 +177,7 @@ export const defaultApp: Types.App = {
     currentMatch: defaultMatch,
     CPUsStrategies: [...defaultCPUsStrategies],
     CPUsRatings: [...defaultCPUsRatings],
+    websockets: [...defaultWebsockets],
     scorecard: {
         totalWins: 0,
         playerWinsMap: new Map(),

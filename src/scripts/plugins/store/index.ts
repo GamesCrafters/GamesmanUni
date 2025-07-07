@@ -95,6 +95,7 @@ type Getters = {
     maximumDrawLevel(state: State):
         (from: number, to: number) => number;
     currentHighlightedMove(state: State): string;
+    websockets(state: State): Array<GMU.WebSocketClient | null>;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -259,7 +260,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     (from: number, to: number) =>
         GMU.getMaximumDrawLevel(state.app, { from, to }),
     currentHighlightedMove: (state: State) =>
-        state.app.highlightedMove
+        state.app.highlightedMove,
+    websockets: (state: State) =>
+        state.app.websockets
 };
 
 export enum mutationTypes {
@@ -286,7 +289,8 @@ export enum mutationTypes {
     setGamesPlayed = "setGamesPlayed",
     setPlayerWinsEntry = "setPlayerWinsEntry",
     showMenu = "showMenu",
-    setHighlightedMove = "setHighlightedMove"
+    setHighlightedMove = "setHighlightedMove",
+    setWebsocket = "setWebsocket"
 }
 
 type Mutations = {
@@ -314,6 +318,7 @@ type Mutations = {
     [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
     [mutationTypes.showMenu] (state: State, showMenu: boolean): void;
     [mutationTypes.setHighlightedMove] (state: State, highlightedMove: string): void;
+    [mutationTypes.setWebsocket] (state: State, {playerIndex, websocketAddress}:{playerIndex: number, websocketAddress: String}): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -366,7 +371,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     showMenu: (state: State, showMenu: boolean) =>
         (state.app.options.showMenu = showMenu),
     setHighlightedMove: (state: State, highlightedMove: string) =>
-    (state.app.highlightedMove = highlightedMove)
+    (state.app.highlightedMove = highlightedMove),
+    setWebsocket: (state: State, {playerIndex, websocketAddress}:{playerIndex: number, websocketAddress: string}) =>
+    (state.app.websockets[playerIndex] = new GMU.WebSocketClient(websocketAddress))
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
@@ -458,9 +465,9 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
             if (preFetchEnabled) context.dispatch(actionTypes.preFetchNextPositions);
         }
         
-        const wsc: GMU.WebSocketClient = new GMU.WebSocketClient("ws://127.0.0.1:8080");
-        await wsc.nextMove();
-        await wsc.sendMove({deltaRemoteness: 0.1, move: 'a4', autoguiMove: 'a3', moveValue: '1', moveValueOpacity: 3, position: 'pos', autoguiPosition: 'autoPos', positionValue: 'a', remoteness: 3, mex: '2', winby: 1, drawLevel: 3, drawRemoteness: 3});
+        // const wsc: GMU.WebSocketClient = new GMU.WebSocketClient("ws://127.0.0.1:8080");
+        // await wsc.nextMove();
+        // await wsc.sendMove({deltaRemoteness: 0.1, move: 'a4', autoguiMove: 'a3', moveValue: '1', moveValueOpacity: 3, position: 'pos', autoguiPosition: 'autoPos', positionValue: 'a', remoteness: 3, mex: '2', winby: 1, drawLevel: 3, drawRemoteness: 3});
         await store.dispatch(actionTypes.runComputerMove);
     },
     exitMatch: (context: ActionContext) => {

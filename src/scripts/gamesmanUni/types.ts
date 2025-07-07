@@ -1,4 +1,5 @@
 import { ImageAutoGUIData } from "../apis/gamesCrafters/types";
+import { WebSocketClient } from "./WebSocketClient";
 
 export type Update = {
     status: string;
@@ -16,6 +17,7 @@ export type App = Update & {
     currentMatch: Match;
     activeVVHViews: Array<VVHView>;
     CPUsStrategies: Array<string>;
+    websockets: Array<WebSocketClient | null>;
     CPUsRatings: number[];
     scorecard: Scorecard;
     highlightedMove: string;

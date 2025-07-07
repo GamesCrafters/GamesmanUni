@@ -72,7 +72,7 @@ export class WebSocketClient {
 
         this.webSocket.addEventListener('open', (event) => {
             this.retryCount = 0;
-            this.log(LogType.INFO,`Established Connection.`);
+            this.log(LogType.INFO, `Established Connection.`);
             this.onConnectionOpenHandler(event);
         });
 

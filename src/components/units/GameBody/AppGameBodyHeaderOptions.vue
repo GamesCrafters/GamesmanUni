@@ -93,13 +93,13 @@
                                 v-model="updatedLeftPlayer.webSocketEnabled" />
                             <label for="checkbox">WebSocket</label>
                             <div class="ws-wrapper" v-if="updatedLeftPlayer.webSocketEnabled">
-                                <span class="ws-connection-indicator" :class="[true ? 'connected' : 'disconnected']"></span>
+                                <span class="ws-connection-indicator" :class="[(leftPlayerWebsocket) ? 'connected' : 'disconnected']"></span>
                                 <div class="ws-address-wrapper">
                                     ws://
-                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20">
+                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20" v-model="leftPlayerWebsocketAddress">
                                 </div>
                                 <div class="ws-connection-wrapper">
-                                    <button class="ws-connect-button" @click="">Connect</button>
+                                    <button class="ws-connect-button" @click="connectWebsocket(0, leftPlayerWebsocketAddress)">Connect</button>
                                 </div>
                             </div>
                         </div>
@@ -150,13 +150,13 @@
                                 v-model="updatedRightPlayer.webSocketEnabled" />
                             <label for="checkbox">WebSocket</label>
                             <div class="ws-wrapper" v-if="updatedRightPlayer.webSocketEnabled">
-                                <span class="ws-connection-indicator disconnected"></span>
+                                <span class="ws-connection-indicator" :class="[(rightPlayerWebsocket) ? 'connected' : 'disconnected']"></span>
                                 <div class="ws-address-wrapper">
                                     ws://
-                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20">
+                                    <input class="ws-input" type="text" placeholder="255.255.255.255:8080" maxlength="20" v-model="rightPlayerWebsocketAddress">
                                 </div>
                                 <div class="ws-connection-wrapper">
-                                    <button class="ws-connect-button" @click="">Connect</button>
+                                    <button class="ws-connect-button" @click="connectWebsocket(1, rightPlayerWebsocketAddress)">Connect</button>
                                 </div>
                             </div>
                         </div>
@@ -366,6 +366,19 @@
         localStorage.clear();
         location.reload();
     };
+
+    const leftPlayerWebsocket = computed(() => store.getters.websockets[0]?.isConnected() || false);
+
+    const rightPlayerWebsocket = computed(() => store.getters.websockets[1]?.isConnected() || false);
+
+
+    const leftPlayerWebsocketAddress = ref("");
+    const rightPlayerWebsocketAddress = ref("");
+
+    const connectWebsocket = (playerIndex: number, websocketAddress: string) => {
+        store.commit(mutationTypes.setWebsocket, {playerIndex: playerIndex, websocketAddress: "ws://" + websocketAddress});
+        console.log(store.getters.websockets);
+    }
 </script>
 
 <style lang="scss" scoped>
