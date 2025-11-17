@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <svg version="1.1" id="EntitySVG" xmlns="http://www.w3.org/2000/svg"
+	viewBox="39 39 22 22">
+	<defs>
+		<radialGradient id="rg0" cx="-107.5" cy="190.5449" r="10.0003" fx="-109.5001" fy="188.5448"
+			gradientTransform="matrix(1 0 0 -1 159.5 242.5)" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#000" />
+			<stop offset="1" stop-color="#000" stop-opacity="0" />
+		</radialGradient>
+		<radialGradient id="rg1" cx="-109.5" cy="192.5449" r="10.0003" fx="-114.5001" fy="187.5448"
+			gradientTransform="matrix(-1.346898e-10 1 1 1.346898e-10 -142.5 159.5)" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#FFF" />
+			<stop offset="0.5" stop-color="#DDD" />
+			<stop offset="1" stop-color="#999" />
+		</radialGradient>
+	</defs>
+	<path fill="url(#rg0)" d="M62,52c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S62,46.4,62,52z" />
+	<path fill="url(#rg1)" d="M50,60c-5.5,0-10-4.5-10-10s4.5-10,10-10s10,4.5,10,10S55.6,60,50,60z" />
+</svg>
