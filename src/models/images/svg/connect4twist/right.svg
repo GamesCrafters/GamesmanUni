@@ -1,0 +1,5 @@
+<svg id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" width="200" height="100" viewBox="0 0 200 100">
+  <g transform="scale(-1, 1) translate(-200, 0)">
+    <polygon points="20,50 80,10 80,90" />
+  </g>
+</svg>
