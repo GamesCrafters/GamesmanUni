@@ -21,7 +21,6 @@ export const defaultDataSources: Types.DataSources = {
     //gameAPI: "http://localhost:8082/"
 };
 
-
 export const defaultAvailableMove: Types.Move = {
     move: "",
     autoguiMove: "",
