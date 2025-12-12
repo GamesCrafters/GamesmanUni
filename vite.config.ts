@@ -5,8 +5,11 @@ import LoadVersion from "vite-plugin-package-version";
 import Vue from "@vitejs/plugin-vue";
 import VueI18n from "@intlify/vite-plugin-vue-i18n";
 
+import { fileURLToPath, URL } from 'node:url'
+
 const alias: Record<string, string> = {
     "vue-i18n": "vue-i18n/dist/vue-i18n.cjs.js",
+    "@": fileURLToPath(new URL('./src', import.meta.url)),
 };
 
 export default defineConfig({
