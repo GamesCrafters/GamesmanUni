@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 10 10">
+  <!-- Leftmost triangle (was upper) -->
+  <path d="M0.335,-4.0 L0.335,4.0 L4.665,0 z" stroke="none"/>
+
+  <!-- Center triangle -->
+  <path d="M-2.665,-4.0 L-2.665,4.0 L1.665,0 z" stroke="none"/>
+
+  <!-- Rightmost triangle (was lower) -->
+  <path d="M-5.665,-4.0 L-5.665,4.0 L-1.335,0 z" stroke="none"/>
+</svg>
