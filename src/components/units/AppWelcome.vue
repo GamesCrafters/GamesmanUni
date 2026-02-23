@@ -29,14 +29,8 @@
     const router = useRouter();
     const store = useStore();
 
-    const exploreAllGames = () => {
+    const exploreGames = () => {
         router.push("/games");
-    }
-    const exploreAllPuzzles = () => {
-        router.push("/puzzles");
-    }
-    const infoGames = () => {
-        router.push("/about");
     }
 
     onMounted(() => {
