@@ -2,7 +2,7 @@
     "dependencies": {
         "axios": "1.7.4",
         "gsap": "^3.11.3",
-        "lodash": "4.17.21",
+        "lodash": "4.17.23",
         "markdown-it-link-attributes": "4.0.0",
         "vue": "3.2.37",
         "vue-axios": "3.4.1",
