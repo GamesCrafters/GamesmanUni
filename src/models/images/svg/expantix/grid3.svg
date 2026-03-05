@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="BackgroundSVG"
+     xmlns="http://www.w3.org/2000/svg"
+     viewBox="-0.25 -0.25 80.5 80.5"
+     shape-rendering="crispEdges">
+
+  <!-- Interior grid lines for 3×3 (2 vertical + 2 horizontal) -->
+  <path
+    d="
+      M40,0  v60
+      M60,0  v60
+
+      M20,20 h60
+      M20,40 h60
+    "
+    stroke="#000"
+    stroke-width="0.5"
+    fill="none"
+  />
+
+  <!-- SOLID: 3×3 outer frame -->
+  <path d="M20,0 h60 v60 h-60 z"
+        fill="none"
+        stroke="#000"
+        stroke-width="0.5" />
+
+  <!-- Dotted left boundary -->
+  <path d="M0,0 v80"
+        stroke="#000" stroke-width="0.5"
+        stroke-dasharray="2,2" fill="none"/>
+
+  <!-- Dotted top-left short boundary -->
+  <path d="M0,0 h20"
+        stroke="#000" stroke-width="0.5"
+        stroke-dasharray="2,2" fill="none"/>
+
+  <!-- Dotted bottom boundary -->
+  <path d="M0,80 h80"
+        stroke="#000" stroke-width="0.5"
+        stroke-dasharray="2,2" fill="none"/>
+
+  <!-- Dotted right short boundary -->
+  <path d="M80,60 v20"
+        stroke="#000" stroke-width="0.5"
+        stroke-dasharray="2,2" fill="none"/>
+
+  <!-- Left strip horizontal dotted lines -->
+  <path
+    d="
+      M0,20 h20
+      M0,40 h20
+      M0,60 h20
+    "
+    stroke="#000" stroke-width="0.5"
+    stroke-dasharray="2,2" fill="none" />
+
+  <!-- Bottom strip vertical dotted lines -->
+  <path
+    d="
+      M20,60 v20
+      M40,60 v20
+      M60,60 v20
+    "
+    stroke="#000" stroke-width="0.5"
+    stroke-dasharray="2,2" fill="none" />
+</svg>
