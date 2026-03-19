@@ -1,0 +1,8 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>Layer 1</title>
+  <circle id="svg_1" stroke-width="8" stroke="black" fill="white" r="46" cy="50" cx="50"/>
+  <text style="cursor: move;" id="svg_2" fill="black" dominant-baseline="central" text-anchor="middle" font-weight="bold" font-size="50" font-family="Arial" y="52" x="50">2</text>
+ </g>
+</svg>
