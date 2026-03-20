@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 160 160">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #603813;
+      }
+
+      .st1 {
+        fill: #6d6e70;
+      }
+
+      .st2, .st3 {
+        fill: #a87c4f;
+      }
+
+      .st4 {
+        fill: #26a9e0;
+      }
+
+      .st4, .st5, .st6, .st3, .st7, .st8 {
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .st4, .st5, .st6, .st3, .st8 {
+        stroke-width: 2px;
+      }
+
+      .st5 {
+        fill: #231f20;
+      }
+
+      .st9 {
+        fill: #c1b49a;
+      }
+
+      .st6 {
+        fill: #faf184;
+      }
+
+      .st10 {
+        fill: #dfe454;
+      }
+
+      .st11 {
+        fill: #bdd632;
+      }
+
+      .st7 {
+        fill: none;
+        stroke-width: 3px;
+      }
+
+      .st12 {
+        fill: #f8b2a9;
+      }
+
+      .st8 {
+        fill: #bbbdbf;
+      }
+
+      .st13 {
+        fill: #f6f4c0;
+      }
+
+      .st14 {
+        fill: #929497;
+      }
+
+      .st15 {
+        fill: #2267b1;
+      }
+    </style>
+  </defs>
+  <rect class="st13" width="160" height="160"/>
+  <rect class="st9" x="9.3" y="14.88" width="31.63" height="7.44"/>
+  <rect class="st9" x="44.65" y=".93" width="23.26" height="6.51"/>
+  <rect class="st9" x="77.21" y="19.53" width="24.19" height="6.51"/>
+  <rect class="st9" x="119.07" y=".93" width="33.49" height="7.44"/>
+  <rect class="st9" x="30.7" y="45.58" width="26.05" height="7.44"/>
+  <rect class="st9" x="83.72" y="43.72" width="26.05" height="9.3"/>
+  <rect class="st9" x="119.07" y="36.28" width="35.35" height="9.3"/>
+  <rect class="st9" x="21.4" y="66.98" width="40" height="8.37"/>
+  <rect class="st9" x="109.77" y="68.84" width="21.4" height="6.51"/>
+  <rect class="st9" y="84.65" width="25.12" height="9.3"/>
+  <rect class="st9" x="25.12" y="99.53" width="28.84" height="7.44"/>
+  <rect class="st9" x="84.65" y="87.44" width="39.07" height="8.37"/>
+  <rect class="st9" x="142.33" y="84.65" width="17.67" height="6.51"/>
+  <rect class="st9" y="120" width="36.28" height="8.37"/>
+  <rect class="st9" x="56.74" y="112.56" width="36.28" height="8.37"/>
+  <rect class="st9" x="102.33" y="123.72" width="21.4" height="7.44"/>
+  <rect class="st9" x="136.74" y="121.86" width="23.26" height="8.37"/>
+  <rect class="st9" x="23.26" y="146.98" width="28.84" height="5.58"/>
+  <rect class="st9" x="77.21" y="147.91" width="25.12" height="7.44"/>
+  <rect class="st9" x="120" y="147.91" width="9.3" height="3.72"/>
+  <rect class="st9" x="134.88" y="137.67" width="13.95" height="5.58"/>
+  <path class="st8" d="M122.56,82.19c0-13.69-19.04-24.78-42.52-24.78s-42.52,11.09-42.52,24.78c0,1.11.14,2.2.38,3.27h-.38v21.51h85.05v-21.51h-.38c.24-1.07.38-2.16.38-3.27Z"/>
+  <ellipse class="st5" cx="80.53" cy="29.36" rx="28" ry="26.18"/>
+  <path class="st3" d="M66.53,117.64l-38.24,34.17c-.44,1.65-.34,3.21.56,4.73h37.68v-38.9Z"/>
+  <path class="st3" d="M94.11,116.79l.14,40.58,36.4-.11c.96-1.02,1.61-2.11,1.77-3.34l-38.31-37.13Z"/>
+  <path class="st4" d="M122.58,108.1H37.55v34.22h29.19c.45-9.55,6.24-17.11,13.33-17.11s12.88,7.56,13.33,17.11h29.19v-34.22Z"/>
+  <path class="st5" d="M69.45,5.79c-10.34,3.73-17.73,13.25-17.9,24.47,11.17,0,20.97-5.76,25.48-16.16-2.98-2.21-5.58-4.89-7.57-8.31Z"/>
+  <path class="st5" d="M82.12,4.11c-3.41,0-6.67.6-9.68,1.69,2,3.42,4.6,6.1,7.57,8.31,1.29-2.96,2.14-6.3,2.48-9.99-.13,0-.25,0-.38,0Z"/>
+  <path class="st6" d="M108.5,31.31c-.77-1.52-.77-3.03-1.55-3.79-9.18-4.22-20.6-6.61-29.1-12.49-4.66,9.99-14.77,15.53-26.31,15.53,0,.13-.01.25-.01.38,0,14.1,12.75,25.52,28.49,25.52s28.26-11.23,28.48-25.16Z"/>
+  <line class="st7" x1="65.87" y1="33.43" x2="74.19" y2="33.43"/>
+  <line class="st7" x1="89.3" y1="33.43" x2="97.62" y2="33.43"/>
+  <ellipse class="st14" cx="70.33" cy="36.53" rx="2.2" ry="2.17"/>
+  <ellipse class="st14" cx="93.55" cy="36.61" rx="1.98" ry="2.1"/>
+  <path class="st15" d="M38.62,114.45v2.81h83.01v-2.81H38.62Z"/>
+  <rect class="st15" x="73.05" y="115.26" width="14.96" height="4" rx=".54" ry=".54" transform="translate(197.79 36.73) rotate(90)"/>
+  <path class="st0" d="M38.53,111.65v2.78h8v-2.78h-8Z"/>
+  <path class="st0" d="M62.53,111.65v2.78h35v-2.78h-35Z"/>
+  <path class="st0" d="M118.53,111.65h-8v2.78h8v-2.78Z"/>
+  <path class="st2" d="M38.53,108.98v2.67h8v-2.67h-8Z"/>
+  <path class="st2" d="M62.53,108.98v2.67h35v-2.67h-35Z"/>
+  <path class="st2" d="M118.53,108.98h-8v2.67h8v-2.67Z"/>
+  <path class="st15" d="M38.51,105.89v3.3h83.03v-3.3H38.51Z"/>
+  <path class="st15" d="M38.59,137.94v3.43h27.5v-3.43h-27.5Z"/>
+  <path class="st15" d="M94.11,137.89v3.46h27.44v-3.46h-27.44Z"/>
+  <rect class="st1" x="75.53" y="77.05" width="13" height="5.61"/>
+  <rect class="st1" x="75.7" y="87.07" width="13" height="5.61"/>
+  <rect class="st10" x="82.53" y="37.77" width="4" height="3.74"/>
+  <rect class="st10" x="82.53" y="41.18" width="4" height="5"/>
+  <rect class="st10" x="79.79" y="43.05" width="4" height="3.13"/>
+  <path class="st11" d="M72.15,49.41c2.73,2.26,6.37,3.54,10.01,3.52s7.27-1.33,9.98-3.61"/>
+  <ellipse class="st8" cx="38.22" cy="80.95" rx="20.9" ry="7.9" transform="translate(-51.26 78.16) rotate(-62.93)"/>
+  <ellipse class="st8" cx="123.89" cy="80.96" rx="7.9" ry="21.27" transform="translate(-23.27 65.19) rotate(-27.05)"/>
+  <ellipse class="st6" cx="132.03" cy="98.09" rx="8.5" ry="7.95"/>
+  <ellipse class="st6" cx="30.03" cy="98.09" rx="8.5" ry="7.95"/>
+  <circle class="st12" cx="80.47" cy="75.81" r="33.02"/>
+</svg>
