@@ -275,8 +275,8 @@
           :width="9"
           :height="9"
           class="marble-hover-piece-btn"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: marbleHoverPlacementMoveByToken[tokenChar] })"
-          @mouseover="store.commit(mutationTypes.setHighlightedMove, marbleHoverPlacementMoveByToken[tokenChar])"
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: marbleHoverPlacementMoveByToken[tokenChar]! })"
+          @mouseover="store.commit(mutationTypes.setHighlightedMove, marbleHoverPlacementMoveByToken[tokenChar]!)"
           @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
         />
       </g>
@@ -300,8 +300,8 @@
           :x="marbleHoverPanelX + 26.0"
           :y="marbleHoverPanelY + 20.0"
           class="marble-hover-remove-x"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: marbleHoverRemoveMove })"
-          @mouseover="store.commit(mutationTypes.setHighlightedMove, marbleHoverRemoveMove)"
+          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: marbleHoverRemoveMove! })"
+          @mouseover="store.commit(mutationTypes.setHighlightedMove, marbleHoverRemoveMove!)"
           @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
         >
           ×
