@@ -42,11 +42,11 @@
     "private": true,
     "repository": "git@github.com:GamesCrafters/GamesmanUni.git",
     "scripts": {
-        "build": "yarn; vite build",
-        "dev": "yarn; vue-tsc --noEmit; vite --debug",
+        "build": "vite build",
+        "dev": "vue-tsc --noEmit && vite",
         "preview": "vite preview",
         "preview:https": "serve dist",
-        "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
+        "reinstall": "rm -rf node_modules && npm install && vue-tsc --noEmit"
     },
     "version": "5.0.24"
 }

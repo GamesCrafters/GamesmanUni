@@ -8,9 +8,9 @@ const gimages = import.meta.globEager("../../models/images/svg/**/*");
 /* Begin Helper Functions */
 const getImageSource = (imagePath: string) => gimages["../../models/images/svg/" + imagePath].default;
 
-const spawnImageEntity = (char: string, i: number, centers: number[][], charImages: Record<string, ImageAutoGUICharImage>, widthFactor: number): SVGImageElement => {
+const spawnImageEntity = (char: string, i: number, centers: number[][], charImages: Record<string, ImageAutoGUICharImage>, widthFactor: number, entityScaleBoost: number): SVGImageElement => {
     var newElement = document.createElementNS("http://www.w3.org/2000/svg", 'image');
-    var ews = charImages[char].scale * widthFactor;
+    var ews = charImages[char].scale * widthFactor * entityScaleBoost;
     newElement.setAttribute("x", (centers[i][0] - 0.5 * ews).toString());
     newElement.setAttribute("y", (centers[i][1] - 0.5 * ews).toString());
     newElement.setAttribute("width", ews.toString());
@@ -123,6 +123,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
     const scaledHeight = backgroundGeometry[1] * widthFactor;
     const animationType = theTheme.animationType || "";
     const charImages = theTheme.charImages;
+    const entityScaleBoost = theTheme.entityScaleBoost ?? 1;
     const centers = theTheme.centers.map((a: Array<number>) => a.map((b: number) => b * widthFactor));
     const foregroundImagePath = theTheme.foreground || "";
     const animationWindow = theTheme.defaultAnimationWindow || [0, currBoard.length];
@@ -208,7 +209,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
 
         var newElement;
         for (i of fadeInIdxs) { // Spawn image entities that'll fade in, but don't play fade-in animation yet
-            newElement = spawnImageEntity(nextBoard[i], i, centers, charImages, widthFactor);
+            newElement = spawnImageEntity(nextBoard[i], i, centers, charImages, widthFactor, entityScaleBoost);
             newElement.setAttribute("class", "appearingEntity");
             newElement.setAttribute("opacity", "0");
             g.appendChild(newElement);
@@ -231,7 +232,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
             const toCoords = centers[slide[1]];
             const fromCoords = centers[idxFrom];
             gsap.fromTo("#entity" + idxFrom, {autoAlpha: 1}, {duration: 0.001, autoAlpha: 0});
-            newElement = spawnImageEntity(currBoard[idxFrom], idxFrom, centers, charImages, widthFactor);
+            newElement = spawnImageEntity(currBoard[idxFrom], idxFrom, centers, charImages, widthFactor, entityScaleBoost);
             newElement.setAttribute("id", "movingEntity" + idxFrom);
             g.appendChild(newElement);
             gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});

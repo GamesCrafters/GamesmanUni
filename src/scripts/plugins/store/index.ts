@@ -95,6 +95,7 @@ type Getters = {
     maximumDrawLevel(state: State):
         (from: number, to: number) => number;
     currentHighlightedMove(state: State): string;
+    marblePullActivated(state: State): boolean;
 };
 
 const getters: Vuex.GetterTree<State, State> & Getters = {
@@ -259,7 +260,9 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     (from: number, to: number) =>
         GMU.getMaximumDrawLevel(state.app, { from, to }),
     currentHighlightedMove: (state: State) =>
-        state.app.highlightedMove
+        state.app.highlightedMove,
+    marblePullActivated: (state: State) =>
+        state.app.currentMatch.marblePullActivated ?? false
 };
 
 export enum mutationTypes {
@@ -286,7 +289,8 @@ export enum mutationTypes {
     setGamesPlayed = "setGamesPlayed",
     setPlayerWinsEntry = "setPlayerWinsEntry",
     showMenu = "showMenu",
-    setHighlightedMove = "setHighlightedMove"
+    setHighlightedMove = "setHighlightedMove",
+    setMarblePullActivated = "setMarblePullActivated"
 }
 
 type Mutations = {
@@ -314,6 +318,7 @@ type Mutations = {
     [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
     [mutationTypes.showMenu] (state: State, showMenu: boolean): void;
     [mutationTypes.setHighlightedMove] (state: State, highlightedMove: string): void;
+    [mutationTypes.setMarblePullActivated] (state: State, marblePullActivated: boolean): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -366,7 +371,9 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     showMenu: (state: State, showMenu: boolean) =>
         (state.app.options.showMenu = showMenu),
     setHighlightedMove: (state: State, highlightedMove: string) =>
-    (state.app.highlightedMove = highlightedMove)
+    (state.app.highlightedMove = highlightedMove),
+    setMarblePullActivated: (state: State, marblePullActivated: boolean) =>
+    (state.app.currentMatch.marblePullActivated = marblePullActivated)
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {

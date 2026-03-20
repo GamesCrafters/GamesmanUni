@@ -78,7 +78,9 @@ const loadVariant = async (app: Types.App, payload: { gameId: string; variantId:
 
 const loadPosition = async (app: Types.App, payload: { gameId: string; variantId: string; position: string; force?: boolean }) => {
     const positions = app.games[payload.gameId].variants[payload.variantId].positions;
-    const updatedPosition = await GCTAPI.loadPosition(`${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/?p=${payload.position}`);
+    const updatedPosition = await GCTAPI.loadPosition(
+        `${app.dataSources.gameAPI}${payload.gameId}/${payload.variantId}/positions/?p=${encodeURIComponent(payload.position)}`
+    );
     if (!updatedPosition) {
         return undefined;
     }
@@ -115,9 +117,14 @@ export const initiateMatch = async (app: Types.App, payload: {
     const variant = await loadVariant(app, payload);
     game.variants[payload.variantId] = variant;
 
-    const startPosition = (payload.startPosition && payload.startPosition !== 'random') ? payload.startPosition : variant.startPosition;
+    /* GamesmanPy (and many providers) expect ?p= to be autogui/canonical string;
+       variant.startPosition is often human-readable and breaks from_string (e.g. Marble Circuit). */
+    const explicitStart = payload.startPosition && payload.startPosition !== 'random';
+    const positionKeyForLoad = explicitStart
+        ? payload.startPosition!
+        : (variant.autoguiStartPosition || variant.startPosition);
 
-    const updatedApp = await loadPosition(app, { ...payload, position: startPosition });
+    const updatedApp = await loadPosition(app, { ...payload, position: positionKeyForLoad });
     if (!updatedApp) return undefined;
 
     // Removes non-legal VVH views from the active VVH views.
@@ -128,8 +135,8 @@ export const initiateMatch = async (app: Types.App, payload: {
     if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
     
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
-    app.currentMatch.startPosition = startPosition;
-    app.currentMatch.moveHistory = game.name + moveHistoryDelim + startPosition;
+    app.currentMatch.startPosition = positionKeyForLoad;
+    app.currentMatch.moveHistory = game.name + moveHistoryDelim + positionKeyForLoad;
     app.currentMatch.gameType = game.type === "onePlayer" ? "puzzles" : "games";
     app.currentMatch.gameId = payload.gameId;
     app.currentMatch.variantId = payload.variantId;
@@ -137,14 +144,14 @@ export const initiateMatch = async (app: Types.App, payload: {
     if (!(payload.firstPlayerIsComputer === undefined)) app.currentMatch.firstPlayer.isComputer = payload.firstPlayerIsComputer;
     if (!(payload.secondPlayerIsComputer === undefined)) app.currentMatch.secondPlayer.isComputer = payload.secondPlayerIsComputer;
     
-    const autoguiStartPosition = app.games[payload.gameId].variants[payload.variantId].positions[startPosition].autoguiPosition;
+    const autoguiStartPosition = app.games[payload.gameId].variants[payload.variantId].positions[positionKeyForLoad].autoguiPosition;
     app.currentMatch.round = {
         id: 1,
         firstPlayerTurn: autoguiStartPosition.charAt(0) != '2',
         move: "",
         autoguiMove: "",
         moveValue: "",
-        position: deepcopy(variant.positions[startPosition]),
+        position: deepcopy(variant.positions[positionKeyForLoad]),
     };
     app.currentMatch.rounds = [
         deepcopy(Defaults.defaultRound),
@@ -222,8 +229,8 @@ const createAutoguiMoveToMoveObject = (moves: Array<GCTAPITypes.Move>) => {
 export const preFetchNextPositions = async (app: Types.App, payload: { gameType: string; gameId: string; variantId: string; position: string }) => {
     const positions = app.games[payload.gameId].variants[payload.variantId].positions;
     for (const move of Object.values(positions[payload.position].availableMoves)) {
-        if (!(move.position in positions)) {
-            await loadPosition(app, { ...payload, position: move.position });
+        if (!(move.autoguiPosition in positions)) {
+            await loadPosition(app, { ...payload, position: move.autoguiPosition });
         }
     }
     return app;
@@ -243,13 +250,15 @@ export const restartMatch = async (app: Types.App) => {
     const variantId = app.currentMatch.variantId
     const game = app.games[gameId];
     const startPosition = app.currentMatch.startPosition;
+    // Marble Circuit UI lever state: hide player1fail until the user clicks again.
+    app.currentMatch.marblePullActivated = false;
 
     /* Reset round id to 1 and delete all existing rounds. */
     const autoguiStartPosition = app.games[gameId].variants[variantId].positions[startPosition].autoguiPosition;
 
     app.currentMatch.round = {
         id: 1,
-        firstPlayerTurn: autoguiStartPosition.charAt(0) == '1',
+        firstPlayerTurn: autoguiStartPosition.charAt(0) != '2',
         move: "",
         autoguiMove: "",
         moveValue: "",
@@ -528,7 +537,7 @@ export const runMove = async (app: Types.App, payload: { autoguiMove: string }) 
         updatedApp = await loadPosition(app, {
             gameId: app.currentMatch.gameId,
             variantId: app.currentMatch.variantId,
-            position: moveObj.position
+            position: moveObj.autoguiPosition
         });
         if (updatedApp) break;
     }
@@ -550,7 +559,7 @@ export const runMove = async (app: Types.App, payload: { autoguiMove: string }) 
             round.
             position.
             availableMoves[payload.autoguiMove].
-            position
+            autoguiPosition
         ]
     };
     app.currentMatch.moveHistory += moveHistoryDelim + moveObj.move;

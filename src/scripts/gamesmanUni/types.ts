@@ -146,6 +146,7 @@ export type Match = {
     backgroundLoading: boolean;
     computerMoving: boolean;
     animationPlaying: boolean;
+    marblePullActivated?: boolean;
 };
 
 export type Rounds = Array<Round>;

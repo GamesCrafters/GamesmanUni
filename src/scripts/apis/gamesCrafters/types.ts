@@ -50,8 +50,16 @@ export type ImageAutoGUITheme = {
     space: Array<number>;
     centers: Array<Array<number>>;
     background: string;
+    /** Marble Circuit: background after "pull lever" (no balls). */
+    backgroundNoBalls?: string;
     foreground: string;
     charImages: Record<string, ImageAutoGUICharImage>;
+    /** Multiplies charImages.*.scale for on-board entities (default 1). */
+    entityScaleBoost?: number;
+    /** Marble Circuit: (x,y) in theme space for each exit 0..4 goal triangle */
+    goalExitCenters?: Array<[number, number]>;
+    goalExitValues?: string[];
+    goalExitFontSize?: number;
     textEntityFontSize: number;
     circleButtonRadius: number;
     lineWidth: number;

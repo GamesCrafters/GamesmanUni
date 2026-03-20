@@ -1,7 +1,7 @@
 <template>
     <div id="app-game-body-statistics-message">
         <!-- If move hints are off and game hasn't ended, show an uninformative message. -->
-        <template v-if="!showNextMoveHints && !isEndOfMatch">
+        <template v-if="!effectiveShowNextMoveHints && !isEndOfMatch">
             <p>It is <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>'s turn.</p>
         </template>
 
@@ -46,6 +46,11 @@
 
         <!-- Game Over (Game-over message is shown even if move hints are turned off.) -->
         <template v-else>
+            <!-- Marble Circuit: hide solve/win/lose statements until user clicks the pull lever -->
+            <template v-if="isPuzzleGame && isMarbleCircuit && !marblePullActivated">
+                <p>Result hidden until you click the pull lever.</p>
+            </template>
+            <template v-else>
             <template v-if="isPuzzleGame">
                 <!-- Puzzles: <Player> was unable to solve the puzzle. -->
                 <p v-if="currentPositionValue === 'lose'">
@@ -76,6 +81,7 @@
                     <mark :class="`uni-${currentPositionValue}`">lost</mark> the game{{ winbyStr }}. {{ mexStr }}
                 </p>
             </template>
+            </template>
         </template>
     </div>
 </template>
@@ -87,10 +93,17 @@
 
     const store = useStore();
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
+    const isMarbleCircuit = computed(() => store.getters.currentGameId === "marblecircuit");
+    const marblePullActivated = computed(() => store.getters.marblePullActivated);
     const currentTurn = computed(() => (store.getters.currentMatch.round.firstPlayerTurn ? 1 : 2));
     const currentOppTurn = computed(() => currentTurn.value == 1 ? 2 : 1);
     const options = computed(() => store.getters.options);
     const showNextMoveHints = computed(() => (options.value ? options.value.showNextMoveHints : true));
+    const effectiveShowNextMoveHints = computed(() => {
+        if (!isPuzzleGame.value) return showNextMoveHints.value;
+        if (!isMarbleCircuit.value) return showNextMoveHints.value;
+        return marblePullActivated.value && showNextMoveHints.value;
+    });
     const currentLeftPlayerName = computed(() => store.getters.currentLeftPlayer.name);
     const currentRightPlayerName = computed(() => store.getters.currentRightPlayer.name);
     const currentPlayerName = computed(() => (store.getters.currentPlayer ? store.getters.currentPlayer.name : ""));
