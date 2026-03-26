@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="BackgroundSVG" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 30 60">
+    <path d="M0,0h50v60h-50z" fill="#DDDDDD" />
+    <path
+        d="M0,0h10v10h-10zM20,0h10v10h-10zM40,0h10v10h-10zM10,10h10v10h-10zM30,10h10v10h-10zM0,20h10v10h-10zM20,20h10v10h-10zM40,20h10v10h-10zM10,30h10v10h-10zM30,30h10v10h-10zM0,40h10v10h-10zM20,40h10v10h-10zM40,40h10v10h-10zM10,50h10v10h-10zM30,50h10v10h-10zM0,60h10v10h-10zM20,60h10v10h-10z"
+        fill="#888888" />
+</svg>
