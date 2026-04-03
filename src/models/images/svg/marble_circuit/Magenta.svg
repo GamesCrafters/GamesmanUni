@@ -1,0 +1,21 @@
+<svg version="1.1" viewBox="410 295 132 125" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="p.0"><path d="m0 0l960.0 0l0 720.0l-960.0 0l0 -720.0z" clip-rule="nonzero"/></clipPath>
+  </defs>
+  <g id="marblePieceArt" clip-path="url(#p.0)">
+    <path fill-rule="evenodd" d="m0 0l960.0 0l0 720.0l-960.0 0z" style="fill: #000000 !important; fill-opacity: 0 !important; stroke: none !important"/>
+    <path fill-rule="evenodd" d="m417.6063 360.0l62.393707 -62.393707l62.393677 62.393707l-62.393677 62.393707z" style="fill: #f55d8b !important; stroke: none !important"/>
+    <path fill-rule="evenodd" d="m417.6063 360.0l62.393707 -62.393707l62.393677 62.393707l-62.393677 62.393707z" style="fill: none !important; stroke: #000000 !important; stroke-width: 1 !important; stroke-linejoin: round !important; stroke-linecap: butt !important"/>
+    <path fill-rule="evenodd" d="m437.7231 379.8894l62.42517 -62.42517l22.393707 22.393677l-62.4252 62.4252z" style="fill: #a9424a !important; stroke: none !important"/>
+    <path fill-rule="evenodd" d="m437.7231 379.8894l62.42517 -62.42517l22.393707 22.393677l-62.4252 62.4252z" style="fill: none !important; stroke: #000000 !important; stroke-width: 1 !important; stroke-linejoin: round !important; stroke-linecap: butt !important"/>
+    <path fill-rule="evenodd" d="m460.15613 317.75854l61.984253 61.984253l-22.393707 22.393677l-61.984253 -61.984253z" style="fill: #a9424a !important; stroke: none !important"/>
+    <path fill-rule="evenodd" d="m460.15613 317.75854l61.984253 61.984253l-22.393707 22.393677l-61.984253 -61.984253z" style="fill: none !important; stroke: #000000 !important; stroke-width: 1 !important; stroke-linejoin: round !important; stroke-linecap: butt !important"/>
+    <path fill-rule="evenodd" d="m448.27954 369.87656l38.677155 -38.677155l21.826782 21.826752l-38.677185 38.677185z" style="fill: #a9424a !important; stroke: none !important"/>
+  </g>
+  <defs>
+    <symbol id="MoveButtonSVG" viewBox="410 295 132 125">
+      <use href="#marblePieceArt" xlink:href="#marblePieceArt"/>
+      <circle cx="479.99" cy="360" r="10" fill="inherit" pointer-events="none" style="stroke: none !important"/>
+    </symbol>
+  </defs>
+</svg>
