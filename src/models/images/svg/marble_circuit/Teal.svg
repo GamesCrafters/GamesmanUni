@@ -1,4 +1,4 @@
-<svg version="1.1" viewBox="410 295 132 125" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+<svg version="1.1" viewBox="417.45 297.45 125.1 125.1" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <clipPath id="p.0"><path d="m0 0l960.0 0l0 720.0l-960.0 0l0 -720.0z" clip-rule="nonzero"/></clipPath>
   </defs>
@@ -12,7 +12,7 @@
     <path fill-rule="evenodd" d="m500.34323 401.64505c-11.817017 -10.899933 -18.481628 -26.029022 -18.428223 -41.833282c0.05340576 -15.80426 6.8201294 -30.890747 18.710571 -41.715576l20.037445 20.642792c-6.345154 5.4286804 -9.973419 13.107513 -10.001465 21.167084c-0.028015137 8.05954 3.546692 15.760468 9.853943 21.227966z" style="fill: none !important; stroke: #000000 !important; stroke-width: 1 !important; stroke-linejoin: round !important; stroke-linecap: butt !important"/>
   </g>
   <defs>
-    <symbol id="MoveButtonSVG" viewBox="410 295 132 125">
+    <symbol id="MoveButtonSVG" viewBox="417.45 297.45 125.1 125.1">
       <use href="#marblePieceArt" xlink:href="#marblePieceArt"/>
       <circle cx="479.99" cy="360" r="10" fill="inherit" pointer-events="none" style="stroke: none !important"/>
     </symbol>
