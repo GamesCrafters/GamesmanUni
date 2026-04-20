@@ -3944,9 +3944,9 @@ __metadata:
   linkType: hard
 
 "lru-cache@npm:^11.0.0, lru-cache@npm:^11.1.0, lru-cache@npm:^11.2.1":
-  version: 11.2.7
-  resolution: "lru-cache@npm:11.2.7"
-  checksum: c4aba67de4a8566622eb1e99cc5f43c1f91129c941af7624d4bbd48f312525d4bf4ce808a414d658a6bc336f0163daa1098d3a3e736989ad65d3231f587fbc30
+  version: 11.3.5
+  resolution: "lru-cache@npm:11.3.5"
+  checksum: 4b0110312c0d7224ab7ab4b6c30f639312d75b8246b6e90719c412c79256db49453c246e0c8ee02d7b7b1494c52bbd7d4f2d135c768ed2b6ba3e5ccbfe74de10
   languageName: node
   linkType: hard
 
@@ -4553,7 +4553,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^4.0.3":
+"picomatch@npm:^4.0.4":
   version: 4.0.4
   resolution: "picomatch@npm:4.0.4"
   checksum: 76b387b5157951422fa6049a96bdd1695e39dd126cd99df34d343638dc5cdb8bcdc83fff288c23eddcf7c26657c35e3173d4d5f488c4f28b889b314472e0a662
@@ -5428,12 +5428,12 @@ __metadata:
   linkType: hard
 
 "tinyglobby@npm:^0.2.12":
-  version: 0.2.15
-  resolution: "tinyglobby@npm:0.2.15"
+  version: 0.2.16
+  resolution: "tinyglobby@npm:0.2.16"
   dependencies:
     fdir: ^6.5.0
-    picomatch: ^4.0.3
-  checksum: 0e33b8babff966c6ab86e9b825a350a6a98a63700fa0bb7ae6cf36a7770a508892383adc272f7f9d17aaf46a9d622b455e775b9949a3f951eaaf5dfb26331d44
+    picomatch: ^4.0.4
+  checksum: db9d22ce1deb1095720a683c492cd5e80da0f71fed21ed697e2752f6f298edd8a1249dab197c86a26f001c180594a81bf532400fe519791ed2a2cb57b03bc337
   languageName: node
   linkType: hard
 
