@@ -125,8 +125,14 @@
         if (savedPreferences) {
             try {
                 const parsed = JSON.parse(savedPreferences);
-                if (parsed.volume !== undefined) setMoveSFXVolume(parsed.volume);
-                if (parsed.ambienceVolume !== undefined) setAmbienceVolume(parsed.ambienceVolume);
+                if (parsed.volume !== undefined) {
+                    store.commit(mutationTypes.setVolume, parsed.volume);
+                    setMoveSFXVolume(parsed.volume);
+                }
+                if (parsed.ambienceVolume !== undefined) {
+                    store.commit(mutationTypes.setAmbienceVolume, parsed.ambienceVolume);
+                    setAmbienceVolume(parsed.ambienceVolume);
+                }
                 if (parsed.theme) setAppTheme(parsed.theme);
                 if (parsed.locale) setAppLocale(parsed.locale);
                 if (parsed.fontSize) setAppRootFontSize(parsed.fontSize);

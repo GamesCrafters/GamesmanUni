@@ -286,7 +286,9 @@ export enum mutationTypes {
     setGamesPlayed = "setGamesPlayed",
     setPlayerWinsEntry = "setPlayerWinsEntry",
     showMenu = "showMenu",
-    setHighlightedMove = "setHighlightedMove"
+    setHighlightedMove = "setHighlightedMove",
+    setVolume = "setVolume",
+    setAmbienceVolume = "setAmbienceVolume"
 }
 
 type Mutations = {
@@ -314,6 +316,8 @@ type Mutations = {
     [mutationTypes.setPlayerWinsEntry] (state: State, {player, wins}:{player: string, wins: number}): void;
     [mutationTypes.showMenu] (state: State, showMenu: boolean): void;
     [mutationTypes.setHighlightedMove] (state: State, highlightedMove: string): void;
+    [mutationTypes.setVolume] (state: State, volume: number): void;
+    [mutationTypes.setAmbienceVolume] (state: State, ambienceVolume: number): void;
 };
 
 const mutations: Vuex.MutationTree<State> & Mutations = {
@@ -366,7 +370,11 @@ const mutations: Vuex.MutationTree<State> & Mutations = {
     showMenu: (state: State, showMenu: boolean) =>
         (state.app.options.showMenu = showMenu),
     setHighlightedMove: (state: State, highlightedMove: string) =>
-    (state.app.highlightedMove = highlightedMove)
+    (state.app.highlightedMove = highlightedMove),
+    setVolume: (state: State, volume: number) =>
+        (state.app.preferences.volume = volume),
+    setAmbienceVolume: (state: State, ambienceVolume: number) =>
+        (state.app.preferences.ambienceVolume = ambienceVolume)
 };
 
 type ActionContext = Omit<Vuex.ActionContext<State, State>, "commit"> & {
