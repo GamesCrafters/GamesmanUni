@@ -28,12 +28,10 @@
       {{ statusText }}
     </text>
 
-
-
-    <!-- Piece inventory row — any unused piece is clickable -->
+    <!-- Piece inventory row -->
     <g v-for="pi in 9" :key="'inv' + pi"
       :class="{ 'wyp-clickable': !usedPieces.has(pi-1) && step === 'selectPiece' }"
-      @click="selectPiece(pi-1)">
+      @click="onPieceClick(pi-1)">
       <rect
         :x="15 + (pi-1) * 82" y="755" width="75" height="55" rx="6"
         :fill="usedPieces.has(pi-1) ? '#1a1a1a' : (selectedPiece === pi-1 ? '#5a4520' : '#2a1a0a')"
@@ -55,78 +53,78 @@
         pointer-events="none">
         {{ String.fromCharCode(64 + pi) }}
       </text>
-      <!-- Strikethrough for used pieces -->
       <line v-if="usedPieces.has(pi-1)"
         :x1="15 + (pi-1)*82" :y1="782"
         :x2="90 + (pi-1)*82" :y2="782"
         stroke="#888" stroke-width="2" pointer-events="none"/>
-      <!-- Click overlay for any unused piece -->
       <rect v-if="!usedPieces.has(pi-1) && step === 'selectPiece'"
         :x="15 + (pi-1) * 82" y="755" width="75" height="55" rx="6"
         fill="transparent" style="cursor:pointer"/>
+      <!-- Value hint dot for piece selection -->
+      <circle v-if="step === 'selectPiece' && !usedPieces.has(pi-1) && pieceValueHint(pi-1)"
+        :cx="15 + (pi-1) * 82 + 67" :cy="762" r="5"
+        :fill="pieceValueHint(pi-1) === 'win' ? '#2ecc71' : '#e74c3c'"
+        pointer-events="none"/>
     </g>
 
     <!-- Step 2: Show orientations for selected piece -->
     <g v-if="step === 'selectOrientation' && selectedPiece !== null">
-      <g v-for="(ori, oi) in selectedOrientations" :key="'ori' + oi"
+      <g v-for="(oriMove, oi) in orientationMoves" :key="'ori' + oi"
         class="wyp-clickable"
-        @click.stop="selectOrientation(oi)">
+        @click.stop="dispatchMove(oriMove.autoguiMove)">
         <rect
           :x="oriSlotX(oi)" y="820"
           :width="orientLayout.slotRectW" :height="orientLayout.slotRectH" rx="10"
-          fill="#3a2a1a" stroke="#8b7355" stroke-width="2"/>
-        <g v-for="(cell, ci) in ori" :key="'os' + oi + '_' + ci">
+          :fill="'#3a2a1a'" :stroke="oriMove.moveValue === 'win' ? '#2ecc71' : '#8b7355'" stroke-width="2"/>
+        <g v-for="(cell, ci) in oriShape(oriMove)" :key="'os' + oi + '_' + ci">
           <rect
             :x="oriSlotX(oi) + orientLayout.padH + cell[1] * orientLayout.cellSize"
             :y="820 + orientLayout.padV + cell[0] * orientLayout.cellSize"
             :width="orientLayout.rectSize" :height="orientLayout.rectSize" rx="3"
-            :fill="pieceColors[selectedPiece]"
+            :fill="pieceColors[selectedPiece!]"
             pointer-events="none"/>
         </g>
-        <!-- Anchor dot (top-left cell of piece) -->
         <circle
-          :cx="oriSlotX(oi) + orientLayout.padH + oriAnchor(ori).cx * orientLayout.cellSize"
-          :cy="820 + orientLayout.padV + oriAnchor(ori).cy * orientLayout.cellSize"
+          :cx="oriSlotX(oi) + orientLayout.padH + oriAnchor(oriShape(oriMove)).cx * orientLayout.cellSize"
+          :cy="820 + orientLayout.padV + oriAnchor(oriShape(oriMove)).cy * orientLayout.cellSize"
           :r="orientLayout.dotR" fill="#fff" opacity="0.9" pointer-events="none"/>
-        <!-- Transparent click overlay -->
         <rect
           :x="oriSlotX(oi)" y="820"
           :width="orientLayout.slotRectW" :height="orientLayout.slotRectH" rx="10"
           fill="transparent" style="cursor:pointer"/>
       </g>
       <text x="720" y="940" text-anchor="end" fill="#aaa" font-size="16"
-        class="wyp-clickable" @click="goBackToPiece()">← Back</text>
+        class="wyp-clickable" @click="doUndo()">← Back</text>
     </g>
 
-    <!-- Step 3: One anchor dot per valid placement; hover previews the placement -->
-    <g v-if="step === 'selectPosition' && selectedPiece !== null">
-      <g v-for="(placement, pi) in validPlacements" :key="'place' + pi">
+    <!-- Step 3: Anchor dots for placement -->
+    <g v-if="step === 'selectPosition' && selectedPiece !== null && selectedOrientation !== null">
+      <g v-for="(placement, pi) in anchorPlacements" :key="'place' + pi">
         <circle
           :cx="placementAnchorXY(placement).cx"
           :cy="placementAnchorXY(placement).cy"
-          r="9" :fill="pieceColors[selectedPiece]"
-          stroke="#fff" stroke-width="2"
+          r="9" :fill="pieceColors[selectedPiece!]"
+          :stroke="placement.moveValue === 'win' ? '#2ecc71' : '#fff'" stroke-width="2"
           class="wyp-clickable" style="cursor:pointer"
           @mouseenter="hoveredPlacementIdx = pi"
           @mouseleave="hoveredPlacementIdx = null"
-          @click.stop="doPlacement(placement.moveStr)"/>
+          @click.stop="dispatchMove(placement.autoguiMove)"/>
       </g>
       <text x="720" y="1020" text-anchor="end" fill="#aaa" font-size="18"
-        class="wyp-clickable" @click="goBack()">← Back</text>
-      <!-- Show selected orientation -->
-      <g v-if="selectedOrientations[selectedOrientation!]">
-        <g v-for="(cell, ci) in selectedOrientations[selectedOrientation!]" :key="'sel' + ci">
+        class="wyp-clickable" @click="doUndo()">← Back</text>
+      <!-- Show selected orientation preview -->
+      <g v-if="selectedOrientation !== null && ALL_ORI[selectedPiece!] && ALL_ORI[selectedPiece!][selectedOrientation]">
+        <g v-for="(cell, ci) in ALL_ORI[selectedPiece!][selectedOrientation]" :key="'sel' + ci">
           <rect
             :x="320 + cell[1] * 28"
             :y="840 + cell[0] * 28"
             width="26" height="26" rx="3"
-            :fill="pieceColors[selectedPiece]"
+            :fill="pieceColors[selectedPiece!]"
             pointer-events="none"/>
         </g>
-        <!-- Anchor dot (top-left cell of piece) -->
         <circle
-          :cx="320 + oriAnchor(selectedOrientations[selectedOrientation!]).cx * 28"
-          :cy="840 + oriAnchor(selectedOrientations[selectedOrientation!]).cy * 28"
+          :cx="320 + oriAnchor(ALL_ORI[selectedPiece!][selectedOrientation]).cx * 28"
+          :cy="840 + oriAnchor(ALL_ORI[selectedPiece!][selectedOrientation]).cy * 28"
           r="4" fill="#fff" opacity="0.9" pointer-events="none"/>
       </g>
     </g>
@@ -142,7 +140,6 @@ const currentPosition = computed(() => store.getters.currentAutoguiPosition);
 const readablePosition = computed(() => store.getters.currentPosition);
 const availableMoves = computed(() => store.getters.currentAvailableMoves);
 
-// ── Piece definitions (must match backend) ──
 const PIECES: number[][][] = [
   [[0,0],[0,1],[1,1],[2,0],[2,1]],
   [[0,0],[0,1],[1,0],[1,1]],
@@ -154,6 +151,7 @@ const PIECES: number[][][] = [
   [[0,0],[0,1],[0,2],[0,3],[1,3]],
   [[0,0],[0,1],[1,1],[2,1],[2,2]],
 ];
+const PIECE_SYMS = 'ABCDEFGHI';
 
 const pieceColors = [
   '#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6',
@@ -194,30 +192,24 @@ function allOrientations(cells: number[][]): number[][][] {
 const ALL_ORI = PIECES.map(p => allOrientations(p));
 
 // ── Board geometry ──
-// 43 valid cells in row-major order
 interface BoardCell { row: number; col: number; x: number; y: number; label: string; vidx: number; }
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 const boardCells = computed<BoardCell[]>(() => {
   const cells: BoardCell[] = [];
-  // Row 0: Jan-Jun (cols 0-5)
   for (let c = 0; c < 6; c++)
     cells.push({ row:0, col:c, x: 10 + c*100, y: 10, label: MONTHS[c], vidx: cells.length });
-  // Row 1: Jul-Dec (cols 0-5)
   for (let c = 0; c < 6; c++)
     cells.push({ row:1, col:c, x: 10 + c*100, y: 110, label: MONTHS[6+c], vidx: cells.length });
-  // Rows 2-5: days 1-28 (cols 0-6)
   for (let r = 2; r < 6; r++)
     for (let c = 0; c < 7; c++)
       cells.push({ row:r, col:c, x: 10 + c*100, y: 10 + r*100, label: String((r-2)*7+c+1), vidx: cells.length });
-  // Row 6: days 29-31 (cols 2-4)
   for (let c = 2; c < 5; c++)
     cells.push({ row:6, col:c, x: 10 + c*100, y: 610, label: String(29+c-2), vidx: cells.length });
   return cells;
 });
 
-// Map (row,col) -> vidx
 const rcToVidx = computed(() => {
   const m: Record<string, number> = {};
   boardCells.value.forEach((c, i) => { m[`${c.row},${c.col}`] = i; });
@@ -234,84 +226,59 @@ function cellXY(rc: number[]): { x: number; y: number } {
   return { x: 0, y: 0 };
 }
 
-// Parse position string: "1_<43 chars>"
-const boardString = computed(() => {
-  const m = currentPosition.value.match(/^1_(.+)$/);
-  return m ? m[1] : '';
+// ── Parse position string to extract half-state ──
+// Autogui format: "1_<43 board chars>" or "1_<43 board chars>_B" or "1_<43 board chars>_B3"
+const positionParts = computed(() => {
+  const pos = currentPosition.value;
+  const parts = pos.split('_');
+  const boardStr = parts[1] || '';
+  let halfStr: string | null = null;
+  if (parts.length >= 3) {
+    const p2 = parts[2];
+    // If it's a piece bits string (9 chars of 0/1), check for part 4
+    if (p2.length === 9 && /^[01]+$/.test(p2)) {
+      halfStr = parts[3] || null;
+    } else {
+      halfStr = p2;
+    }
+  }
+  return { boardStr, halfStr };
 });
 
-function cellFill(vidx: number): string {
-  const ch = boardString.value[vidx];
-  if (ch === 'T') return '#c0392b';
-  if (ch === 'X' && vidx in cellPieceMap.value) return pieceColors[cellPieceMap.value[vidx]];
-  if (ch === 'X') return '#4a90d9';
-  if (isHoveredPlacementCell(vidx)) return pieceColors[selectedPiece.value!];
-  return '#f0e6d3';
-}
+const boardString = computed(() => positionParts.value.boardStr);
 
-function cellFillOpacity(vidx: number): number {
-  const ch = boardString.value[vidx];
-  if (ch === 'T' || ch === 'X') return 1;
-  if (isHoveredPlacementCell(vidx)) return 0.85;
-  return 1;
-}
+// Derive step, selectedPiece, selectedOrientation from position suffix
+const selectedPiece = computed<number | null>(() => {
+  const hs = positionParts.value.halfStr;
+  if (!hs) return null;
+  return PIECE_SYMS.indexOf(hs[0]);
+});
 
-function isHoveredPlacementCell(vidx: number): boolean {
-  if (step.value !== 'selectPosition') return false;
-  if (hoveredPlacementIdx.value === null || selectedPiece.value === null) return false;
-  const placement = validPlacements.value[hoveredPlacementIdx.value];
-  if (!placement) return false;
-  return placement.cells.some(([r, c]) => rcToVidx.value[`${r},${c}`] === vidx);
-}
+const selectedOrientation = computed<number | null>(() => {
+  const hs = positionParts.value.halfStr;
+  if (!hs || hs.length < 2) return null;
+  return parseInt(hs[1]);
+});
 
-function cellTextFill(vidx: number): string {
-  const ch = boardString.value[vidx];
-  if (ch === 'T' || ch === 'X') return '#fff';
-  return '#5a4a3a';
-}
+type Step = 'selectPiece' | 'selectOrientation' | 'selectPosition' | 'done';
+const step = computed<Step>(() => {
+  if (Object.keys(availableMoves.value).length === 0) return 'done';
+  if (selectedPiece.value === null) return 'selectPiece';
+  if (selectedOrientation.value === null) return 'selectOrientation';
+  return 'selectPosition';
+});
 
-// ── Multi-step interaction state ──
-// Step 1: click piece in inventory → Step 2: choose orientation → Step 3: place on board
-type Step = 'selectPiece' | 'selectOrientation' | 'selectPosition';
-const step = ref<Step>('selectPiece');
-const selectedOrientation = ref<number | null>(null);
-const selectedPiece = ref<number | null>(null);
 const hoveredPlacementIdx = ref<number | null>(null);
 
 // Track which piece covers which cell (vidx → pieceIdx)
 const cellPieceMap = ref<Record<number, number>>({});
 
-// Current canonical piece (first unused) — detected from available moves
-const currentCanonicalPiece = computed(() => {
-  const MOVE_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.~!+:;=<>";
-  for (const moveObj of Object.values(availableMoves.value) as any[]) {
-    const m = moveObj.autoguiMove.match(/^A_(.)_(\d+)$/);
-    if (m) {
-      const charIdx = MOVE_CHARS.indexOf(m[1]);
-      return Math.floor(charIdx / 8);
-    }
-  }
-  return -1;
-});
-
-const currentOrientations = computed(() => {
-  if (currentCanonicalPiece.value < 0) return [];
-  return ALL_ORI[currentCanonicalPiece.value];
-});
-
-// Orientations for the user-selected piece
-const selectedOrientations = computed(() => {
-  if (selectedPiece.value === null || selectedPiece.value < 0) return [];
-  return ALL_ORI[selectedPiece.value];
-});
-
-// Which pieces are still available (not yet placed)?
-// Readable position format: "1_<43 board chars>_<9 piece bits>"
+// Which pieces are used — from readable position
 const usedPieces = computed(() => {
   const used = new Set<number>();
   const parts = readablePosition.value.split('_');
   if (parts.length >= 3) {
-    const pieceBits = parts[2]; // e.g. "000000000"
+    const pieceBits = parts[2];
     for (let i = 0; i < 9 && i < pieceBits.length; i++) {
       if (pieceBits[i] === '1') used.add(i);
     }
@@ -319,11 +286,7 @@ const usedPieces = computed(() => {
   return used;
 });
 
-// Keep cellPieceMap in sync with the solver. doPlacement only runs for
-// manual user moves; in auto/solver mode, moves are dispatched directly,
-// so we infer the placed piece from position deltas: a used-piece bit
-// flipped 0→1 identifies the new piece, and the newly-covered X cells
-// all belong to it. Undo (1→0) clears those cells.
+// Sync cellPieceMap from position changes
 let prevBoardString = boardString.value;
 let prevUsedPieces = new Set(usedPieces.value);
 watch([boardString, usedPieces], ([newBoard, newUsed]) => {
@@ -347,124 +310,133 @@ watch([boardString, usedPieces], ([newBoard, newUsed]) => {
   prevUsedPieces = new Set(newUsed);
 });
 
-const availablePieces = computed(() => {
-  return PIECES.map((shape, i) => ({ shape, index: i }))
-    .filter((_, i) => !usedPieces.value.has(i));
-});
-
-// Parse all moves into structured data
-interface ParsedMove {
-  pieceIdx: number;
-  oriIdx: number;
-  anchorRow: number;
-  anchorCol: number;
-  moveStr: string;
-  cells: number[][]; // absolute (row,col) pairs
+function cellFill(vidx: number): string {
+  const ch = boardString.value[vidx];
+  if (ch === 'T') return '#c0392b';
+  if (ch === 'X' && vidx in cellPieceMap.value) return pieceColors[cellPieceMap.value[vidx]];
+  if (ch === 'X') return '#4a90d9';
+  if (isHoveredPlacementCell(vidx)) return pieceColors[selectedPiece.value!];
+  return '#f0e6d3';
 }
 
+function cellFillOpacity(vidx: number): number {
+  const ch = boardString.value[vidx];
+  if (ch === 'T' || ch === 'X') return 1;
+  if (isHoveredPlacementCell(vidx)) return 0.85;
+  return 1;
+}
+
+function isHoveredPlacementCell(vidx: number): boolean {
+  if (step.value !== 'selectPosition') return false;
+  if (hoveredPlacementIdx.value === null || selectedPiece.value === null) return false;
+  const placement = anchorPlacements.value[hoveredPlacementIdx.value];
+  if (!placement) return false;
+  return placement.cells.some(([r, c]: number[]) => rcToVidx.value[`${r},${c}`] === vidx);
+}
+
+function cellTextFill(vidx: number): string {
+  const ch = boardString.value[vidx];
+  if (ch === 'T' || ch === 'X') return '#fff';
+  return '#5a4a3a';
+}
+
+// ── Move parsing from availableMoves ──
 const MOVE_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.~!+:;=<>";
 
-const parsedMoves = computed<ParsedMove[]>(() => {
-  const result: ParsedMove[] = [];
+interface ParsedAnchorMove {
+  pieceIdx: number;
+  oriIdx: number;
+  cells: number[][];
+  autoguiMove: string;
+  moveValue: string;
+}
+
+function pieceValueHint(pi: number): string | null {
+  if (step.value !== 'selectPiece') return null;
+  const letter = PIECE_SYMS[pi];
+  for (const moveObj of Object.values(availableMoves.value) as any[]) {
+    if (moveObj.autoguiMove === `A_${letter}_s`) {
+      return moveObj.moveValue || null;
+    }
+  }
+  return null;
+}
+
+const orientationMoves = computed(() => {
+  if (step.value !== 'selectOrientation' || selectedPiece.value === null) return [];
+  const letter = PIECE_SYMS[selectedPiece.value];
+  const results: { oriIdx: number; autoguiMove: string; moveValue: string }[] = [];
+  for (const moveObj of Object.values(availableMoves.value) as any[]) {
+    const m = moveObj.autoguiMove.match(/^A_([A-I])(\d)_o$/);
+    if (m && m[1] === letter) {
+      results.push({
+        oriIdx: parseInt(m[2]),
+        autoguiMove: moveObj.autoguiMove,
+        moveValue: moveObj.moveValue || '',
+      });
+    }
+  }
+  return results;
+});
+
+function oriShape(oriMove: { oriIdx: number }): number[][] {
+  if (selectedPiece.value === null) return [];
+  return ALL_ORI[selectedPiece.value][oriMove.oriIdx] || [];
+}
+
+const anchorPlacements = computed<ParsedAnchorMove[]>(() => {
+  if (step.value !== 'selectPosition' || selectedPiece.value === null || selectedOrientation.value === null) return [];
+  const results: ParsedAnchorMove[] = [];
   for (const moveObj of Object.values(availableMoves.value) as any[]) {
     const m = moveObj.autoguiMove.match(/^A_(.)_(\d+)$/);
     if (!m) continue;
     const charIdx = MOVE_CHARS.indexOf(m[1]);
     const pi = Math.floor(charIdx / 8);
     const oi = charIdx % 8;
+    if (pi !== selectedPiece.value || oi !== selectedOrientation.value) continue;
     const shape = ALL_ORI[pi][oi];
     if (!shape) continue;
-    // Need to figure out anchor (row,col) from the center index
-    // center index = min vidx of covered cells
-    // We need to reverse-engineer: try all valid anchors for this piece+ori
-    // and find which one produces min_vidx = m[2]
     const targetVidx = parseInt(m[2]);
-    const targetCell = boardCells.value[targetVidx];
-    if (!targetCell) continue;
-    // Try all possible anchors
     for (let r = 0; r < 7; r++) {
+      let found = false;
       for (let c = 0; c < 7; c++) {
         const cells = shape.map(([dr,dc]: number[]) => [r+dr, c+dc]);
-        // Check all cells are valid
-        const allValid = cells.every(([cr,cc]: number[]) => {
-          const key = `${cr},${cc}`;
-          return rcToVidx.value[key] !== undefined;
-        });
+        const allValid = cells.every(([cr,cc]: number[]) => rcToVidx.value[`${cr},${cc}`] !== undefined);
         if (!allValid) continue;
         const minVidx = Math.min(...cells.map(([cr,cc]: number[]) => rcToVidx.value[`${cr},${cc}`]));
         if (minVidx === targetVidx) {
-          result.push({
-            pieceIdx: pi, oriIdx: oi,
-            anchorRow: r, anchorCol: c,
-            moveStr: moveObj.autoguiMove,
-            cells
-          });
+          results.push({ pieceIdx: pi, oriIdx: oi, cells, autoguiMove: moveObj.autoguiMove, moveValue: moveObj.moveValue || '' });
+          found = true;
           break;
         }
       }
-      if (result.length > 0 && result[result.length-1].moveStr === moveObj.autoguiMove) break;
+      if (found) break;
     }
   }
-  return result;
-});
-
-const validPlacements = computed<ParsedMove[]>(() => {
-  if (selectedPiece.value === null || selectedOrientation.value === null) return [];
-  return parsedMoves.value.filter(
-    m => m.pieceIdx === selectedPiece.value && m.oriIdx === selectedOrientation.value
-  );
+  return results;
 });
 
 const statusText = computed(() => {
-  if (Object.keys(availableMoves.value).length === 0) return '🎉 Puzzle Complete!';
+  if (step.value === 'done') return 'Puzzle Complete!';
   if (step.value === 'selectPiece')
-    return `Select a piece to place (A-I)`;
-  if (step.value === 'selectOrientation' && selectedPiece.value !== null) {
-    const pieceName = String.fromCharCode(65 + selectedPiece.value);
-    return `Piece ${pieceName} — choose orientation`;
-  }
-  if (step.value === 'selectPosition' && selectedPiece.value !== null) {
-    const pieceName = String.fromCharCode(65 + selectedPiece.value);
-    return `Place piece ${pieceName} on the board`;
-  }
+    return 'Select a piece to place (A-I)';
+  if (step.value === 'selectOrientation' && selectedPiece.value !== null)
+    return `Piece ${String.fromCharCode(65 + selectedPiece.value)} — choose orientation`;
+  if (step.value === 'selectPosition' && selectedPiece.value !== null)
+    return `Place piece ${String.fromCharCode(65 + selectedPiece.value)} on the board`;
   return '';
 });
 
-// ── Piece slot positioning ──
-
-// Top-left cell of a piece orientation (lex-smallest row, then col)
 function oriAnchor(ori: number[][]): { cx: number; cy: number } {
   let best = ori[0];
   for (const cell of ori) {
-    if (cell[0] < best[0] || (cell[0] === best[0] && cell[1] < best[1])) {
+    if (cell[0] < best[0] || (cell[0] === best[0] && cell[1] < best[1]))
       best = cell;
-    }
   }
   return { cx: best[1] + 0.5, cy: best[0] + 0.5 };
 }
 
-// Geometric center of a placement on the board → snap to nearest cell's center (in pixels)
-function placementCenter(placement: ParsedMove): { cx: number; cy: number } {
-  let avgX = 0, avgY = 0;
-  for (const cell of placement.cells) {
-    const { x, y } = cellXY(cell);
-    avgX += x + 44;
-    avgY += y + 44;
-  }
-  avgX /= placement.cells.length;
-  avgY /= placement.cells.length;
-  // Snap to nearest cell center
-  let bestCX = avgX, bestCY = avgY, bestDist = Infinity;
-  for (const cell of placement.cells) {
-    const { x, y } = cellXY(cell);
-    const cx = x + 44, cy = y + 44;
-    const d = (cx - avgX) ** 2 + (cy - avgY) ** 2;
-    if (d < bestDist) { bestDist = d; bestCX = cx; bestCY = cy; }
-  }
-  return { cx: bestCX, cy: bestCY };
-}
-
-function placementAnchorXY(placement: ParsedMove): { cx: number; cy: number } {
+function placementAnchorXY(placement: ParsedAnchorMove): { cx: number; cy: number } {
   let best = placement.cells[0];
   let bestVidx = rcToVidx.value[`${best[0]},${best[1]}`];
   for (const c of placement.cells) {
@@ -475,36 +447,14 @@ function placementAnchorXY(placement: ParsedMove): { cx: number; cy: number } {
   return { cx: x + 44, cy: y + 44 };
 }
 
-function placementBBox(placement: ParsedMove): { x: number; y: number; w: number; h: number } {
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  for (const cell of placement.cells) {
-    const { x, y } = cellXY(cell);
-    if (x < minX) minX = x;
-    if (y < minY) minY = y;
-    if (x + 88 > maxX) maxX = x + 88;
-    if (y + 88 > maxY) maxY = y + 88;
-  }
-  return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
-}
-
-function pieceSlotX(idx: number): number {
-  const count = availablePieces.value.length;
-  const slotW = 140;
-  const totalW = count * slotW;
-  const startX = (750 - totalW) / 2;
-  return startX + idx * slotW;
-}
-
-// Fit orientations inside viewBox (750) — scale down when a piece has many.
 const orientLayout = computed(() => {
-  const count = Math.max(1, selectedOrientations.value.length);
+  const count = Math.max(1, orientationMoves.value.length);
   const maxSlotW = 140;
-  const availW = 720; // viewBox width minus ~15px margin each side
+  const availW = 720;
   const slotW = Math.min(maxSlotW, availW / count);
   const scale = slotW / maxSlotW;
   return {
-    slotW,
-    scale,
+    slotW, scale,
     slotRectW: 130 * scale,
     slotRectH: 120 * scale,
     padH: 12 * scale,
@@ -517,77 +467,36 @@ const orientLayout = computed(() => {
 
 function oriSlotX(idx: number): number {
   const oL = orientLayout.value;
-  const count = selectedOrientations.value.length;
+  const count = orientationMoves.value.length;
   const totalW = count * oL.slotW;
   const startX = (750 - totalW) / 2;
   return startX + idx * oL.slotW;
 }
 
-// ── Actions ──
-function selectPiece(pi: number) {
-  if (!usedPieces.value.has(pi) && step.value === 'selectPiece') {
-    selectedPiece.value = pi;
-    step.value = 'selectOrientation';
-  }
+// ── Actions — dispatch halfmoves to the store ──
+function onPieceClick(pi: number) {
+  if (usedPieces.value.has(pi) || step.value !== 'selectPiece') return;
+  const letter = PIECE_SYMS[pi];
+  const moveStr = `A_${letter}_s`;
+  dispatchMove(moveStr);
 }
 
-function selectOrientation(oi: number) {
-  selectedOrientation.value = oi;
-  step.value = 'selectPosition';
-}
-
-function goBackToPiece() {
-  selectedPiece.value = null;
-  selectedOrientation.value = null;
-  step.value = 'selectPiece';
-}
-
-async function doPlacement(moveStr: string) {
-  const am = availableMoves.value;
-  if (!(moveStr in am)) return;
-
-  // Record which cells this piece covers
-  if (selectedPiece.value !== null && selectedOrientation.value !== null) {
-    const placement = validPlacements.value.find(p => p.moveStr === moveStr);
-    if (placement) {
-      const newMap = { ...cellPieceMap.value };
-      for (const cell of placement.cells) {
-        const key = `${cell[0]},${cell[1]}`;
-        const vidx = rcToVidx.value[key];
-        if (vidx !== undefined) {
-          newMap[vidx] = selectedPiece.value;
-        }
-      }
-      cellPieceMap.value = newMap;
-    }
-  }
-
-  await store.dispatch(actionTypes.runMove, { autoguiMove: moveStr });
-
-  // Clean up animation overlay elements that the animation system adds
-  // (they use AutoGUI images which don't match our custom piece colors)
+async function dispatchMove(autoguiMove: string) {
+  await store.dispatch(actionTypes.runMove, { autoguiMove });
   setTimeout(() => {
     const svg = document.getElementById('image-autogui');
     if (svg) {
       const anim = svg.querySelector('#animationForeground');
       if (anim) anim.remove();
-      // Also remove any stray appearing entities
       svg.querySelectorAll('.appearingEntity, .appearingPiece').forEach(el => el.remove());
     }
-  }, 600); // after animation duration (500ms + buffer)
-
-  selectedOrientation.value = null;
-  selectedPiece.value = null;
-  step.value = 'selectPiece';
+  }, 600);
   hoveredPlacementIdx.value = null;
 }
 
-function goBack() {
-  if (step.value === 'selectPosition') {
-    selectedOrientation.value = null;
-    step.value = 'selectOrientation';
-    hoveredPlacementIdx.value = null;
-  }
+function doUndo() {
+  store.dispatch(actionTypes.undoMove);
+  hoveredPlacementIdx.value = null;
 }
 </script>
 
