@@ -7,5 +7,5 @@
       <stop offset="100%" style="stop-color:#501008"/>
     </linearGradient>
   </defs>
-  <path d="M 20,5 L 100,5 L 100,100 L 5,100 L 5,20 Q 5,5 20,5 Z" fill="url(#g)"/>
+  <rect x="5" y="5" width="95" height="95" fill="url(#g)"/>
 </svg>
