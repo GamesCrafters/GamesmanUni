@@ -2,7 +2,31 @@
     <div id="app-game-variants">
         <h2>{{ gameName }}</h2>
         <h3>{{ t("gameVariantsTitle") }}</h3>
-        <div id="variants" v-if="game">
+
+        <!-- Special two-step selector for Whole Year Puzzle -->
+        <div v-if="isWholeYearPuzzle" id="wyp-selector">
+            <div v-if="!selectedMonth" class="wyp-grid">
+                <div v-for="(month, mi) in monthNames" :key="'m' + mi"
+                    class="wyp-card"
+                    @click="selectedMonth = mi + 1">
+                    <p>{{ month }}</p>
+                </div>
+            </div>
+            <div v-else>
+                <p class="wyp-back" @click="selectedMonth = null">← Back to months</p>
+                <h3>{{ monthNames[selectedMonth - 1] }}</h3>
+                <div class="wyp-grid">
+                    <router-link v-for="d in daysInSelectedMonth" :key="'d' + d"
+                        class="wyp-card wyp-day"
+                        :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: selectedMonth + '-' + d } }">
+                        <p>{{ d }}</p>
+                    </router-link>
+                </div>
+            </div>
+        </div>
+
+        <!-- Default variant selector -->
+        <div id="variants" v-else-if="game">
             <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
                 <img :src="getLogoSource(variant.id)" :alt="'Logo'" style="width: 8rem" />
                 <p>{{ variant.name }}</p>
@@ -16,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
     import { useRoute } from "vue-router";
     import { router } from "../../scripts/plugins/router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
@@ -32,6 +56,16 @@
     const game = computed(() => store.getters.game(gameId.value));
     const gameCustom = computed(() => (game.value ? game.value.allowCustomVariantCreation : false));
     const gameName = computed(() => (game.value ? game.value.name : ""));
+
+    // Whole Year Puzzle special handling
+    const isWholeYearPuzzle = computed(() => gameId.value === 'wholeyearpuzzle');
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const daysPerMonth = [31,29,31,30,31,30,31,31,30,31,30,31];
+    const selectedMonth = ref<number | null>(null);
+    const daysInSelectedMonth = computed(() => {
+        if (!selectedMonth.value) return 0;
+        return daysPerMonth[selectedMonth.value - 1];
+    });
     const gameVariants = computed(() => {
         let total = game.value.variants;
         const asArray = Object.entries(total);
@@ -118,6 +152,39 @@
                 text-decoration: underline;
             }
         }
+    }
+
+    .wyp-back {
+        cursor: pointer;
+        color: purple;
+        margin-bottom: 0.5rem;
+        &:hover { text-decoration: underline; }
+    }
+
+    .wyp-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .wyp-card {
+        border: 0.2rem solid purple;
+        border-radius: 1rem;
+        padding: 1.2rem 1.5rem;
+        min-width: 8rem;
+        text-align: center;
+        cursor: pointer;
+        font-size: 1.1rem;
+        &:hover { background: rgba(128, 0, 128, 0.15); }
+    }
+
+    .wyp-day {
+        min-width: 4rem;
+        padding: 1rem;
+        font-size: 1.3rem;
+        font-weight: bold;
     }
 </style>
 

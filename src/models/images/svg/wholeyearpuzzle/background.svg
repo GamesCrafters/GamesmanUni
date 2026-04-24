@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+  <defs>
+    <style>
+      .cell { fill: #f0e6d3; stroke: #8b7355; stroke-width: 0.03; }
+      .cell-label { font-family: Arial, sans-serif; font-size: 0.28px; fill: #5a4a3a; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+      .cell-label-month { font-size: 0.24px; }
+    </style>
+  </defs>
+  <!-- Row 0: Jan-Jun (cols 0-5) -->
+  <rect class="cell" x="0.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="0.5" y="0.5">Jan</text>
+  <rect class="cell" x="1.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="1.5" y="0.5">Feb</text>
+  <rect class="cell" x="2.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="2.5" y="0.5">Mar</text>
+  <rect class="cell" x="3.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="3.5" y="0.5">Apr</text>
+  <rect class="cell" x="4.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="4.5" y="0.5">May</text>
+  <rect class="cell" x="5.05" y="0.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="5.5" y="0.5">Jun</text>
+
+  <!-- Row 1: Jul-Dec (cols 0-5) -->
+  <rect class="cell" x="0.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="0.5" y="1.5">Jul</text>
+  <rect class="cell" x="1.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="1.5" y="1.5">Aug</text>
+  <rect class="cell" x="2.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="2.5" y="1.5">Sep</text>
+  <rect class="cell" x="3.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="3.5" y="1.5">Oct</text>
+  <rect class="cell" x="4.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="4.5" y="1.5">Nov</text>
+  <rect class="cell" x="5.05" y="1.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label cell-label-month" x="5.5" y="1.5">Dec</text>
+
+  <!-- Rows 2-5: Days 1-28 (cols 0-6) -->
+  <rect class="cell" x="0.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="0.5" y="2.5">1</text>
+  <rect class="cell" x="1.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="1.5" y="2.5">2</text>
+  <rect class="cell" x="2.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="2.5" y="2.5">3</text>
+  <rect class="cell" x="3.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="3.5" y="2.5">4</text>
+  <rect class="cell" x="4.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="4.5" y="2.5">5</text>
+  <rect class="cell" x="5.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="5.5" y="2.5">6</text>
+  <rect class="cell" x="6.05" y="2.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="6.5" y="2.5">7</text>
+
+  <rect class="cell" x="0.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="0.5" y="3.5">8</text>
+  <rect class="cell" x="1.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="1.5" y="3.5">9</text>
+  <rect class="cell" x="2.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="2.5" y="3.5">10</text>
+  <rect class="cell" x="3.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="3.5" y="3.5">11</text>
+  <rect class="cell" x="4.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="4.5" y="3.5">12</text>
+  <rect class="cell" x="5.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="5.5" y="3.5">13</text>
+  <rect class="cell" x="6.05" y="3.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="6.5" y="3.5">14</text>
+
+  <rect class="cell" x="0.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="0.5" y="4.5">15</text>
+  <rect class="cell" x="1.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="1.5" y="4.5">16</text>
+  <rect class="cell" x="2.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="2.5" y="4.5">17</text>
+  <rect class="cell" x="3.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="3.5" y="4.5">18</text>
+  <rect class="cell" x="4.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="4.5" y="4.5">19</text>
+  <rect class="cell" x="5.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="5.5" y="4.5">20</text>
+  <rect class="cell" x="6.05" y="4.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="6.5" y="4.5">21</text>
+
+  <rect class="cell" x="0.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="0.5" y="5.5">22</text>
+  <rect class="cell" x="1.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="1.5" y="5.5">23</text>
+  <rect class="cell" x="2.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="2.5" y="5.5">24</text>
+  <rect class="cell" x="3.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="3.5" y="5.5">25</text>
+  <rect class="cell" x="4.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="4.5" y="5.5">26</text>
+  <rect class="cell" x="5.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="5.5" y="5.5">27</text>
+  <rect class="cell" x="6.05" y="5.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="6.5" y="5.5">28</text>
+
+  <!-- Row 6: Days 29-31 (cols 2-4) -->
+  <rect class="cell" x="2.05" y="6.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="2.5" y="6.5">29</text>
+  <rect class="cell" x="3.05" y="6.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="3.5" y="6.5">30</text>
+  <rect class="cell" x="4.05" y="6.05" width="0.9" height="0.9" rx="0.08"/>
+  <text class="cell-label" x="4.5" y="6.5">31</text>
+</svg>

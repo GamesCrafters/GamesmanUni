@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.15 -0.15 7.3 7.3">
+  <style>
+    .bg   { fill: #2c1810; }
+    .cell { fill: #f0e6d3; stroke: #5a4a3a; stroke-width: 0.025; }
+    .hi   { fill: #c0392b; }
+    .lbl  { font-family: Arial, sans-serif; font-weight: bold; font-size: 0.36px;
+            fill: #5a4a3a; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+    .lbl-m{ font-size: 0.3px; }
+    .lbl-w{ fill: #fff; }
+    .pc   { stroke: #1a0e08; stroke-width: 0.04; }
+  </style>
+
+  <rect class="bg" x="-0.15" y="-0.15" width="7.3" height="7.3" rx="0.15"/>
+
+  <!-- Row 0: Jan-Jun (Apr is target) -->
+  <rect class="cell" x="0.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="0.5" y="0.5">Jan</text>
+  <rect class="cell" x="1.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="1.5" y="0.5">Feb</text>
+  <rect class="cell" x="2.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="2.5" y="0.5">Mar</text>
+  <rect class="cell hi" x="3.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m lbl-w" x="3.5" y="0.5">Apr</text>
+  <rect class="cell" x="4.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="4.5" y="0.5">May</text>
+  <rect class="cell" x="5.05" y="0.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="5.5" y="0.5">Jun</text>
+
+  <!-- Row 1: Jul-Dec -->
+  <rect class="cell" x="0.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="0.5" y="1.5">Jul</text>
+  <rect class="cell" x="1.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="1.5" y="1.5">Aug</text>
+  <rect class="cell" x="2.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="2.5" y="1.5">Sep</text>
+  <rect class="cell" x="3.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="3.5" y="1.5">Oct</text>
+  <rect class="cell" x="4.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="4.5" y="1.5">Nov</text>
+  <rect class="cell" x="5.05" y="1.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-m" x="5.5" y="1.5">Dec</text>
+
+  <!-- Rows 2-5: Days 1-28 -->
+  <rect class="cell" x="0.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="0.5" y="2.5">1</text>
+  <rect class="cell" x="1.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="1.5" y="2.5">2</text>
+  <rect class="cell" x="2.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="2.5" y="2.5">3</text>
+  <rect class="cell" x="3.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="3.5" y="2.5">4</text>
+  <rect class="cell" x="4.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="4.5" y="2.5">5</text>
+  <rect class="cell" x="5.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="5.5" y="2.5">6</text>
+  <rect class="cell" x="6.05" y="2.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="6.5" y="2.5">7</text>
+
+  <rect class="cell" x="0.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="0.5" y="3.5">8</text>
+  <rect class="cell" x="1.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="1.5" y="3.5">9</text>
+  <rect class="cell" x="2.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="2.5" y="3.5">10</text>
+  <rect class="cell" x="3.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="3.5" y="3.5">11</text>
+  <rect class="cell" x="4.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="4.5" y="3.5">12</text>
+  <rect class="cell" x="5.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="5.5" y="3.5">13</text>
+  <rect class="cell" x="6.05" y="3.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="6.5" y="3.5">14</text>
+
+  <rect class="cell" x="0.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="0.5" y="4.5">15</text>
+  <rect class="cell" x="1.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="1.5" y="4.5">16</text>
+  <rect class="cell" x="2.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="2.5" y="4.5">17</text>
+  <rect class="cell" x="3.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="3.5" y="4.5">18</text>
+  <rect class="cell" x="4.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="4.5" y="4.5">19</text>
+  <rect class="cell" x="5.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="5.5" y="4.5">20</text>
+  <rect class="cell" x="6.05" y="4.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="6.5" y="4.5">21</text>
+
+  <rect class="cell" x="0.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="0.5" y="5.5">22</text>
+  <rect class="cell" x="1.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="1.5" y="5.5">23</text>
+  <rect class="cell hi" x="2.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl lbl-w" x="2.5" y="5.5">24</text>
+  <rect class="cell" x="3.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="3.5" y="5.5">25</text>
+  <rect class="cell" x="4.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="4.5" y="5.5">26</text>
+  <rect class="cell" x="5.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="5.5" y="5.5">27</text>
+  <rect class="cell" x="6.05" y="5.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="6.5" y="5.5">28</text>
+
+  <!-- Row 6: Days 29-31 -->
+  <rect class="cell" x="2.05" y="6.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="2.5" y="6.5">29</text>
+  <rect class="cell" x="3.05" y="6.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="3.5" y="6.5">30</text>
+  <rect class="cell" x="4.05" y="6.05" width="0.9" height="0.9" rx="0.08"/><text class="lbl" x="4.5" y="6.5">31</text>
+
+  <!-- Piece A (red #e74c3c): Jan/Feb/Jul/day1/day2 -->
+  <rect class="pc" fill="#e74c3c" x="0.1" y="0.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#e74c3c" x="1.1" y="0.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#e74c3c" x="0.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#e74c3c" x="0.1" y="2.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#e74c3c" x="1.1" y="2.1" width="0.8" height="0.8" rx="0.08"/>
+
+  <!-- Piece B (blue #3498db, 2x2): May/Jun/Nov/Dec -->
+  <rect class="pc" fill="#3498db" x="4.1" y="0.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#3498db" x="5.1" y="0.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#3498db" x="4.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#3498db" x="5.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+
+  <!-- Piece C (green #2ecc71, plus): Mar/Aug/Sep/Oct/day3 -->
+  <rect class="pc" fill="#2ecc71" x="2.1" y="0.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#2ecc71" x="1.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#2ecc71" x="2.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#2ecc71" x="3.1" y="1.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#2ecc71" x="2.1" y="2.1" width="0.8" height="0.8" rx="0.08"/>
+
+  <!-- Piece D (orange #f39c12, S): day16/day17/day22/day23 -->
+  <rect class="pc" fill="#f39c12" x="1.1" y="4.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#f39c12" x="2.1" y="4.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#f39c12" x="0.1" y="5.1" width="0.8" height="0.8" rx="0.08"/>
+  <rect class="pc" fill="#f39c12" x="1.1" y="5.1" width="0.8" height="0.8" rx="0.08"/>
+</svg>

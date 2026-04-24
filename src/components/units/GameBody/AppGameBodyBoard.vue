@@ -12,6 +12,7 @@
     import CustomGUITicTacToe from "./CustomGUITicTacToe.vue";
     import CustomGUIQuarto from "./CustomGUIQuarto.vue";
     import CustomGUISim from "./CustomGUISim.vue";
+    import CustomGUIWholeYearPuzzle from "./CustomGUIWholeYearPuzzle.vue";
     import { Rounds } from "../../../scripts/gamesmanUni/types";
     import { deepcopy } from "../../../scripts/gamesmanUni/index";
     import * as GMUTypes from "../../../scripts/gamesmanUni/types";
@@ -23,7 +24,8 @@
     const customGUIs: Record<string, any> = {
         "tictactoe": CustomGUITicTacToe,
         "quarto": CustomGUIQuarto,
-        "sim": CustomGUISim
+        "sim": CustomGUISim,
+        "wholeyearpuzzle": CustomGUIWholeYearPuzzle
     };
     const customGameBoardExists = computed(() => gameId.value in customGUIs);
 
