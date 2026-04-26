@@ -43,17 +43,35 @@
         flex-direction: column;
         flex-wrap: nowrap;
         justify-content: flex-start;
+        min-height: 100%;
         #app-game-menu-content {
-            border-radius: 1rem;
-            border: 0.1rem solid var(--neutralColor);
-            padding: 4rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            border: 1px solid var(--gu-border);
+            padding: 1rem;
+            #app-game-menu-content-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 1rem;
+                flex-shrink: 0;
+                justify-content: center;
+            }
+            #app-game-menu-content-active {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
             .buttons {
-                margin-right: 1rem;
-                margin-left: 1rem;
-                margin-bottom: 2rem;
-                padding: 0 0.5rem;
-                border-radius: 10rem;
-                border: 0.1rem solid var(--neutralColor);
+                padding: 5px 12px;
+                border-radius: 6px;
+                border: 1px solid var(--gu-border);
+                font-size: 13px;
+                color: var(--gu-brand);
+                background: var(--gu-surface-alt);
+                &:hover { background: var(--gu-surface-hover); transform: none; }
             }
         }
     }

@@ -39,7 +39,7 @@
     #app-game-vvh {
         align-content: normal;
         align-items: stretch;
-        flex: 3 1 auto;
+        flex: 1;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;

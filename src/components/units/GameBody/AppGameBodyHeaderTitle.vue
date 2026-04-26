@@ -1,6 +1,7 @@
 <template>
     <div id="app-game-body-header-title">
-        <h2>{{ gameName }} ({{ variantName }})</h2>
+        <span class="title-name">{{ gameName }}</span>
+        <span class="title-variant">({{ variantName }})</span>
     </div>
 </template>
 
@@ -17,11 +18,27 @@
 
 <style lang="scss" scoped>
     #app-game-body-header-title {
-        align-content: center;
-        align-items: center;
         display: flex;
         flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
+        align-items: flex-start;
+        gap: 1px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .title-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--gu-brand);
+        white-space: nowrap;
+    }
+
+    .title-variant {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--gu-text-muted);
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 </style>

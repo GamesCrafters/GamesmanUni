@@ -8,20 +8,17 @@
         <!-- Move hints are on and game is ongoing... -->
         <template v-else-if="!isEndOfMatch">
             <template v-if="isPuzzleGame">
-                <!-- Puzzles: <Player> will not be able to solve the puzzle. -->
                 <p v-if="currentPositionValue === 'lose'">
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> will 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> will
                     <mark :class="`uni-lose`">not be able to solve</mark> the puzzle.
                 </p>
-                <!-- Puzzles: <Player> should solve the puzzle in <remoteness> moves. -->
                 <p v-else>
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> {{ currentPlayerIsComputer ? "will" : "should" }} 
-                    <mark :class="`uni-win`">solve</mark> the puzzle in {{ currentRemoteness }} 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> {{ currentPlayerIsComputer ? "will" : "should" }}
+                    <mark :class="`uni-win`">solve</mark> the puzzle in {{ currentRemoteness }}
                     move{{ currentRemoteness == 1 ? "" : "s"}}.
                 </p>
             </template>
             <template v-else>
-                <!-- Games (if current position is a draw): <Player1> and <Player2> are in a draw. -->
                 <p v-if="currentPositionValue === 'draw'">
                     <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> should <mark :class="`uni-${currentPositionValue}`">draw</mark> <b :class="`uni-turn-${currentOppTurn}`">{{ currentOpponentName }}</b>.
                     <span v-if="currentDrawLevel != -1">
@@ -30,49 +27,43 @@
                     <span v-if="currentDrawRemoteness == 0"> is at the draw level {{ currentDrawLevel }} fringe.</span>
                     <span v-else> can be forced to the draw level {{ currentDrawLevel }} fringe in {{ currentDrawRemoteness }} move{{ currentDrawRemoteness == 1 ? "" : "s"}}.</span></span>
                 </p>
-                <!-- Games (if current position is unsolved): <Player>'s turn.  -->
                 <p v-else-if="currentPositionValue === 'unsolved'">
                     <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b>'s turn.
                 </p>
-                <!-- Games: <Player> should <win/lose/tie> the game in <remoteness> moves -->
                 <p v-else>
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> {{ currentPlayerIsComputer ? "will" : "should" }}
-                    <mark :class="`uni-${currentPositionValue}`">{{ currentPositionValue }}</mark> 
-                    the game<span v-if="currentRemoteness != Remoteness.FINITE_UNKNOWN"> in {{ currentRemoteness }} 
-                    move{{ currentRemoteness == 1 ? "" : "s" }}{{ winbyStr }}</span>. {{ mexStr }}
+                    <mark :class="`uni-${currentPositionValue} value-badge`">
+                        {{ currentPositionValue === 'tie' ? 'Tie' : (currentPositionValue === 'win' ? 'Win' : 'Lose') }}
+                        <span v-if="currentRemoteness != Remoteness.FINITE_UNKNOWN"> in {{ currentRemoteness }} move{{ currentRemoteness == 1 ? "" : "s" }}{{ winbyStr }}</span>
+                    </mark>
+                    <span class="mex-str" v-if="mexStr">{{ mexStr }}</span>
                 </p>
             </template>
         </template>
 
-        <!-- Game Over (Game-over message is shown even if move hints are turned off.) -->
+        <!-- Game Over -->
         <template v-else>
             <template v-if="isPuzzleGame">
-                <!-- Puzzles: <Player> was unable to solve the puzzle. -->
                 <p v-if="currentPositionValue === 'lose'">
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> was 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> was
                     <mark :class="`uni-lose`">unable to solve</mark> the puzzle.
                 </p>
-                <!-- Puzzles: <Player> has solved the puzzle. -->
                 <p v-else>
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has
                     <mark :class="`uni-win`">solved</mark> the puzzle.
                 </p>
             </template>
             <template v-else>
-                <!-- Games: <Player> has won the game. -->
                 <p v-if="currentPositionValue === 'win'">
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has
                     <mark :class="`uni-${currentPositionValue}`">won</mark> the game{{ winbyStr }}. {{ mexStr }}
                 </p>
-                <!-- Games: <Player1> and <Player2> have tied the game. -->
                 <p v-else-if="currentPositionValue === 'tie'">
-                    <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and 
-                    <b class="uni-turn-2">{{ currentRightPlayerName }}</b> have 
+                    <b class="uni-turn-1">{{ currentLeftPlayerName }}</b> and
+                    <b class="uni-turn-2">{{ currentRightPlayerName }}</b> have
                     <mark :class="`uni-${currentPositionValue}`">tied</mark> the game.
                 </p>
-                <!-- Games: <Player> has lost the game. -->
                 <p v-else>
-                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has 
+                    <b :class="`uni-turn-${currentTurn}`">{{ currentPlayerName }}</b> has
                     <mark :class="`uni-${currentPositionValue}`">lost</mark> the game{{ winbyStr }}. {{ mexStr }}
                 </p>
             </template>
@@ -111,15 +102,35 @@
 
 <style lang="scss" scoped>
     #app-game-body-statistics-message {
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
         > p {
-            padding: 1rem;
-            text-align: center;
+            font-size: 13px;
+            color: var(--gu-text-body);
+            text-align: right;
+
             mark {
-                border-radius: 1rem;
-                padding: 0.25rem 0.5rem;
+                border-radius: 6px;
+                padding: 2px 8px;
+                font-size: 12px;
+                font-weight: 500;
             }
-        }        
+
+            .value-badge {
+                display: inline-block;
+                border-radius: 6px;
+                padding: 3px 10px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+        }
+
+        .mex-str {
+            font-size: 11px;
+            color: var(--gu-text-muted);
+            margin-left: 6px;
+        }
     }
 </style>
