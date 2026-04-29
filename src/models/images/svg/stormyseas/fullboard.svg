@@ -1,0 +1,16 @@
+<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- Board shapes -->
+  <g stroke="#000">
+    <!-- water backdrop -->
+    <rect x="0" y="0" width="220" height="160" fill="#0bc1b2" stroke-width="0"/>
+    <!-- board yellow background -->
+    <rect x="0" y="0" width="220" height="20" fill="#fbf600" stroke-width="0"/>
+    <rect x="0" y="0" width="40" height="220" fill="#fbf600" stroke-width="0"/>
+    <rect x="180" y="0" width="40" height="220" fill="#fbf600" stroke-width="0"/>
+    <rect x="0" y="120" width="100" height="40" fill="#fbf600" stroke-width="0"/>
+    <rect x="120" y="120" width="80" height="40" fill="#fbf600" stroke-width="0"/>
+    <!-- adding landing port -->
+    <polygon points="100,140 110,160 100,160" fill="#fbf600" stroke-width="0" />
+    <polygon points="120,140 110,160 120,160" fill="#fbf600" stroke-width="0" />
+  </g>
+</svg>

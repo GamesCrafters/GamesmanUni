@@ -1,0 +1,11 @@
+<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <!-- Board shapes -->
+  <g stroke="#000">
+      <path d="M2,10 L4,6 L6,14 L8,5 L10,13 L12,7 L14,12 L16,8 L18,11" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  </g>
+</svg>
