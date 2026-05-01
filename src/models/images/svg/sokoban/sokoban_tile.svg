@@ -8,6 +8,5 @@
       }
     </style>
   </defs>
-  <rect class="st0" x=".12" y=".12" width="79.75" height="79.75"/>
-  <path class="st0" d="M79.75.25v79.5H.25V.25h79.5M80,0H0v80h80V0h0Z"/>
+  <rect class="st0" width="80" height="80"/>
 </svg>
