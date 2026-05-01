@@ -12,7 +12,7 @@
                 <!-- Motivation -->
                 <div class="about-card">
                     <div class="about-card-title">Motivation</div>
-                    <p>Games have been played for millennia — wall paintings over 5,000 years old have been found in Egypt. People are playing the same games now as they were back then, but only now are we able to <strong>strongly solve</strong> them.</p>
+                    <p>Games have been played for millennia. Wall paintings over 5,000 years old have been found in Egypt. People are playing the same games now as they were back then, but only now are we able to <strong>strongly solve</strong> them.</p>
                     <p>GamesCrafters was formed to explore the fertile area of combinatorial and computational game theory.</p>
                 </div>
 
@@ -43,7 +43,7 @@
                 <!-- How We Do It -->
                 <div class="about-card">
                     <div class="about-card-title">How We Do It</div>
-                    <p>The value of a game is determined by a <strong>brute-force exhaustive search</strong> of the game tree. The value of a particular board configuration, or <strong>position</strong>, is based on the values of its children — the positions that are one legal move away.</p>
+                    <p>The value of a game is determined by a <strong>brute-force exhaustive search</strong> of the game tree. The value of a particular board configuration, or <strong>position</strong>, is based on the values of its children. The positions that are one legal move away.</p>
                     <p>A position has a value of either <strong>Win</strong>, <strong>Lose</strong>, or <strong>Tie</strong>. Moves are also labeled with one of these three values.</p>
                 </div>
             </div>

@@ -4,8 +4,8 @@
         <div class="hero-bp-area">
             <div class="hero-left">
                 <div class="hero-eyebrow">UC Berkeley · GamesCrafters · Est. 2001</div>
-                <h1 class="hero-title">Play and analyze<br>perfectly solved games</h1>
-                <p class="hero-sub">Finite, two-player, perfect-information games — computed and made playable by Berkeley undergraduates. Every position evaluated, every optimal move known.</p>
+                <h1 class="hero-title">Play and analyze<br>perfectly solved games and puzzles</h1>
+                <p class="hero-sub">Finite, two-player, perfect-information games and puzzles. Computed and made playable by Berkeley students. Every position evaluated, every optimal move known.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <div class="hero-stat-num">{{ gameCount }}+</div>
@@ -93,7 +93,7 @@
             <div class="home-card">
                 <div class="hc-icon hc-blue">&#9651;</div>
                 <h4>Strong solutions</h4>
-                <p>Every game is solved in the strict sense: optimal play is computed from every legal board position, not just common ones.</p>
+                <p>In a strict sense, optimal play is computed from every legal board position, not just common ones.</p>
             </div>
             <div class="home-card">
                 <div class="hc-icon hc-gold">&#9632;</div>

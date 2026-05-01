@@ -184,7 +184,7 @@
                     </div>
                     <select class="sort-select" v-model="sortOrder">
                         <option value="az">A to Z</option>
-                        <option value="newest">Newest First</option>
+                        <option value="za">Z to A</option>
                     </select>
                 </div>
 
@@ -228,7 +228,7 @@
                 </template>
 
                 <!-- Puzzles section -->
-                <template v-if="filteredPuzzles.length > 0">
+                <template v-if="filteredPuzzles.length > 0 && activeTypeTab !== 'games'">
                     <div class="section-label" :class="{ 'section-label-gap': filteredGames.length > 0 }">Puzzles</div>
                     <div class="games-grid">
                         <router-link
@@ -296,7 +296,7 @@
     const showGlossary = ref(false);
     const sidebarCollapsed = ref(false);
     const activeTypeTab = ref("all");
-    const sortOrder = ref<"az" | "newest">("az");
+    const sortOrder = ref<"az" | "za">("az");
     const selectedGuiFilters = ref<string[]>([]);
     const selectedStyleFilters = ref<string[]>([]);
     const selectedSolveFilters = ref<string[]>([]);
@@ -368,7 +368,7 @@
     const allGames = computed<Game[]>(() => Object.values(store.getters.games));
 
     const applySortOrder = (games: ReturnType<typeof enrich>[]) => {
-        if (sortOrder.value === "newest") {
+        if (sortOrder.value === "za") {
             // Newest First = descending alphabetical as proxy (no date field exists)
             return [...games].sort((a, b) => b.name.localeCompare(a.name));
         }
