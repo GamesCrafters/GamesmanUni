@@ -100,27 +100,9 @@
       </text>
 
       <!-- Draw M-type (arrow) move buttons on top of entities -->
-      <template v-if="!entitiesOverArrows">
-        <!-- clipPath defs: punch a circle at each arrow's source so the source entity renders above the arrow -->
-        <defs v-if="arrowClipSource">
-          <clipPath v-for="(arrow, i) in autoguiPositionData.arrows" :key="'acp' + i" :id="'arrow-clip-' + i">
-            <path fill-rule="evenodd"
-              :d="'M -9999 -9999 L 9999 -9999 L 9999 9999 L -9999 9999 Z ' +
-                  (autoguiPositionData.board[arrow.from] !== '-' && autoguiPositionData.board[arrow.from] in charImages
-                    ? 'M ' + centers[arrow.from][0] + ' ' + centers[arrow.from][1] +
-                      ' m -' + (0.5 * charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) + ' 0' +
-                      ' a ' + (0.5 * charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) + ' ' +
-                              (0.5 * charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) +
-                      ' 0 1 0 ' + (charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) + ' 0' +
-                      ' a ' + (0.5 * charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) + ' ' +
-                              (0.5 * charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) +
-                      ' 0 1 0 -' + (charImages[autoguiPositionData.board[arrow.from]].scale * widthFactor) + ' 0 Z'
-                    : '')"/>
-          </clipPath>
-        </defs>
-        <path v-for="(arrow, i) in autoguiPositionData.arrows" :key="arrow.move.str"
+      <template v-if="!entitiesOverArrows"> 
+        <path v-for="arrow in autoguiPositionData.arrows " :key="arrow.move.str"
           :d="formatArrowPathPoints(arrow, arrowWidth)"
-          :clip-path="arrowClipSource ? 'url(#arrow-clip-' + i + ')' : undefined"
           :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (options.highlightMove && highlightedMove === arrow.move.str) ? 'highlighted' : '']"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
           @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })"
@@ -309,7 +291,6 @@
   const lineWidth = computed(() => theme.value.lineWidth || 0.04);
   const defaultMoveTokenRadius = computed(() => (theme.value.circleButtonRadius * widthFactor.value) || 2);
   const entitiesOverArrows = computed(() => theme.value.entitiesOverArrows || false);
-  const arrowClipSource = computed(() => theme.value.arrowClipSource || false);
   const textEntityFontSize = computed(() => theme.value.textEntityFontSize * widthFactor.value || 10);
   const textButtonFontSize = computed(() => theme.value.textButtonFontSize * widthFactor.value || 10);
 
