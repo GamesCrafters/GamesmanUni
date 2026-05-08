@@ -1,0 +1,23 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 5 22 18" width="20.019px" height="15.876px">
+
+  <defs>
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1" stdDeviation="0.8" flood-color="#000000" flood-opacity="0.35"></feDropShadow>
+    </filter>
+  </defs>
+
+  <g filter="url(#dropShadow)">
+    <path fill="#A0A0A0" stroke="#000000" stroke-width="1" d="M 6 6.107 L 10 6.107 L 10 7.964 L 12 7.964 L 12 8.893 L 20 8.893 L 20 7.964 L 22 7.964 L 22 6.107 L 26 6.107 L 26 21.893 L 22 21.893 L 22 20.964 L 10 20.964 L 10 21.893 L 6 21.893 L 6 6.107 Z M 12.615 18.893 L 19.385 18.893 L 19.385 10.857 L 12.615 10.857 L 12.615 18.893 Z"></path>
+
+    <rect x="7" y="7" width="2" height="2" fill="#FF0"></rect>
+    <rect x="7" y="11" width="2" height="2" fill="#FF0"></rect>
+    <rect x="7" y="15" width="2" height="2" fill="#FF0"></rect>
+    <rect x="7" y="19" width="2" height="2" fill="#FF0"></rect>
+
+    <rect x="23" y="7" width="2" height="2" fill="#FF0"></rect>
+    <rect x="23" y="11" width="2" height="2" fill="#FF0"></rect>
+    <rect x="23" y="15" width="2" height="2" fill="#FF0"></rect>
+    <rect x="23" y="19" width="2" height="2" fill="#FF0"></rect>
+  </g>
+</svg>
