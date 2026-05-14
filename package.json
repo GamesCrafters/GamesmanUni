@@ -48,9 +48,5 @@
         "preview:https": "serve dist",
         "reinstall": "rm -rf node_modules; yarn; vue-tsc --noEmit"
     },
-<<<<<<< HEAD
-    "version": "5.0.27"
-=======
     "version": "5.0.30"
->>>>>>> 58c9f02649bd689e76d076b01a1e9940cff50a09
 }
