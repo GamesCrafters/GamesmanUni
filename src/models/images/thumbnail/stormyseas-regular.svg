@@ -1,0 +1,174 @@
+
+<svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- Board shapes -->
+  <g stroke="#000">
+    <!-- water backdrop -->
+    <rect x="0" y="0" width="220" height="160" fill="#0bc1b2" stroke-width="0"/>
+    <!-- board yellow background -->
+    <rect x="0" y="0" width="220" height="20" fill="#fbf600" stroke-width="0"/>
+    <rect x="0" y="0" width="40" height="220" fill="#fbf600" stroke-width="0"/>
+    <rect x="180" y="0" width="40" height="220" fill="#fbf600" stroke-width="0"/>
+    <rect x="0" y="120" width="100" height="40" fill="#fbf600" stroke-width="0"/>
+    <rect x="120" y="120" width="80" height="40" fill="#fbf600" stroke-width="0"/>
+    <!-- adding landing port -->
+    <polygon points="100,140 110,160 100,160" fill="#fbf600" stroke-width="0" />
+    <polygon points="120,140 110,160 120,160" fill="#fbf600" stroke-width="0" />
+  </g>
+
+  <!--row 1 -->
+<path d="M62,30 L64,26 L66,34 L68,25 L70,33 L72,27 L74,32 L76,28 L78,31" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M102,30 L104,26 L106,34 L108,25 L110,33 L112,27 L114,32 L116,28 L118,31" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M122,30 L124,26 L126,34 L128,25 L130,33 L132,27 L134,32 L136,28 L138,31" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M142,30 L144,26 L146,34 L148,25 L150,33 L152,27 L154,32 L156,28 L158,31" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+    <!--row 2 -->
+
+<path d="M62,50 L64,46 L66,54 L68,45 L70,53 L72,47 L74,52 L76,48 L78,51" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M102,50 L104,46 L106,54 L108,45 L110,53 L112,47 L114,52 L116,48 L118,51" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M142,50 L144,46 L146,54 L148,45 L150,53 L152,47 L154,52 L156,48 L158,51" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+    <!--row 3 -->
+
+
+  <path d="M82,70 L84,66 L86,74 L88,65 L90,73 L92,67 L94,72 L96,68 L98,71" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M102,70 L104,66 L106,74 L108,65 L110,73 L112,67 L114,72 L116,68 L118,71" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M142,70 L144,66 L146,74 L148,65 L150,73 L152,67 L154,72 L156,68 L158,71" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M62,70 L64,66 L66,74 L68,65 L70,73 L72,67 L74,72 L76,68 L78,71" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+    <!--row 4 -->
+
+
+  <path d="M82,90 L84,86 L86,94 L88,85 L90,93 L92,87 L94,92 L96,88 L98,91" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M102,90 L104,86 L106,94 L108,85 L110,93 L112,87 L114,92 L116,88 L118,91" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M142,90 L144,86 L146,94 L148,85 L150,93 L152,87 L154,92 L156,88 L158,91" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M162,90 L164,86 L166,94 L168,85 L170,93 L172,87 L174,92 L176,88 L178,91" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+    <!--row 5 -->
+
+
+  <path d="M62,110 L64,106 L66,114 L68,105 L70,113 L72,107 L74,112 L76,108 L78,111" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M102,110 L104,106 L106,114 L108,105 L110,113 L112,107 L114,112 L116,108 L118,111" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M82,110 L84,106 L86,114 L88,105 L90,113 L92,107 L94,112 L96,108 L98,111" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+<path d="M142,110 L144,106 L146,114 L148,105 L150,113 L152,107 L154,112 L156,108 L158,111" 
+        stroke="#089c8f" 
+        stroke-width="2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  <!--blue boat -->
+
+  <rect x="80" y="20" width="20" height="20" fill="blue" stroke-width="0" />
+
+<polygon points="80,40 100,40 90,60" fill="blue" stroke-width="0" />
+
+    <!--red boat -->
+
+  <rect x="120" y="40" width="20" height="20" fill="red" stroke-width="0" />
+
+<polygon points="120,60 140,60 130,80" fill="red" stroke-width="0" />
+
+</svg>
