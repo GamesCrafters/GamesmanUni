@@ -229,6 +229,7 @@
     const currentLeftPlayerName = computed(() => (currentLeftPlayer ? currentLeftPlayer.value.name : ""));
     const currentRightPlayerName = computed(() => (currentRightPlayer ? currentRightPlayer.value.name : ""));
     const currentGameId = computed(() => store.getters.currentGameId); 
+    const currentVariantId = computed(() => store.getters.currentVariantId);
 
     const updatedLeftPlayer = ref({ name: "", isComputer: false });
     const updatedRightPlayer = ref({ name: "", isComputer: false });
@@ -283,7 +284,7 @@
 
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
-        store.getters.supportsWinBy(currentGameId.value)
+        store.getters.supportsWinBy(currentGameId.value, currentVariantId.value)
     );
 
     const currentCPUsStrategies = computed(() =>
