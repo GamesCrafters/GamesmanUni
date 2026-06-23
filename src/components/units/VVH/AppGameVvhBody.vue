@@ -54,14 +54,14 @@
     
     const store = useStore();
     const currentGameId = computed(() => store.getters.currentGameId);
-
+    const currentVariantId = computed(() => store.getters.currentVariantId);
     const activeVVHViews = computed(() => store.getters.currentActiveVVHViews);
 
     const isPuzzleGame = computed(() => store.getters.currentGameType === "puzzles");
 
     // Stores true or false, whether the current game supports the Win By view or it does not.
     const supportsWinBy = computed(() =>
-        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
+        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value, currentVariantId.value) : false
     );
     
     /** 

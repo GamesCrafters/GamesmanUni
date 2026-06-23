@@ -24,16 +24,17 @@ export type Game = {
     variants: Array<{
         id: string;
         name: string;
+        supportsWinBy: boolean;
         gui: string;
     }>;
     allowCustomVariantCreation: boolean;
-    supportsWinBy: boolean;
     instructions: string;
 };
 
 export type Variant = {
     id: string;
     name: string;
+    supportsWinBy: boolean;
     startPosition: string;
     autoguiStartPosition: string;
     imageAutoGUIData: ImageAutoGUIData;

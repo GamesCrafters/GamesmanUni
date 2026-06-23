@@ -46,11 +46,11 @@ export const loadGame = async (app: Types.App, payload: { gameId: string; force?
     app.games[payload.gameId].instructions = {};
     app.games[payload.gameId].allowCustomVariantCreation = game.allowCustomVariantCreation;
     app.games[payload.gameId].variants = {};
-    app.games[payload.gameId].supportsWinBy = game.supportsWinBy;
     for (const variant of game.variants) {
         app.games[payload.gameId].variants[variant.id] = {
             id: variant.id,
             name: variant.name,
+            supportsWinBy: variant.supportsWinBy,
             gui: variant.gui,
             startPosition: '',
             autoguiStartPosition: '',
@@ -68,11 +68,12 @@ const loadVariant = async (app: Types.App, payload: { gameId: string; variantId:
     return {
         id: variant.id,
         name: variant.name,
+        supportsWinBy: variant.supportsWinBy,
         gui: variant.gui,
         startPosition: variant.startPosition,
         autoguiStartPosition: variant.autoguiStartPosition,
         imageAutoGUIData: variant.imageAutoGUIData,
-        positions: {},
+        positions: {}
     };
 };
 
@@ -121,11 +122,11 @@ export const initiateMatch = async (app: Types.App, payload: {
     if (!updatedApp) return undefined;
 
     // Removes non-legal VVH views from the active VVH views.
-    if (!game.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {togglePreferences: false, toggleScrolling: false, toggleGuides: true }});
+    if (!variant.supportsWinBy && app.activeVVHViews.some(VVHView => VVHView.name === "Win By")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Win By"), 1).push({name: "", viewOptions: {togglePreferences: false, toggleScrolling: false, toggleGuides: true }});
     if (game.type === "onePlayer" && app.activeVVHViews.some(VVHView => VVHView.name === "Draw Level")) app.activeVVHViews.splice(app.activeVVHViews.findIndex(VVHView => VVHView.name === "Draw Level"), 1).push({name: "", viewOptions: {togglePreferences: false, toggleScrolling: false, toggleGuides: true }});
     
     // Replaces non-legal CPUs Strategies from the active CPUs Strategies.
-    if (!game.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
+    if (!variant.supportsWinBy && app.CPUsStrategies.includes("Win By")) app.CPUsStrategies[app.CPUsStrategies.indexOf("Win By")] = "Remoteness";
     
     app.currentMatch.gameTheme = variant.imageAutoGUIData ? variant.imageAutoGUIData.defaultTheme : "";
     app.currentMatch.startPosition = startPosition;
@@ -415,9 +416,10 @@ const generateComputerMoveByRemoteness = (round: Types.Round) => {
     const store = useStore();
 
     const gameId = store.getters.currentGameId;
+    const variantId = store.getters.currentVariantId;
     const currentPositionValue = round.position.positionValue;
 
-    const supportsWinBy = store.getters.supportsWinBy(gameId);
+    const supportsWinBy = store.getters.supportsWinBy(gameId, variantId);
 
     const availableMoves = Object.values(round.position.availableMoves);
     let bestMoves = availableMoves.filter((availableMove) => availableMove.moveValue === currentPositionValue || currentPositionValue === "unsolved");
