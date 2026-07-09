@@ -92,9 +92,10 @@
     const currentRoundId = computed(() => store.getters.currentRoundId);
     const currentRounds = computed(() => store.getters.currentRounds);
     const currentGameId = computed(() => store.getters.currentGameId);
+    const currentVariantId = computed(() => store.getters.currentVariantId);
 
     const supportsWinBy = computed(() =>
-        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value) : false
+        currentGameId.value ? store.getters.supportsWinBy(currentGameId.value, currentVariantId.value) : false
     );
 
     const highlightedMove = computed(() => store.getters.currentHighlightedMove);

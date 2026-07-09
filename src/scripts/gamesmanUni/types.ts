@@ -48,12 +48,12 @@ export type Game = {
     variants: Record<string, Variant>;
     gui: string;
     allowCustomVariantCreation: boolean;
-    supportsWinBy: boolean;
 };
 
 export type Variant = {
     id: string;
     name: string;
+    supportsWinBy: boolean;
     startPosition: string;
     autoguiStartPosition: string;
     positions: Positions;

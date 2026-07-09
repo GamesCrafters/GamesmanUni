@@ -17,8 +17,8 @@ export const defaultPreferences: Types.Preferences = {
 
 export const defaultDataSources: Types.DataSources = {
     gitHubRepositoryAPI: "https://api.github.com/repos/GamesCrafters/GamesmanUni",
-    gameAPI: "https://nyc.cs.berkeley.edu/universal/v1/"
-    //gameAPI: "http://localhost:8082/"
+    //gameAPI: "https://nyc.cs.berkeley.edu/universal/v1/"
+    gameAPI: "http://localhost:8082/"
 };
 
 export const defaultAvailableMove: Types.Move = {
@@ -58,6 +58,7 @@ export const defaultPositions: Types.Positions = {};
 export const defaultVariant: Types.Variant = {
     id: "",
     name: "",
+    supportsWinBy: false,
     gui: "v0",
     startPosition: "",
     autoguiStartPosition: "",
@@ -89,8 +90,7 @@ export const defaultGame: Types.Game = {
     type: "",
     variants: {},
     allowCustomVariantCreation: false,
-    gui: "v0",
-    supportsWinBy: false,
+    gui: "v0"
 };
 
 export const defaultCommit: Types.Commit = {

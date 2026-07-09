@@ -76,7 +76,7 @@ type Getters = {
     variants(state: State): (gameId: string) => Record<string, GMUTypes.Variant>;
     version(state: State): string;
     volume(state: State): number;
-    supportsWinBy(state: State): (gameId: string) => boolean;
+    supportsWinBy(state: State): (gameId: string, variantId: string) => boolean;
     currentWinBy(state: State): number;
     maximumWinBy(state: State): 
         (from: number, to: number) => number;
@@ -227,8 +227,8 @@ const getters: Vuex.GetterTree<State, State> & Getters = {
     volume: (state: State) =>
         state.app.preferences.volume,
     supportsWinBy: (state: State) =>
-        (gameId: string) => 
-            state.app.games[gameId].supportsWinBy,
+        (gameId: string, variantId: string) => 
+            state.app.games[gameId].variants[variantId].supportsWinBy,
     currentWinBy: (state: State) =>
         state.app.currentMatch.round.position.winby,
     maximumWinBy: (state: State) =>
