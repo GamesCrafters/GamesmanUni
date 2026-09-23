@@ -8,11 +8,11 @@
                 <p class="hero-sub">Finite, two-player, perfect-information games and puzzles. Computed and made playable by Berkeley students. Every position evaluated, every optimal move known.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <div class="hero-stat-num">{{ gameCount }}+</div>
+                        <div class="hero-stat-num">{{ gameCount }}</div>
                         <div class="hero-stat-label">games integrated</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-num">{{ puzzleCount }}+</div>
+                        <div class="hero-stat-num">{{ puzzleCount }}</div>
                         <div class="hero-stat-label">puzzles solved</div>
                     </div>
                     <div class="hero-stat">
@@ -136,14 +136,22 @@
 
     const allGames = computed<Game[]>(() => Object.values(store.state.app.games));
 
+    /**
+     * Shown only when the game server is unreachable, so the hero never renders a zero.
+     * Snapshot of the UWAPI registry on 2026-09-22; the live counts below replace these
+     * as soon as the API responds, so a newly registered game appears without a code change.
+     */
+    const FALLBACK_GAME_COUNT = 83;
+    const FALLBACK_PUZZLE_COUNT = 29;
+
     const gameCount = computed(() => {
         const games = allGames.value.filter(game => game.type === "twoPlayer")
-        return games.length > 0 ? games.length : 54;
+        return games.length > 0 ? games.length : FALLBACK_GAME_COUNT;
     });
 
     const puzzleCount = computed(() => {
         const puzzles = allGames.value.filter(game => game.type === "onePlayer")
-        return puzzles.length > 0 ? puzzles.length : 9;
+        return puzzles.length > 0 ? puzzles.length : FALLBACK_PUZZLE_COUNT;
     });
 </script>
 

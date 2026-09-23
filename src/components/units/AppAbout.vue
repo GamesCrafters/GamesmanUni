@@ -53,6 +53,7 @@
                 <div class="stack-tags">
                     <span class="stack-tag">Vue.js</span>
                     <span class="stack-tag">Python (UWAPI)</span>
+                    <span class="stack-tag">Python (GamesmanPy)</span>
                     <span class="stack-tag">C (Gamesman core)</span>
                     <span class="stack-tag">PWA / SPA</span>
                     <span class="stack-tag">TypeScript</span>
