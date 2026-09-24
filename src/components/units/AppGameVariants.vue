@@ -3,11 +3,11 @@
         <h2>{{ gameName }}</h2>
         <h3>{{ t("gameVariantsTitle") }}</h3>
         <div id="variants" v-if="game">
-            <router-link v-for="variant in gameVariants" :key="variant.id" :class="variant.gui" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
+            <router-link v-for="variant in gameVariants" :key="variant.id" :class="[variant.gui, gameId]" :to="{ name: 'game', params: { type: gameType, gameId: gameId, variantId: variant.id } }">
                 <img :src="getLogoSource(variant.id)" :alt="'Logo'" style="width: 8rem" />
                 <p>{{ variant.name }}</p>
             </router-link>
-            <div v-if="gameCustom" v-on:click="customBoardRoute" :class="game.gui">
+            <div v-if="gameCustom" v-on:click="customBoardRoute" :class="[game.gui, gameId]">
                 <img :src="getLogoSource('custom')" :alt="'Logo'" style="width: 8rem" />
                 <p>Custom</p>
             </div>
@@ -111,6 +111,12 @@
 
             > a.v0, div.v0 {
                 border: 0.2rem solid #CD7F32;
+            }
+
+            > a.breakthrough, div.breakthrough {
+                background: linear-gradient(180deg, rgba(0, 50, 98, 0.06) 0%, rgba(0, 50, 98, 0) 60%);
+                border: 0.2rem solid #003262;
+                box-shadow: 0 0 0 0.15rem #FDB515 inset;
             }
 
             > div {
