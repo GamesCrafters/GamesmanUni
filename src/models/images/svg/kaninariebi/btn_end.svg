@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" id="MoveButtonSVG" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="panel_end" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#203C4B"/><stop offset="48%" stop-color="#142C39"/><stop offset="100%" stop-color="#0C1B29"/>
+    </linearGradient>
+    <linearGradient id="rim_end" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFC886" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#D29244" stop-opacity="0.50"/>
+    </linearGradient>
+  </defs>
+  <!-- Solid clickable panel -->
+  <rect x="5" y="6" width="90" height="88" rx="19" fill="#020E16" fill-opacity="0.44"/>
+  <rect x="8" y="7" width="84" height="84" rx="17" fill="url(#panel_end)" stroke="url(#rim_end)" stroke-width="2.6"/>
+  <path d="M23 16H77" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
+  <rect x="15" y="14" width="70" height="55" rx="12" fill="#D29244" fill-opacity="0.10"/>
+  <path d="M34 27 H66 A6 6 0 0 1 72 33 V55 A6 6 0 0 1 66 61 H34 A6 6 0 0 1 28 55 V33 A6 6 0 0 1 34 27Z" fill="none" stroke="#FFC886" stroke-width="5"/><path d="M40 34V54 M51 34V54 M62 34V54" stroke="#FFC886" stroke-width="4" stroke-linecap="round"/>
+  <path d="M25 69 H75" stroke="#FFC886" stroke-opacity="0.26" stroke-width="1"/>
+  <text x="50" y="82.5" font-family="Arial, Helvetica, sans-serif" font-size="11.3" font-weight="700" letter-spacing="0.15" text-anchor="middle" fill="#F4FCFF">END TURN</text>
+</svg>
