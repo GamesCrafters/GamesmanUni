@@ -100,7 +100,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     return duration;
 }
 
-const animateImageAutoGUI = (currPosition: string, nextPosition: string, autoguiMove: string = ""): number => {
+const animateImageAutoGUI = (currPosition: string, nextPosition: string): number => {
     const currEntityStringParts = currPosition.split("_")[1].split("~");
     var currBoard = currEntityStringParts[0];
     const nextEntityStringParts = nextPosition.split("_")[1].split("~");
@@ -127,8 +127,6 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
     const foregroundImagePath = theTheme.foreground || "";
     const animationWindow = theTheme.defaultAnimationWindow || [0, currBoard.length];
     const textEntityFontSize = theTheme.textEntityFontSize * widthFactor || 10;
-    // Length of entityFade / simpleSlides animations, in seconds.
-    const animationDuration = theTheme.animationDuration || 0.5;
 
     var svg = document.getElementById('image-autogui'); // Get svg element
     var g = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -159,22 +157,6 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
                             break;
                         }
                     }
-                }
-            }
-
-            // A piece that lands on an identical piece (e.g. capturing a friendly
-            // piece) leaves its target square unchanged, so the diff above cannot
-            // tell where it went. Fall back to the arrow move that was played.
-            const arrowMove = autoguiMove.match(/^M_([0-9]+)_([0-9]+)/);
-            if (arrowMove) {
-                const from = parseInt(arrowMove[1]);
-                const to = parseInt(arrowMove[2]);
-                if (currBoard[from] != '-' && currBoard[to] == currBoard[from] && nextBoard[to] == currBoard[from]
-                        && !slides.some((slide) => slide[0] === from)) {
-                    slides.push([from, to]);
-                    i = fadeOutIdxs.indexOf(from);
-                    if (i !== -1) fadeOutIdxs.splice(i, 1);
-                    fadeOutIdxs.push(to); // the captured piece fades under the arriving one
                 }
             }
         }
@@ -211,12 +193,6 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
         }
         /* END Text entity fadein and fadeout index handling */
 
-        // Themes may skip moves that only fade (e.g. selecting a piece), so the
-        // next position shows at once instead of after a full animation.
-        if (theTheme.instantWithoutSlides && slides.length === 0) {
-            return 0;
-        }
-
         if (store.getters.currentGameId === "kayles") {
             // TEMPORARY; WILL REMOVE THIS SPECIAL HANDLING FOR KAYLES WHEN CUSTOM ANIMATIONS ARE IMPLEMENTED
             for (i of fadeOutIdxs) {
@@ -227,7 +203,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
         }
 
         for (i of fadeOutIdxs) { // Play fade-out animations
-            gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: animationDuration, autoAlpha: 0});
+            gsap.fromTo("#entity" + i, {autoAlpha: 1}, {duration: 0.5, autoAlpha: 0});
         }
 
         var newElement;
@@ -258,7 +234,7 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
             newElement = spawnImageEntity(currBoard[idxFrom], idxFrom, centers, charImages, widthFactor);
             newElement.setAttribute("id", "movingEntity" + idxFrom);
             g.appendChild(newElement);
-            gsap.to("#movingEntity" + idxFrom, {duration: animationDuration, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
+            gsap.to("#movingEntity" + idxFrom, {duration: 0.5, x: toCoords[0] - fromCoords[0], y: toCoords[1] - fromCoords[1]});
         }
 
         if (foregroundImagePath !== "") { // Redraw foreground image in front of any newly introduced entities
@@ -269,9 +245,9 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string, autogui
             g.appendChild(newForegroundElement);
         }
         if (fadeInIdxs.length > 0 || textFadeInIdxs.length > 0) { // Play fade-in animations
-            gsap.fromTo(".appearingEntity", {opacity: 0.001}, {duration: animationDuration, opacity: 1});
+            gsap.fromTo(".appearingEntity", {opacity: 0.001}, {duration: 0.5, opacity: 1});
         }
-        return animationDuration * 1000;
+        return 500;
     } else if (animationType === "custom") {
         console.log("Custom");
     }
@@ -293,7 +269,7 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         if (imageAutoGUIData != null) {
             var theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
             const sounds = theTheme.sounds || {} as Record<string, string>;
-            var duration = animateImageAutoGUI(currPosition, nextPosition, moveObj.autoguiMove);
+            var duration = animateImageAutoGUI(currPosition, nextPosition);
 
             const soundChar = moveObj.autoguiMove[moveObj.autoguiMove.length - 1];
             if (soundChar in sounds) {

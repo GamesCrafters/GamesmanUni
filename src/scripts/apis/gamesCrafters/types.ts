@@ -61,8 +61,6 @@ export type ImageAutoGUITheme = {
     sounds: Record<string, string>;
     animationType: string;
     defaultAnimationWindow: Array<number>;
-    animationDuration?: number;
-    instantWithoutSlides?: boolean;
 };
 
 export type ImageAutoGUICharImage = {
@@ -83,7 +81,6 @@ export type Move = {
     mex: string;
     drawLevel: number;
     drawRemoteness: number;
-    partMove?: boolean;
 };
 
 export type Position = {

@@ -94,7 +94,6 @@ export type Move = {
     mex: string;
     drawLevel: number;
     drawRemoteness: number;
-    partMove?: boolean; // true if the move does not complete a turn (e.g. selecting a piece)
 };
 
 export type Commits = Update & {
@@ -158,7 +157,6 @@ export type Round = {
     autoguiMove: string;
     moveValue: string; //'lose, win, tie, etc.'
     position: Position;
-    partMoveHistory?: string; // part-moves (e.g. selecting a piece) made in this round before `move`, each followed by partMoveDelim
 };
 
 export type Scorecard = {

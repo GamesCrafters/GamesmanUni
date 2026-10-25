@@ -558,14 +558,11 @@ const actions: Vuex.ActionTree<State, State> & Actions = {
         });
         // Do move one by one, return undefined if any move is invalid
         for (let i = 2; i < parsed.length; i++) {
-            // A round's entry may be part-moves followed by its move, e.g. 'b3>b3u'.
-            for (const move of parsed[i].split(GMU.partMoveDelim)) {
-                const nextMove = context.state.app.currentMatch.round.position.moveToAutoguiMove[move];
-                if (!nextMove) {
-                    return Error("Invalid move [" + move + "]");
-                } else {
-                    await store.dispatch(actionTypes.runMove, {autoguiMove: nextMove})
-                }
+            const nextMove = context.state.app.currentMatch.round.position.moveToAutoguiMove[parsed[i]];
+            if (!nextMove) {
+                return Error("Invalid move [" + parsed[i] + "]");
+            } else {
+                await store.dispatch(actionTypes.runMove, {autoguiMove: nextMove})
             }
         }
     }
