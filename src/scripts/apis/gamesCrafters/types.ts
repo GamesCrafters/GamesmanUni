@@ -83,6 +83,7 @@ export type Move = {
     mex: string;
     drawLevel: number;
     drawRemoteness: number;
+    partMove?: boolean;
 };
 
 export type Position = {
