@@ -7,6 +7,8 @@ import { handleMoveAnimation, animationEpilogue } from "./moveAnimation"
 import { playGameAmbience, pauseAllGameSounds } from "./audio"
 import { useStore } from "../plugins/store";
 export const moveHistoryDelim = ':';
+// Joins the part-moves of a round to its move in the move history, e.g. 'b3>b3u'.
+export const partMoveDelim = '>';
 
 export const deepcopy = (obj: Object) => {
     return JSON.parse(JSON.stringify(obj));
@@ -553,7 +555,19 @@ export const runMove = async (app: Types.App, payload: { autoguiMove: string }) 
             position
         ]
     };
-    app.currentMatch.moveHistory += moveHistoryDelim + moveObj.move;
+    if (moveObj.partMove) {
+        // A part-move (e.g. selecting a piece) only changes what the current
+        // round shows. It is recorded with the round's eventual move instead
+        // of as a round of its own, so the VVH and move count are unaffected.
+        app.currentMatch.round.partMoveHistory = (app.currentMatch.round.partMoveHistory || "") + moveObj.move + partMoveDelim;
+        app.currentMatch.round.autoguiMove = "";
+        app.currentMatch.round.move = "";
+        app.currentMatch.round.moveValue = "";
+        app.currentMatch.round.position = updatedPosition;
+        app.currentMatch.rounds[app.currentMatch.round.id] = deepcopy(app.currentMatch.round);
+        return app;
+    }
+    app.currentMatch.moveHistory += moveHistoryDelim + (app.currentMatch.round.partMoveHistory || "") + moveObj.move;
     let autoguiPosition = updatedPosition.autoguiPosition;
     if ((autoguiPosition.charAt(0) == '1' || autoguiPosition.charAt(0) == '2') && autoguiPosition.charAt(1) == '_') { // in proper autogui format
         app.currentMatch.round.firstPlayerTurn = autoguiPosition.charAt(0) == '1';
@@ -567,6 +581,7 @@ export const runMove = async (app: Types.App, payload: { autoguiMove: string }) 
     app.currentMatch.round.moveValue = "";
     app.currentMatch.round.id += 1;
     app.currentMatch.round.position = updatedPosition;
+    app.currentMatch.round.partMoveHistory = "";
     app.currentMatch.rounds.push(deepcopy(app.currentMatch.round));
     return app;
 };
@@ -641,7 +656,7 @@ export const redoMove = (app: Types.App) => {
     }
     // Modify move history before changing current round id.
     for (let i = currRoundId; i < toRoundId; ++i) {
-        app.currentMatch.moveHistory += moveHistoryDelim + app.currentMatch.rounds[i].move;
+        app.currentMatch.moveHistory += moveHistoryDelim + (app.currentMatch.rounds[i].partMoveHistory || "") + app.currentMatch.rounds[i].move;
     }
     return gotoRoundId(app, toRoundId);
 };
