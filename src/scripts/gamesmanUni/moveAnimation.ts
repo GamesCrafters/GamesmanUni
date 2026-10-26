@@ -100,7 +100,7 @@ const animateQuarto = (volume: number, currPosition: string, nextPosition: strin
     return duration;
 }
 
-const animateImageAutoGUI = (currPosition: string, nextPosition: string): number => {
+const animateImageAutoGUI = (currPosition: string, nextPosition: string, autoguiMove: string = ""): number => {
     const currEntityStringParts = currPosition.split("_")[1].split("~");
     var currBoard = currEntityStringParts[0];
     const nextEntityStringParts = nextPosition.split("_")[1].split("~");
@@ -157,6 +157,22 @@ const animateImageAutoGUI = (currPosition: string, nextPosition: string): number
                             break;
                         }
                     }
+                }
+            }
+
+            // A piece that lands on an identical piece (e.g. capturing a friendly
+            // piece) leaves its target square unchanged, so the diff above cannot
+            // tell where it went. Fall back to the arrow move that was played.
+            const arrowMove = autoguiMove.match(/^M_([0-9]+)_([0-9]+)/);
+            if (arrowMove) {
+                const from = parseInt(arrowMove[1]);
+                const to = parseInt(arrowMove[2]);
+                if (currBoard[from] != '-' && currBoard[to] == currBoard[from] && nextBoard[to] == currBoard[from]
+                        && !slides.some((slide) => slide[0] === from)) {
+                    slides.push([from, to]);
+                    i = fadeOutIdxs.indexOf(from);
+                    if (i !== -1) fadeOutIdxs.splice(i, 1);
+                    fadeOutIdxs.push(to); // the captured piece fades under the arriving one
                 }
             }
         }
@@ -269,7 +285,7 @@ export const handleMoveAnimation = (volume: number, currentMatch: Types.Match, m
         if (imageAutoGUIData != null) {
             var theTheme = imageAutoGUIData.themes[store.getters.currentGameTheme];
             const sounds = theTheme.sounds || {} as Record<string, string>;
-            var duration = animateImageAutoGUI(currPosition, nextPosition);
+            var duration = animateImageAutoGUI(currPosition, nextPosition, moveObj.autoguiMove);
 
             const soundChar = moveObj.autoguiMove[moveObj.autoguiMove.length - 1];
             if (soundChar in sounds) {
