@@ -133,12 +133,14 @@
         border-right: 0.1rem solid var(--neutralColor);
         border-bottom: 0.1rem solid var(--neutralColor);
         box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.2);
-        max-width: 20rem;
-        padding: 1.5rem 2rem;
+        left: calc(75% + 10rem);
+        max-width: 24rem;
+        padding: 1.75rem 2.25rem;
         position: fixed;
-        right: 2rem;
         text-align: left;
-        top: 8rem;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 24rem;
         z-index: 10;
         > #close-button {
             border-radius: 100%;
@@ -153,16 +155,17 @@
         }
         > #label {
             color: var(--secondaryColor);
-            font-size: 0.85rem;
+            font-size: 1.05rem;
             font-weight: 600;
             letter-spacing: 0.05rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             text-transform: uppercase;
         }
         > p {
-            font-size: 1.2rem;
-            line-height: 1.7rem;
-            margin: 0 1.5rem 1rem 0;
+            font-size: 1.6rem;
+            line-height: 2.3rem;
+            margin: 0 0 1.25rem 0;
+            text-align: left;
         }
         > #footer {
             align-items: center;
@@ -181,8 +184,8 @@
             }
         }
         > #footer > #next-button {
-            font-size: 1rem;
-            padding: 0.4rem 1.25rem;
+            font-size: 1.25rem;
+            padding: 0.5rem 1.5rem;
         }
 
         &.berkeley {

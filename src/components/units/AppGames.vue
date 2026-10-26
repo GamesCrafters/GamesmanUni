@@ -7,7 +7,7 @@
                 <h2>{{ gameTypeTitle }} with{{ category.name }}</h2>
                 <div class="games">
                     <g v-for="member in category.members" :key="member.id">
-                        <router-link :class="[category.id, member.id]" v-if="member.gui === category.id" :to="{ name: 'variants', params: { type: gameType, gameId: member.id } }">
+                        <router-link :class="category.id" v-if="member.gui === category.id" :to="{ name: 'variants', params: { type: gameType, gameId: member.id } }">
                             <img :src="getLogoSource(member)" style="width: 8rem" />
                             <p :style="member.name.length < 17 ? 'font-size: 100%' : 'font-size: 90%'" >{{ member.name }}</p>
                         </router-link>
@@ -135,12 +135,6 @@
 
                     a.v0 {
                         border: 0.2rem solid #cd7f32;
-                    }
-
-                    a.breakthrough {
-                        background: linear-gradient(180deg, rgba(0, 50, 98, 0.06) 0%, rgba(0, 50, 98, 0) 60%);
-                        border: 0.2rem solid #003262;
-                        box-shadow: 0 0 0 0.15rem #FDB515 inset;
                     }
                 }
             }

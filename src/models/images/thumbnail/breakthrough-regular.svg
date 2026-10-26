@@ -19,18 +19,15 @@
         </symbol>
     </defs>
 
-    <rect x="4" y="4" width="92" height="92" rx="14" fill="#003262" />
-    <rect x="4" y="4" width="92" height="92" rx="14" fill="none" stroke="#FDB515" stroke-width="3" />
-
     <g>
-        <rect x="26" y="26" width="48" height="48" fill="#E9E6DE" />
-        <rect x="26" y="26" width="16" height="16" fill="#7A8291" />
-        <rect x="58" y="26" width="16" height="16" fill="#7A8291" />
-        <rect x="42" y="42" width="16" height="16" fill="#7A8291" />
-        <rect x="26" y="58" width="16" height="16" fill="#7A8291" />
-        <rect x="58" y="58" width="16" height="16" fill="#7A8291" />
+        <rect x="11" y="11" width="78" height="78" fill="#E9E6DE" />
+        <rect x="11" y="11" width="26" height="26" fill="#7A8291" />
+        <rect x="63" y="11" width="26" height="26" fill="#7A8291" />
+        <rect x="37" y="37" width="26" height="26" fill="#7A8291" />
+        <rect x="11" y="63" width="26" height="26" fill="#7A8291" />
+        <rect x="63" y="63" width="26" height="26" fill="#7A8291" />
     </g>
 
-    <use href="#tpawn" x="42" y="24" width="16" height="16" fill="#FDB515" />
-    <use href="#tpawn" x="42" y="58" width="16" height="16" fill="#7FA3E0" />
+    <use href="#tpawn" x="37" y="11" width="26" height="26" fill="#FDB515" />
+    <use href="#tpawn" x="37" y="63" width="26" height="26" fill="#3B6CB8" />
 </svg>
