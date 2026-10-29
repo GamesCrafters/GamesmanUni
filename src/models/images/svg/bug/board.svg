@@ -1,82 +1,82 @@
 <svg width="868" height="802" viewBox="-34 -1 868 802" xmlns="http://www.w3.org/2000/svg">
   <polygon points="400,0 486.6,50 486.6,150 400,200 313.4,150 313.4,50"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="400" y="100" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">12</text>
+  <text x="400" y="160" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">12</text>
   <polygon points="226.8,0 313.4,50 313.4,150 226.8,200 140.2,150 140.2,50"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="226.8" y="100" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">11</text>
+  <text x="226.8" y="160" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">11</text>
   <polygon points="573.2,0 659.8,50 659.8,150 573.2,200 486.6,150 486.6,50"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="573.2" y="100" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">13</text>
+  <text x="573.2" y="160" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">13</text>
 
   <polygon points="140.2,150 226.8,200 226.8,300 140.2,350 53.6,300 53.6,200"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="140.2" y="250" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">21</text>
+  <text x="140.2" y="310" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">21</text>
   <polygon points="486.6,150 573.2,200 573.2,300 486.6,350 400,300 400,200"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="486.6" y="250" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">23</text>
+  <text x="486.6" y="310" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">23</text>
   <polygon points="313.4,150 400,200 400,300 313.4,350 226.8,300 226.8,200"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="313.4" y="250" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">22</text>
+  <text x="313.4" y="310" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">22</text>
   <polygon points="659.8,150 746.4,200 746.4,300 659.8,350 573.2,300 573.2,200"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="659.8" y="250" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">24</text>
+  <text x="659.8" y="310" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">24</text>
 
   <polygon points="53.6,300 140.2,350 140.2,450 53.6,500 -33,450 -33,350"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="53.6" y="400" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">31</text>
+  <text x="53.6" y="460" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">31</text>
   <polygon points="226.8,300 313.4,350 313.4,450 226.8,500 140.2,450 140.2,350"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="226.8" y="400" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">32</text>
+  <text x="226.8" y="460" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">32</text>
   <polygon points="573.2,300 659.8,350 659.8,450 573.2,500 486.6,450 486.6,350"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="573.2" y="400" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">34</text>
+  <text x="573.2" y="460" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">34</text>
   <polygon points="400,300 486.6,350 486.6,450 400,500 313.4,450 313.4,350"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="400" y="400" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">33</text>
+  <text x="400" y="460" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">33</text>
   <polygon points="746.4,300 833,350 833,450 746.4,500 659.8,450 659.8,350"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="746.4" y="400" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">35</text>
+  <text x="746.4" y="460" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">35</text>
 
   <polygon points="140.2,450 226.8,500 226.8,600 140.2,650 53.6,600 53.6,500"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="140.2" y="550" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">41</text>
+  <text x="140.2" y="610" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">41</text>
   <polygon points="486.6,450 573.2,500 573.2,600 486.6,650 400,600 400,500"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="486.6" y="550" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">43</text>
+  <text x="486.6" y="610" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">43</text>
   <polygon points="313.4,450 400,500 400,600 313.4,650 226.8,600 226.8,500"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="313.4" y="550" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">42</text>
+  <text x="313.4" y="610" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">42</text>
   <polygon points="659.8,450 746.4,500 746.4,600 659.8,650 573.2,600 573.2,500"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="659.8" y="550" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">44</text>
+  <text x="659.8" y="610" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">44</text>
   
   <polygon points="400,600 486.6,650 486.6,750 400,800 313.4,750 313.4,650"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="400" y="700" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">52</text>
+  <text x="400" y="760" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">52</text>
   <polygon points="226.8,600 313.4,650 313.4,750 226.8,800 140.2,750 140.2,650"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="226.8" y="700" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">51</text>
+  <text x="226.8" y="760" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">51</text>
   <polygon points="573.2,600 659.8,650 659.8,750 573.2,800 486.6,750 486.6,650"
-    fill="#8b7452" 
+    fill="#F6C026" 
     stroke="#563515"/>
-  <text x="573.2" y="700" font-family="Arial" font-size="48" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="central">53</text>
+  <text x="573.2" y="760" font-family="Papyrus, fantasy" font-size="22" fill="#5c3a06" font-weight="bold" text-anchor="middle" dominant-baseline="central">53</text>
 </svg>
