@@ -16,6 +16,7 @@
         { path: "/games", name: "Games" },
         { path: "/about", name: "About" },
         { path: "/updates", name: "Updates" },
+        { path: "/status", name: "Status" },
     ];
 </script>
 
@@ -63,28 +64,32 @@
         "Puzzles": "单人解谜",
         "Games": "双人游戏",
         "About": "关于",
-        "Updates": "更新日志"
+        "Updates": "更新日志",
+        "Status": "状态"
     },
     "en-US": {
         "Home": "Home",
         "Puzzles": "Puzzles",
         "Games": "Games",
         "About": "About",
-        "Updates": "Updates"
+        "Updates": "Updates",
+        "Status": "Status"
     },
     "es": {
         "Home": "Inicio",
         "Puzzles": "Rompecabezas",
         "Games": "Juegos",
         "About": "Información",
-        "Updates": "Versiones"
+        "Updates": "Versiones",
+        "Status": "Estado"
     },
     "hi": {
         "Home": "Home",
         "Puzzles": "Puzzles",
         "Games": "Games",
         "About": "About",
-        "Updates": "Updates"
+        "Updates": "Updates",
+        "Status": "Status"
     }
 }
 </i18n>
