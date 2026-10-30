@@ -52,6 +52,11 @@
                             {{ t("latency") }} <span class="muted">{{ t("latencyKind") }}</span>
                         </span>
                     </button>
+                    <span class="rest" aria-hidden="true" @click="latencyOpen = !latencyOpen"></span>
+                    <span :class="['help', { pinned: helpPinned }]">
+                        <button type="button" class="help-button" :aria-label="t('helpLabel')" aria-describedby="latency-help" @click="helpPinned = !helpPinned" @blur="helpPinned = false" @keydown.esc="closeHelp">?</button>
+                        <span id="latency-help" class="help-tip" role="tooltip">{{ t("helpText") }}</span>
+                    </span>
                 </h3>
                 <div v-if="latencyOpen" id="latency-panel">
                     <AppStatusLatencyChart :options="chartOptions" :daily="data.daily.components" :day-keys="dayKeys" />
@@ -88,6 +93,12 @@
     const now = ref(Date.now());
     const narrow = ref(false);
     const latencyOpen = ref(false);
+    const helpPinned = ref(false);
+    // Escape also takes focus off the button, or the tooltip would stay open for as long as it has focus.
+    const closeHelp = (event: KeyboardEvent) => {
+        helpPinned.value = false;
+        (event.target as HTMLElement).blur();
+    };
 
     // Rows start open when their component is not ok, closed otherwise. Once a row is clicked,
     // the person's choice wins, also across refreshes.
@@ -294,8 +305,85 @@
         }
         #latency {
             margin-top: 0.8rem;
+            overflow: visible;
+            // The "?" can't sit inside the toggle button (a button can't contain a button), so the row is
+            // the toggle, the "?" and an empty area that also toggles, which keeps the whole row clickable.
             > h3 {
+                align-items: center;
+                display: flex;
                 font-size: inherit;
+                position: relative;
+            }
+            .rest {
+                align-self: stretch;
+                cursor: pointer;
+                flex: 1;
+            }
+            .help {
+                flex: none;
+                margin-right: 1.8rem;
+                position: relative;
+            }
+            .help-button {
+                align-items: center;
+                background: transparent;
+                border: 0.1rem solid var(--primaryColor);
+                border-radius: 50%;
+                box-shadow: none;
+                color: inherit;
+                cursor: help;
+                display: inline-flex;
+                font-size: 1.1rem;
+                font-weight: 700;
+                height: 2rem;
+                justify-content: center;
+                min-height: 0;
+                opacity: 0.75;
+                padding: 0;
+                position: relative;
+                transition: none;
+                width: 2rem;
+                // On a touch screen only, a bigger area to hit with a finger. With a mouse the tooltip
+                // opens only over the circle itself.
+                @media (pointer: coarse) {
+                    &::before {
+                        content: "";
+                        inset: -0.9rem;
+                        position: absolute;
+                    }
+                }
+                &:hover,
+                &:focus-visible {
+                    opacity: 1;
+                    transform: none;
+                }
+                &:focus-visible {
+                    outline: 0.2rem solid var(--primaryColor);
+                    outline-offset: 0.2rem;
+                }
+            }
+            .help-tip {
+                background-color: var(--primaryColor);
+                border-radius: 0.6rem;
+                box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.2);
+                color: var(--backgroundColor);
+                display: none;
+                font-size: 1.2rem;
+                line-height: 1.7rem;
+                max-width: min(30rem, 80vw);
+                padding: 0.8rem 1.1rem;
+                pointer-events: none;
+                position: absolute;
+                // Opens leftward from the right edge of the row, so it stays on screen on a phone.
+                right: 0;
+                top: calc(100% + 0.8rem);
+                width: max-content;
+                z-index: 5;
+            }
+            .help:hover .help-tip,
+            .help:focus-within .help-tip,
+            .help.pinned .help-tip {
+                display: block;
             }
             .toggle {
                 align-items: center;
@@ -309,7 +397,6 @@
                 min-height: 5.6rem;
                 padding: 1rem 1.8rem;
                 transition: none;
-                width: 100%;
                 &:hover {
                     transform: none;
                 }
@@ -318,7 +405,6 @@
                     outline-offset: -0.2rem;
                 }
                 .label {
-                    flex: 1;
                     font-size: 1.5rem;
                     font-weight: 600;
                     > .muted {
@@ -373,6 +459,8 @@
         "components": { "api": "Universal Web API", "instructions": "Game instructions" },
         "latency": "Latency",
         "latencyKind": "(daily p95)",
+        "helpLabel": "What is p95?",
+        "helpText": "Each point is one day’s p95: 95% of that day’s checks responded at least this fast, so it shows how slow a slow check gets. “now” is the latest single check.",
         "fallback": "Backup status page",
         "repo": "How this works"
     },
@@ -390,6 +478,8 @@
         "components": { "api": "通用 Web API", "instructions": "游戏说明" },
         "latency": "延迟",
         "latencyKind": "（每日 p95）",
+        "helpLabel": "什么是 p95？",
+        "helpText": "每个点是当天的 p95：当天 95% 的检查响应时间不超过该值，反映较慢检查的耗时。“当前”是最近一次检查的耗时。",
         "fallback": "备用状态页",
         "repo": "工作原理"
     },
@@ -407,6 +497,8 @@
         "components": { "api": "API web universal", "instructions": "Instrucciones de juegos" },
         "latency": "Latencia",
         "latencyKind": "(p95 diario)",
+        "helpLabel": "¿Qué es p95?",
+        "helpText": "Cada punto es el p95 de un día: el 95 % de las comprobaciones de ese día respondió al menos así de rápido, lo que muestra cuánto tarda una comprobación lenta. «Ahora» es la última comprobación.",
         "fallback": "Página de estado de respaldo",
         "repo": "Cómo funciona"
     },
@@ -424,6 +516,8 @@
         "components": { "api": "Universal Web API", "instructions": "Game instructions" },
         "latency": "Latency",
         "latencyKind": "(daily p95)",
+        "helpLabel": "What is p95?",
+        "helpText": "Each point is one day’s p95: 95% of that day’s checks responded at least this fast, so it shows how slow a slow check gets. “now” is the latest single check.",
         "fallback": "Backup status page",
         "repo": "How this works"
     }

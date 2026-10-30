@@ -14,7 +14,7 @@
                 <li v-for="line in lines" :key="line.id">
                     <span class="swatch" :style="{ backgroundColor: line.color }" aria-hidden="true"></span>
                     <span class="legend-name">{{ line.name }}</span>
-                    <span class="legend-now">{{ formatLatency(line.latencyMs, fmtLocale) }}</span>
+                    <span class="legend-now">{{ formatLatency(line.latencyMs, fmtLocale) }} {{ t("now") }}</span>
                 </li>
             </ul>
             <div ref="frame" class="frame">
@@ -53,38 +53,6 @@
             </ul>
         </div>
         <p v-else class="readout" aria-live="polite">{{ readout }}</p>
-        <details class="table-view">
-            <summary>{{ t("showTable") }}</summary>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">{{ t("date") }}</th>
-                        <template v-if="isAll">
-                            <th v-for="line in lines" :key="line.id" scope="col">{{ line.name }} ({{ t("p95") }})</th>
-                        </template>
-                        <template v-else>
-                            <th scope="col">{{ t("p95") }}</th>
-                            <th scope="col">{{ t("average") }}</th>
-                        </template>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="key in daysWithLatency" :key="key">
-                        <td>{{ key }}</td>
-                        <template v-if="isAll">
-                            <td v-for="line in lines" :key="line.id">{{ formatLatency(p95Of(line.id, key) ?? null, fmtLocale) }}</td>
-                        </template>
-                        <template v-else>
-                            <td>{{ formatLatency(chosenDays?.[key]?.p95LatencyMs ?? null, fmtLocale) }}</td>
-                            <td>{{ formatLatency(chosenDays?.[key]?.avgLatencyMs ?? null, fmtLocale) }}</td>
-                        </template>
-                    </tr>
-                    <tr v-if="!daysWithLatency.length">
-                        <td :colspan="isAll ? lines.length + 1 : 3">{{ t("noData") }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </details>
     </div>
 </template>
 
@@ -138,7 +106,6 @@
     // otherwise just the chosen one in the text colour.
     const seriesCount = 8;
     const shown = computed(() => (isAll.value ? props.options.map((option, i) => ({ ...option, color: `var(--series-${(i % seriesCount) + 1})` })) : chosenOption.value ? [{ ...chosenOption.value, color: "var(--primaryColor)" }] : []));
-    const daysWithLatency = computed(() => props.dayKeys.filter((key) => shown.value.some((line) => p95Of(line.id, key) !== undefined)).reverse());
 
     // Log scale between the nearest ticks around the data, so a normal 100-600 ms stays readable
     // next to a slow day of tens of seconds.
@@ -400,26 +367,6 @@
             font-size: 1.2rem;
             min-height: 2rem;
         }
-        .table-view {
-            font-size: 1.2rem;
-            summary {
-                cursor: pointer;
-                font-size: 1.2rem;
-                width: fit-content;
-            }
-            table {
-                border-collapse: collapse;
-                max-height: 30rem;
-                th,
-                td {
-                    font-size: 1.2rem;
-                    padding: 0 1rem 0 0;
-                }
-                th {
-                    font-weight: 600;
-                }
-            }
-        }
     }
 </style>
 
@@ -436,12 +383,7 @@
         "degradedLine": "degraded above 30 s",
         "hint": "Hover, tap or use the arrow keys to read a day.",
         "dayNoData": "{date} · no data",
-        "dayDetail": "{date} · p95 {p95}, average {average}",
-        "showTable": "Show as a table",
-        "date": "Date (UTC)",
-        "p95": "p95",
-        "average": "Average",
-        "noData": "No data yet"
+        "dayDetail": "{date} · p95 {p95}, average {average}"
     },
     "zh": {
         "all": "全部",
@@ -454,12 +396,7 @@
         "degradedLine": "超过 30 秒为缓慢",
         "hint": "悬停、点按或使用方向键查看某一天。",
         "dayNoData": "{date} · 无数据",
-        "dayDetail": "{date} · p95 {p95}，平均 {average}",
-        "showTable": "以表格显示",
-        "date": "日期（UTC）",
-        "p95": "p95",
-        "average": "平均",
-        "noData": "暂无数据"
+        "dayDetail": "{date} · p95 {p95}，平均 {average}"
     },
     "es": {
         "all": "Todos",
@@ -472,12 +409,7 @@
         "degradedLine": "lento por encima de 30 s",
         "hint": "Pase el cursor, toque o use las flechas para leer un día.",
         "dayNoData": "{date} · sin datos",
-        "dayDetail": "{date} · p95 {p95}, promedio {average}",
-        "showTable": "Mostrar como tabla",
-        "date": "Fecha (UTC)",
-        "p95": "p95",
-        "average": "Promedio",
-        "noData": "Aún sin datos"
+        "dayDetail": "{date} · p95 {p95}, promedio {average}"
     },
     "hi": {
         "all": "All",
@@ -490,12 +422,7 @@
         "degradedLine": "degraded above 30 s",
         "hint": "Hover, tap or use the arrow keys to read a day.",
         "dayNoData": "{date} · no data",
-        "dayDetail": "{date} · p95 {p95}, average {average}",
-        "showTable": "Show as a table",
-        "date": "Date (UTC)",
-        "p95": "p95",
-        "average": "Average",
-        "noData": "No data yet"
+        "dayDetail": "{date} · p95 {p95}, average {average}"
     }
 }
 </i18n>
