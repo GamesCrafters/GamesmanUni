@@ -13,9 +13,10 @@
         <div v-if="open" :id="panelId" class="panel">
             <div class="bars-frame">
                 <svg class="bars" :viewBox="`0 0 ${dayKeys.length * slotWidth} ${barHeight}`" preserveAspectRatio="none" tabindex="0" role="group" :aria-label="t('barsLabel', { name, count: dayKeys.length })" @keydown="onKeydown" @mousedown.prevent @mouseleave="selected = undefined" @blur="selected = undefined">
+                    <rect v-if="selectedDay" class="ring" :x="selected! * slotWidth" y="0" :width="slotWidth - gapWidth" :height="barHeight" rx="2" />
                     <g v-for="(key, i) in dayKeys" :key="key" @mouseenter="selected = i" @click="selected = i">
                         <rect class="hit" :x="i * slotWidth" y="0" :width="slotWidth" :height="barHeight" />
-                        <rect :class="['bar', `day-${dayStatus(days?.[key])}`, { selected: selected === i }]" :x="i * slotWidth" y="0" :width="slotWidth - gapWidth" :height="barHeight" />
+                        <rect :class="['bar', `day-${dayStatus(days?.[key])}`, { selected: selected === i }]" :x="i * slotWidth" y="0" :width="slotWidth - gapWidth" :height="barHeight" rx="2" />
                     </g>
                 </svg>
                 <p class="tooltip" :style="tooltipStyle" aria-live="polite">
@@ -240,6 +241,8 @@
         .bars {
             display: block;
             height: 3.4rem;
+            // The outline around a chosen bar sticks out past the edge of the drawing.
+            overflow: visible;
             width: 100%;
             &:focus-visible {
                 outline: 0.2rem solid var(--primaryColor);
@@ -257,15 +260,20 @@
             .day-down {
                 fill: var(--statusDownColor);
             }
+            // Opaque (the same look as 20% of the text color over the background), so the outline
+            // below can sit under the bar without showing through it.
             .day-none {
-                fill: var(--primaryColor);
-                opacity: 0.2;
+                fill: color-mix(in srgb, var(--primaryColor) 20%, var(--backgroundColor));
             }
-            .bar.selected {
-                opacity: 0.6;
-            }
-            .day-none.selected {
-                opacity: 0.45;
+            // The chosen day gets an outline outside the bar: 3 px above and below, and as wide as the gap
+            // to the neighbouring bars at the sides. It is drawn before (so under) all the bars as a 6 px
+            // line, so no bar pixels are covered, the neighbours' included. vector-effect keeps it that
+            // width however wide the bars are drawn.
+            .ring {
+                fill: none;
+                stroke: var(--primaryColor);
+                stroke-width: 0.6rem;
+                vector-effect: non-scaling-stroke;
             }
         }
         .tooltip {

@@ -80,7 +80,7 @@
     const { t, te, locale } = useI18n();
     const fmtLocale = computed(() => formattingLocale(locale.value));
     const repoUrl = "https://github.com/GamesCrafters/GamesCraftersStatus";
-    const fallbackUrl = "https://gamescrafters.github.io/GamesCraftersStatus/";
+    const fallbackUrl = "https://naheejeong.github.io/gamescrafters-status-backup/";
     const dataSource = getDataSource();
 
     const data = ref<StatusData>();
