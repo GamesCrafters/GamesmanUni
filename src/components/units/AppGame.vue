@@ -3,7 +3,6 @@
         <AppGameBody />
         <AppGameMenu v-show="showMenu"/>
     </div>
-    <AppGameTutorial />
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +11,6 @@
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import AppGameBody from "./GameBody/AppGameBody.vue";
     import AppGameMenu from "./GameMenu/AppGameMenu.vue";
-    import AppGameTutorial from "./GameBody/AppGameTutorial.vue";
 
     const route = useRoute();
     const store = useStore();
