@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder Onitama thumbnail: 3x3 board with red pieces on top and blue pieces on the bottom. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+    <rect x="0" y="0" width="36" height="36" fill="#f3ead8" stroke="#555" stroke-width="0.6"/>
+    <rect x="12" y="0" width="12" height="12" fill="#f0c8c8"/>
+    <rect x="12" y="24" width="12" height="12" fill="#c8d7f0"/>
+    <path d="M12 0V36M24 0V36M0 12H36M0 24H36" stroke="#555" stroke-width="0.3"/>
+    <g stroke="#000" stroke-width="0.4">
+        <circle cx="6" cy="6" r="3" fill="#e04848"/>
+        <circle cx="18" cy="6" r="4" fill="#e04848"/>
+        <circle cx="30" cy="6" r="3" fill="#e04848"/>
+        <circle cx="6" cy="30" r="3" fill="#3b6fd8"/>
+        <circle cx="18" cy="30" r="4" fill="#3b6fd8"/>
+        <circle cx="30" cy="30" r="3" fill="#3b6fd8"/>
+    </g>
+</svg>
