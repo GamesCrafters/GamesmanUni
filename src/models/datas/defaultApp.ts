@@ -77,6 +77,7 @@ export const defaultImageAutoGUITheme: ImageAutoGUITheme = {
     arrowWidth: 1,
     textButtonFontSize: 1,
     entitiesOverArrows: false,
+    selectionFrame: '',
     sounds: {},
     animationType: '',
     defaultAnimationWindow: [0, 1]

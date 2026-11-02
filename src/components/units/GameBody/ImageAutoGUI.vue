@@ -3,7 +3,8 @@
   <svg v-if="autoguiPositionData.isValidAutoguiPositionString"
     id="image-autogui" xmlns="http://www.w3.org/2000/svg"
     :viewBox="'-2 -2 ' + (scaledWidth + 4) + ' ' + (scaledHeight + 4)" 
-    :data-turn="autoguiPositionData.turn">
+    :data-turn="autoguiPositionData.turn"
+    @click="deselectOnClickOff">
 
     <!-- Draw Background Image -->
     <image v-if="'background' in theme" x="0" y="0"
@@ -50,6 +51,27 @@
       :href="getImageSource(theme.foreground)"/>
 
     <template v-if="!animationPlaying">
+      <!-- Draw the selection frame over the selected S-type selector (e.g. a card). -->
+      <image v-if="selectedCenter !== null && selectionFrame in charImages"
+        class="iag-selection-frame"
+        :x="centers[selectedCenter][0] - 0.5 * charImages[selectionFrame].scale * widthFactor"
+        :y="centers[selectedCenter][1] - 0.5 * charImages[selectionFrame].scale * widthFactor"
+        :width="charImages[selectionFrame].scale * widthFactor"
+        :height="charImages[selectionFrame].scale * widthFactor"
+        :href="getImageSource(charImages[selectionFrame].image)"/>
+
+      <!-- Draw S-type selector buttons. Clicking one only selects it (it is not a move), which shows the
+           moves that go through it; the button is colored by the best of those moves. -->
+      <circle v-for="selector in autoguiPositionData.selectors" :key="'selector' + selector.center"
+        :cx="centers[selector.center][0]" :cy="centers[selector.center][1]"
+        :stroke-width="0" :r="defaultMoveTokenRadius"
+        :class="['iag-button-point move ' + getBoardMoveElementHintClass(selector.move)]"
+        :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? selector.move.hintOpacity : 1"
+        :style="'--tOrigin: ' + centers[selector.center][0] + 'px ' + centers[selector.center][1] + 'px;'"
+        @click.stop="movesAreClickable && (selectedCenter = selector.center)">
+        <title>{{ moveButtonTitle(selector.move.str) }}</title>
+      </circle>
+
       <!-- Draw A-type move buttons. -->
       <g v-for="token in autoguiPositionData.tokens" :key="token.move.str">
         <g v-if="token.move">  
@@ -197,7 +219,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from "vue";
+  import { computed, ref, watch } from "vue";
   import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
@@ -213,6 +235,11 @@
     token: string;
     center: number;
     move: IAGMove;
+  }
+
+  interface IAGSelectorButton {
+    center: number;
+    move: IAGMove; // Best move that goes through this selector; only used for its hint.
   }
 
   interface IAGArrowButton {
@@ -293,6 +320,21 @@
   const entitiesOverArrows = computed(() => theme.value.entitiesOverArrows || false);
   const textEntityFontSize = computed(() => theme.value.textEntityFontSize * widthFactor.value || 10);
   const textButtonFontSize = computed(() => theme.value.textButtonFontSize * widthFactor.value || 10);
+  const selectionFrame = computed(() => theme.value.selectionFrame || "");
+
+  /**
+   * Center of the selected S-type selector (moves "S_<center>_<move>"), or null if none is selected.
+   * Selecting is local to the GUI and not a move, so it is cleared whenever the position changes.
+   */
+  const selectedCenter = ref<number | null>(null);
+  watch(currentAutoguiPosition, () => { selectedCenter.value = null; });
+
+  /** Clicking anything other than a move button deselects the selected selector. */
+  const deselectOnClickOff = (event: MouseEvent) => {
+    if (selectedCenter.value === null) return;
+    if ((event.target as Element).closest('[class*="iag-button"]')) return;
+    selectedCenter.value = null;
+  };
 
   /**
    * Parses a series of points from the 'parsedData' array, dependant of the positioning mode. Given the 'X' positioning mode highlights
@@ -347,6 +389,7 @@
       let quadraticBeziers: IAGQuadraticBezierButton[] = [];
       let cubicBeziers: IAGCubicBezierButton[] = [];
       let ellipticalArcs: IAGEllipticalArcButton[] = [];
+      let selectors: IAGSelectorButton[] = [];
       let listedButtons = [];
       let textIndices = [];
       for (var i = 0; i < board.length; i++) {
@@ -364,31 +407,44 @@
           hintOpacity: !options.value.showNextMoves ? 0.001 : moveObj.moveValueOpacity,
           nextPosition: moveObj.position
         };
+        let autoguiMove = moveObj.autoguiMove;
         let matches;
-        if ((matches = moveObj.autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
+        // S_<center>_<move>: <move> is only shown once the selector at <center> is selected.
+        if ((matches = autoguiMove.match(/^S_([0-9]+)_(.+)$/))) {
+          const center = parseInt(matches[1]);
+          if (center !== selectedCenter.value) {
+            // Available moves are sorted best-first, so the first move seen for a selector is its best.
+            if (!selectors.some((selector) => selector.center === center)) {
+              selectors.push({center, move});
+            }
+            continue;
+          }
+          autoguiMove = matches[2];
+        }
+        if ((matches = autoguiMove.match(/^A_([a-zA-Z0-9-])_([0-9]+)*/))) {
           tokens.push({token: matches[1], center: parseInt(matches[2]), move});
-        } else if ((matches = moveObj.autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
+        } else if ((matches = autoguiMove.match(/^M_([0-9]+)_([0-9]+)*/))) {
           arrows.push({from: parseInt(matches[1]), to: parseInt(matches[2]), move});
-        } else if ((matches = moveObj.autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
+        } else if ((matches = autoguiMove.match(/^L_([0-9]+)_([0-9]+)*/))) {
           lines.push({p1: parseInt(matches[1]), p2: parseInt(matches[2]), move});
-        } else if ((matches = moveObj.autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
+        } else if ((matches = autoguiMove.match(/^T_([a-zA-Z0-9-])_([0-9]+)*/))) {
           textButtons.push({text: matches[1], center: parseInt(matches[2]), move});
-        } else if ((matches = moveObj.autoguiMove.match(/^LQ_([ACR]{3})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+        } else if ((matches = autoguiMove.match(/^LQ_([ACR]{3})/))) {
+          const parsedData = [...autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           quadraticBeziers.push({start: points[0], control: points[1], end: points[2], move: move});
           if (points.length != 3) {
             console.error("[IAGQuadraticBezierButton] Unexpected number of points:", points);
           }
-        } else if ((matches = moveObj.autoguiMove.match(/^LC_([ACR]{4})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+        } else if ((matches = autoguiMove.match(/^LC_([ACR]{4})/))) {
+          const parsedData = [...autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 4) {
             console.error("[IAGCubicBezierButton] Unexpected number of points:", points);
           }
           cubicBeziers.push({start: points[0], control1: points[1], control2: points[2], end: points[3], move: move});
-        } else if ((matches = moveObj.autoguiMove.match(/^LA_([ACRX]{7})/))) {
-          const parsedData = [...moveObj.autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
+        } else if ((matches = autoguiMove.match(/^LA_([ACRX]{7})/))) {
+          const parsedData = [...autoguiMove.matchAll(/_(-?\d+(\.\d+)?)/g)].map(match => parseFloat(match[1]));
           const points: Point[] = parseAbsolutePoints(matches[1], parsedData);
           if (points.length != 7) {
             console.error("[IAGEllipticalArcButton] Unexpected number of points:", points);
@@ -426,6 +482,7 @@
         quadraticBeziers,
         cubicBeziers,
         ellipticalArcs,
+        selectors,
         listedButtons,
         isValidAutoguiPositionString,
       };

@@ -58,6 +58,7 @@ export type ImageAutoGUITheme = {
     arrowWidth: number;
     textButtonFontSize: number;
     entitiesOverArrows: boolean;
+    selectionFrame: string; // charImages key of the frame drawn over the selected S-type selector (S_<center>_<move> moves).
     sounds: Record<string, string>;
     animationType: string;
     defaultAnimationWindow: Array<number>;
