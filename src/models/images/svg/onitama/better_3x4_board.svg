@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48">
+  <rect x="36" width="36" height="16" fill="#f7dcdc" style=""/>
+  <rect x="36" y="32" width="36" height="16" fill="#dce6f7" style=""/>
+  <rect x="56" width="12" height="12" rx="1" fill="none" stroke="#999" stroke-width="0.25" stroke-dasharray="0.8 0.6" style="" y="2"/>
+  <rect width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="12" width="12" height="12" fill="#f0c8c8" style="stroke-width: 0.3px;" stroke="#555" stroke-width="0.3"/>
+  <rect x="24" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect y="12" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="12" y="12" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="24" y="12" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect y="36" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="12" y="36" width="12" height="12" fill="#c8d7f0" style="stroke-width: 0.3px;" stroke="#555" stroke-width="0.3"/>
+  <rect x="24" y="36" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect y="24" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="12" y="24" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="24" y="24" width="12" height="12" style="stroke-width: 0.3px;" fill="#f3ead8" stroke="#555" stroke-width="0.3"/>
+  <rect x="40" width="12" height="12" rx="1" fill="none" stroke="#999" stroke-width="0.25" stroke-dasharray="0.8 0.6" style="stroke-width: 0.25px;" y="2"/>
+  <rect x="56" width="12" height="12" rx="1" fill="none" stroke="#999" stroke-width="0.25" stroke-dasharray="0.8 0.6" style="stroke-width: 0.25px;" y="18"/>
+  <rect x="56" width="12" height="12" rx="1" fill="none" stroke="#999" stroke-width="0.25" stroke-dasharray="0.8 0.6" style="stroke-width: 0.25px;" y="34"/>
+  <rect x="40" width="12" height="12" rx="1" fill="none" stroke="#999" stroke-width="0.25" stroke-dasharray="0.8 0.6" style="stroke-width: 0.25px;" y="34"/>
+  <text style="fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 28px; white-space: pre;" transform="matrix(0.153032, 0, 0, 0.159795, 37.847942, 21.868879)" x="40.211" y="23.053">Next:</text>
+</svg>
