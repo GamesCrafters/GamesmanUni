@@ -1,5 +1,5 @@
 <template>
-    <div id="app-game-body-header-title">
+    <div id="app-game-body-header-title" :class="{ breakthrough: gameId === 'breakthrough' }">
         <span class="title-name">{{ gameName }}</span>
         <span class="title-variant">({{ variantName }})</span>
     </div>
@@ -24,6 +24,12 @@
         gap: 1px;
         flex: 1;
         min-width: 0;
+
+        &.breakthrough > .title-name {
+            color: #003262;
+            border-bottom: 0.2rem solid #FDB515;
+            padding-bottom: 0.3rem;
+        }
     }
 
     .title-name {

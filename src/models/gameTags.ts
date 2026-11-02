@@ -129,4 +129,19 @@ export const gameTags: Record<string, { style: string[]; solveType: string[]; mi
     "spinout":        { style: [],                                       solveType: ["Remoteness"],              misc: [] },
     "toadsandfrogspuzzle": { style: [],                                  solveType: ["Remoteness"],              misc: ["Educational"] },
     "topspin":        { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+
+    // ── New puzzles from main merge (Sokoban, Klotski, Stormy Seas, Marble Circuit,
+    //    Snake's Tale, Hashi, Flow Free, Lunar Lockout) ──────────────────────
+    // TODO: review tags
+    // Drafted to the existing puzzle convention (no style chips, Remoteness solve type).
+    // Note: "snakestale" is Snake's Tale, distinct from the two-player "snake" above.
+
+    "sokoban":        { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "klotski":        { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "stormyseas":     { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "marblecircuit":  { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "snakestale":     { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "hashi":          { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "flowfree":       { style: [],                                       solveType: ["Remoteness"],              misc: [] },
+    "lunarlockout":   { style: [],                                       solveType: ["Remoteness"],              misc: [] },
 };
