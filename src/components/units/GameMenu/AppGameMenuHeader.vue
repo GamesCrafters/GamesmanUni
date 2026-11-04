@@ -13,7 +13,7 @@
         flex-wrap: wrap;
         justify-content: space-around;
         > * {
-            margin: 2.5rem;
+            margin: 0.75rem 0;
         }
     }
 </style>

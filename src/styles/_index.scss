@@ -1,5 +1,19 @@
 @forward "themes";
 
+@mixin uiColors {
+    --gu-surface:        #ffffff;
+    --gu-surface-alt:    #f7f6f2;
+    --gu-surface-hover:  #f0ede4;
+    --gu-border:         #e0ddd6;
+    --gu-brand:          #1b3a6b;
+    --gu-text-body:      #555555;
+    --gu-text-secondary: #888888;
+    --gu-text-muted:     #999999;
+    --gu-status-bg:      #eef3fb;
+    --gu-status-text:    #3a6abf;
+    --gu-status-dot:     #4a9eff;
+}
+
 @mixin reservedColors {
     --drawColor: #ffff00;
     --loseColor: #800000;
@@ -161,7 +175,6 @@ code {
 button {
     border-radius: 1rem;
     border: 0.1rem solid var(--primaryColor);
-    box-shadow: 0.25rem 0.25rem 0.1rem 0.01rem var(--primaryColor);
     cursor: pointer;
     outline: none;
     text-decoration: none;
@@ -185,6 +198,7 @@ button {
 
 #app {
     @include reservedColors;
+    @include uiColors;
 }
 
 .uni-dropdown {
@@ -268,7 +282,7 @@ button {
         color: var(--primaryColor);
         text-shadow: -1px -1px rgba(0, 0, 0, 0.15);
         white-space: nowrap;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: none;
         transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
     }
     &:checked {

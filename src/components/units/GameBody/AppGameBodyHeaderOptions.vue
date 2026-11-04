@@ -341,11 +341,16 @@
 <style lang="scss" scoped>
     #app-game-body-header-options {
         > button {
-            border-radius: 100%;
-            font-size: 2rem;
-            height: max(2.5rem, min(5vh, 5vw));
-            margin: 0.5rem;
-            width: max(2.5rem, min(5vh, 5vw));
+            border-radius: 8px;
+            font-size: 16px;
+            height: 40px;
+            width: 40px;
+            background: #f0ede4;
+            border: 1px solid #e0ddd6;
+            color: #555;
+            transition: background 0.15s;
+
+            &:hover { background: #1b3a6b; color: #fff; border-color: #1b3a6b; transform: none; }
         }
         #popup {
             align-content: center;
@@ -393,7 +398,7 @@
                             border-radius: 1rem;
                             box-sizing: border-box;
                             &:focus {
-                                box-shadow: 0.25rem 0.25rem 0.1rem 0.01rem var(--primaryColor);
+                                box-shadow: none;
                                 outline: none;
                             }
                         }
@@ -448,7 +453,7 @@
         position: absolute;
         background-color: #f9f9f9;
         min-width: 192px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        border: 1px solid #e0ddd6;
         z-index: 9999;
     }
 
