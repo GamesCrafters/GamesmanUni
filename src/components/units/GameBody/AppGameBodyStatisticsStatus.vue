@@ -1,5 +1,6 @@
 <template>
-    <div id="app-game-body-statistics-status">
+    <div id="app-game-body-statistics-status" :class="{ loading: backgroundLoading }">
+        <span class="status-dot"></span>
         <p>{{ status }}</p>
     </div>
 </template>
@@ -10,22 +11,32 @@
 
     const store = useStore();
     const backgroundLoading = computed(() => store.getters.backgroundLoading);
-    const status = computed(() => backgroundLoading.value ? "Loading..." : " Ready ");
+    const status = computed(() => backgroundLoading.value ? "Loading..." : "Ready");
 </script>
 
 <style lang="scss" scoped>
     #app-game-body-statistics-status {
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
-        align-content: stretch;
-        align-items: center;
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-around;
+        align-items: center;
+        gap: 7px;
+        flex: 0 0 auto;
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gu-status-dot);
+            flex-shrink: 0;
+        }
+
+        &.loading .status-dot {
+            background: #FDB515;
+        }
+
         > p {
-            padding: 1rem;
-            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gu-status-text);
         }
     }
 </style>

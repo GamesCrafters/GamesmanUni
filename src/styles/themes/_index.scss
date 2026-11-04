@@ -43,6 +43,17 @@
     --primaryColor: #{dark.$primaryColor};
     --regularFontFamily: #{dark.$regularFontFamily};
     --secondaryColor: #{dark.$secondaryColor};
+    --gu-surface:        #2a2a2a;
+    --gu-surface-alt:    #1e1e1e;
+    --gu-surface-hover:  #383838;
+    --gu-border:         #3d3d3d;
+    --gu-brand:          #5b9bd5;
+    --gu-text-body:      #e8e8e8;
+    --gu-text-secondary: #999999;
+    --gu-text-muted:     #777777;
+    --gu-status-bg:      #1e2535;
+    --gu-status-text:    #7ab8ff;
+    --gu-status-dot:     #4a9eff;
 }
 
 #app.uni-theme-greenboard {
@@ -61,6 +72,17 @@
     --primaryColor: #{light.$primaryColor};
     --regularFontFamily: #{light.$regularFontFamily};
     --secondaryColor: #{light.$secondaryColor};
+    --gu-surface:        #ffffff;
+    --gu-surface-alt:    #f7f6f2;
+    --gu-surface-hover:  #f0ede4;
+    --gu-border:         #e0ddd6;
+    --gu-brand:          #1b3a6b;
+    --gu-text-body:      #555555;
+    --gu-text-secondary: #888888;
+    --gu-text-muted:     #999999;
+    --gu-status-bg:      #eef3fb;
+    --gu-status-text:    #3a6abf;
+    --gu-status-dot:     #4a9eff;
 }
 
 #app.uni-theme-rose {
