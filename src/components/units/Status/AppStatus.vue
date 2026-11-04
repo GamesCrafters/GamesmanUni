@@ -447,7 +447,7 @@
 {
     "en-US": {
         "title": "System status",
-        "note": "Live status of GamesCrafters services, checked every hour. Times are in UTC.",
+        "note": "This page shows the live status of GamesCrafters services, checked every hour. Times are in UTC.",
         "loading": "Loading status…",
         "loadFailed": "Couldn't load status. Trying again every minute.",
         "overall": { "ok": "All systems operational", "degraded": "Some systems degraded", "down": "Partial outage", "major": "Major outage" },
@@ -466,7 +466,7 @@
     },
     "zh": {
         "title": "系统状态",
-        "note": "GamesCrafters 各项服务的实时状态，每小时检查一次。时间为 UTC。",
+        "note": "本页显示 GamesCrafters 各项服务的实时状态，每小时检查一次。时间为 UTC。",
         "loading": "正在加载状态…",
         "loadFailed": "无法加载状态。每分钟重试一次。",
         "overall": { "ok": "所有系统运行正常", "degraded": "部分系统运行缓慢", "down": "部分系统故障", "major": "重大故障" },
@@ -485,7 +485,7 @@
     },
     "es": {
         "title": "Estado del sistema",
-        "note": "Estado en vivo de los servicios de GamesCrafters, comprobado cada hora. Las horas están en UTC.",
+        "note": "Esta página muestra el estado en vivo de los servicios de GamesCrafters, comprobado cada hora. Las horas están en UTC.",
         "loading": "Cargando estado…",
         "loadFailed": "No se pudo cargar el estado. Se reintenta cada minuto.",
         "overall": { "ok": "Todos los sistemas operativos", "degraded": "Algunos sistemas lentos", "down": "Interrupción parcial", "major": "Interrupción grave" },
@@ -504,7 +504,7 @@
     },
     "hi": {
         "title": "System status",
-        "note": "Live status of GamesCrafters services, checked every hour. Times are in UTC.",
+        "note": "This page shows the live status of GamesCrafters services, checked every hour. Times are in UTC.",
         "loading": "Loading status…",
         "loadFailed": "Couldn't load status. Trying again every minute.",
         "overall": { "ok": "All systems operational", "degraded": "Some systems degraded", "down": "Partial outage", "major": "Major outage" },

@@ -5,7 +5,9 @@
         </div>
         <div class="card">
             <div class="card-heading">
-                <span class="card-name">{{ chosenName }}</span>
+                <span class="card-name"
+                    >{{ chosenName }} <span v-if="isAll" class="muted">{{ t("legendNote") }}</span></span
+                >
                 <span v-if="!isAll" class="card-now"
                     ><strong>{{ formatLatency(chosenLatency, fmtLocale) }}</strong> {{ t("now") }}</span
                 >
@@ -14,7 +16,7 @@
                 <li v-for="line in lines" :key="line.id">
                     <span class="swatch" :style="{ backgroundColor: line.color }" aria-hidden="true"></span>
                     <span class="legend-name">{{ line.name }}</span>
-                    <span class="legend-now">{{ formatLatency(line.latencyMs, fmtLocale) }} {{ t("now") }}</span>
+                    <span class="legend-now">{{ formatLatency(line.latencyMs, fmtLocale) }}</span>
                 </li>
             </ul>
             <div ref="frame" class="frame">
@@ -81,7 +83,7 @@
     const width = ref(0);
     // "All" overlays every component's line in one chart, each in its own colour.
     const allId = "__all__";
-    const chosen = ref(props.options[0]?.id);
+    const chosen = ref(allId);
     const selected = ref<number>();
 
     let observer: ResizeObserver | undefined;
@@ -157,7 +159,7 @@
         () => (selected.value = undefined)
     );
     const selectedKey = computed(() => (selected.value === undefined ? undefined : props.dayKeys[selected.value]));
-    const readout = computed(() => (selectedKey.value ? describeDay(selectedKey.value) : t("hint")));
+    const readout = computed(() => (selectedKey.value ? describeDay(selectedKey.value) : ""));
 
     // For "All": every component's value on the chosen day, slowest first.
     const allReadout = computed(() => {
@@ -355,10 +357,15 @@
             margin: 0.4rem 0 0;
         }
         .swatch {
-            border-radius: 0.2rem;
+            border-radius: 50%;
             flex: none;
-            height: 0.4rem;
-            width: 1.8rem;
+            height: 1rem;
+            width: 1rem;
+        }
+        .card-name > .muted {
+            font-size: inherit;
+            font-weight: 400;
+            opacity: 0.8;
         }
         .legend-now {
             opacity: 0.8;
@@ -373,6 +380,7 @@
 <i18n lang="json">
 {
     "en-US": {
+        "legendNote": "(latest check)",
         "all": "All",
         "allName": "All components",
         "chartLabelAll": "Daily 95th percentile latency of all components for the last {count} days, one line each. Use the arrow keys to read each day.",
@@ -381,11 +389,11 @@
         "chooseComponent": "Component to show",
         "chartLabel": "Daily 95th percentile latency of {name} for the last {count} days. Use the arrow keys to read each day.",
         "degradedLine": "degraded above 30 s",
-        "hint": "Hover, tap or use the arrow keys to read a day.",
         "dayNoData": "{date} · no data",
         "dayDetail": "{date} · p95 {p95}, average {average}"
     },
     "zh": {
+        "legendNote": "（最近一次检查）",
         "all": "全部",
         "allName": "所有组件",
         "chartLabelAll": "所有组件最近 {count} 天每日第 95 百分位延迟，每个组件一条线。使用方向键查看每一天。",
@@ -394,11 +402,11 @@
         "chooseComponent": "选择组件",
         "chartLabel": "{name} 最近 {count} 天每日第 95 百分位延迟。使用方向键查看每一天。",
         "degradedLine": "超过 30 秒为缓慢",
-        "hint": "悬停、点按或使用方向键查看某一天。",
         "dayNoData": "{date} · 无数据",
         "dayDetail": "{date} · p95 {p95}，平均 {average}"
     },
     "es": {
+        "legendNote": "(última comprobación)",
         "all": "Todos",
         "allName": "Todos los componentes",
         "chartLabelAll": "Latencia diaria del percentil 95 de todos los componentes en los últimos {count} días, una línea cada uno. Use las flechas para leer cada día.",
@@ -407,11 +415,11 @@
         "chooseComponent": "Componente a mostrar",
         "chartLabel": "Latencia diaria del percentil 95 de {name} en los últimos {count} días. Use las flechas para leer cada día.",
         "degradedLine": "lento por encima de 30 s",
-        "hint": "Pase el cursor, toque o use las flechas para leer un día.",
         "dayNoData": "{date} · sin datos",
         "dayDetail": "{date} · p95 {p95}, promedio {average}"
     },
     "hi": {
+        "legendNote": "(latest check)",
         "all": "All",
         "allName": "All components",
         "chartLabelAll": "Daily 95th percentile latency of all components for the last {count} days, one line each. Use the arrow keys to read each day.",
@@ -420,7 +428,6 @@
         "chooseComponent": "Component to show",
         "chartLabel": "Daily 95th percentile latency of {name} for the last {count} days. Use the arrow keys to read each day.",
         "degradedLine": "degraded above 30 s",
-        "hint": "Hover, tap or use the arrow keys to read a day.",
         "dayNoData": "{date} · no data",
         "dayDetail": "{date} · p95 {p95}, average {average}"
     }
