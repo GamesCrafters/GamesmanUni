@@ -15,6 +15,7 @@
         { path: "/games", name: "GamesAndPuzzles" },
         { path: "/about", name: "About" },
         { path: "/updates", name: "Updates" },
+        { path: "/status", name: "Status" },
     ];
 </script>
 
@@ -59,25 +60,29 @@
         "Home": "首页",
         "GamesAndPuzzles": "游戏与解谜",
         "About": "关于",
-        "Updates": "更新日志"
+        "Updates": "更新日志",
+        "Status": "状态"
     },
     "en-US": {
         "Home": "Home",
         "GamesAndPuzzles": "Games & Puzzles",
         "About": "About",
-        "Updates": "Updates"
+        "Updates": "Updates",
+        "Status": "Status"
     },
     "es": {
         "Home": "Inicio",
         "GamesAndPuzzles": "Juegos y rompecabezas",
         "About": "Información",
-        "Updates": "Versiones"
+        "Updates": "Versiones",
+        "Status": "Estado"
     },
     "hi": {
         "Home": "Home",
         "GamesAndPuzzles": "Games & Puzzles",
         "About": "About",
-        "Updates": "Updates"
+        "Updates": "Updates",
+        "Status": "Status"
     }
 }
 </i18n>

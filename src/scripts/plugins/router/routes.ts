@@ -5,11 +5,13 @@ import TheVariantsPage from "../../../components/views/TheVariantsPage.vue";
 import TheGamePage from "../../../components/views/TheGamePage.vue";
 import TheUpdatesPage from "../../../components/views/TheUpdatesPage.vue";
 import TheDemoPage from "../../../components/views/TheDemoPage.vue"
+import TheStatusPage from "../../../components/views/TheStatusPage.vue";
 import The404Page from "../../../components/views/The404Page.vue";
 
 export const routes = [
     { path: "/", component: TheHomePage, name: "home" },
     { path: "/about", component: TheAboutPage, name: "about" },
+    { path: "/status", component: TheStatusPage, name: "status" },
     { path: "/:type", component: TheGamesPage, name: "games" },
     { path: "/:type", component: TheGamesPage, name: "puzzles" },
     { path: "/:type/:gameId/variants", component: TheVariantsPage, name: "variants" },
