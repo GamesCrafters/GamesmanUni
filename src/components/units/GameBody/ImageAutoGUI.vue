@@ -17,7 +17,7 @@
         :d="formatArrowPathPoints(arrow, arrowWidth)"
         :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (options.highlightMove && highlightedMove === arrow.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })"
+        @click="isMoveAllowed(arrow.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         <title>{{ moveButtonTitle(arrow.move.str) }}</title>
@@ -86,7 +86,7 @@
               :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
               :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px'"
               :href="getImageSource(charImages[token.token].image) + '#MoveButtonSVG'"
-              @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })"
+              @click="isMoveAllowed(token.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })"
               @mouseover="store.commit(mutationTypes.setHighlightedMove, token.move.str)"
               @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
               <title>{{ moveButtonTitle(token.move.str) }}</title>
@@ -100,7 +100,7 @@
             :class="['iag-button-point ' + (token.move ? 'move ' : '') + getBoardMoveElementHintClass(token.move), (options.highlightMove && highlightedMove === token.move.str) ? 'highlighted' : '']"
             :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? token.move.hintOpacity : 1"
             :style="'--tOrigin: ' + centers[token.center][0] + 'px ' + centers[token.center][1] + 'px;'"
-            @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })"
+            @click="isMoveAllowed(token.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: token.move.str })"
             @mouseover="store.commit(mutationTypes.setHighlightedMove, token.move.str)"
             @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
             <title>{{ moveButtonTitle(token.move.str) }}</title>
@@ -114,7 +114,7 @@
         :class="['iag-button-point ' + (textButton.move ? 'move ' : '') + getBoardMoveElementHintClass(textButton.move), (options.highlightMove && highlightedMove === textButton.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? textButton.move.hintOpacity : 1"
         :style="'font-size:' + textButtonFontSize + 'px;stroke:none;--tOrigin: ' + centers[textButton.center][0] + 'px ' + centers[textButton.center][1] + 'px'"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: textButton.move.str })"
+        @click="isMoveAllowed(textButton.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: textButton.move.str })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, textButton.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         {{ textButton.text }}
@@ -127,7 +127,7 @@
           :d="formatArrowPathPoints(arrow, arrowWidth)"
           :class="['iag-button-arrow ' + getBoardMoveElementHintClass(arrow.move), (options.highlightMove && highlightedMove === arrow.move.str) ? 'highlighted' : '']"
           :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? arrow.move.hintOpacity : 1"
-          @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })"
+          @click="isMoveAllowed(arrow.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: arrow.move.str })"
           @mouseover="store.commit(mutationTypes.setHighlightedMove, arrow.move.str)"
           @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
           <title>{{ moveButtonTitle(arrow.move.str) }}</title>
@@ -143,7 +143,7 @@
         :stroke-width="lineWidth * widthFactor"
         :class="['iag-button-line ' + getBoardMoveElementHintClass(line.move), (options.highlightMove && highlightedMove === line.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? line.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: line.move.str })"
+        @click="isMoveAllowed(line.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: line.move.str })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, line.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">
         <title>{{ moveButtonTitle(line.move.str) }}</title>
@@ -159,7 +159,7 @@
         :stroke-width=lineWidth
         :class="['iag-button-quadraticbezier ' + getBoardMoveElementHintClass(quadraticBezier.move), (options.highlightMove && highlightedMove === quadraticBezier.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? quadraticBezier.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: quadraticBezier.move.str })"
+        @click="isMoveAllowed(quadraticBezier.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: quadraticBezier.move.str })"
         :key="quadraticBezier.move.str"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, quadraticBezier.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
@@ -175,7 +175,7 @@
         :stroke-width=lineWidth
         :class="['iag-button-cubicbezier ' + getBoardMoveElementHintClass(cubicBezier.move), (options.highlightMove && highlightedMove === cubicBezier.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? cubicBezier.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: cubicBezier.move.str })"
+        @click="isMoveAllowed(cubicBezier.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: cubicBezier.move.str })"
         :key="cubicBezier.move.str"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, cubicBezier.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
@@ -191,7 +191,7 @@
         :stroke-width=lineWidth
         :class="['iag-button-ellipticalarc ' + getBoardMoveElementHintClass(ellipticalArc.move), (options.highlightMove && highlightedMove === ellipticalArc.move.str) ? 'highlighted' : '']"
         :opacity="options.showNextMoveHints && options.showNextMoveDeltaRemotenesses ? ellipticalArc.move.hintOpacity : 1"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: ellipticalArc.move.str })"
+        @click="isMoveAllowed(ellipticalArc.move.str) && store.dispatch(actionTypes.runMove, { autoguiMove: ellipticalArc.move.str })"
         :key="ellipticalArc.move.str"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, ellipticalArc.move.str)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')"
@@ -210,7 +210,7 @@
       <div class="move" v-for="listedMove in listedMoves" :key="listedMove.move"
         :class="[options.showNextMoveHints ? `uni-${listedMove.moveValue}` : '', (options.highlightMove && highlightedMove === listedMove.move) ? 'highlighted' : '']"
         :style="{ opacity: options.showNextMoveDeltaRemotenesses ? listedMove.moveValueOpacity : 1 }"
-        @click="movesAreClickable && store.dispatch(actionTypes.runMove, { autoguiMove: listedMove.move })"
+        @click="isMoveAllowed(listedMove.move) && store.dispatch(actionTypes.runMove, { autoguiMove: listedMove.move })"
         @mouseover="store.commit(mutationTypes.setHighlightedMove, listedMove.move)"
         @mouseout="store.commit(mutationTypes.setHighlightedMove, '')">{{ listedMove.move }}
       </div>
@@ -222,6 +222,7 @@
   import { computed, ref, watch } from "vue";
   import { actionTypes, mutationTypes, useStore } from "../../../scripts/plugins/store";
   import { defaultImageAutoGUITheme } from "../../../models/datas/defaultApp";
+  import { tutorialState } from "../../../scripts/tutorial";
   const gimages = import.meta.globEager("../../../models/images/svg/**/*");
 
   interface IAGMove {
@@ -297,6 +298,7 @@
   const currentAutoguiPosition = computed(() => store.getters.currentAutoguiPosition);
   const currentAvailableMoves = computed(() => store.getters.currentAvailableMoves);
   const movesAreClickable = computed(() => !(store.getters.currentPlayer.isComputer || (options.value.automoveIfSingleMove && Object.keys(currentAvailableMoves.value).length == 1)));
+  const isMoveAllowed = (moveStr: string) => movesAreClickable.value && (tutorialState.allowedMove === null || tutorialState.allowedMove === moveStr);
   const getImageSource = (imagePath: string) => gimages["../../../models/images/svg/" + imagePath].default;
   const scaledWidth = 100;
   const animationPlaying = computed(() => store.getters.animationPlaying);
@@ -547,7 +549,7 @@
   const getBoardMoveElementHintClass = (move?: IAGMove): string => 
       (move && options.value.showNextMoveHints ? "hint-" + move.hint : "");  
 
-  const highlightedMove = computed(() => store.getters.currentHighlightedMove);
+  const highlightedMove = computed(() => store.getters.currentHighlightedMove || tutorialState.allowedMove || '');
 </script>
 
 <style lang="scss" scoped>

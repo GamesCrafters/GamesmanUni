@@ -26,16 +26,24 @@
     #app-footer {
         align-content: center;
         align-items: center;
-        background-color: var(--neutralColor);
+        background-color: var(--gu-surface-hover);
+        border-top: 1px solid var(--gu-border);
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 1rem 10%;
+        padding: 1rem 2rem;
+        gap: 1.5rem;
         a {
             display: inline-block;
-            font-size: 0.83rem;
-            margin: 0 0.5rem;
+            font-size: 11px;
+            color: var(--gu-text-muted);
+            text-decoration: none;
+            font-weight: 400;
+
+            &:hover {
+                color: var(--gu-brand);
+            }
         }
     }
 </style>
