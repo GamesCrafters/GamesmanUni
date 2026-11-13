@@ -58,7 +58,7 @@
             justify-content: center;
             transition: background 0.15s;
 
-            &:hover { background: #1b3a6b; color: #fff; border-color: #1b3a6b; transform: none; }
+            &:hover { background: var(--gu-brand); color: var(--gu-bg); border-color: var(--gu-brand); transform: none; }
         }
     }
 </style>

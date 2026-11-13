@@ -1,17 +1,20 @@
 @forward "themes";
 
 @mixin uiColors {
-    --gu-surface:        #ffffff;
-    --gu-surface-alt:    #f7f6f2;
-    --gu-surface-hover:  #f0ede4;
-    --gu-border:         #e0ddd6;
-    --gu-brand:          #1b3a6b;
-    --gu-text-body:      #555555;
-    --gu-text-secondary: #888888;
-    --gu-text-muted:     #999999;
-    --gu-status-bg:      #eef3fb;
-    --gu-status-text:    #3a6abf;
-    --gu-status-dot:     #4a9eff;
+    --gu-bg:              #f7f6f2;
+    --gu-surface:         #ffffff;
+    --gu-surface-alt:     #f0ede4;
+    --gu-surface-hover:   #e8e4d9;
+    --gu-border:          #e0ddd6;
+    --gu-brand:           #1b3a6b;
+    --gu-accent:          #fdb515;
+    --gu-hero:            #0f1e3a;
+    --gu-text-body:       #494949;
+    --gu-text-secondary:  #565656;
+    --gu-text-muted:      #636363;
+    --gu-status-bg:       #eef3fb;
+    --gu-status-text:     #1b3a6b;
+    --gu-status-dot:      #4a9eff;
 }
 
 @mixin reservedColors {

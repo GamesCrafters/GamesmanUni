@@ -5,11 +5,11 @@
         <div class="overlay-bg" :class="{ open: showGlossary }" @click="showGlossary = false"></div>
         <div class="glossary-panel" :class="{ open: showGlossary }">
             <button class="glossary-close" @click="showGlossary = false">&#10005;</button>
-            <div class="glossary-heading">Tag glossary</div>
-            <div class="glossary-subheading">What each filter tag means</div>
+            <div class="glossary-heading">{{ t("games.glossaryHeading") }}</div>
+            <div class="glossary-subheading">{{ t("games.glossarySub") }}</div>
 
             <div class="glossary-section">
-                <div class="glossary-section-title">GUI Type</div>
+                <div class="glossary-section-title">{{ t("games.gGui") }}</div>
                 <div class="glossary-item">
                     <div class="glossary-term"><span class="gtag gt-v3">Animated GUI</span></div>
                     <div class="glossary-def">Games with fully animated boards rendered by the AutoGUI system.</div>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="glossary-section">
-                <div class="glossary-section-title">Game Style</div>
+                <div class="glossary-section-title">{{ t("games.gStyle") }}</div>
                 <div class="glossary-item">
                     <div class="glossary-term"><span class="gtag gt-style">Blocking</span></div>
                     <div class="glossary-def">Players win by preventing the opponent from making any legal move. The goal is positional control rather than capture.</div>
@@ -61,7 +61,7 @@
             </div>
 
             <div class="glossary-section">
-                <div class="glossary-section-title">Solve Type</div>
+                <div class="glossary-section-title">{{ t("games.gSolve") }}</div>
                 <div class="glossary-item">
                     <div class="glossary-term"><span class="gtag gt-solve">Remoteness</span></div>
                     <div class="glossary-def">Stores how many moves remain until the game ends assuming perfect play from any position.</div>
@@ -85,7 +85,7 @@
             </div>
 
             <div class="glossary-section">
-                <div class="glossary-section-title">Miscellaneous</div>
+                <div class="glossary-section-title">{{ t("games.gMisc") }}</div>
                 <div class="glossary-item">
                     <div class="glossary-term"><span class="gtag gt-misc">Educational</span></div>
                     <div class="glossary-def">Used for teaching or demonstration purposes within the GamesCrafters research group.</div>
@@ -99,10 +99,10 @@
             <!-- Filter Sidebar -->
             <aside class="filter-sidebar" :class="{ collapsed: sidebarCollapsed }">
                 <div v-if="!sidebarCollapsed" class="filter-title-row">
-                    <span class="filter-title">Filter</span>
+                    <span class="filter-title">{{ t("games.filter") }}</span>
                 </div>
                 <div class="filter-header-row">
-                    <button v-if="!sidebarCollapsed" class="glossary-btn" @click="showGlossary = true">Tag glossary &#8599;</button>
+                    <button v-if="!sidebarCollapsed" class="glossary-btn" @click="showGlossary = true">{{ t("games.glossary") }} &#8599;</button>
                     <button class="sidebar-toggle" @click="sidebarCollapsed = !sidebarCollapsed" :title="sidebarCollapsed ? 'Expand filters' : 'Collapse filters'">
                         {{ sidebarCollapsed ? '›' : '‹' }}
                     </button>
@@ -112,7 +112,7 @@
                     <!-- GUI TYPE -->
                     <div class="filter-section">
                         <div class="filter-section-header">
-                            <span class="filter-section-title">GUI TYPE</span>
+                            <span class="filter-section-title">{{ t("games.fGui") }}</span>
                         </div>
                         <div class="tag-chips">
                             <span class="tag-chip chip-v3" :class="{ active: selectedGuiFilters.includes('v3') }" @click="toggleGuiFilter('v3')" @mouseenter="showChipTooltip($event, tagDescriptions['v3'])" @mouseleave="hideChipTooltip">Animated GUI</span>
@@ -125,7 +125,7 @@
                     <!-- GAME STYLE -->
                     <div class="filter-section">
                         <div class="filter-section-header">
-                            <span class="filter-section-title">GAME STYLE</span>
+                            <span class="filter-section-title">{{ t("games.fStyle") }}</span>
                         </div>
                         <div class="tag-chips">
                             <span v-for="s in styleChips" :key="s"
@@ -141,7 +141,7 @@
                     <!-- SOLVE TYPE -->
                     <div class="filter-section">
                         <div class="filter-section-header">
-                            <span class="filter-section-title">SOLVE TYPE</span>
+                            <span class="filter-section-title">{{ t("games.fSolve") }}</span>
                         </div>
                         <div class="tag-chips">
                             <span v-for="s in solveChips" :key="s"
@@ -157,7 +157,7 @@
                     <!-- MISC -->
                     <div class="filter-section">
                         <div class="filter-section-header">
-                            <span class="filter-section-title">MISC</span>
+                            <span class="filter-section-title">{{ t("games.fMisc") }}</span>
                         </div>
                         <div class="tag-chips">
                             <span class="tag-chip chip-misc"
@@ -179,12 +179,12 @@
                             type="text"
                             v-model="search"
                             @keydown.esc="search = ''"
-                            placeholder="Search by name..."
+                            :placeholder="t('games.search')"
                         />
                     </div>
                     <select class="sort-select" v-model="sortOrder">
-                        <option value="az">A to Z</option>
-                        <option value="za">Z to A</option>
+                        <option value="az">{{ t("games.sortAz") }}</option>
+                        <option value="za">{{ t("games.sortZa") }}</option>
                     </select>
                 </div>
 
@@ -196,7 +196,7 @@
                         class="type-tab"
                         :class="{ active: activeTypeTab === tab.value }"
                         @click="activeTypeTab = tab.value"
-                    >{{ tab.label }}</button>
+                    >{{ t(tab.key) }}</button>
                 </div>
 
                 <!-- Active filters display (all groups) -->
@@ -204,12 +204,12 @@
                     <span class="active-chip" v-for="f in allActiveFilters" :key="f.key" @click="f.remove()">
                         {{ f.label }} <span>&#10005;</span>
                     </span>
-                    <span class="clear-all" @click="clearAllFilters">Clear all</span>
+                    <span class="clear-all" @click="clearAllFilters">{{ t("games.clearAll") }}</span>
                 </div>
 
                 <!-- Games section -->
                 <template v-if="filteredGames.length > 0">
-                    <div class="section-label">Games</div>
+                    <div class="section-label">{{ t("games.secGames") }}</div>
                     <div class="games-grid">
                         <router-link
                             v-for="game in filteredGames"
@@ -229,7 +229,7 @@
 
                 <!-- Puzzles section -->
                 <template v-if="filteredPuzzles.length > 0 && activeTypeTab !== 'games'">
-                    <div class="section-label" :class="{ 'section-label-gap': filteredGames.length > 0 }">Puzzles</div>
+                    <div class="section-label" :class="{ 'section-label-gap': filteredGames.length > 0 }">{{ t("games.secPuzzles") }}</div>
                     <div class="games-grid">
                         <router-link
                             v-for="puzzle in filteredPuzzles"
@@ -258,10 +258,12 @@
 
 <script lang="ts" setup>
     import { computed, onMounted, ref } from "vue";
+    import { useI18n } from "vue-i18n";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import type { Game } from "../../scripts/gamesmanUni/types";
     import { gameTags } from "../../models/gameTags";
 
+    const { t } = useI18n({ useScope: "global" });
     const store = useStore();
 
     const getLogoSource = (game: Game) => {
@@ -303,10 +305,10 @@
     const selectedMiscFilters = ref<string[]>([]);
 
     const typeTabs = [
-        { value: "all",        label: "All" },
-        { value: "games",  label: "Games" },
-        { value: "onePlayer",  label: "Puzzle" },
-        { value: "v0",         label: "In development" },
+        { value: "all",        label: "All",            key: "games.tabAll" },
+        { value: "games",      label: "Games",          key: "games.tabGames" },
+        { value: "onePlayer",  label: "Puzzle",         key: "games.tabPuzzle" },
+        { value: "v0",         label: "In development", key: "games.tabInDev" },
     ];
 
     const styleChips = ["Blocking", "Rearranger", "Dartboard", "Chasing", "Impartial", "Partisan", "Connection", "Majority Control"];
@@ -625,7 +627,7 @@
 
         &:hover {
             background: var(--gu-brand);
-            color: #fff;
+            color: var(--gu-bg);
             border-color: var(--gu-brand);
         }
     }
@@ -766,7 +768,7 @@
 
         &:last-child { border-right: none; }
         &:hover:not(.active) { background: var(--gu-surface-hover); color: var(--primaryColor); }
-        &.active { background: var(--gu-brand); color: #ffffff; }
+        &.active { background: var(--gu-brand); color: var(--gu-bg); }
     }
 
     /* Active filters row */
@@ -784,8 +786,8 @@
         font-size: 11px;
         padding: 3px 8px;
         border-radius: 20px;
-        background: #1b3a6b;
-        color: #fff;
+        background: var(--gu-brand);
+        color: var(--gu-bg);
         cursor: pointer;
 
         > span { opacity: 0.6; }
@@ -793,7 +795,7 @@
 
     .clear-all {
         font-size: 11px;
-        color: #aaa;
+        color: var(--gu-text-muted);
         cursor: pointer;
         padding: 3px 6px;
         align-self: center;
@@ -816,10 +818,14 @@
     }
 
     /* ── GAME GRID ── */
+    /* The thumbnail is a fixed 8rem wide, so a 178px track left roughly 90px
+       of unused width per card and capped the row at about five games. A
+       narrower track packs six or seven across and brings the card back to
+       roughly square. */
     .games-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(178px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+        gap: 10px;
         margin-bottom: 1rem;
     }
 
@@ -856,7 +862,7 @@
     .game-card.v0:hover { border-color: #a0522d; }
 
     .game-thumb {
-        height: 108px;
+        height: 100px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -871,23 +877,27 @@
     }
 
     .game-card-body {
-        padding: 10px 12px;
+        padding: 8px 10px;
         flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .game-card-name {
         font-size: 13px;
         font-weight: 500;
         color: var(--gu-brand);
-        text-align: left;
-        line-height: 1.4;
+        text-align: center;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
     }
 
     /* ── CHIP TOOLTIP ── */
     .chip-tooltip {
         position: fixed;
-        background: #1b3a6b;
-        color: #ffffff;
+        background: var(--gu-brand);
+        color: var(--gu-bg);
         font-size: 11px;
         line-height: 1.5;
         padding: 7px 11px;
@@ -904,7 +914,7 @@
             left: var(--arrow-left, 100px);
             transform: translateX(-50%);
             border: 6px solid transparent;
-            border-bottom-color: #1b3a6b;
+            border-bottom-color: var(--gu-brand);
             border-top: none;
         }
     }

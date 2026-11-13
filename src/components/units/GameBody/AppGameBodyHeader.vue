@@ -119,7 +119,7 @@
     .analysis-toggle-btn.active {
         background: var(--gu-brand);
         border: none;
-        svg { stroke: #ffffff; }
+        svg { stroke: var(--gu-bg); }
     }
 
     /* Variant button wrapper — hosts the tooltip */
@@ -137,8 +137,8 @@
                 bottom: calc(100% + 10px);
                 left: 50%;
                 transform: translateX(-50%);
-                background: #1b3a6b;
-                color: #ffffff;
+                background: var(--gu-brand);
+                color: var(--gu-bg);
                 font-size: 12px;
                 font-weight: 500;
                 padding: 6px 10px;
@@ -157,7 +157,7 @@
                     left: 50%;
                     transform: translateX(-50%);
                     border: 5px solid transparent;
-                    border-top-color: #1b3a6b;
+                    border-top-color: var(--gu-brand);
                 }
             }
 

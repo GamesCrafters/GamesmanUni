@@ -30,7 +30,7 @@
         }
 
         &.loading .status-dot {
-            background: #FDB515;
+            background: var(--gu-accent);
         }
 
         > p {

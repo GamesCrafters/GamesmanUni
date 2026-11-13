@@ -2,14 +2,16 @@
     <div id="app-footer">
         <a v-for="(externalLink, i) in externalLinks" :="externalLink.attributes" :key="'exLink'+ i">{{ externalLink.value }}</a>
         <router-link to="/demo">
-            <a>Demo Mode</a>
+            <a>{{ t("footer.demo") }}</a>
         </router-link>
     </div>
 </template>
 
 <script lang="ts" setup>
+    import { useI18n } from "vue-i18n";
     import { useStore } from "../../scripts/plugins/store";
 
+    const { t } = useI18n({ useScope: "global" });
     const store = useStore();
     const commonAttributes = { rel: "noopener noreferrer nofollow", target: "_blank" };
     const externalLinks = [
