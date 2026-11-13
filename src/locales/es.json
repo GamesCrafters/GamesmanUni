@@ -1,0 +1,80 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "games": "Juegos y acertijos",
+        "about": "Acerca de",
+        "updates": "Novedades",
+        "settings": "Ajustes"
+    },
+    "hero": {
+        "eyebrow": "UC Berkeley · GamesCrafters · Desde 2001",
+        "title": "Juega y analiza<br>juegos y acertijos resueltos a la perfección",
+        "sub": "Juegos y acertijos finitos, de dos jugadores y con información perfecta. Calculados y hechos jugables por estudiantes de Berkeley. Cada posición evaluada, cada movimiento óptimo conocido.",
+        "s1": "juegos integrados",
+        "s2": "acertijos resueltos",
+        "s3": "colaboradores",
+        "cta1": "Ver juegos",
+        "cta2": "Sobre el proyecto"
+    },
+    "home": {
+        "c1t": "Soluciones fuertes",
+        "c1b": "En sentido estricto, el juego óptimo se calcula desde todas las posiciones legales del tablero, no solo las habituales.",
+        "c2t": "Lejanía y Mex",
+        "c2b": "Observa cuántos movimientos faltan para que termine la partida con juego perfecto, y explora los valores de mínimo excluido en los juegos imparciales.",
+        "c3t": "Imparciales y partidistas",
+        "c3b": "Desde juegos imparciales al estilo de Nim hasta juegos partidistas asimétricos, está representado todo el espectro de la teoría combinatoria de juegos."
+    },
+    "games": {
+        "filter": "Filtrar",
+        "glossary": "Glosario de etiquetas",
+        "glossaryHeading": "Glosario de etiquetas",
+        "glossarySub": "Qué significa cada etiqueta de filtro",
+        "gGui": "Tipo de GUI",
+        "gStyle": "Estilo de juego",
+        "gSolve": "Tipo de solución",
+        "gMisc": "Varios",
+        "fGui": "TIPO DE GUI",
+        "fStyle": "ESTILO DE JUEGO",
+        "fSolve": "TIPO DE SOLUCIÓN",
+        "fMisc": "VARIOS",
+        "search": "Buscar por nombre…",
+        "sortAz": "A a Z",
+        "sortZa": "Z a A",
+        "tabAll": "Todos",
+        "tabGames": "Juegos",
+        "tabPuzzle": "Acertijo",
+        "tabInDev": "En desarrollo",
+        "secGames": "Juegos",
+        "secPuzzles": "Acertijos",
+        "clearAll": "Borrar todo"
+    },
+    "set": {
+        "title": "Ajustes",
+        "movesVol": "Volumen de movimientos",
+        "ambVol": "Volumen ambiental",
+        "theme": "Tema",
+        "lang": "Idioma",
+        "fontSize": "Tamaño de fuente"
+    },
+    "footer": {
+        "demo": "Modo demostración"
+    },
+    "appLocales": {
+        "zh": "🇨🇳 chino",
+        "en-US": "🇺🇸 inglés",
+        "es": "🇲🇽 español",
+        "hi": "🇮🇳 hindi"
+    },
+    "appThemes": {
+        "blackboard": "Pizarra",
+        "cal": "Cal",
+        "classic": "Clásico",
+        "dark": "Oscuro",
+        "greenboard": "Pizarra verde",
+        "light": "Claro",
+        "rose": "Rosa",
+        "sepia": "Sepia",
+        "space": "Espacio",
+        "terminal": "Terminal"
+    }
+}
