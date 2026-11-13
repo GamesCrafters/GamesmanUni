@@ -696,11 +696,14 @@
             }
 
             >#left-y-axis-label {
+                flex: 0 0 auto;
                 text-align: center;
                 transform: rotate(-90deg);
             }
 
             >#chart {
+                flex: 1 1 0;
+                min-width: 0;
 
                 >.player-winning-direction,
                 >.left-player-winning-direction,
@@ -823,6 +826,7 @@
             }
 
             >#right-y-axis-label {
+                flex: 0 0 auto;
                 text-align: center;
                 transform: rotate(90deg);
             }
