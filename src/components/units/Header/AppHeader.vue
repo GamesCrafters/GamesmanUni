@@ -34,17 +34,17 @@
         height: 3px;
         background: linear-gradient(
             90deg,
-            #1b3a6b 0%,
-            #1b3a6b 25%,
-            #2a5298 30%,
-            #FDB515 38%,
-            #ffe066 48%,
-            #fff5cc 50%,
-            #ffe066 52%,
-            #FDB515 62%,
-            #2a5298 70%,
-            #1b3a6b 75%,
-            #1b3a6b 100%
+            var(--gu-brand) 0%,
+            var(--gu-brand) 25%,
+            var(--gu-brand) 30%,
+            var(--gu-accent) 38%,
+            var(--gu-accent) 48%,
+            #ffffff 50%,
+            var(--gu-accent) 52%,
+            var(--gu-accent) 62%,
+            var(--gu-brand) 70%,
+            var(--gu-brand) 75%,
+            var(--gu-brand) 100%
         );
         overflow: hidden;
     }

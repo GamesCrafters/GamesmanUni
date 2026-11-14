@@ -1,7 +1,7 @@
 <template>
     <nav id="app-header-navigations">
         <router-link v-for="route in routes" :key="route.name" :to="route.path">
-            {{ t(route.name) }}
+            {{ t(route.key) }}
         </router-link>
     </nav>
 </template>
@@ -9,12 +9,12 @@
 <script lang="ts" setup>
     import { useI18n } from "vue-i18n";
 
-    const { t } = useI18n();
+    const { t } = useI18n({ useScope: "global" });
     const routes = [
-        { path: "/", name: "Home" },
-        { path: "/games", name: "GamesAndPuzzles" },
-        { path: "/about", name: "About" },
-        { path: "/updates", name: "Updates" },
+        { path: "/", name: "Home", key: "nav.home" },
+        { path: "/games", name: "GamesAndPuzzles", key: "nav.games" },
+        { path: "/about", name: "About", key: "nav.about" },
+        { path: "/updates", name: "Updates", key: "nav.updates" },
     ];
 </script>
 
@@ -53,31 +53,3 @@
     }
 </style>
 
-<i18n lang="json">
-{
-    "zh": {
-        "Home": "首页",
-        "GamesAndPuzzles": "游戏与解谜",
-        "About": "关于",
-        "Updates": "更新日志"
-    },
-    "en-US": {
-        "Home": "Home",
-        "GamesAndPuzzles": "Games & Puzzles",
-        "About": "About",
-        "Updates": "Updates"
-    },
-    "es": {
-        "Home": "Inicio",
-        "GamesAndPuzzles": "Juegos y rompecabezas",
-        "About": "Información",
-        "Updates": "Versiones"
-    },
-    "hi": {
-        "Home": "Home",
-        "GamesAndPuzzles": "Games & Puzzles",
-        "About": "About",
-        "Updates": "Updates"
-    }
-}
-</i18n>

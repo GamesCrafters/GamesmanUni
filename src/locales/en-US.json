@@ -1,0 +1,80 @@
+{
+    "nav": {
+        "home": "Home",
+        "games": "Games & Puzzles",
+        "about": "About",
+        "updates": "Updates",
+        "settings": "Settings"
+    },
+    "hero": {
+        "eyebrow": "UC Berkeley · GamesCrafters · Est. 2001",
+        "title": "Play and analyze<br>strongly solved games and puzzles",
+        "sub": "Finite, two-player, perfect-information games and puzzles. Computed and made playable by Berkeley students. Every position evaluated, every optimal move known.",
+        "s1": "games integrated",
+        "s2": "puzzles solved",
+        "s3": "contributors",
+        "cta1": "Browse",
+        "cta2": "About the project"
+    },
+    "home": {
+        "c1t": "Strong solutions",
+        "c1b": "In a strict sense, optimal play is computed from every legal board position, not just common ones.",
+        "c2t": "Remoteness & Mex",
+        "c2b": "See how many moves remain until the game ends under perfect play, and explore minimum excludant values for impartial games.",
+        "c3t": "Impartial & partisan",
+        "c3b": "From Nim-like impartial games to asymmetric partisan ones, the full spectrum of combinatorial game theory is represented."
+    },
+    "games": {
+        "filter": "Filter",
+        "glossary": "Tag glossary",
+        "glossaryHeading": "Tag glossary",
+        "glossarySub": "What each filter tag means",
+        "gGui": "GUI Type",
+        "gStyle": "Game Style",
+        "gSolve": "Solve Type",
+        "gMisc": "Miscellaneous",
+        "fGui": "GUI TYPE",
+        "fStyle": "GAME STYLE",
+        "fSolve": "SOLVE TYPE",
+        "fMisc": "MISC",
+        "search": "Search by name...",
+        "sortAz": "A to Z",
+        "sortZa": "Z to A",
+        "tabAll": "All",
+        "tabGames": "Games",
+        "tabPuzzle": "Puzzle",
+        "tabInDev": "In development",
+        "secGames": "Games",
+        "secPuzzles": "Puzzles",
+        "clearAll": "Clear all"
+    },
+    "set": {
+        "title": "Settings",
+        "movesVol": "Moves volume",
+        "ambVol": "Ambience volume",
+        "theme": "Theme",
+        "lang": "Language",
+        "fontSize": "Font size"
+    },
+    "footer": {
+        "demo": "Demo Mode"
+    },
+    "appLocales": {
+        "zh": "🇨🇳 Simplified Chinese",
+        "en-US": "🇺🇸 English",
+        "es": "🇲🇽 Spanish",
+        "hi": "🇮🇳 Hindi"
+    },
+    "appThemes": {
+        "blackboard": "Blackboard",
+        "cal": "Cal",
+        "classic": "Classic",
+        "dark": "Dark",
+        "greenboard": "Greenboard",
+        "light": "Light",
+        "rose": "Rose",
+        "sepia": "Sepia",
+        "space": "Space",
+        "terminal": "Terminal"
+    }
+}

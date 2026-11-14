@@ -1,32 +1,32 @@
 <template>
     <div id="app-header-preferences" v-click-outside="() => showPanel = false">
         <button class="settings-btn" :class="{ active: showPanel }" @click="showPanel = !showPanel">
-            &#9881; Settings
+            &#9881; {{ t("set.title") }}
         </button>
 
         <div class="settings-panel" v-if="showPanel">
             <!-- Sound -->
             <div class="settings-row">
-                <div class="settings-row-label">Moves volume</div>
+                <div class="settings-row-label">{{ t("set.movesVol") }}</div>
                 <VueSlider v-model="preferences.volume" :min="0" :max="1" :interval="0.1" :tooltip="'none'" class="settings-slider" />
             </div>
             <div class="settings-row">
-                <div class="settings-row-label">Ambience volume</div>
+                <div class="settings-row-label">{{ t("set.ambVol") }}</div>
                 <VueSlider v-model="preferences.ambienceVolume" :min="0" :max="1" :interval="0.1" :tooltip="'none'" class="settings-slider" />
             </div>
             <div class="settings-divider"></div>
             <!-- Theme -->
             <div class="settings-row">
-                <div class="settings-row-label">Theme</div>
+                <div class="settings-row-label">{{ t("set.theme") }}</div>
                 <select class="settings-select" :value="appTheme" @change="setAppTheme(($event.target as HTMLSelectElement).value)">
                     <option v-for="themeOption in appThemes" :key="themeOption" :value="themeOption">
-                        {{ themeOption[0].toUpperCase() + themeOption.slice(1) }}
+                        {{ t(`appThemes.${themeOption}`) }}
                     </option>
                 </select>
             </div>
             <!-- Language -->
             <div class="settings-row">
-                <div class="settings-row-label">Language</div>
+                <div class="settings-row-label">{{ t("set.lang") }}</div>
                 <select class="settings-select" :value="appLocale" @change="setAppLocale(($event.target as HTMLSelectElement).value)">
                     <option v-for="localeOption in appLocales" :key="localeOption" :value="localeOption">
                         {{ t(`appLocales.${localeOption}`) }}
@@ -35,7 +35,7 @@
             </div>
             <!-- Font size -->
             <div class="settings-row">
-                <div class="settings-row-label">Font size</div>
+                <div class="settings-row-label">{{ t("set.fontSize") }}</div>
                 <select class="settings-select" :value="appRootFontSize" @change="setAppRootFontSize(($event.target as HTMLSelectElement).value)">
                     <option v-for="fontSizeOption in appRootFontSizes" :key="fontSizeOption" :value="fontSizeOption">
                         {{ fontSizeOption }}px
@@ -67,10 +67,11 @@
         },
     };
 
+    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'userPreferences';
+
     const store = useStore();
     const preferences = computed(() => store.getters.preferences);
-    const { t } = useI18n();
-    const { locale } = useI18n({ useScope: "global" });
+    const { t, locale } = useI18n({ useScope: "global" });
     const appLocales = ["zh", "en-US", "es", "hi"];
     const appLocale = ref("");
     const setActiveLocaleOptionStyle = (localeOption: string) => (localeOption === appLocale.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
@@ -78,17 +79,21 @@
         store.commit(mutationTypes.setLocale, newAppLocale);
         locale.value = newAppLocale;
         appLocale.value = newAppLocale;
+        document.documentElement.lang = newAppLocale === "zh" ? "zh-Hans" : newAppLocale;
     };
     const appThemes = ["blackboard", "cal", "classic", "dark", "greenboard", "light", "rose", "sepia", "space", "terminal"];
     const appTheme = ref("");
     const setActiveThemeOptionStyle = (themeOption: string) => (themeOption === appTheme.value ? { background: "var(--themeColor)" } : { background: "var(--neutralColor)" });
     const setAppTheme = (newAppTheme: string) => {
-        if (document.getElementById("app")!.classList.contains(`uni-theme-${appTheme.value}`)) {
-            document.getElementById("app")!.classList.remove(`uni-theme-${appTheme.value}`);
-        }
+        const root = document.getElementById("app")!;
+        // Drop any theme class already on the element, including one applied
+        // before mount, so two themes can never be active at once.
+        Array.from(root.classList)
+            .filter((c) => c.startsWith("uni-theme-"))
+            .forEach((c) => root.classList.remove(c));
         store.commit(mutationTypes.setTheme, newAppTheme);
-        document.getElementById("app")!.classList.add(`uni-theme-${newAppTheme}`);
-        document.documentElement.style.backgroundColor = getComputedStyle(document.getElementById("app")!).getPropertyValue("--backgroundColor");
+        root.classList.add(`uni-theme-${newAppTheme}`);
+        document.documentElement.style.backgroundColor = getComputedStyle(root).getPropertyValue("--backgroundColor");
         appTheme.value = newAppTheme;
     };
     const appRootFontSizes = ["05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"];
@@ -99,9 +104,18 @@
         document.documentElement.style.fontSize = newAppFontSize + "px";
         appRootFontSize.value = newAppFontSize;
     };
-    setAppLocale(store.getters.locale);
-    setAppTheme(store.getters.theme);
-    setAppRootFontSize(store.getters.rootFontSize);
+    // Read saved preferences synchronously so the first render already uses
+    // them; onMounted would run after the initial paint.
+    const savedAtSetup = (() => {
+        try {
+            return JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES_KEY) || "null") || {};
+        } catch {
+            return {};
+        }
+    })();
+    setAppLocale(savedAtSetup.locale || store.getters.locale);
+    setAppTheme(savedAtSetup.theme || store.getters.theme);
+    setAppRootFontSize(savedAtSetup.fontSize || store.getters.rootFontSize);
 
     watch(
         () => [preferences.value.ambienceVolume, preferences.value.volume],
@@ -110,8 +124,6 @@
             setAmbienceVolume(preferences.value.ambienceVolume);
         }
     );
-
-    const LOCAL_STORAGE_USER_PREFERENCES_KEY = 'userPreferences';
 
     watch(
         [() => preferences.value.volume, () => preferences.value.ambienceVolume, appTheme, appLocale, appRootFontSize],
@@ -166,7 +178,7 @@
 
         &:hover, &.active {
             background: var(--gu-brand);
-            color: #fff;
+            color: var(--gu-bg);
             border-color: var(--gu-brand);
         }
     }
@@ -219,80 +231,6 @@
         border-top: 1px solid var(--gu-border);
         margin: 2px 0;
     }
+
 </style>
 
-<i18n lang="json">
-{
-    "zh": {
-        "appLocales": {
-            "zh": "🇨🇳 简体中文",
-            "en-US": "🇺🇸 英文",
-            "es": "🇲🇽 西班牙语",
-            "hi": "🇮🇳 印地语"
-        },
-        "themeTitle": "主题",
-        "fontSizeUnit": "号字"
-    },
-    "en-US": {
-        "appRootFontSizes": {
-            "05px": "05",
-            "06px": "06",
-            "07px": "07",
-            "08px": "08",
-            "09px": "09",
-            "10px": "10",
-            "11px": "11",
-            "12px": "12",
-            "13px": "13",
-            "14px": "14",
-            "15px": "15",
-            "16px": "16",
-            "17px": "17",
-            "18px": "18",
-            "19px": "19",
-            "20px": "20",
-            "21px": "21",
-            "22px": "22",
-            "23px": "23",
-            "24px": "24",
-            "25px": "25"
-        },
-        "appLocales": {
-            "zh": "🇨🇳 Simplified Chinese",
-            "en-US": "🇺🇸 English",
-            "es": "🇲🇽 Spanish",
-            "hi": "🇮🇳 Hindi"
-        },
-        "appThemes": {
-            "blackboard": "Blackboard",
-            "cal": "Cal",
-            "classic": "Classic",
-            "dark": "Dark",
-            "greenboard": "Greenboard",
-            "light": "Light",
-            "rose": "Rose",
-            "sepia": "Sepia",
-            "space": "Space",
-            "terminal": "Terminal"
-        },
-        "themeTitle": "",
-        "fontSizeUnit": "px"
-    },
-    "es": {
-        "appLocales": {
-            "zh": "🇨🇳 chino",
-            "en-US": "🇺🇸 inglés",
-            "es": "🇲🇽 español",
-            "hi": "🇮🇳 hindi"
-        }
-    },
-    "hi": {
-        "appLocales": {
-            "zh": "🇨🇳 चीनी",
-            "en-US": "🇺🇸 अंग्रेज़ी",
-            "es": "🇲🇽 स्पेनिश",
-            "hi": "🇮🇳 हिन्दी"
-        }
-    }
-}
-</i18n>

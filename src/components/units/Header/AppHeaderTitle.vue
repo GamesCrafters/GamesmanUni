@@ -31,6 +31,6 @@
     .logo-text {
         font-size: 17px;
         font-weight: 500;
-        color: #1b3a6b;
+        color: var(--gu-brand);
     }
 </style>

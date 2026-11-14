@@ -82,7 +82,7 @@
 
     .about-eyebrow {
         font-size: 11px;
-        color: #FDB515;
+        color: var(--gu-accent);
         letter-spacing: 0.07em;
         text-transform: uppercase;
         font-weight: 500;

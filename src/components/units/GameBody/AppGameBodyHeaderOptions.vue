@@ -345,12 +345,12 @@
             font-size: 16px;
             height: 40px;
             width: 40px;
-            background: #f0ede4;
-            border: 1px solid #e0ddd6;
-            color: #555;
+            background: var(--gu-surface-alt);
+            border: 1px solid var(--gu-border);
+            color: var(--gu-text-body);
             transition: background 0.15s;
 
-            &:hover { background: #1b3a6b; color: #fff; border-color: #1b3a6b; transform: none; }
+            &:hover { background: var(--gu-brand); color: var(--gu-bg); border-color: var(--gu-brand); transform: none; }
         }
         #popup {
             align-content: center;
@@ -451,9 +451,9 @@
     .strategy-dropdown-options {
         display: none;
         position: absolute;
-        background-color: #f9f9f9;
+        background-color: var(--gu-surface);
         min-width: 192px;
-        border: 1px solid #e0ddd6;
+        border: 1px solid var(--gu-border);
         z-index: 9999;
     }
 
@@ -462,6 +462,6 @@
     }
 
     .strategy-dropdown-option:hover {
-        background-color: #ececec;
+        background-color: var(--gu-surface-hover);
     }
 </style>

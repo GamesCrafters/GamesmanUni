@@ -63,20 +63,20 @@
 
         > button {
             border-radius: 6px;
-            border: 1px solid #e0ddd6;
+            border: 1px solid var(--gu-border);
             padding: 5px 12px;
             font-size: 13px;
             font-weight: 400;
             cursor: pointer;
-            background: #ffffff;
-            color: #555;
+            background: var(--gu-surface);
+            color: var(--gu-text-body);
             white-space: nowrap;
             transition: border-color 0.15s, color 0.15s;
 
             &#app-game-body-statistics-moves-restart {
-                background: #1b3a6b;
-                color: #ffffff;
-                border-color: #1b3a6b;
+                background: var(--gu-brand);
+                color: var(--gu-bg);
+                border-color: var(--gu-brand);
                 font-weight: 500;
 
                 &:not(:disabled):hover { opacity: 0.85; }
@@ -85,8 +85,8 @@
             &:hover { transform: none; }
 
             &:not(:disabled):not(#app-game-body-statistics-moves-restart):hover {
-                border-color: #1b3a6b;
-                color: #1b3a6b;
+                border-color: var(--gu-brand);
+                color: var(--gu-brand);
             }
 
             &:disabled {

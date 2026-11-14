@@ -184,7 +184,7 @@
         svg {
             width: 14px;
             height: 14px;
-            stroke: #888;
+            stroke: var(--gu-text-muted);
             fill: none;
             stroke-width: 2;
             transition: transform 0.3s;

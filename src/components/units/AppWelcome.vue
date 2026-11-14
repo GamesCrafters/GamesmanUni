@@ -3,26 +3,26 @@
     <div class="hero">
         <div class="hero-bp-area">
             <div class="hero-left">
-                <div class="hero-eyebrow">UC Berkeley · GamesCrafters · Est. 2001</div>
-                <h1 class="hero-title">Play and analyze<br>perfectly solved games and puzzles</h1>
-                <p class="hero-sub">Finite, two-player, perfect-information games and puzzles. Computed and made playable by Berkeley students. Every position evaluated, every optimal move known.</p>
+                <div class="hero-eyebrow">{{ t("hero.eyebrow") }}</div>
+                <h1 class="hero-title" v-html="t('hero.title')"></h1>
+                <p class="hero-sub">{{ t("hero.sub") }}</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <div class="hero-stat-num">{{ gameCount }}</div>
-                        <div class="hero-stat-label">games integrated</div>
+                        <div class="hero-stat-label">{{ t("hero.s1") }}</div>
                     </div>
                     <div class="hero-stat">
                         <div class="hero-stat-num">{{ puzzleCount }}</div>
-                        <div class="hero-stat-label">puzzles solved</div>
+                        <div class="hero-stat-label">{{ t("hero.s2") }}</div>
                     </div>
                     <div class="hero-stat">
                         <div class="hero-stat-num">500+</div>
-                        <div class="hero-stat-label">contributors</div>
+                        <div class="hero-stat-label">{{ t("hero.s3") }}</div>
                     </div>
                 </div>
                 <div class="hero-cta-row">
-                    <button class="btn-primary" @click="exploreAllGames">Browse</button>
-                    <button class="btn-ghost" @click="infoGames">About the project</button>
+                    <button class="btn-primary" @click="exploreAllGames">{{ t("hero.cta1") }}</button>
+                    <button class="btn-ghost" @click="infoGames">{{ t("hero.cta2") }}</button>
                 </div>
             </div>
             <div class="hero-right">
@@ -92,18 +92,18 @@
         <div class="home-cards">
             <div class="home-card">
                 <div class="hc-icon hc-blue">&#9651;</div>
-                <h4>Strong solutions</h4>
-                <p>In a strict sense, optimal play is computed from every legal board position, not just common ones.</p>
+                <h4>{{ t("home.c1t") }}</h4>
+                <p>{{ t("home.c1b") }}</p>
             </div>
             <div class="home-card">
                 <div class="hc-icon hc-gold">&#9632;</div>
-                <h4>Remoteness &amp; Mex</h4>
-                <p>See how many moves remain until the game ends under perfect play, and explore minimum excludant values for impartial games.</p>
+                <h4>{{ t("home.c2t") }}</h4>
+                <p>{{ t("home.c2b") }}</p>
             </div>
             <div class="home-card">
                 <div class="hc-icon hc-teal">&#9711;</div>
-                <h4>Impartial &amp; partisan</h4>
-                <p>From Nim-like impartial games to asymmetric partisan ones, the full spectrum of combinatorial game theory is represented.</p>
+                <h4>{{ t("home.c3t") }}</h4>
+                <p>{{ t("home.c3b") }}</p>
             </div>
         </div>
     </div>
@@ -111,11 +111,13 @@
 </template>
 
 <script lang="ts" setup>
+    import { useI18n } from "vue-i18n";
     import { useRouter } from "vue-router";
     import { actionTypes, useStore } from "../../scripts/plugins/store";
     import { computed, onMounted } from "vue";
     import { Game } from "../../scripts/gamesmanUni/types";
 
+    const { t } = useI18n({ useScope: "global" });
     const router = useRouter();
     const store = useStore();
 
@@ -157,18 +159,13 @@
 
 <style lang="scss" scoped>
 .welcome {
-    --gu-navy: #1b3a6b;
-    --gu-gold: #FDB515;
-    --gu-bg: #f7f6f2;
-    --gu-border: #e0ddd6;
-
     display: flex;
     flex-direction: column;
 }
 
 /* ── HERO ── */
 .hero {
-    background-color: #0f1e3a;
+    background-color: var(--gu-hero);
     overflow: hidden;
     padding: 3rem 3rem;
 }
@@ -196,7 +193,7 @@
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #FDB515;
+    color: var(--gu-accent);
     font-weight: 500;
     margin-bottom: 0.6rem;
     text-align: left;
@@ -213,7 +210,7 @@
 
 .hero-sub {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.78);
     line-height: 1.7;
     margin-bottom: 1.5rem;
     max-width: 360px;
@@ -229,13 +226,13 @@
 .hero-stat-num {
     font-size: 22px;
     font-weight: 500;
-    color: #FDB515;
+    color: var(--gu-accent);
     text-align: left;
 }
 
 .hero-stat-label {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7);
     margin-top: 2px;
     text-align: left;
 }
@@ -246,8 +243,8 @@
 }
 
 .btn-primary {
-    background-color: #FDB515;
-    color: #1b3a6b;
+    background-color: var(--gu-accent);
+    color: var(--gu-hero);
     border: none;
     padding: 9px 20px;
     border-radius: 6px;
@@ -265,7 +262,7 @@
 .btn-ghost {
     background: transparent;
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 9px 20px;
     border-radius: 6px;
     font-size: 13px;
@@ -345,19 +342,3 @@
 }
 </style>
 
-<i18n lang="json">
-    {
-        "zh": {
-            "title": "欢迎！"
-        },
-        "en-US": {
-            "title": "Welcome! "
-        },
-        "es": {
-            "title": "¡Bienvenido!"
-        },
-        "hi": {
-            "title": "आपका स्वागत है!"
-        }
-    }
-</i18n>

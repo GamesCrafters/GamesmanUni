@@ -1,3 +1,18 @@
+// Theme tokens.
+//
+// Each theme defines the full --gu-* set so switching a theme changes colour,
+// not only fonts. Values are derived from the theme's own $backgroundColor and
+// $primaryColor, then tuned so text clears WCAG contrast on that theme's own
+// panels: body text >= 7:1 (AAA) and muted text >= 4.7:1 (AA). Because the
+// tuning is a measured result rather than a fixed ratio, the values are written
+// out literally instead of as mix() calls -- recompute them if a theme's
+// $backgroundColor or $primaryColor changes.
+//
+// Pairing rules the components rely on:
+//   text on --gu-brand  -> use --gu-bg    (never #fff: fails on every dark theme)
+//   text on --gu-accent -> use --gu-hero
+//   text on --gu-hero   -> #fff is safe (>= 12:1 everywhere)
+
 @use "blackboard";
 @use "cal";
 @use "classic";
@@ -16,6 +31,21 @@
     --primaryColor: #{blackboard.$primaryColor};
     --regularFontFamily: #{blackboard.$regularFontFamily};
     --secondaryColor: #{blackboard.$secondaryColor};
+    --gu-bg:              #31343a;
+    --gu-surface:         #47494f;
+    --gu-surface-alt:     #56595d;
+    --gu-surface-hover:   #505257;
+    --gu-border:          #7f8185;
+    --gu-brand:           #e0dbd1;
+    --gu-accent:          #e0dbd1;
+    --gu-hero:            #222429;
+    --gu-text-body:       #ffffff;
+    --gu-text-secondary:  #e3e4e5;
+    --gu-text-muted:      #d3d4d5;
+    --gu-status-bg:       #4d4f52;
+    --gu-status-text:     #e0dbd1;
+    --gu-status-dot:      #e0dbd1;
+
 }
 
 #app.uni-theme-cal {
@@ -25,6 +55,20 @@
     --primaryColor: #{cal.$primaryColor};
     --regularFontFamily: #{cal.$regularFontFamily};
     --secondaryColor: #{cal.$secondaryColor};
+    --gu-bg:              #003262;
+    --gu-surface:         #1e4a75;
+    --gu-surface-alt:     #345c82;
+    --gu-surface-hover:   #2b557d;
+    --gu-border:          #61809e;
+    --gu-brand:           #fdb515;
+    --gu-accent:          #fdb515;
+    --gu-hero:            #002345;
+    --gu-text-body:       #ffffff;
+    --gu-text-secondary:  #dee5eb;
+    --gu-text-muted:      #cbd6df;
+    --gu-status-bg:       #284756;
+    --gu-status-text:     #fdb515;
+    --gu-status-dot:      #fdb515;
 }
 
 #app.uni-theme-classic {
@@ -34,6 +78,20 @@
     --primaryColor: #{classic.$primaryColor};
     --regularFontFamily: #{classic.$regularFontFamily};
     --secondaryColor: #{classic.$secondaryColor};
+    --gu-bg:              #000066;
+    --gu-surface:         #23237b;
+    --gu-surface-alt:     #3d3d8b;
+    --gu-surface-hover:   #333384;
+    --gu-border:          #6161a0;
+    --gu-brand:           #fd922e;
+    --gu-accent:          #fd922e;
+    --gu-hero:            #000047;
+    --gu-text-body:       #dedeeb;
+    --gu-text-secondary:  #c5c5dc;
+    --gu-text-muted:      #b7b7d4;
+    --gu-status-bg:       #28175d;
+    --gu-status-text:     #fd922e;
+    --gu-status-dot:      #fd922e;
 }
 
 #app.uni-theme-dark {
@@ -43,17 +101,20 @@
     --primaryColor: #{dark.$primaryColor};
     --regularFontFamily: #{dark.$regularFontFamily};
     --secondaryColor: #{dark.$secondaryColor};
-    --gu-surface:        #2a2a2a;
-    --gu-surface-alt:    #1e1e1e;
-    --gu-surface-hover:  #383838;
-    --gu-border:         #3d3d3d;
-    --gu-brand:          #5b9bd5;
-    --gu-text-body:      #e8e8e8;
-    --gu-text-secondary: #999999;
-    --gu-text-muted:     #777777;
-    --gu-status-bg:      #1e2535;
-    --gu-status-text:    #7ab8ff;
-    --gu-status-dot:     #4a9eff;
+    --gu-bg:              #1e1e1e;
+    --gu-surface:         #2a2a2a;
+    --gu-surface-alt:     #1e1e1e;
+    --gu-surface-hover:   #383838;
+    --gu-border:          #3d3d3d;
+    --gu-brand:           #5b9bd5;
+    --gu-accent:          #fdb515;
+    --gu-hero:            #151515;
+    --gu-text-body:       #d6d6d6;
+    --gu-text-secondary:  #b7b7b7;
+    --gu-text-muted:      #a4a4a4;
+    --gu-status-bg:       #1e2535;
+    --gu-status-text:     #5b9bd5;
+    --gu-status-dot:      #4a9eff;
 }
 
 #app.uni-theme-greenboard {
@@ -63,6 +124,21 @@
     --primaryColor: #{greenboard.$primaryColor};
     --regularFontFamily: #{greenboard.$regularFontFamily};
     --secondaryColor: #{greenboard.$secondaryColor};
+    --gu-bg:              #284123;
+    --gu-surface:         #3b5237;
+    --gu-surface-alt:     #495e45;
+    --gu-surface-hover:   #44593f;
+    --gu-border:          #7a8977;
+    --gu-brand:           #e0dbd1;
+    --gu-accent:          #e0dbd1;
+    --gu-hero:            #1c2e18;
+    --gu-text-body:       #fefefe;
+    --gu-text-secondary:  #e0e4e0;
+    --gu-text-muted:      #cfd5ce;
+    --gu-status-bg:       #455a3f;
+    --gu-status-text:     #e0dbd1;
+    --gu-status-dot:      #e0dbd1;
+
 }
 
 #app.uni-theme-light {
@@ -72,17 +148,20 @@
     --primaryColor: #{light.$primaryColor};
     --regularFontFamily: #{light.$regularFontFamily};
     --secondaryColor: #{light.$secondaryColor};
-    --gu-surface:        #ffffff;
-    --gu-surface-alt:    #f7f6f2;
-    --gu-surface-hover:  #f0ede4;
-    --gu-border:         #e0ddd6;
-    --gu-brand:          #1b3a6b;
-    --gu-text-body:      #555555;
-    --gu-text-secondary: #888888;
-    --gu-text-muted:     #999999;
-    --gu-status-bg:      #eef3fb;
-    --gu-status-text:    #3a6abf;
-    --gu-status-dot:     #4a9eff;
+    --gu-bg:              #ffffff;
+    --gu-surface:         #ffffff;
+    --gu-surface-alt:     #f2f3f5;
+    --gu-surface-hover:   #e9ebee;
+    --gu-border:          #dcdee2;
+    --gu-brand:           #003262;
+    --gu-accent:          #fdb515;
+    --gu-hero:            #003262;
+    --gu-text-body:       #1e1e1e;
+    --gu-text-secondary:  #414246;
+    --gu-text-muted:      #64676e;
+    --gu-status-bg:       #eef3fb;
+    --gu-status-text:     #003262;
+    --gu-status-dot:      #4a9eff;
 }
 
 #app.uni-theme-rose {
@@ -92,6 +171,20 @@
     --primaryColor: #{rose.$primaryColor};
     --regularFontFamily: #{rose.$regularFontFamily};
     --secondaryColor: #{rose.$secondaryColor};
+    --gu-bg:              #390000;
+    --gu-surface:         #552323;
+    --gu-surface-alt:     #693d3d;
+    --gu-surface-hover:   #603333;
+    --gu-border:          #846161;
+    --gu-brand:           #ff5eae;
+    --gu-accent:          #ff007f;
+    --gu-hero:            #280000;
+    --gu-text-body:       #e8e2e2;
+    --gu-text-secondary:  #d5c8c8;
+    --gu-text-muted:      #c8b8b8;
+    --gu-status-bg:       #590014;
+    --gu-status-text:     #ff409f;
+    --gu-status-dot:      #ff5eae;
 }
 
 #app.uni-theme-sepia {
@@ -101,15 +194,20 @@
     --primaryColor: #{sepia.$primaryColor};
     --regularFontFamily: #{sepia.$regularFontFamily};
     --secondaryColor: #{sepia.$secondaryColor};
-}
-
-#app.uni-theme-terminal {
-    --backgroundColor: #{terminal.$backgroundColor};
-    --fixedWidthFontFamily: #{terminal.$fixedWidthFontFamily};
-    --neutralColor: #{terminal.$neutralColor};
-    --primaryColor: #{terminal.$primaryColor};
-    --regularFontFamily: #{terminal.$regularFontFamily};
-    --secondaryColor: #{terminal.$secondaryColor};
+    --gu-bg:              #704214;
+    --gu-surface:         #764a1e;
+    --gu-surface-alt:     #7a4f24;
+    --gu-surface-hover:   #784d22;
+    --gu-border:          #a68a6d;
+    --gu-brand:           #ffba75;
+    --gu-accent:          #ff7f00;
+    --gu-hero:            #4e2e0e;
+    --gu-text-body:       #fefefd;
+    --gu-text-secondary:  #e9e2db;
+    --gu-text-muted:      #dcd1c6;
+    --gu-status-bg:       #874c11;
+    --gu-status-text:     #ffc891;
+    --gu-status-dot:      #ffba75;
 }
 
 #app.uni-theme-space {
@@ -119,4 +217,110 @@
     --primaryColor: #{space.$primaryColor};
     --regularFontFamily: #{space.$regularFontFamily};
     --secondaryColor: #{space.$secondaryColor};
+    --gu-bg:              #000000;
+    --gu-surface:         #111111;
+    --gu-surface-alt:     #0a0a0a;
+    --gu-surface-hover:   #333333;
+    --gu-border:          #2a2a2a;
+    --gu-brand:           #ffffff;
+    --gu-accent:          #ffffff;
+    --gu-hero:            #000000;
+    --gu-text-body:       #d1d1d1;
+    --gu-text-secondary:  #adadad;
+    --gu-text-muted:      #9e9e9e;
+    --gu-status-bg:       #292929;
+    --gu-status-text:     #ffffff;
+    --gu-status-dot:      #ffffff;
+
+    // faint starfield on the page behind the content
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.55), transparent 100%),
+        radial-gradient(1px 1px at 68% 13%, rgba(255, 255, 255, 0.40), transparent 100%),
+        radial-gradient(1px 1px at 35% 71%, rgba(255, 255, 255, 0.45), transparent 100%),
+        radial-gradient(2px 2px at 84% 56%, rgba(255, 255, 255, 0.30), transparent 100%),
+        radial-gradient(1px 1px at 52% 41%, rgba(255, 255, 255, 0.35), transparent 100%);
+    background-size: 340px 340px, 260px 260px, 410px 410px, 520px 520px, 300px 300px;
+    background-attachment: fixed;
+}
+
+#app.uni-theme-terminal {
+    --backgroundColor: #{terminal.$backgroundColor};
+    --fixedWidthFontFamily: #{terminal.$fixedWidthFontFamily};
+    --neutralColor: #{terminal.$neutralColor};
+    --primaryColor: #{terminal.$primaryColor};
+    --regularFontFamily: #{terminal.$regularFontFamily};
+    --secondaryColor: #{terminal.$secondaryColor};
+    --gu-bg:              #282828;
+    --gu-surface:         #454545;
+    --gu-surface-alt:     #595959;
+    --gu-surface-hover:   #515151;
+    --gu-border:          #7a7a7a;
+    --gu-brand:           #00ff33;
+    --gu-accent:          #00ff33;
+    --gu-hero:            #1c1c1c;
+    --gu-text-body:       #ffffff;
+    --gu-text-secondary:  #e4e4e4;
+    --gu-text-muted:      #d4d4d4;
+    --gu-status-bg:       #224a2a;
+    --gu-status-text:     #00ff33;
+    --gu-status-dot:      #00ff33;
+}
+
+// The hero paints its own band, so give it the same texture on textured themes.
+#app.uni-theme-space .hero {
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.55), transparent 100%),
+        radial-gradient(1px 1px at 68% 13%, rgba(255, 255, 255, 0.40), transparent 100%),
+        radial-gradient(1px 1px at 35% 71%, rgba(255, 255, 255, 0.45), transparent 100%),
+        radial-gradient(2px 2px at 84% 56%, rgba(255, 255, 255, 0.30), transparent 100%),
+        radial-gradient(1px 1px at 52% 41%, rgba(255, 255, 255, 0.35), transparent 100%);
+    background-size: 340px 340px, 260px 260px, 410px 410px, 520px 520px, 300px 300px;
+    background-attachment: fixed;
+}
+
+// ── Chalkboard photo texture (blackboard + greenboard) ───────────────────
+// One continuous board behind the whole app. The texture is declared on #app
+// so every page gets it, including pages that paint no background of their
+// own, and repeated on the page-level surfaces that do paint one so they do
+// not cover it. Inner panels and cards keep their own --gu-surface fills.
+//
+// Each theme has its own image: the source board is green, and the -dark
+// variant is that same chalk luminance re-mapped onto the blackboard palette.
+// Both sit under a scrim in the theme's own colour, which keeps the board tone
+// and holds the contrast measured for text placed directly on the board. The
+// scrim strengths were measured against the brightest pixel of each image,
+// not picked by eye; re-measure if an image or a palette changes.
+//
+// --gu-chalk-texture* are set in main.ts: a relative url() inside this
+// forwarded partial resolves against the wrong root and loses the base path.
+@mixin chalkboard($texture, $scrim) {
+    background-image: linear-gradient($scrim, $scrim), $texture;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+#app.uni-theme-greenboard,
+#app.uni-theme-greenboard .home-lower,
+#app.uni-theme-greenboard #app-games,
+#app.uni-theme-greenboard #app-game,
+#app.uni-theme-greenboard #app-about {
+    @include chalkboard(var(--gu-chalk-texture), rgba(40, 65, 35, 0.58));
+}
+
+#app.uni-theme-greenboard .hero {
+    @include chalkboard(var(--gu-chalk-texture), rgba(28, 46, 24, 0.66));
+}
+
+#app.uni-theme-blackboard,
+#app.uni-theme-blackboard .home-lower,
+#app.uni-theme-blackboard #app-games,
+#app.uni-theme-blackboard #app-game,
+#app.uni-theme-blackboard #app-about {
+    @include chalkboard(var(--gu-chalk-texture-dark), rgba(49, 52, 58, 0.45));
+}
+
+#app.uni-theme-blackboard .hero {
+    @include chalkboard(var(--gu-chalk-texture-dark), rgba(34, 36, 41, 0.60));
 }

@@ -1,0 +1,80 @@
+{
+    "nav": {
+        "home": "首页",
+        "games": "游戏与谜题",
+        "about": "关于",
+        "updates": "更新日志",
+        "settings": "设置"
+    },
+    "hero": {
+        "eyebrow": "加州大学伯克利分校 · GamesCrafters · 创立于 2001",
+        "title": "游玩并分析<br>强求解的游戏与谜题",
+        "sub": "有限的双人完全信息游戏与谜题。由伯克利学生计算并实现在线游玩。每个局面都已评估，每一步最优走法都已知晓。",
+        "s1": "款游戏",
+        "s2": "个已解谜题",
+        "s3": "位贡献者",
+        "cta1": "浏览游戏",
+        "cta2": "关于项目"
+    },
+    "home": {
+        "c1t": "强解",
+        "c1b": "严格意义上，最优走法由每一个合法局面计算得出，而不只是常见局面。",
+        "c2t": "剩余步数与 Mex",
+        "c2b": "查看在完美对弈下距离终局还有多少步，并探索无偏博弈的最小排除值。",
+        "c3t": "无偏与偏向博弈",
+        "c3b": "从类似 Nim 的无偏博弈到不对称的偏向博弈，组合博弈论的完整谱系都有体现。"
+    },
+    "games": {
+        "filter": "筛选",
+        "glossary": "标签词汇表",
+        "glossaryHeading": "标签词汇表",
+        "glossarySub": "各筛选标签的含义",
+        "gGui": "GUI 类型",
+        "gStyle": "游戏风格",
+        "gSolve": "求解类型",
+        "gMisc": "其他",
+        "fGui": "GUI 类型",
+        "fStyle": "游戏风格",
+        "fSolve": "求解类型",
+        "fMisc": "其他",
+        "search": "按名称搜索…",
+        "sortAz": "A 到 Z",
+        "sortZa": "Z 到 A",
+        "tabAll": "全部",
+        "tabGames": "游戏",
+        "tabPuzzle": "谜题",
+        "tabInDev": "开发中",
+        "secGames": "游戏",
+        "secPuzzles": "谜题",
+        "clearAll": "清除全部"
+    },
+    "set": {
+        "title": "设置",
+        "movesVol": "走子音量",
+        "ambVol": "环境音量",
+        "theme": "主题",
+        "lang": "语言",
+        "fontSize": "字号"
+    },
+    "footer": {
+        "demo": "演示模式"
+    },
+    "appLocales": {
+        "zh": "🇨🇳 简体中文",
+        "en-US": "🇺🇸 英文",
+        "es": "🇲🇽 西班牙语",
+        "hi": "🇮🇳 印地语"
+    },
+    "appThemes": {
+        "blackboard": "黑板",
+        "cal": "伯克利",
+        "classic": "经典",
+        "dark": "深色",
+        "greenboard": "绿板",
+        "light": "浅色",
+        "rose": "玫瑰",
+        "sepia": "棕褐",
+        "space": "太空",
+        "terminal": "终端"
+    }
+}
