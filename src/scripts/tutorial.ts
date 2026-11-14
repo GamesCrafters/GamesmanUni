@@ -9,4 +9,7 @@ export const tutorialState = reactive({
     // "" = no moves allowed (narration-only step).
     // any other string = only that exact AUTOGUI move is clickable.
     allowedMove: null as string | null,
+    // Whether the tutorial hid the analysis panel, so leaving the tutorial
+    // reopens only a panel it closed, not one the player chose to hide.
+    hidMenu: false,
 });

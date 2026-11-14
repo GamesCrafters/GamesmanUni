@@ -96,12 +96,18 @@
             step.value = 0;
             visible.value = true;
             applyStep();
-            store.commit(mutationTypes.showMenu, false);
+            if (store.getters.options.showMenu) {
+                store.commit(mutationTypes.showMenu, false);
+                tutorialState.hidMenu = true;
+            }
         } else {
             visible.value = false;
             tutorialState.allowedMove = null;
             resetPlayers();
-            store.commit(mutationTypes.showMenu, true);
+            if (tutorialState.hidMenu) {
+                store.commit(mutationTypes.showMenu, true);
+                tutorialState.hidMenu = false;
+            }
         }
     }, { immediate: true });
 
