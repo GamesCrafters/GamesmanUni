@@ -12,8 +12,7 @@
     const { t } = useI18n();
     const routes = [
         { path: "/", name: "Home" },
-        { path: "/puzzles", name: "Puzzles" },
-        { path: "/games", name: "Games" },
+        { path: "/games", name: "GamesAndPuzzles" },
         { path: "/about", name: "About" },
         { path: "/updates", name: "Updates" },
     ];
@@ -21,37 +20,35 @@
 
 <style lang="scss" scoped>
     #app-header-navigations {
-        width: 40%;
-        align-content: center;
-        align-items: center;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        > a {
-            font-size: 1.5em;
+        gap: 2rem;
+
+        > a, > a:link, > a:visited, > a:hover, > a:active {
             text-decoration: none;
-            padding-left: 0.7em;
-            padding-right: 0.7em;
-            > h2 {
-                font-weight: 500;
-                color: var(--primaryColor);
-                margin: 0 0.5rem;
-            }
+        }
+
+        > a {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gu-text-body);
         }
 
         > a:hover {
-            color: var(--backgroundColor);
+            color: var(--gu-brand);
+        }
+
+        > a.router-link-active {
+            color: var(--gu-brand);
+            font-weight: 500;
         }
 
         > a.router-link-exact-active {
-            color: var(--primaryColor);
-            text-decoration: solid underline var(--primaryColor) 10%;
+            color: var(--gu-brand);
+            font-weight: 500;
         }
 
         > a.router-link-exact-active:hover {
-            color: var(--backgroundColor);
-            text-decoration: solid underline var(--backgroundColor) 10%;
+            color: var(--gu-brand);
         }
     }
 </style>
@@ -60,29 +57,25 @@
 {
     "zh": {
         "Home": "首页",
-        "Puzzles": "单人解谜",
-        "Games": "双人游戏",
+        "GamesAndPuzzles": "游戏与解谜",
         "About": "关于",
         "Updates": "更新日志"
     },
     "en-US": {
         "Home": "Home",
-        "Puzzles": "Puzzles",
-        "Games": "Games",
+        "GamesAndPuzzles": "Games & Puzzles",
         "About": "About",
         "Updates": "Updates"
     },
     "es": {
         "Home": "Inicio",
-        "Puzzles": "Rompecabezas",
-        "Games": "Juegos",
+        "GamesAndPuzzles": "Juegos y rompecabezas",
         "About": "Información",
         "Updates": "Versiones"
     },
     "hi": {
         "Home": "Home",
-        "Puzzles": "Puzzles",
-        "Games": "Games",
+        "GamesAndPuzzles": "Games & Puzzles",
         "About": "About",
         "Updates": "Updates"
     }

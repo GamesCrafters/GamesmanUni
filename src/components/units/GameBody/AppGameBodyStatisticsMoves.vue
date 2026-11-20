@@ -12,7 +12,7 @@
                 Restart
         </button>
 
-        <button id="app-game-body-statistics-moves-restart"
+        <button id="app-game-body-statistics-moves-swap"
             @click="swapPlayers()"
             :disabled="currentRoundId != 1 || currentGameType === 'puzzles'">
                 Swap
@@ -56,18 +56,43 @@
 
 <style lang="scss" scoped>
     #app-game-body-statistics-moves {
-        align-content: stretch;
-        align-items: center;
-        border-radius: 1rem;
-        border: 0.1rem solid var(--neutralColor);
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-around;
-        padding: 1rem;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+
         > button {
-            margin: 0.5rem;
-            padding: 0 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #e0ddd6;
+            padding: 5px 12px;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            background: #ffffff;
+            color: #555;
+            white-space: nowrap;
+            transition: border-color 0.15s, color 0.15s;
+
+            &#app-game-body-statistics-moves-restart {
+                background: #1b3a6b;
+                color: #ffffff;
+                border-color: #1b3a6b;
+                font-weight: 500;
+
+                &:not(:disabled):hover { opacity: 0.85; }
+            }
+
+            &:hover { transform: none; }
+
+            &:not(:disabled):not(#app-game-body-statistics-moves-restart):hover {
+                border-color: #1b3a6b;
+                color: #1b3a6b;
+            }
+
+            &:disabled {
+                opacity: 0.3;
+                cursor: default;
+            }
         }
     }
 </style>
