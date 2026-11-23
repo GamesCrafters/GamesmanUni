@@ -2,14 +2,16 @@
     <div id="app-footer">
         <a v-for="(externalLink, i) in externalLinks" :="externalLink.attributes" :key="'exLink'+ i">{{ externalLink.value }}</a>
         <router-link to="/demo">
-            <a>Demo Mode</a>
+            <a>{{ t("footer.demo") }}</a>
         </router-link>
     </div>
 </template>
 
 <script lang="ts" setup>
+    import { useI18n } from "vue-i18n";
     import { useStore } from "../../scripts/plugins/store";
 
+    const { t } = useI18n({ useScope: "global" });
     const store = useStore();
     const commonAttributes = { rel: "noopener noreferrer nofollow", target: "_blank" };
     const externalLinks = [
@@ -26,16 +28,24 @@
     #app-footer {
         align-content: center;
         align-items: center;
-        background-color: var(--neutralColor);
+        background-color: var(--gu-surface-hover);
+        border-top: 1px solid var(--gu-border);
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 1rem 10%;
+        padding: 1rem 2rem;
+        gap: 1.5rem;
         a {
             display: inline-block;
-            font-size: 0.83rem;
-            margin: 0 0.5rem;
+            font-size: 11px;
+            color: var(--gu-text-muted);
+            text-decoration: none;
+            font-weight: 400;
+
+            &:hover {
+                color: var(--gu-brand);
+            }
         }
     }
 </style>

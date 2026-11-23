@@ -11,10 +11,10 @@
                     <a class="commit" v-for="commit in latestCommits.commits" :key="commit.sha" :href="commit.url" target="_blank" rel="noreferrer">
                         <template v-if="commit.message.startsWith('v')">
                             <h3 class="commit-version">{{ commit.message.split(/:(.+)/)[0] }}</h3>
-                            <i class="message">{{ commit.message.split(/:(.+)/)[1].split(/\n(.+)/)[0] }}</i>
+                            <i class="message" :title="commit.message">{{ commit.message.split(/:(.+)/)[1].split(/\n(.+)/)[0] }}</i>
                         </template>
                         <template v-else>
-                            <i class="message">{{ commit.message }}</i>
+                            <i class="message" :title="commit.message">{{ commit.message }}</i>
                         </template>
                         <span class="author">
                             <img class="avatar" :alt="commit.authorName + `'s Avatar`" :title="commit.authorName" :src="getAuthorAvatarSource(commit.authorAvatarUrl)" style="width: 3rem" />
@@ -60,7 +60,9 @@
             }
             > #commits {
                 align-content: center;
-                align-items: center;
+                /* Stretch, not center, so cards on the same row share a height
+                   instead of each sizing to its own message. */
+                align-items: stretch;
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -85,6 +87,16 @@
                         min-height: 3rem;
                         line-height: 1rem;
                         text-align: center;
+                        /* Commit messages are arbitrarily long: clamp to a few
+                           lines so one verbose commit cannot stretch the whole
+                           row. The full text stays in the title tooltip, and
+                           the card still links to the commit on GitHub. */
+                        display: -webkit-box;
+                        -webkit-line-clamp: 6;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        max-height: 7rem;
+                        overflow-wrap: anywhere;
                     }
                     > .author {
                         align-content: normal;

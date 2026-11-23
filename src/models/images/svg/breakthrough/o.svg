@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="EntitySVG" xmlns="http://www.w3.org/2000/svg"
+    viewBox="39 39 22 22">
+    <defs>
+        <radialGradient id="rgShadowO" cx="50" cy="61.5" r="10" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#000" stop-opacity="0.38" />
+            <stop offset="1" stop-color="#000" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="rgBodyO" cx="46.5" cy="45" r="17" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#7FA3E0" />
+            <stop offset="0.5" stop-color="#003262" />
+            <stop offset="1" stop-color="#00152B" />
+        </radialGradient>
+    </defs>
+    <ellipse fill="url(#rgShadowO)" cx="50" cy="61.5" rx="10.5" ry="2.7" />
+    <g fill="url(#rgBodyO)">
+        <circle cx="50" cy="44" r="3.2" />
+        <path d="M52.4,46.6
+                 C52.4,47.8 54.4,47.4 54.4,48.6
+                 C54.4,49.68 51.2,49.32 51.2,50.4
+                 C51.2,54.36 57.0,53.04 57.0,57.0
+                 C57.0,58.44 59.6,57.96 59.6,59.4
+                 L59.6,60.6
+                 L40.4,60.6
+                 L40.4,59.4
+                 C40.4,57.96 43.0,58.44 43.0,57.0
+                 C43.0,53.04 48.8,54.36 48.8,50.4
+                 C48.8,49.32 45.6,49.68 45.6,48.6
+                 C45.6,47.4 47.6,47.8 47.6,46.6 Z" />
+        <rect x="39.5" y="60.3" width="21" height="2.2" rx="1.1" ry="1.1" />
+    </g>
+</svg>

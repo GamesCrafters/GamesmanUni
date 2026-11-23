@@ -46,10 +46,19 @@
 <style lang="scss" scoped>
     #app-game-body-header-instructions {
         button {
-            border-radius: 100%;
-            font-size: 2rem;
-            height: max(2.5rem, min(5vh, 5vw));
-            width: max(2.5rem, min(5vh, 5vw));
+            border-radius: 8px;
+            font-size: 16px;
+            height: 40px;
+            width: 40px;
+            background: var(--gu-surface-hover);
+            border: 1px solid var(--gu-border);
+            color: var(--gu-text-body);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+
+            &:hover { background: var(--gu-brand); color: var(--gu-bg); border-color: var(--gu-brand); transform: none; }
         }
     }
 </style>
