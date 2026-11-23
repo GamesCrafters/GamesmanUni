@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+<!-- Hadron Sculpted Clay board: a slab of matte green clay (grass), softly rolling light
+     and shade, fine grain and faint hand-smoothed strokes; each cell is gently pressed
+     into the clay. -->
+<defs>
+  <linearGradient id="slab" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#8BC052"/>
+    <stop offset="0.45" stop-color="#79A947"/>
+    <stop offset="1" stop-color="#69963E"/>
+  </linearGradient>
+  <clipPath id="slabClip"><rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2"/></clipPath>
+  <filter id="soften" x="-0.3" y="-0.3" width="1.6" height="1.6"><feGaussianBlur stdDeviation="0.570"/></filter>
+  <!-- fine clay grain: tiny dark pits and light flecks -->
+  <filter id="grainDark" x="0" y="0" width="1" height="1">
+    <feTurbulence type="fractalNoise" baseFrequency="22.0" numOctaves="2" seed="4"/>
+    <feColorMatrix values="0 0 0 0 0.16  0 0 0 0 0.25  0 0 0 0 0.10  0 0 0 1.6 -0.86"/>
+  </filter>
+  <filter id="grainLight" x="0" y="0" width="1" height="1">
+    <feTurbulence type="fractalNoise" baseFrequency="30.0" numOctaves="1" seed="9"/>
+    <feColorMatrix values="0 0 0 0 0.85  0 0 0 0 0.95  0 0 0 0 0.6  0 0 0 1.5 -0.9"/>
+  </filter>
+  <!-- slow, stretched noise: the faint smoothing strokes of a hand-worked surface -->
+  <filter id="strokes" x="0" y="0" width="1" height="1">
+    <feTurbulence type="fractalNoise" baseFrequency="0.50 2.20" numOctaves="2" seed="2"/>
+    <feColorMatrix values="0 0 0 0 0.26  0 0 0 0 0.39  0 0 0 0 0.16  0 0 0 1.2 -0.55"/>
+  </filter>
+  <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#D2EE9E" stop-opacity="0.95"/>
+    <stop offset="0.4" stop-color="#C2E486" stop-opacity="0.25"/>
+    <stop offset="1" stop-color="#43632A" stop-opacity="0.55"/>
+  </linearGradient>
+  <linearGradient id="bevel" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#D6F0A4" stop-opacity="0.75"/>
+    <stop offset="0.5" stop-color="#B9E07C" stop-opacity="0.15"/>
+    <stop offset="1" stop-color="#43632A" stop-opacity="0.55"/>
+  </linearGradient>
+  <filter id="bevelBlur" x="-0.1" y="-0.1" width="1.2" height="1.2"><feGaussianBlur stdDeviation="0.06"/></filter>
+  <linearGradient id="lip" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0.9" stop-color="#43632A" stop-opacity="0"/>
+    <stop offset="1" stop-color="#43632A" stop-opacity="0.55"/>
+  </linearGradient>
+  <!-- a cell pressed into clay: shaded upper lip, lit lower lip -->
+  <linearGradient id="well" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#43632A" stop-opacity="0.18"/>
+    <stop offset="0.55" stop-color="#608A39" stop-opacity="0.06"/>
+    <stop offset="1" stop-color="#B4DD78" stop-opacity="0.22"/>
+  </linearGradient>
+  <linearGradient id="wellEdge" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#43632A" stop-opacity="0.3"/>
+    <stop offset="0.5" stop-color="#537931" stop-opacity="0.06"/>
+    <stop offset="1" stop-color="#C8EB8F" stop-opacity="0.6"/>
+  </linearGradient>
+</defs>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="url(#slab)"/>
+  <g clip-path="url(#slabClip)">
+    <g filter="url(#soften)">
+      <ellipse cx="0.27" cy="1.25" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="0.67" cy="3.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/><ellipse cx="1.16" cy="4.00" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="1.56" cy="1.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/><ellipse cx="2.05" cy="1.25" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="2.46" cy="3.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/><ellipse cx="2.95" cy="4.00" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="3.35" cy="1.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/><ellipse cx="3.84" cy="1.25" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="4.24" cy="3.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/><ellipse cx="4.73" cy="4.00" rx="1.25" ry="1.10" fill="#A4D96A" opacity="0.85"/><ellipse cx="5.13" cy="1.10" rx="0.95" ry="0.85" fill="#537931" opacity="0.6"/>
+    </g>
+    <rect width="5" height="5" filter="url(#strokes)" opacity="0.32"/>
+    <rect width="5" height="5" filter="url(#grainDark)" opacity="0.55"/>
+    <rect width="5" height="5" filter="url(#grainLight)" opacity="0.28"/>
+    <rect width="5" height="5" fill="url(#lip)"/>
+    <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="none" stroke="url(#bevel)" stroke-width="0.26" filter="url(#bevelBlur)"/>
+  </g>
+  <rect x="0.035" y="0.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="1.035" y="0.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="2.035" y="0.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="3.035" y="0.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="4.035" y="0.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="0.035" y="1.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="1.035" y="1.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="2.035" y="1.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="3.035" y="1.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="4.035" y="1.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="0.035" y="2.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="1.035" y="2.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="2.035" y="2.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="3.035" y="2.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="4.035" y="2.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="0.035" y="3.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="1.035" y="3.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="2.035" y="3.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="3.035" y="3.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="4.035" y="3.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="0.035" y="4.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="1.035" y="4.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="2.035" y="4.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="3.035" y="4.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="4.035" y="4.035" width="0.930" height="0.930" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.014"/>
+  <rect x="0.03" y="0.03" width="4.94" height="4.94" rx="0.185" fill="none" stroke="url(#rim)" stroke-width="0.03"/>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="none" stroke="#2E4A1C" stroke-opacity="0.3" stroke-width="0.012"/>
+</svg>

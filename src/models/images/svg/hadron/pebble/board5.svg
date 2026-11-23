@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+<!-- Hadron Living Glass V2 "Pebble" board: one continuous translucent sheet;
+     cells are marked only by hairlines, no wells or per-cell borders. -->
+<defs>
+  <linearGradient id="slab" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.8"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0.58"/>
+  </linearGradient>
+  <radialGradient id="sheen" cx="0.18" cy="-0.05" r="0.95">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+    <stop offset="0.6" stop-color="#ffffff" stop-opacity="0.08"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+    <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.35"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0.6"/>
+  </linearGradient>
+</defs>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.22" fill="url(#slab)"/>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.22" fill="url(#sheen)"/>
+  <g stroke="#2a2a46" stroke-opacity="0.075" stroke-width="0.008" stroke-linecap="round">
+    <line x1="1" y1="0.16" x2="1" y2="4.84"/><line x1="0.16" y1="1" x2="4.84" y2="1"/><line x1="2" y1="0.16" x2="2" y2="4.84"/><line x1="0.16" y1="2" x2="4.84" y2="2"/><line x1="3" y1="0.16" x2="3" y2="4.84"/><line x1="0.16" y1="3" x2="4.84" y2="3"/><line x1="4" y1="0.16" x2="4" y2="4.84"/><line x1="0.16" y1="4" x2="4.84" y2="4"/>
+  </g>
+  <rect x="0.03" y="0.03" width="4.94" height="4.94" rx="0.205" fill="none" stroke="url(#rim)" stroke-width="0.02"/>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.22" fill="none" stroke="#14142a" stroke-opacity="0.1" stroke-width="0.01"/>
+</svg>

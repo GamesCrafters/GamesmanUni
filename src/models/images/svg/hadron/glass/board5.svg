@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="BackgroundSVG" viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+<!-- Hadron "Living Glass" board: one translucent slab with gently recessed cells.
+     Fills are white at partial alpha, so the slab takes its tone from the page
+     behind it (lighter on light themes, smoky on dark ones). The outer shadow
+     is drawn by CSS on the board element, so it is not clipped here. -->
+<defs>
+  <linearGradient id="slab" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.78"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0.56"/>
+  </linearGradient>
+  <!-- one broad, soft reflection from an imagined light above-left -->
+  <radialGradient id="sheen" cx="0.18" cy="-0.05" r="0.95">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+    <stop offset="0.6" stop-color="#ffffff" stop-opacity="0.08"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="1"/>
+    <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.35"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0.6"/>
+  </linearGradient>
+  <linearGradient id="well" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3c3c5a" stop-opacity="0.045"/>
+    <stop offset="1" stop-color="#3c3c5a" stop-opacity="0.015"/>
+  </linearGradient>
+  <!-- a barely-there recess: a faint upper lip, a lit lower lip -->
+  <linearGradient id="wellEdge" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#1e1e3c" stop-opacity="0.08"/>
+    <stop offset="0.5" stop-color="#1e1e3c" stop-opacity="0.02"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0.8"/>
+  </linearGradient>
+</defs>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="url(#slab)"/>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="url(#sheen)"/>
+  <rect x="0.06" y="0.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="1.06" y="0.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="2.06" y="0.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="3.06" y="0.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="4.06" y="0.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="0.06" y="1.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="1.06" y="1.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="2.06" y="1.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="3.06" y="1.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="4.06" y="1.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="0.06" y="2.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="1.06" y="2.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="2.06" y="2.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="3.06" y="2.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="4.06" y="2.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="0.06" y="3.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="1.06" y="3.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="2.06" y="3.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="3.06" y="3.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="4.06" y="3.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="0.06" y="4.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="1.06" y="4.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="2.06" y="4.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="3.06" y="4.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="4.06" y="4.06" width="0.88" height="0.88" rx="0.13" fill="url(#well)" stroke="url(#wellEdge)" stroke-width="0.009"/>
+  <rect x="0.03" y="0.03" width="4.94" height="4.94" rx="0.185" fill="none" stroke="url(#rim)" stroke-width="0.022"/>
+  <rect x="0.015" y="0.015" width="4.970" height="4.970" rx="0.2" fill="none" stroke="#14142a" stroke-opacity="0.11" stroke-width="0.012"/>
+</svg>

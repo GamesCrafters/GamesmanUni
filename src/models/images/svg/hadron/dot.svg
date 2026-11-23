@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="MoveButtonSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1">
+	<!-- Hadron move button (all themes): a value dot on a white disc. GamesmanUni colours the
+	     parts with no fill of their own (win / lose / ...), so only the inner dot changes. -->
+	<!-- invisible click area: the whole cell -->
+	<rect x="0" y="0" width="1" height="1" fill="white" opacity="0.001" stroke="none"/>
+	<!-- white disc (fixed colour) -->
+	<circle cx="0.5" cy="0.5" r="0.115" fill="#ffffff" stroke="none"/>
+	<!-- value dot (takes the move-value colour) -->
+	<circle cx="0.5" cy="0.5" r="0.09" stroke="none"/>
+</svg>

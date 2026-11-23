@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="EntitySVG" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+<!-- Hadron "Living Glass" Blue tile: a solid, slightly domed square that sits
+     in its cell (inset so neighbouring tiles stay distinct, which matters in a
+     game about counting neighbours). Colour of the original tile kept. -->
+<defs>
+  <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#5d8cf4"/>
+    <stop offset="0.55" stop-color="#3b6fe0"/>
+    <stop offset="1" stop-color="#2c58c4"/>
+  </linearGradient>
+  <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/>
+    <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.05"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/>
+    <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.1"/>
+    <stop offset="1" stop-color="#000000" stop-opacity="0.16"/>
+  </linearGradient>
+  <filter id="lift" x="-0.25" y="-0.25" width="1.5" height="1.6" color-interpolation-filters="sRGB">
+    <feDropShadow dx="0" dy="0.012" stdDeviation="0.01" flood-color="#0b1f4d" flood-opacity="0.32"/>
+    <feDropShadow dx="0" dy="0.035" stdDeviation="0.035" flood-color="#0b1f4d" flood-opacity="0.22"/>
+  </filter>
+</defs>
+  <rect x="0.08" y="0.08" width="0.84" height="0.84" rx="0.15" fill="url(#body)" filter="url(#lift)"/>
+  <rect x="0.105" y="0.1" width="0.79" height="0.46" rx="0.13" fill="url(#sheen)"/>
+  <rect x="0.089" y="0.089" width="0.822" height="0.822" rx="0.142" fill="none" stroke="url(#edge)" stroke-width="0.018"/>
+</svg>

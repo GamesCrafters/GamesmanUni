@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="EntitySVG" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">
+<!-- Hadron V2 "Pebble" red tile (#EE6A5C): matte soft squircle, diffuse key light
+     from the upper left, contact occlusion at the base, very fine grain. -->
+<defs>
+  <path id="shape" d="M0.8700,0.5000 L0.8724,0.6010 L0.8724,0.6403 L0.8713,0.6699 L0.8693,0.6944 L0.8664,0.7155 L0.8626,0.7342 L0.8580,0.7509 L0.8525,0.7660 L0.8460,0.7797 L0.8387,0.7921 L0.8304,0.8034 L0.8212,0.8137 L0.8109,0.8230 L0.7994,0.8314 L0.7868,0.8389 L0.7729,0.8455 L0.7576,0.8513 L0.7405,0.8563 L0.7214,0.8605 L0.6997,0.8639 L0.6746,0.8666 L0.6442,0.8685 L0.6038,0.8696 L0.5000,0.8700 L0.3962,0.8696 L0.3558,0.8685 L0.3254,0.8666 L0.3003,0.8639 L0.2786,0.8605 L0.2595,0.8563 L0.2424,0.8513 L0.2271,0.8455 L0.2132,0.8389 L0.2006,0.8314 L0.1891,0.8230 L0.1788,0.8137 L0.1696,0.8034 L0.1613,0.7921 L0.1540,0.7797 L0.1475,0.7660 L0.1420,0.7509 L0.1374,0.7342 L0.1336,0.7155 L0.1307,0.6944 L0.1287,0.6699 L0.1276,0.6403 L0.1276,0.6010 L0.1300,0.5000 L0.1314,0.3990 L0.1329,0.3597 L0.1351,0.3301 L0.1379,0.3056 L0.1415,0.2845 L0.1459,0.2658 L0.1510,0.2491 L0.1569,0.2340 L0.1636,0.2203 L0.1712,0.2079 L0.1796,0.1966 L0.1889,0.1863 L0.1992,0.1770 L0.2104,0.1686 L0.2228,0.1611 L0.2365,0.1545 L0.2514,0.1487 L0.2680,0.1437 L0.2865,0.1395 L0.3075,0.1361 L0.3317,0.1334 L0.3611,0.1315 L0.4000,0.1304 L0.5000,0.1300 L0.6000,0.1304 L0.6389,0.1315 L0.6683,0.1334 L0.6925,0.1361 L0.7135,0.1395 L0.7320,0.1437 L0.7486,0.1487 L0.7635,0.1545 L0.7772,0.1611 L0.7896,0.1686 L0.8008,0.1770 L0.8111,0.1863 L0.8204,0.1966 L0.8288,0.2079 L0.8364,0.2203 L0.8431,0.2340 L0.8490,0.2491 L0.8541,0.2658 L0.8585,0.2845 L0.8621,0.3056 L0.8649,0.3301 L0.8671,0.3597 L0.8686,0.3990 Z"/>
+  <clipPath id="clip"><use href="#shape"/></clipPath>
+  <radialGradient id="body" cx="0.4" cy="0.3" r="1.0">
+    <stop offset="0" stop-color="#F18378"/>
+    <stop offset="0.5" stop-color="#EE6A5C"/>
+    <stop offset="1" stop-color="#CF5C50"/>
+  </radialGradient>
+  <linearGradient id="occlusion" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0.55" stop-color="#5A2823" stop-opacity="0"/>
+    <stop offset="1" stop-color="#5A2823" stop-opacity="0.22"/>
+  </linearGradient>
+  <radialGradient id="diffuse" cx="0.4" cy="0.3" r="0.46">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.15"/>
+    <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="rimlight" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity="0.45"/>
+    <stop offset="0.4" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="soft" x="-0.3" y="-0.3" width="1.6" height="1.7" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="0.045" result="b1"/>
+    <feOffset in="b1" dy="0.05" result="o1"/>
+    <feFlood flood-color="#5A2823" flood-opacity="0.22"/><feComposite in2="o1" operator="in" result="s1"/>
+    <feGaussianBlur in="SourceAlpha" stdDeviation="0.01" result="b2"/>
+    <feOffset in="b2" dy="0.012" result="o2"/>
+    <feFlood flood-color="#5A2823" flood-opacity="0.28"/><feComposite in2="o2" operator="in" result="s2"/>
+    <feMerge><feMergeNode in="s1"/><feMergeNode in="s2"/></feMerge>
+  </filter>
+  <filter id="grain" x="0" y="0" width="1" height="1">
+    <feTurbulence type="fractalNoise" baseFrequency="140" numOctaves="1" seed="7"/>
+    <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 -0.35"/>
+  </filter>
+</defs>
+  <use href="#shape" fill="#000" filter="url(#soft)"/>
+  <use href="#shape" fill="url(#body)"/>
+  <g clip-path="url(#clip)">
+    <rect width="1" height="1" fill="url(#occlusion)"/>
+    <rect width="1" height="1" fill="url(#diffuse)"/>
+    <rect width="1" height="1" filter="url(#grain)" opacity="0.1"/>
+  </g>
+  <use href="#shape" fill="none" stroke="url(#rimlight)" stroke-width="0.014"/>
+</svg>
