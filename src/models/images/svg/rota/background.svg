@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- board -->
+  <circle cx="100" cy="100" r="95" fill="#d9b382"/>
+
+  <!-- outer ring -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="#5a3a1a" stroke-width="3"/>
+
+  <!-- 4 diameters through the center -->
+  <g stroke="#5a3a1a" stroke-width="3">
+    <line x1="100" y1="30" x2="100" y2="170"/>
+    <line x1="30" y1="100" x2="170" y2="100"/>
+    <line x1="50.5025" y1="50.5025" x2="149.4975" y2="149.4975"/>
+    <line x1="149.4975" y1="50.5025" x2="50.5025" y2="149.4975"/>
+  </g>
+
+  <!-- 9 spots: indices 0-8 in Rota's order -->
+  <g fill="#f3e2c7" stroke="#5a3a1a" stroke-width="2">
+    <circle cx="50.5025"  cy="50.5025"  r="9"/>  <!-- 0 -->
+    <circle cx="100"      cy="30"       r="9"/>  <!-- 1 -->
+    <circle cx="149.4975" cy="50.5025"  r="9"/>  <!-- 2 -->
+    <circle cx="30"       cy="100"      r="9"/>  <!-- 3 -->
+    <circle cx="100"      cy="100"      r="9"/>  <!-- 4 -->
+    <circle cx="170"      cy="100"      r="9"/>  <!-- 5 -->
+    <circle cx="50.5025"  cy="149.4975" r="9"/>  <!-- 6 -->
+    <circle cx="100"      cy="170"      r="9"/>  <!-- 7 -->
+    <circle cx="149.4975" cy="149.4975" r="9"/>  <!-- 8 -->
+  </g>
+</svg>

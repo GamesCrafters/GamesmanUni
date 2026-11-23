@@ -98,6 +98,7 @@ export const gameTags: Record<string, { style: string[]; solveType: string[]; mi
     "quickchess":     { style: ["Chasing", "Partisan"],                 solveType: ["Remoteness"],              misc: [] },
     "quickcross":     { style: ["Connection", "Dartboard", "Partisan"], solveType: ["Remoteness"],              misc: [] },
     "quixo":          { style: ["Rearranger", "Partisan"],              solveType: ["Remoteness"],              misc: [] },
+    "rota":           { style: ["Dartboard", "Rearranger", "Partisan"], solveType: ["Remoteness"],              misc: [] },
     "sevenpennies":   { style: ["Impartial"],                           solveType: ["Mex"],                     misc: [] },
     "shifttactoe":    { style: ["Dartboard", "Rearranger", "Partisan"], solveType: ["Remoteness"],              misc: [] },
     "sim":            { style: ["Connection", "Impartial"],             solveType: ["Remoteness"],              misc: ["Educational"] },
